@@ -1,0 +1,300 @@
+// ────────────────────────────────────────────────────────────
+// Grand Cinematic Poster Billboard — Luminous Warm Light Theme
+// ────────────────────────────────────────────────────────────
+
+.featured-poster-section {
+  margin-block: var(--space-6, 24px);
+  position: relative;
+
+  @media (min-width: 769px) {
+    margin-block: var(--space-8, 36px);
+  }
+}
+
+.featured-poster-card {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(32, 23, 75, 0.08);
+  border: 1.5px solid #ded4f0;
+  text-decoration: none;
+  cursor: pointer;
+  background: #ffffff;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+
+  @media (min-width: 769px) {
+    display: block;
+    border-radius: 36px;
+    box-shadow: 0 20px 50px rgba(32, 23, 75, 0.1);
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 28px 70px rgba(94, 67, 155, 0.2);
+
+      .poster-main-img {
+        transform: scale(1.02);
+      }
+
+      .poster-cta-btn {
+        background: linear-gradient(135deg, #7152b7 0%, #2b1f63 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 28px rgba(94, 67, 155, 0.5);
+      }
+    }
+  }
+}
+
+// ── 1. The Poster Image Frame ────────────────────────────────
+.poster-image-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #ffffff;
+
+  @media (min-width: 769px) {
+    aspect-ratio: auto;
+    min-height: 500px;
+    max-height: 600px;
+  }
+}
+
+.poster-main-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+// Bottom vignette (Desktop only)
+.poster-bottom-vignette {
+  display: none;
+
+  @media (min-width: 769px) {
+    display: block;
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 140px;
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.2) 0%,
+      transparent 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+}
+
+// ── 2. Top Corner Discount Badge ─────────────────────────────
+.poster-top-badge {
+  position: absolute;
+  top: 12px;
+  inset-inline-start: 12px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: linear-gradient(135deg, #5e439b 0%, #20174b 100%);
+  color: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 900;
+  padding: 6px 16px;
+  border-radius: 9999px;
+  box-shadow: 0 6px 18px rgba(94, 67, 155, 0.4);
+
+  @media (min-width: 769px) {
+    top: 20px;
+    inset-inline-start: 20px;
+    font-size: 0.92rem;
+    padding: 8px 20px;
+    animation: poster-tag-bounce 3.2s ease-in-out infinite alternate;
+  }
+
+  .badge-fire {
+    font-size: 0.95rem;
+    @media (min-width: 769px) { font-size: 1.1rem; }
+  }
+}
+
+@keyframes poster-tag-bounce {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-5px); }
+}
+
+// ── 3. Action Panel (Clean Luminous White / Cream Theme) ──────
+.poster-floating-bar {
+  // Mobile layout: Crisp White / Cream Footer under image
+  width: 100%;
+  background: #ffffff;
+  padding: 16px 20px 20px;
+  color: #20174b;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-top: 1.5px solid #ded4f0;
+
+  @media (min-width: 769px) {
+    // Desktop layout: Frosted White Floating Glass Bar
+    position: absolute;
+    inset-inline: 24px;
+    bottom: 24px;
+    z-index: 3;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    background: rgba(255, 253, 255, 0.94);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1.5px solid #ded4f0;
+    border-radius: 26px;
+    padding: 18px 30px;
+    box-shadow: 0 20px 50px rgba(32, 23, 75, 0.12);
+  }
+}
+
+.poster-bar-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: right;
+}
+
+.poster-bar-tag {
+  align-self: flex-start;
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: #5e439b;
+  background: #ede4f8;
+  border: 1px solid #d8c8ee;
+  padding: 3px 12px;
+  border-radius: 9999px;
+  letter-spacing: 0.02em;
+
+  @media (min-width: 769px) {
+    font-size: 0.8rem;
+  }
+}
+
+.poster-bar-title {
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: #20174b;
+  margin: 0;
+  font-family: 'Readex Pro', 'Noto Kufi Arabic', 'Plus Jakarta Sans', sans-serif;
+  line-height: 1.25;
+
+  @media (min-width: 769px) {
+    font-size: 1.55rem;
+  }
+}
+
+.poster-bar-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  width: 100%;
+
+  @media (min-width: 769px) {
+    width: auto;
+    gap: 24px;
+  }
+}
+
+.poster-bar-pricing {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.poster-price-current {
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: #1e1b4b;
+  font-family: 'Readex Pro', 'Plus Jakarta Sans', sans-serif;
+  line-height: 1;
+
+  @media (min-width: 769px) {
+    font-size: 1.85rem;
+  }
+}
+
+.poster-price-slashed {
+  font-size: 1rem;
+  color: #94a3b8;
+  text-decoration: line-through;
+
+  @media (min-width: 769px) {
+    font-size: 1.1rem;
+  }
+}
+
+.poster-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #5e439b 0%, #20174b 100%);
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 900;
+  padding: 12px 26px;
+  border-radius: 9999px;
+  box-shadow: 0 6px 20px rgba(94, 67, 155, 0.35);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: 'Readex Pro', 'Noto Kufi Arabic', 'Plus Jakarta Sans', sans-serif;
+  white-space: nowrap;
+  flex-shrink: 0;
+
+  @media (min-width: 769px) {
+    font-size: 1.02rem;
+    padding: 14px 32px;
+  }
+}
+
+// ── LTR English Support ──────────────────────────────────────
+[dir="ltr"] {
+  .poster-bar-info {
+    text-align: left;
+  }
+
+  .poster-bar-tag {
+    align-self: flex-start;
+  }
+}
+
+// ── Skeleton Loader ──────────────────────────────────────────
+.fb-poster-skeleton {
+  min-height: 340px;
+  border-radius: 24px;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #fed7aa;
+  margin-block: var(--space-6, 24px);
+  position: relative;
+
+  @media (min-width: 769px) {
+    min-height: 480px;
+    border-radius: 36px;
+    margin-block: var(--space-8, 36px);
+  }
+
+  &__shimmer {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #f1f5f9 25%, #fed7aa 50%, #f1f5f9 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

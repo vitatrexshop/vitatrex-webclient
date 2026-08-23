@@ -1,0 +1,52 @@
+<article class="offer-card" *ngIf="offer">
+  <!-- ── Image + Overlay Badges ─────────────────────────────── -->
+  <a routerLink="/shop" class="offer-card__image-link" [attr.aria-label]="offer.title">
+    <div class="offer-card__image-wrap">
+      <img
+        [src]="offer.image"
+        [alt]="offer.title"
+        loading="lazy"
+        decoding="async"
+        class="offer-card__image"
+      />
+    </div>
+    <div class="offer-card__badges">
+      <span class="offer-card__badge-label" *ngIf="offer.badgeText">
+        {{ offer.badgeText }}
+      </span>
+      <span class="offer-card__discount-badge" *ngIf="offer.discountPercentage > 0">
+        {{ 'OFFERS_SECTION.SAVE_TAG' | translate: { percent: offer.discountPercentage } }}
+      </span>
+    </div>
+  </a>
+
+  <!-- ── Content ─────────────────────────────────────────────── -->
+  <div class="offer-card__body">
+    <h3 class="offer-card__title">{{ offer.title }}</h3>
+
+    <p class="offer-card__desc" *ngIf="offer.description">{{ offer.description }}</p>
+
+    <!-- Included items list (only shown when backend populates product objects) -->
+    <ul class="offer-card__items" *ngIf="hasPopulatedItems()">
+      <li *ngFor="let item of offer.items">
+        <span class="offer-card__check">✓</span>
+        <span class="offer-card__item-name">{{ getItemProductName(item) }}</span>
+        <span class="offer-card__item-qty">× {{ item.quantity }}</span>
+      </li>
+    </ul>
+
+    <!-- Pricing -->
+    <div class="offer-card__pricing">
+      <span class="offer-card__offer-price">{{ offer.offerPrice | number }} {{ 'COMMON.CURRENCY' | translate }}</span>
+      <span
+        class="offer-card__orig-price"
+        *ngIf="offer.originalPrice > offer.offerPrice"
+      >{{ offer.originalPrice | number }} {{ 'COMMON.CURRENCY' | translate }}</span>
+    </div>
+
+    <!-- CTA -->
+    <a routerLink="/shop" class="btn btn--amber btn--full">
+      {{ 'HERO.ORDER_BUNDLE_NOW' | translate }}
+    </a>
+  </div>
+</article>

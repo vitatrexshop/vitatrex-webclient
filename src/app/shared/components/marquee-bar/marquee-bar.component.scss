@@ -1,0 +1,82 @@
+// ══════════════════════════════════════════════════════════════
+// Marquee Bar — SLEEP WELL PURPLE TONAL GRADIENT + WHITE TEXT
+// #5e439b → #20174b gradient
+// ══════════════════════════════════════════════════════════════
+
+.marquee-bar {
+  width: 100%;
+  overflow: hidden;
+  background: linear-gradient(90deg, #5e439b 0%, #20174b 50%, #5e439b 100%);
+  padding: 13px 0;
+  position: relative;
+  z-index: 5;
+
+  &__track {
+    display: flex;
+    width: max-content;
+    // GPU-composited: no repaints during animation
+    will-change: transform;
+    transform: translateZ(0);
+    animation: vt-ticker 32s linear infinite;
+  }
+
+  &__group {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    padding-inline-end: 40px;
+    flex-shrink: 0;
+  }
+
+  &__item {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #ffffff; // Crisp white — replaces any old green
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Readex Pro', 'Noto Kufi Arabic', sans-serif;
+    letter-spacing: 0.015em;
+
+    // Light Lavender bullet separator between items
+    &::after {
+      content: '•';
+      margin-inline-start: 40px;
+      color: #d2bbf0; // Soft Lavender bullet
+      font-size: 1.2rem;
+      font-weight: 900;
+    }
+  }
+
+  // Fade-out edge gradients for polished look
+  &__fade {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 80px;
+    z-index: 2;
+    pointer-events: none;
+
+    &--right {
+      right: 0;
+      background: linear-gradient(to left, #20174b 0%, transparent 100%);
+    }
+
+    &--left {
+      left: 0;
+      background: linear-gradient(to right, #5e439b 0%, transparent 100%);
+    }
+  }
+
+  // Pause marquee on hover (accessibility)
+  &:hover &__track {
+    animation-play-state: paused;
+  }
+}
+
+// 60fps hardware-accelerated horizontal scroll
+@keyframes vt-ticker {
+  from { transform: translateX(0) translateZ(0); }
+  to   { transform: translateX(-50%) translateZ(0); }
+}

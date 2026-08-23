@@ -1,0 +1,523 @@
+// ══════════════════════════════════════════════════════════════
+// VITATRIX CLEAN MINIMALIST NAVBAR SCSS
+// Matches Exact Reference: Floating Rounded Card | Fully Responsive
+// ══════════════════════════════════════════════════════════════
+
+// ── Outer Sticky Header Shell ────────────────────────────────
+.site-header-wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 950;
+  width: 100%;
+  padding: 8px 10px;
+  background: transparent;
+  transition: all 0.25s ease;
+  direction: inherit;
+  box-sizing: border-box;
+
+  @media (min-width: 576px) {
+    padding: 10px 16px;
+  }
+
+  @media (min-width: 768px) {
+    padding: 12px 20px;
+  }
+
+  @media (min-width: 1200px) {
+    padding: 14px 28px;
+  }
+}
+
+// ── Floating White Navbar Card ────────────────────────────────
+.site-header-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 14px;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+  transition: all 0.25s ease;
+  position: relative;
+  box-sizing: border-box;
+
+  @media (min-width: 576px) {
+    height: 64px;
+    padding: 0 18px;
+    border-radius: 20px;
+  }
+
+  @media (min-width: 768px) {
+    height: 70px;
+    padding: 0 24px;
+    border-radius: 24px;
+  }
+
+  @media (min-width: 1200px) {
+    height: 76px;
+    padding: 0 32px;
+    border-radius: 28px;
+  }
+}
+
+// ── 1. Brand Logo ────────────────────────────────────────────
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+
+  &:hover {
+    opacity: 0.88;
+    transform: scale(1.02);
+  }
+
+  .navbar-brand-logo {
+    height: 40px;
+    width: auto;
+    max-width: 165px;
+    object-fit: contain;
+    display: block;
+
+    @media (min-width: 576px) {
+      height: 46px;
+      max-width: 185px;
+    }
+
+    @media (min-width: 768px) {
+      height: 52px;
+      max-width: 210px;
+    }
+  }
+}
+
+// ── 2. Center Navigation Links ───────────────────────────────
+.navbar-nav-links {
+  display: none;
+
+  @media (min-width: 992px) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    margin: 0 1.25rem;
+  }
+}
+
+.nav-links-list {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  @media (min-width: 1100px) {
+    gap: 30px;
+  }
+
+  @media (min-width: 1240px) {
+    gap: 40px;
+  }
+
+  .nav-link-anchor {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #1f2937; // Dark slate matching image
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    font-family: 'Outfit', 'Readex Pro', sans-serif;
+    transition: color 0.2s ease;
+    padding: 6px 0;
+    position: relative;
+    white-space: nowrap;
+
+    @media (min-width: 1200px) {
+      font-size: 0.95rem;
+      letter-spacing: 0.05em;
+    }
+
+    &:hover {
+      color: #5e439b;
+    }
+
+    &.is-active {
+      color: #5e439b;
+      font-weight: 800;
+    }
+  }
+}
+
+// ── 3. Right Actions Group ───────────────────────────────────
+.navbar-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+
+  @media (min-width: 480px) {
+    gap: 12px;
+  }
+
+  @media (min-width: 768px) {
+    gap: 16px;
+  }
+
+  @media (min-width: 1200px) {
+    gap: 20px;
+  }
+}
+
+// Language Dropdown Pill (EN ⌵)
+.lang-dropdown-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 32px;
+  padding: 0 10px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 9999px;
+  color: #1f2937;
+  font-size: 0.8rem;
+  font-weight: 700;
+  font-family: 'Outfit', 'Readex Pro', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  @media (min-width: 576px) {
+    height: 36px;
+    padding: 0 13px;
+    font-size: 0.85rem;
+    gap: 5px;
+  }
+
+  @media (min-width: 768px) {
+    height: 38px;
+    padding: 0 16px;
+    font-size: 0.88rem;
+    gap: 6px;
+  }
+
+  &:hover {
+    border-color: #cbd5e1;
+    background: #f8fafc;
+  }
+
+  .chevron-svg {
+    color: #6b7280;
+  }
+}
+
+// Icon Action Buttons (Search, Profile, Bag)
+.icon-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: none;
+  color: #1f2937;
+  cursor: pointer;
+  border-radius: 50%;
+  position: relative;
+  text-decoration: none;
+  transition: all 0.2s ease;
+
+  @media (min-width: 576px) {
+    width: 36px;
+    height: 36px;
+  }
+
+  &:hover {
+    color: #5e439b;
+    background: #f5f0fc;
+  }
+
+  svg {
+    display: block;
+    width: 18px;
+    height: 18px;
+
+    @media (min-width: 576px) {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  // Hide user profile icon on small mobile (<480px) to keep space clean (it's inside mobile sheet)
+  &.profile-btn {
+    @media (max-width: 480px) {
+      display: none;
+    }
+  }
+}
+
+// Shopping Bag with Notification Dot
+.bag-btn {
+  svg {
+    width: 20px;
+    height: 20px;
+
+    @media (min-width: 576px) {
+      width: 22px;
+      height: 22px;
+    }
+  }
+
+  .bag-dot-badge {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #1f2937;
+    border: 2px solid #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &.has-count {
+      width: 16px;
+      height: 16px;
+      bottom: -2px;
+      right: -2px;
+      background: #5e439b;
+      color: #ffffff;
+      font-size: 0.65rem;
+      font-weight: 900;
+      font-family: 'Outfit', sans-serif;
+    }
+  }
+}
+
+// Expandable Search Form
+.search-action-wrap {
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  .search-expandable-form {
+    display: flex;
+    align-items: center;
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 9999px;
+    overflow: hidden;
+    max-width: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: max-width 0.3s ease, opacity 0.2s ease;
+  }
+
+  &.is-open {
+    .search-expandable-form {
+      max-width: 130px;
+      opacity: 1;
+      pointer-events: auto;
+      margin-inline-end: 4px;
+
+      @media (min-width: 576px) {
+        max-width: 180px;
+        margin-inline-end: 6px;
+      }
+    }
+  }
+
+  .search-input-field {
+    border: none;
+    background: transparent;
+    padding: 6px 10px;
+    font-size: 0.82rem;
+    color: #1f2937;
+    outline: none;
+    width: 110px;
+    font-family: 'Outfit', 'Readex Pro', sans-serif;
+
+    @media (min-width: 576px) {
+      padding: 7px 12px;
+      font-size: 0.88rem;
+      width: 150px;
+    }
+
+    &::placeholder {
+      color: #9ca3af;
+    }
+  }
+}
+
+// Mobile Hamburger Button
+.mobile-hamburger {
+  display: flex;
+
+  @media (min-width: 992px) {
+    display: none;
+  }
+
+  .hamburger-lines {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 18px;
+    height: 14px;
+    position: relative;
+
+    span {
+      display: block;
+      width: 18px;
+      height: 2px;
+      background: #1f2937;
+      border-radius: 2px;
+      position: absolute;
+      transition: transform 0.25s ease, opacity 0.2s ease;
+
+      &:nth-child(1) { top: 0; }
+      &:nth-child(2) { top: 6px; }
+      &:nth-child(3) { top: 12px; }
+    }
+
+    &.is-open {
+      span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+      span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+      span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+    }
+  }
+}
+
+// ── 4. Mobile Navigation Dropdown Sheet ────────────────────────
+.mobile-nav-sheet {
+  display: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 10px;
+  right: 10px;
+  background: #ffffff;
+  border-radius: 18px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  z-index: 999;
+  animation: mobileSheetSlide 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+
+  @media (min-width: 576px) {
+    left: 16px;
+    right: 16px;
+    border-radius: 22px;
+  }
+
+  &.is-open {
+    display: block;
+  }
+
+  .mobile-nav-sheet-inner {
+    padding: 1.15rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+}
+
+@keyframes mobileSheetSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mobile-sheet-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+
+  a {
+    display: block;
+    padding: 10px 14px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1f2937;
+    text-decoration: none;
+    border-radius: 10px;
+    transition: background 0.15s ease, color 0.15s ease;
+    font-family: 'Outfit', 'Readex Pro', sans-serif;
+
+    &:hover,
+    &.is-active {
+      background: #f5f0fc;
+      color: #5e439b;
+    }
+  }
+}
+
+.mobile-sheet-search {
+  display: flex;
+  align-items: center;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 9999px;
+  padding: 4px 6px;
+
+  .mobile-sheet-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    color: #1f2937;
+    outline: none;
+    font-family: 'Outfit', 'Readex Pro', sans-serif;
+  }
+
+  .mobile-sheet-submit {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #5e439b 0%, #20174b 100%);
+    border: none;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+}
+
+.mobile-sheet-footer {
+  padding-top: 4px;
+
+  .mobile-sheet-lang-btn {
+    width: 100%;
+    padding: 10px;
+    border-radius: 12px;
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #1f2937;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-family: 'Outfit', 'Readex Pro', sans-serif;
+
+    &:hover {
+      background: #f5f0fc;
+      color: #5e439b;
+    }
+  }
+}

@@ -1,0 +1,97 @@
+// ══════════════════════════════════════════════════════════════
+// Home Page SCSS — Complete Rewrite
+// Olly.com Aesthetic | Warm Cream Canvas | Deep Emerald Brand
+// ══════════════════════════════════════════════════════════════
+
+:host {
+  display: block;
+  background: #fdfbf7;
+  min-height: 100vh;
+  font-family: 'Readex Pro', 'Noto Kufi Arabic', 'Cairo', sans-serif;
+}
+
+// ── Section Wrapper ──────────────────────────────────────────
+.vt-section {
+  // Initial hidden state — revealed by IntersectionObserver
+  opacity: 0;
+  transform: translateY(32px);
+  transition:
+    opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+
+  &.vt-revealed {
+    opacity: 1;
+    transform: none;
+    will-change: auto;
+  }
+}
+
+// ── Reveal animations for staggered children ─────────────────
+.vt-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+
+  &.vt-revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ── Page-level container ─────────────────────────────────────
+.vt-container {
+  width: 100%;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: 1rem;
+
+  @media (min-width: 768px) {
+    padding-inline: 2rem;
+  }
+}
+
+// ── Marquee wrapper — no extra padding around it ─────────────
+.vt-marquee-wrapper {
+  width: 100%;
+  overflow: hidden;
+}
+
+// ── Products wrapper — White card container (Olly style) ─────
+.vt-products-wrapper {
+  background: #fdfbf7;
+  padding-block: 0;
+}
+
+.vt-products-container {
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: 1rem;
+  padding-block: 48px;
+
+  @media (min-width: 768px) {
+    padding-inline: 2rem;
+  }
+
+  // White card wrapper for category filter + grid
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 4px 40px rgba(6, 78, 59, 0.05);
+  border: 1px solid #f1f5f9;
+
+  @media (max-width: 767px) {
+    border-radius: 0;
+    padding-inline: 1rem;
+  }
+}
+
+// ── Offers Section Wrapper — Luxury Deep Purple Strip ────────
+.vt-offers-wrapper {
+  width: 100%;
+  background: radial-gradient(circle at 50% 20%, #2a1d63 0%, #20174b 75%, #18113c 100%);
+  overflow: hidden;
+}
+

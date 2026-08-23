@@ -1,0 +1,327 @@
+<main class="success-page container">
+
+  <!-- ── 1. ORDER TRACKING SEARCH BAR ────────────────────────── -->
+  <section class="tracking-search-bar">
+    <div class="search-inner">
+      <span class="search-icon">🔍</span>
+      <input
+        type="text"
+        class="search-input"
+        [placeholder]="'SUCCESS_PAGE.TRACK_SEARCH_PLACEHOLDER' | translate"
+        #orderInput
+        [value]="searchQuery"
+        (keyup.enter)="searchOrder(orderInput.value)"
+      />
+      <button
+        type="button"
+        class="search-btn"
+        (click)="searchOrder(orderInput.value)"
+      >
+        {{ 'NAV.TRACK_ORDER' | translate }} 🚀
+      </button>
+    </div>
+  </section>
+
+  <!-- ── 2. LOADING SKELETON STATE ───────────────────────────── -->
+  <div class="loading-state" *ngIf="isLoading">
+    <div class="skeleton-hero">
+      <div class="sk-circle"></div>
+      <div class="sk-title"></div>
+      <div class="sk-subtitle"></div>
+      <div class="sk-pill"></div>
+    </div>
+    <div class="skeleton-grid">
+      <div class="sk-card"></div>
+      <div class="sk-card"></div>
+    </div>
+  </div>
+
+  <!-- ── 3. ORDER FOUND & TRACKING VIEW ──────────────────────── -->
+  <ng-container *ngIf="!isLoading && order">
+
+    <!-- HERO BANNER -->
+    <section class="hero-card" [attr.data-status]="order.orderStatus">
+      <div class="success-icon-wrap" aria-hidden="true">
+        <div class="success-icon-ring"></div>
+        <div class="success-icon">
+          <span *ngIf="order.orderStatus === 'pending'">📋</span>
+          <span *ngIf="order.orderStatus === 'processing'">📦</span>
+          <span *ngIf="order.orderStatus === 'shipped'">🚚</span>
+          <span *ngIf="order.orderStatus === 'delivered'">✓</span>
+          <span *ngIf="order.orderStatus === 'cancelled'">✕</span>
+        </div>
+      </div>
+
+      <span class="success-tag" [class.tag-cancelled]="order.orderStatus === 'cancelled'">
+        <span *ngIf="order.orderStatus !== 'cancelled'">✨ {{ 'SUCCESS_PAGE.LIVE_UPDATE_TAG' | translate }}</span>
+        <span *ngIf="order.orderStatus === 'cancelled'">⚠️ {{ 'TRACKING.CANCELLED_NOTICE' | translate }}</span>
+      </span>
+
+      <h1 class="hero-title">{{ getStatusTitle(order.orderStatus) }}</h1>
+      <p class="hero-desc">{{ getStatusDescription(order.orderStatus) }}</p>
+
+      <!-- Order Number & Status Pill -->
+      <div class="order-badge-row">
+        <div class="order-number-badge">
+          <span class="badge-label">{{ 'TRACKING.ORDER_NUM_PREFIX' | translate }}:</span>
+          <strong class="badge-code">{{ order.orderNumber }}</strong>
+        </div>
+
+        <div class="order-status-badge" [attr.data-status]="order.orderStatus">
+          <span class="status-dot"></span>
+          <span>{{ 'SUCCESS_PAGE.CURRENT_STATUS' | translate }}: {{ getStatusLabel(order.orderStatus) }}</span>
+        </div>
+      </div>
+
+      <!-- MAGIC LINK ORDER TRACKING BOX -->
+      <div class="magic-link-banner" *ngIf="order.orderStatus !== 'cancelled'">
+        <div class="magic-link-header">
+          <div class="magic-icon-wrap">🔗</div>
+          <div class="magic-info">
+            <h3 class="magic-title">{{ 'SUCCESS_PAGE.MAGIC_LINK_TITLE' | translate }}</h3>
+            <p class="magic-sub">{{ 'SUCCESS_PAGE.MAGIC_LINK_SUB' | translate }}</p>
+          </div>
+        </div>
+
+        <div class="magic-action-bar">
+          <div class="magic-input-wrap">
+            <input
+              type="text"
+              class="magic-url-input"
+              [value]="trackingUrl"
+              readonly
+              dir="ltr"
+              #trackInput
+              (click)="trackInput.select()"
+            />
+          </div>
+          <button
+            type="button"
+            class="magic-copy-btn"
+            [class.copied]="copiedLink"
+            (click)="copyTrackingLink()"
+          >
+            <span *ngIf="!copiedLink">📋 {{ 'SUCCESS_PAGE.COPY_LINK' | translate }}</span>
+            <span *ngIf="copiedLink">✓ {{ 'SUCCESS_PAGE.LINK_COPIED' | translate }}</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEPPER TIMELINE -->
+    <section class="timeline-card" *ngIf="order.orderStatus !== 'cancelled'">
+      <div class="timeline-track">
+        <div
+          class="timeline-progress-fill"
+          [style.width.%]="(getStatusStep(order.orderStatus) - 1) * 33.33"
+        ></div>
+
+        <!-- Step 1: Pending -->
+        <div
+          class="timeline-step"
+          [class.is-completed]="isStepComplete(1, order.orderStatus)"
+          [class.is-active]="isStepActive(1, order.orderStatus)"
+        >
+          <div class="step-circle">
+            <span class="step-num" *ngIf="!isStepComplete(1, order.orderStatus)">1</span>
+            <span class="step-check" *ngIf="isStepComplete(1, order.orderStatus)">✓</span>
+          </div>
+          <span class="step-label">{{ 'TRACKING.STEP_SUBMITTED' | translate }}</span>
+        </div>
+
+        <!-- Step 2: Processing -->
+        <div
+          class="timeline-step"
+          [class.is-completed]="isStepComplete(2, order.orderStatus)"
+          [class.is-active]="isStepActive(2, order.orderStatus)"
+        >
+          <div class="step-circle">
+            <span class="step-num" *ngIf="!isStepComplete(2, order.orderStatus)">2</span>
+            <span class="step-check" *ngIf="isStepComplete(2, order.orderStatus)">✓</span>
+          </div>
+          <span class="step-label">{{ 'TRACKING.STEP_PROCESSING' | translate }}</span>
+        </div>
+
+        <!-- Step 3: Shipped -->
+        <div
+          class="timeline-step"
+          [class.is-completed]="isStepComplete(3, order.orderStatus)"
+          [class.is-active]="isStepActive(3, order.orderStatus)"
+        >
+          <div class="step-circle">
+            <span class="step-num" *ngIf="!isStepComplete(3, order.orderStatus)">3</span>
+            <span class="step-check" *ngIf="isStepComplete(3, order.orderStatus)">✓</span>
+          </div>
+          <span class="step-label">{{ 'TRACKING.STEP_SHIPPED' | translate }}</span>
+        </div>
+
+        <!-- Step 4: Delivered -->
+        <div
+          class="timeline-step"
+          [class.is-completed]="isStepComplete(4, order.orderStatus)"
+          [class.is-active]="isStepActive(4, order.orderStatus)"
+        >
+          <div class="step-circle">
+            <span class="step-num" *ngIf="!isStepComplete(4, order.orderStatus)">4</span>
+            <span class="step-check" *ngIf="isStepComplete(4, order.orderStatus)">✓</span>
+          </div>
+          <span class="step-label">{{ 'TRACKING.STEP_DELIVERED' | translate }}</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- DETAILS GRID -->
+    <div class="order-details-grid">
+
+      <!-- LEFT / MAIN: Ordered Items -->
+      <div class="details-left">
+        <section class="card items-card">
+          <div class="card-header">
+            <span class="card-icon">🛍️</span>
+            <h2 class="card-title">{{ 'TRACKING.ORDER_ITEMS' | translate }} ({{ order.items.length }})</h2>
+          </div>
+
+          <div class="items-list">
+            <div
+              class="item-row"
+              *ngFor="let item of order.items; trackBy: trackByItemIndex"
+            >
+              <div class="item-img-wrap">
+                <img
+                  [src]="getProductImage(item)"
+                  [alt]="getProductName(item)"
+                  class="item-img"
+                  loading="lazy"
+                />
+              </div>
+              <div class="item-info">
+                <h4 class="item-name">{{ getProductName(item) }}</h4>
+                <div class="item-meta">
+                  <span class="item-variant">{{ item.variantCount }} {{ 'COMMON.PIECES' | translate }}</span>
+                  <span class="item-qty">× {{ item.quantity }}</span>
+                </div>
+              </div>
+              <div class="item-price">
+                <strong>{{ (item.price * item.quantity) | number }} {{ 'COMMON.CURRENCY' | translate }}</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Total Calculation Breakdown -->
+          <div class="price-breakdown">
+            <div class="breakdown-row">
+              <span>{{ 'CART.SUBTOTAL' | translate }}</span>
+              <span>{{ getSubtotal(order) | number }} {{ 'COMMON.CURRENCY' | translate }}</span>
+            </div>
+            <div class="breakdown-row">
+              <span>{{ 'CHECKOUT.SHIPPING_FEE' | translate }}</span>
+              <span *ngIf="getShippingCost(order) === 0" class="free-ship">{{ 'CHECKOUT.FREE_SHIPPING_BADGE' | translate }} 🎉</span>
+              <span *ngIf="getShippingCost(order) > 0">{{ getShippingCost(order) | number }} {{ 'COMMON.CURRENCY' | translate }}</span>
+            </div>
+            <div class="breakdown-row breakdown-row--total">
+              <span>{{ 'CHECKOUT.ORDER_TOTAL' | translate }}</span>
+              <strong class="total-amount">{{ order.totalAmount | number }} {{ 'COMMON.CURRENCY' | translate }}</strong>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- RIGHT / SIDE: Shipping & Payment Cards -->
+      <div class="details-right">
+
+        <!-- Shipping Destination Card -->
+        <section class="card shipping-card">
+          <div class="card-header">
+            <span class="card-icon">📍</span>
+            <h2 class="card-title">{{ 'CHECKOUT.PERSONAL_INFO' | translate }}</h2>
+          </div>
+          <div class="customer-info-list">
+            <div class="info-item">
+              <span class="info-label">{{ 'CHECKOUT.FULL_NAME' | translate }}</span>
+              <strong class="info-val">{{ order.customer.name }}</strong>
+            </div>
+            <div class="info-item">
+              <span class="info-label">{{ 'CHECKOUT.PHONE' | translate }}</span>
+              <strong class="info-val" dir="ltr">{{ order.customer.phone }}</strong>
+            </div>
+            <div class="info-item">
+              <span class="info-label">{{ 'CHECKOUT.CITY' | translate }}</span>
+              <span class="info-val">{{ order.customer.city }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">{{ 'CHECKOUT.ADDRESS' | translate }}</span>
+              <span class="info-val">{{ order.customer.address }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">{{ 'TRACKING.ESTIMATED_DELIVERY' | translate }}</span>
+              <span class="info-val delivery-estimate">⚡ {{ getEstimatedDelivery(order.createdAt) }}</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Payment Info Card -->
+        <section class="card payment-card">
+          <div class="card-header">
+            <span class="card-icon">💳</span>
+            <h2 class="card-title">{{ 'CHECKOUT.PAYMENT_METHOD' | translate }}</h2>
+          </div>
+          <div class="customer-info-list">
+            <div class="info-item">
+              <span class="info-label">{{ 'CHECKOUT.PAYMENT_METHOD' | translate }}</span>
+              <strong class="info-val">{{ getPaymentMethodLabel(order.paymentMethod) }}</strong>
+            </div>
+            <div class="info-item">
+              <span class="info-label">{{ 'SUCCESS_PAGE.PAYMENT_STATUS_LABEL' | translate }}</span>
+              <span class="payment-status-pill" [class.is-paid]="order.paymentStatus === 'paid'">
+                {{ getPaymentStatusLabel(order.paymentStatus) }}
+              </span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Action / Help Card -->
+        <section class="card support-card">
+          <div class="support-content">
+            <span class="support-icon">💬</span>
+            <div class="support-text">
+              <h4>{{ 'SUCCESS_PAGE.NEED_HELP' | translate }}</h4>
+              <p>{{ 'SUCCESS_PAGE.SUPPORT_SUB' | translate }}</p>
+            </div>
+          </div>
+          <a
+            [href]="getWhatsAppLink(order.orderNumber)"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="whatsapp-btn"
+          >
+            {{ 'SUCCESS_PAGE.WHATSAPP_BTN' | translate }} 💬
+          </a>
+        </section>
+
+      </div>
+    </div>
+
+    <!-- ── 4. FOOTER ACTION BUTTONS ────────────────────────────── -->
+    <div class="success-actions">
+      <a routerLink="/shop" class="btn btn--primary btn--lg">
+        {{ 'COMMON.CONTINUE_SHOPPING' | translate }}
+      </a>
+      <a routerLink="/" class="btn btn--outline btn--lg">
+        {{ 'COMMON.BACK_HOME' | translate }}
+      </a>
+    </div>
+
+  </ng-container>
+
+  <!-- ── 5. ORDER NOT FOUND / EMPTY STATE ─────────────────────── -->
+  <div class="not-found-card" *ngIf="!isLoading && !order">
+    <div class="not-found-icon">🔎</div>
+    <h2>{{ 'SUCCESS_PAGE.NOT_FOUND_TITLE' | translate }}</h2>
+    <p>{{ 'SUCCESS_PAGE.NOT_FOUND_SUB' | translate }}</p>
+    <div class="not-found-actions">
+      <a routerLink="/" class="btn btn--primary">{{ 'COMMON.BACK_HOME' | translate }}</a>
+      <a routerLink="/shop" class="btn btn--outline">{{ 'NAV.SHOP' | translate }}</a>
+    </div>
+  </div>
+
+</main>

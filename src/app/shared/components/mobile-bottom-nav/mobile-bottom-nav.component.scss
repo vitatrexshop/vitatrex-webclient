@@ -1,0 +1,360 @@
+// ══════════════════════════════════════════════════════════════
+// VITATRIX MOBILE FLOATING BOTTOM DOCK NAVIGATION SCSS
+// Exact match to reference screenshot: Pill container with orange border,
+// elevated center circle with shop icon, cart badge, and search modal
+// ══════════════════════════════════════════════════════════════
+
+:host {
+  display: block;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 9990;
+  pointer-events: none; // Host itself does not block clicks
+
+  // Only render on mobile and small tablets
+  @media (min-width: 992px) {
+    display: none !important;
+  }
+}
+
+// ── Floating Dock Container ───────────────────────────────────
+.mobile-bottom-dock {
+  position: fixed;
+  bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 24px);
+  max-width: 460px;
+  z-index: 9995;
+  pointer-events: auto; // Content inside receives clicks
+  user-select: none;
+  animation: dockSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+  box-sizing: border-box;
+
+  &.is-hidden {
+    transform: translateX(-50%) translateY(160%) !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  .dock-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 2px solid #5e439b; // VitaTrix SLEEP WELL Purple border
+    border-radius: 40px;
+    padding: 6px 10px 7px;
+    box-shadow:
+      0 12px 32px -4px rgba(32, 23, 75, 0.25),
+      0 4px 18px rgba(0, 0, 0, 0.1);
+    position: relative;
+    box-sizing: border-box;
+    width: 100%;
+  }
+}
+
+// ── Individual Dock Items ─────────────────────────────────────
+.dock-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  padding: 4px 6px;
+  color: #64748b; // Neutral slate
+  font-family: inherit;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  min-width: 48px;
+  -webkit-tap-highlight-color: transparent;
+
+  .dock-icon-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    margin-bottom: 2px;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    svg {
+      transition: stroke 0.2s ease, transform 0.2s ease;
+    }
+  }
+
+  .dock-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    line-height: 1.2;
+    color: #475569;
+    letter-spacing: -0.01em;
+    transition: color 0.2s ease;
+    white-space: nowrap;
+  }
+
+  // Active state
+  &.is-active {
+    color: #5e439b;
+
+    .dock-icon-wrap svg {
+      stroke: #5e439b;
+      stroke-width: 2.3;
+      transform: scale(1.08);
+    }
+
+    .dock-label {
+      color: #20174b;
+      font-weight: 800;
+    }
+  }
+
+  &:active {
+    transform: scale(0.94);
+  }
+}
+
+// ── Center Elevated "Shop" Button ─────────────────────────────
+.dock-item--center {
+  margin-top: -24px;
+  padding: 0 4px;
+
+  .center-circle-btn {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #5e439b 0%, #20174b 100%); // SLEEP WELL Purple gradient
+    border: 3.5px solid #ffffff;
+    box-shadow:
+      0 6px 18px rgba(32, 23, 75, 0.45),
+      0 2px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    margin-bottom: 3px;
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    svg {
+      stroke: #ffffff !important;
+      fill: none;
+      filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.15));
+    }
+  }
+
+  .center-label {
+    color: #20174b !important;
+    font-size: 0.76rem;
+    font-weight: 800 !important;
+  }
+
+  &:active .center-circle-btn {
+    transform: scale(0.92);
+    box-shadow: 0 3px 10px rgba(32, 23, 75, 0.35);
+  }
+
+  &.is-active .center-circle-btn {
+    transform: scale(1.05);
+    box-shadow:
+      0 8px 24px rgba(32, 23, 75, 0.55),
+      0 2px 8px rgba(0, 0, 0, 0.12);
+  }
+}
+
+// ── Dynamic Cart Badge ────────────────────────────────────────
+.dock-badge {
+  position: absolute;
+  top: -4px;
+  right: -8px;
+  min-width: 19px;
+  height: 19px;
+  padding: 0 4px;
+  background: #5e439b; // SLEEP WELL Purple badge
+  color: #ffffff;
+  font-size: 10.5px;
+  font-weight: 800;
+  border-radius: 9999px;
+  border: 2px solid #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(94, 67, 155, 0.4);
+  animation: badgePop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-sizing: border-box;
+
+  :host-context([dir='rtl']) & {
+    right: auto;
+    left: -8px;
+  }
+}
+
+// ── Quick Search Sheet Overlay ────────────────────────────────
+.mobile-search-sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &.is-open {
+    pointer-events: auto;
+    opacity: 1;
+    visibility: visible;
+
+    .search-sheet-card {
+      transform: translateY(0);
+    }
+  }
+
+  .search-sheet-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  .search-sheet-card {
+    position: relative;
+    background: #ffffff;
+    border-radius: 28px 28px 0 0;
+    padding: 1.5rem 1.25rem calc(1.5rem + env(safe-area-inset-bottom, 0px));
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.15);
+    transform: translateY(100%);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 1;
+    max-width: 540px;
+    width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+
+  .search-sheet-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+
+    .search-sheet-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0;
+    }
+
+    .search-sheet-close {
+      background: #f1f5f9;
+      border: none;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #64748b;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: #e2e8f0;
+        color: #0f172a;
+      }
+    }
+  }
+
+  .search-sheet-input-wrap {
+    display: flex;
+    align-items: center;
+    background: #f8fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 9999px;
+    padding: 4px 6px 4px 14px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+    :host-context([dir='rtl']) & {
+      padding: 4px 14px 4px 6px;
+    }
+
+    &:focus-within {
+      border-color: #ea580c;
+      box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.12);
+      background: #ffffff;
+    }
+
+    .search-sheet-icon {
+      color: #94a3b8;
+      flex-shrink: 0;
+      margin-inline-end: 8px;
+    }
+
+    .search-sheet-input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      outline: none;
+      font-size: 0.95rem;
+      font-family: inherit;
+      color: #0f172a;
+      padding: 8px 0;
+
+      &::placeholder {
+        color: #94a3b8;
+      }
+    }
+
+    .search-sheet-btn {
+      background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 9999px;
+      padding: 8px 18px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+
+      &:hover {
+        opacity: 0.92;
+      }
+    }
+  }
+}
+
+// ── Keyframe Animations ───────────────────────────────────────
+@keyframes dockSlideUp {
+  from {
+    transform: translateX(-50%) translateY(120%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes badgePop {
+  0% {
+    transform: scale(0);
+  }
+  70% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

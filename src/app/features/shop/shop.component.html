@@ -1,0 +1,97 @@
+<main class="shop-page container">
+  <!-- ── 1. Shop Header ───────────────────────────────────────── -->
+  <header class="shop-header">
+    <div class="shop-header-badge">
+      <span>🌿 {{ 'NAV.SHOP' | translate }}</span>
+    </div>
+    <h1 class="shop-header__title">{{ 'SHOP.PAGE_TITLE' | translate }}</h1>
+    <p class="shop-header__subtitle">{{ 'SHOP.PAGE_SUBTITLE' | translate }}</p>
+  </header>
+
+  <!-- ── 2. Filter Bar & Search ───────────────────────────────── -->
+  <section class="shop-filters-bar" aria-label="Filters and Search">
+    <!-- Dynamic Category Selector Chips -->
+    <div class="category-chips-scroll" role="group" aria-label="Product categories" *ngIf="tabs$ | async as tabs">
+      <button
+        *ngFor="let tab of tabs; trackBy: trackByTab"
+        type="button"
+        class="chip-360"
+        [class.is-active]="selectedCategory$.value === tab.id || selectedCategory$.value === tab.slug"
+        (click)="setCategory(tab.id)"
+      >
+        <img *ngIf="tab.icon?.startsWith('http')" [src]="tab.icon" alt="" class="chip-icon" />
+        <span>{{ tab.name }}</span>
+      </button>
+    </div>
+
+    <!-- Modern Search Input -->
+    <div class="shop-search-box">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="7.5"/>
+        <path d="M21 21l-4.35-4.35"/>
+      </svg>
+      <input
+        class="search-input"
+        type="search"
+        [placeholder]="'SHOP.SEARCH_INPUT_PLACEHOLDER' | translate"
+        [formControl]="searchControl"
+        [attr.aria-label]="'SHOP.SEARCH_INPUT_PLACEHOLDER' | translate"
+      />
+    </div>
+  </section>
+
+  <!-- ── 3. Products Grid (3-Column 360 Nutrition Layout) ─────── -->
+  <section class="shop-grid-section" *ngIf="!(isBundleMode$ | async); else bundlesGrid">
+    <div
+      class="grid-360"
+      *ngIf="filteredProducts$ | async as products; else loading"
+    >
+      <app-product-card
+        *ngFor="let prod of products; let i = index; trackBy: trackByProduct"
+        [product]="prod"
+        [priority]="i < 3"
+      ></app-product-card>
+
+      <!-- Empty State Graphic & Message when no products in selected category -->
+      <div class="no-results-box" *ngIf="products.length === 0">
+        <div class="no-results-icon">📦</div>
+        <h3 class="no-results-title">{{ 'SHOP.NO_PRODUCTS_TITLE' | translate }}</h3>
+        <p class="no-results-desc">{{ 'SHOP.NO_PRODUCTS_SUB' | translate }}</p>
+        <button type="button" class="no-results-btn" (click)="searchControl.reset(); setCategory('all')">
+          {{ 'SHOP.VIEW_ALL_PRODUCTS' | translate }}
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 4. Bundles Grid ──────────────────────────────────────── -->
+  <ng-template #bundlesGrid>
+    <section class="shop-grid-section">
+      <div
+        class="grid-360 grid-360--bundles"
+        *ngIf="filteredOffers$ | async as offers; else loading"
+      >
+        <app-offer-card
+          *ngFor="let off of offers; trackBy: trackByOffer"
+          [offer]="off"
+        ></app-offer-card>
+
+        <div class="no-results-box" *ngIf="offers.length === 0">
+          <div class="no-results-icon">🎁</div>
+          <h3 class="no-results-title">{{ 'SHOP.NO_BUNDLES_TITLE' | translate }}</h3>
+          <button type="button" class="no-results-btn" (click)="searchControl.reset(); setCategory('all')">
+            {{ 'SHOP.VIEW_ALL_PRODUCTS' | translate }}
+          </button>
+        </div>
+      </div>
+    </section>
+  </ng-template>
+
+  <!-- Shimmer Loader -->
+  <ng-template #loading>
+    <div class="grid-360" aria-busy="true" aria-label="جاري التحميل">
+      <div class="skeleton-card-360" *ngFor="let i of [1,2,3,4,5,6]"></div>
+    </div>
+  </ng-template>
+</main>
+

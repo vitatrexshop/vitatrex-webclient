@@ -1,0 +1,192 @@
+<footer class="site-footer" role="contentinfo">
+  <!-- Top Organic Wave Transition -->
+  <div class="footer-wave-container" aria-hidden="true">
+    <svg class="footer-wave-svg" viewBox="0 0 1440 90" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M0,35 C320,85 540,5 820,45 C1100,85 1280,15 1440,35 L1440,90 L0,90 Z"
+        fill="#161233"
+      />
+    </svg>
+  </div>
+
+  <div class="site-footer__main">
+    <div class="container site-footer__grid">
+
+      <!-- ── 1. Column 1: Brand, Tagline & Social Links (Right in RTL) ── -->
+      <div class="footer-col footer-col--brand">
+        <a routerLink="/" class="footer-brand-link" aria-label="Vitatrex">
+          <img
+            src="assets/logo-white.png"
+            alt="Vitatrex"
+            class="footer-brand-logo"
+            width="170"
+            height="46"
+            loading="lazy"
+          />
+        </a>
+
+        <p class="footer-tagline">
+          {{ 'FOOTER.TAGLINE' | translate }}
+        </p>
+
+        <!-- Social Media Icons Row -->
+        <div class="footer-socials" aria-label="Social Links">
+          <a
+            href="https://tiktok.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="social-btn"
+            aria-label="TikTok"
+            title="TikTok"
+          >
+            <span class="social-icon">🎵</span>
+          </a>
+
+          <a
+            href="https://instagram.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="social-btn"
+            aria-label="Instagram"
+            title="Instagram"
+          >
+            <span class="social-icon">📷</span>
+          </a>
+
+          <a
+            href="https://facebook.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="social-btn"
+            aria-label="Facebook"
+            title="Facebook"
+          >
+            <span class="social-icon">📱</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- ── 2. Column 2: Products Links ── -->
+      <div class="footer-col footer-col--nav">
+        <h3 class="footer-heading">{{ 'FOOTER.PRODUCTS_TITLE' | translate }}</h3>
+        <ul class="footer-links-list" role="list">
+          <li>
+            <a routerLink="/shop" [queryParams]="{ category: 'sleep' }">
+              <span>{{ 'NAV.SLEEP' | translate }}</span>
+              <span class="link-emoji">🌙</span>
+            </a>
+          </li>
+          <li>
+            <a routerLink="/shop" [queryParams]="{ category: 'immunity' }">
+              <span>{{ 'NAV.IMMUNITY' | translate }}</span>
+              <span class="link-emoji">🛡️</span>
+            </a>
+          </li>
+          <li>
+            <a routerLink="/shop" [queryParams]="{ category: 'energy' }">
+              <span>{{ 'NAV.ENERGY' | translate }}</span>
+              <span class="link-emoji">⚡</span>
+            </a>
+          </li>
+          <li>
+            <a routerLink="/shop" [queryParams]="{ category: 'hair-skin' }">
+              <span>{{ 'NAV.HAIR_SKIN' | translate }}</span>
+              <span class="link-emoji">💆‍♀️</span>
+            </a>
+          </li>
+          <li>
+            <a routerLink="/shop" [queryParams]="{ type: 'bundle' }">
+              <span>{{ 'FOOTER.ALL_OFFERS' | translate }}</span>
+              <span class="link-emoji">🎉</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- ── 3. Column 3: Help & Support Links ── -->
+      <div class="footer-col footer-col--nav">
+        <h3 class="footer-heading">{{ 'FOOTER.HELP_TITLE' | translate }}</h3>
+        <ul class="footer-links-list" role="list">
+          <li><a routerLink="/track">{{ 'NAV.TRACK_ORDER' | translate }}</a></li>
+          <li><a routerLink="/shipping">{{ 'FOOTER.RETURN_POLICY' | translate }}</a></li>
+          <li><a href="mailto:support@vitatrex.com">{{ 'FOOTER.CONTACT_US' | translate }}</a></li>
+          <li><a routerLink="/quiz">{{ 'FOOTER.FAQ' | translate }}</a></li>
+          <li><a routerLink="/shipping">{{ 'FOOTER.SHIPPING_DELIVERY' | translate }}</a></li>
+        </ul>
+      </div>
+
+      <!-- ── 4. Column 4: Newsletter & Accepted Payment Methods ── -->
+      <div class="footer-col footer-col--newsletter">
+        <h3 class="footer-heading">{{ 'FOOTER.NEWSLETTER_TITLE' | translate }}</h3>
+        <p class="newsletter-desc">
+          {{ 'FOOTER.NEWSLETTER_SUBTITLE' | translate }}
+        </p>
+
+        <!-- Newsletter Subscription Form -->
+        <form class="newsletter-form" (ngSubmit)="subscribeNewsletter()" role="form">
+          <div class="newsletter-input-wrap">
+            <input
+              type="email"
+              class="newsletter-input"
+              [placeholder]="'FOOTER.NEWSLETTER_PLACEHOLDER' | translate"
+              [formControl]="emailControl"
+              autocomplete="email"
+            />
+            <button type="submit" class="newsletter-submit-btn">
+              {{ 'FOOTER.SUBSCRIBE_BTN' | translate }}
+            </button>
+          </div>
+        </form>
+
+        <!-- Accepted Payment Methods -->
+        <div class="payment-methods-block">
+          <span class="payment-title">{{ 'FOOTER.PAYMENT_METHODS_TITLE' | translate }}</span>
+          <div class="payment-badges-row">
+            <div class="pay-badge">
+              <span>{{ 'FOOTER.VISA_MASTERCARD' | translate }}</span>
+              <span class="pay-icon">💳</span>
+            </div>
+            <div class="pay-badge">
+              <span>{{ 'FOOTER.COD' | translate }}</span>
+              <span class="pay-icon">💵</span>
+            </div>
+            <div class="pay-badge">
+              <span>{{ 'FOOTER.VODAFONE_CASH' | translate }}</span>
+              <span class="pay-icon">📱</span>
+            </div>
+          </div>
+          <div class="payment-security-note">
+            <span class="sec-icon">🔒</span>
+            <span>{{ 'FOOTER.SECURE_TRANSACTIONS' | translate }}</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── Bottom Bar: Copyright & Policy Links ── -->
+    <div class="site-footer__bottom">
+      <div class="container bottom-inner">
+        <p class="copyright-text">
+          {{ 'FOOTER.RIGHTS' | translate: { year: currentYear } }}
+        </p>
+        <div class="bottom-policy-links">
+          <a routerLink="/shipping">{{ 'FOOTER.PRIVACY_POLICY' | translate }}</a>
+          <span class="sep">•</span>
+          <a routerLink="/shipping">{{ 'FOOTER.TERMS_OF_SERVICE' | translate }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Question / Help Button -->
+  <button
+    class="floating-support-btn"
+    (click)="openHelpModal()"
+    [attr.aria-label]="'FOOTER.HELP_TITLE' | translate"
+    [title]="'FOOTER.HELP_TITLE' | translate"
+    type="button"
+  >
+    ?
+  </button>
+</footer>

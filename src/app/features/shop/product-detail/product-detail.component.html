@@ -1,0 +1,265 @@
+<main class="detail-page container" *ngIf="product$ | async as product; else loading">
+  <!-- Top Breadcrumb / Back Link -->
+  <nav class="detail-breadcrumb" aria-label="Breadcrumb">
+    <a routerLink="/shop" class="detail-breadcrumb__link">
+      <span class="arrow" aria-hidden="true">←</span>
+      <span>{{ 'PRODUCT.BACK_TO_SHOP' | translate }}</span>
+    </a>
+  </nav>
+
+  <div class="product-showcase-grid">
+    <!-- ══════════════════════════════════════════════════════════════
+         LEFT COLUMN: Vertical Thumbnails + Big Product Image
+         ══════════════════════════════════════════════════════════════ -->
+    <section class="gallery-column">
+      <div class="gallery-wrapper">
+        <!-- Vertical Thumbnails Column -->
+        <div class="vertical-thumbnails" *ngIf="getThumbnails(product) as thumbs">
+          <button
+            *ngFor="let thumb of thumbs; let i = index"
+            type="button"
+            class="thumb-btn"
+            [class.is-active]="selectedImage === thumb || (!selectedImage && i === 0)"
+            (click)="selectImage(thumb)"
+            [attr.aria-label]="'عرض الصورة ' + (i + 1)"
+          >
+            <img [src]="thumb" [alt]="product.name + ' - ' + (i + 1)" loading="lazy" />
+          </button>
+        </div>
+
+        <!-- Main Big Image Showcase -->
+        <div class="main-image-card">
+          <!-- Bestseller / Featured Badge -->
+          <span class="showcase-badge" *ngIf="product.isBestSeller">
+            🏆 {{ 'PRODUCT.BEST_SELLER' | translate }}
+          </span>
+
+          <div class="main-image-stage">
+            <img
+              [src]="getImageUrl(product)"
+              [alt]="product.name"
+              class="showcase-main-img"
+              loading="eager"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         RIGHT COLUMN: 360 Nutrition Style Product Info & Purchase Flow
+         ══════════════════════════════════════════════════════════════ -->
+    <section class="info-column">
+      <!-- Product Title (Bold, uppercase, modern) -->
+      <h1 class="product-title-360">{{ product.name }}</h1>
+
+      <!-- Health & Benefit Pills Row -->
+      <div class="health-pills-row">
+        <span
+          *ngFor="let pill of getPills(product)"
+          class="health-pill"
+          [ngClass]="pill.colorClass"
+        >
+          <span class="pill-emoji">{{ pill.emoji }}</span>
+          <span class="pill-label">{{ pill.label }}</span>
+        </span>
+      </div>
+
+      <!-- Price Row -->
+      <div class="price-row-360" *ngIf="selectedVariant">
+        <span class="price-value">
+          LE {{ (selectedVariant.price * quantity) | number:'1.2-2' }}
+        </span>
+        <span
+          class="price-slashed"
+          *ngIf="selectedVariant.originalPrice && selectedVariant.originalPrice > selectedVariant.price"
+        >
+          LE {{ (selectedVariant.originalPrice * quantity) | number:'1.2-2' }}
+        </span>
+        <span
+          class="price-discount-tag"
+          *ngIf="selectedVariant.discountPercentage > 0"
+        >
+          -{{ selectedVariant.discountPercentage }}%
+        </span>
+      </div>
+
+      <!-- Accordion: DESCRIPTION -->
+      <div class="accordion-section">
+        <button
+          type="button"
+          class="accordion-header"
+          (click)="toggleDescription()"
+          [attr.aria-expanded]="isDescriptionOpen"
+        >
+          <div class="accordion-header-left">
+            <span class="accordion-icon">💬</span>
+            <span class="accordion-title">{{ 'PRODUCT.DESCRIPTION' | translate }}</span>
+          </div>
+          <span class="accordion-toggle-symbol">{{ isDescriptionOpen ? '—' : '+' }}</span>
+        </button>
+
+        <div class="accordion-body" *ngIf="isDescriptionOpen">
+          <!-- Catchy Headline -->
+          <h2 class="description-headline">
+            {{ getHeadline(product) }}
+          </h2>
+
+          <!-- Main Description Paragraph -->
+          <p class="description-text">
+            {{ product.description || 'تركيبة فريدة ومتطورة من الفيتامينات والمعادن الطبيعية بنكهات لذيذة لدعم صحة ومناعة ونشاط الجسم يومياً بدون سكر مضاف أو مواد حافظة.' }}
+          </p>
+
+          <!-- HOW IT WORKS Section -->
+          <div class="how-it-works-box">
+            <h3 class="how-it-works-title">{{ 'PRODUCT.HOW_IT_WORKS' | translate }}</h3>
+            <p class="how-it-works-text" *ngIf="!product.benefits?.length">
+              تعمل العناصر الغذائية الأساسية في تناغم تام لتعزيز الامتصاص الفعال في الجسم، ودعم الطاقة الحيوية وقوة العظام وجهاز المناعة، لتشعر بالانتعاش والنشاط كل يوم.
+            </p>
+            <ul class="benefits-bullet-list" *ngIf="product.benefits?.length">
+              <li *ngFor="let benefit of product.benefits" class="benefit-bullet-item">
+                <span class="bullet-dot">✨</span>
+                <span>{{ benefit }}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Size / Variant Selector (if available) -->
+      <div class="variants-picker" *ngIf="product.variants && product.variants.length > 1">
+        <span class="picker-label">{{ 'PRODUCT.CHOOSE_SIZE' | translate }}</span>
+        <div class="picker-options">
+          <button
+            *ngFor="let v of product.variants; trackBy: trackByVariant"
+            type="button"
+            class="picker-btn"
+            [class.is-active]="v === selectedVariant"
+            (click)="selectVariant(v)"
+          >
+            <span class="picker-btn-count">{{ v.count }} {{ 'COMMON.PIECES' | translate }}</span>
+            <span class="picker-btn-discount" *ngIf="v.discountPercentage > 0">
+              -{{ v.discountPercentage }}%
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <!-- CTA Buttons & Quantity Flow -->
+      <div class="purchase-cta-flow">
+        <!-- Row 1: Quantity Selector + ADD TO CART Button -->
+        <div class="cta-row-top">
+          <!-- Capsule Quantity Selector -->
+          <div class="capsule-qty">
+            <button
+              type="button"
+              class="qty-btn"
+              (click)="decrement()"
+              aria-label="Decrease quantity"
+            >
+              —
+            </button>
+            <span class="qty-number">{{ quantity }}</span>
+            <button
+              type="button"
+              class="qty-btn"
+              (click)="increment()"
+              aria-label="Increase quantity"
+            >
+              +
+            </button>
+          </div>
+
+          <!-- Primary ADD TO CART Button -->
+          <button
+            type="button"
+            class="btn-360 btn-360-add"
+            (click)="addToCart(product)"
+          >
+            <svg class="cart-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <path d="M16 10a4 4 0 0 1-8 0"/>
+            </svg>
+            <span>{{ 'PRODUCT.ADD_TO_CART' | translate }}</span>
+          </button>
+        </div>
+
+        <!-- Row 2: Full Width BUY IT NOW Button -->
+        <button
+          type="button"
+          class="btn-360 btn-360-buynow"
+          (click)="buyNow(product)"
+        >
+          <span>{{ 'PRODUCT.BUY_IT_NOW' | translate }}</span>
+        </button>
+      </div>
+
+      <!-- Free shipping & trust guarantees strip -->
+      <div class="trust-guarantees">
+        <div class="guarantee-item">
+          <span class="g-icon">🚚</span>
+          <span>{{ 'MARQUEE.FREE_SHIPPING' | translate }}</span>
+        </div>
+        <div class="guarantee-item">
+          <span class="g-icon">🌿</span>
+          <span>{{ 'MARQUEE.NATURAL' | translate }}</span>
+        </div>
+        <div class="guarantee-item">
+          <span class="g-icon">🔒</span>
+          <span>{{ 'MARQUEE.HALAL' | translate }}</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       BOTTOM SECTION: You May Also Like / Suggested Products
+       ══════════════════════════════════════════════════════════════ -->
+  <section class="suggestions-section" *ngIf="suggestedProducts.length > 0">
+    <div class="suggestions-header">
+      <h2 class="suggestions-title">{{ 'PRODUCTS_SECTION.TITLE' | translate }}</h2>
+      <p class="suggestions-subtitle">{{ 'PRODUCTS_SECTION.SUBTITLE' | translate }}</p>
+    </div>
+
+    <div class="suggestions-grid">
+      <article class="suggest-card" *ngFor="let p of suggestedProducts; trackBy: trackById">
+        <a [routerLink]="['/shop', p.slug]" class="suggest-card__link">
+          <div class="suggest-card__img-wrap">
+            <img [src]="p.image" [alt]="p.name" loading="lazy" />
+          </div>
+          <div class="suggest-card__body">
+            <h3 class="suggest-card__name">{{ p.name }}</h3>
+            <div class="suggest-card__price">
+              <span>LE {{ getMinPrice(p) | number }}</span>
+            </div>
+          </div>
+        </a>
+        <button
+          type="button"
+          class="suggest-card__btn"
+          (click)="addSuggestedToCart(p)"
+        >
+          {{ 'PRODUCT.ADD_TO_CART' | translate }}
+        </button>
+      </article>
+    </div>
+  </section>
+</main>
+
+<!-- Loading Skeleton -->
+<ng-template #loading>
+  <div class="detail-page-skeleton container" aria-busy="true">
+    <div class="sk-back"></div>
+    <div class="sk-layout">
+      <div class="sk-gallery"></div>
+      <div class="sk-info">
+        <div class="sk-line sk-line--lg"></div>
+        <div class="sk-line sk-line--sm"></div>
+        <div class="sk-line sk-line--md"></div>
+        <div class="sk-blocks"></div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+

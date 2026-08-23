@@ -1,0 +1,244 @@
+<!-- ══════════════════════════════════════════════════════════════
+     VITATRIX CLEAN MINIMALIST FLOATING NAVBAR
+     Matches Reference: Logo | HOME SHOP ABOUT US CONTACT | EN ⌵  🔍 👤 🛍️
+     ══════════════════════════════════════════════════════════════ -->
+
+<header class="site-header-wrapper" [class.is-scrolled]="isScrolled()">
+  <div class="site-header-card container">
+
+    <!-- ── 1. Brand Logo ────────────────────────────────────────── -->
+    <a routerLink="/" class="navbar-brand" aria-label="Vitatrex Homepage">
+      <img
+        src="assets/logo.png"
+        alt="Vitatrex"
+        class="navbar-brand-logo"
+        width="165"
+        height="46"
+        loading="eager"
+      />
+    </a>
+
+    <!-- ── 2. Center Navigation Links ──────────────────────────── -->
+    <nav class="navbar-nav-links" aria-label="Main Navigation">
+      <ul class="nav-links-list" role="list">
+
+        <!-- 1. HOME -->
+        <li class="nav-link-item">
+          <a
+            routerLink="/"
+            [routerLinkActiveOptions]="{ exact: true }"
+            routerLinkActive="is-active"
+            class="nav-link-anchor"
+          >
+            {{ 'NAV.HOME' | translate }}
+          </a>
+        </li>
+
+        <!-- 2. SHOP -->
+        <li class="nav-link-item">
+          <a
+            routerLink="/shop"
+            [routerLinkActiveOptions]="{ exact: true }"
+            routerLinkActive="is-active"
+            class="nav-link-anchor"
+          >
+            {{ 'NAV.SHOP' | translate }}
+          </a>
+        </li>
+
+        <!-- 3. ABOUT US -->
+        <li class="nav-link-item">
+          <a
+            href="javascript:void(0)"
+            (click)="scrollToAbout($event)"
+            class="nav-link-anchor"
+          >
+            {{ 'NAV.ABOUT_US' | translate }}
+          </a>
+        </li>
+
+        <!-- 4. CONTACT -->
+        <li class="nav-link-item">
+          <a
+            href="javascript:void(0)"
+            (click)="scrollToContact($event)"
+            class="nav-link-anchor"
+          >
+            {{ 'NAV.CONTACT' | translate }}
+          </a>
+        </li>
+
+      </ul>
+    </nav>
+
+    <!-- ── 3. Right Actions Group ───────────────────────────────── -->
+    <div class="navbar-actions-group">
+
+      <!-- Language Dropdown Pill: EN ⌵ / عربي ⌵ -->
+      <button
+        type="button"
+        class="lang-dropdown-pill"
+        (click)="switchLanguage()"
+        [attr.aria-label]="'LANG.SWITCH_TO' | translate"
+        [title]="'LANG.SWITCH_TO' | translate"
+      >
+        <span class="lang-label">{{ (currentLang$ | async) === 'ar' ? 'عربي' : 'EN' }}</span>
+        <svg class="chevron-svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 9l6 6 6-6"/>
+        </svg>
+      </button>
+
+      <!-- Search Icon Button & Expandable Form -->
+      <div class="search-action-wrap" [class.is-open]="isSearchOpen">
+        <form
+          class="search-expandable-form"
+          (ngSubmit)="submitSearch()"
+          role="search"
+        >
+          <input
+            class="search-input-field"
+            type="search"
+            [placeholder]="'NAV.SEARCH_PLACEHOLDER' | translate"
+            [formControl]="searchControl"
+            [attr.aria-hidden]="!isSearchOpen"
+            [attr.tabindex]="isSearchOpen ? 0 : -1"
+            autocomplete="off"
+          />
+        </form>
+
+        <button
+          type="button"
+          class="icon-action-btn search-btn"
+          (click)="toggleSearch()"
+          [attr.aria-expanded]="isSearchOpen"
+          [attr.aria-label]="'COMMON.SEARCH' | translate"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="7.5"/>
+            <path d="M21 21l-4.35-4.35"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- User Account Profile Button (links to /track) -->
+      <a
+        routerLink="/track"
+        class="icon-action-btn profile-btn"
+        [attr.aria-label]="'NAV.TRACK_ORDER' | translate"
+        title="Account & Orders"
+      >
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </a>
+
+      <!-- Shopping Bag Cart Button with Notification Badge -->
+      <button
+        type="button"
+        class="icon-action-btn bag-btn"
+        (click)="openCart()"
+        [attr.aria-label]="'NAV.CART_ARIA' | translate"
+        id="navbar-bag-btn"
+      >
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 0 1-8 0"/>
+        </svg>
+
+        <!-- Notification Dot / Counter matching image -->
+        <span
+          *ngIf="(itemCount$ | async) as count"
+          class="bag-dot-badge"
+          [class.has-count]="count > 0"
+          [attr.aria-label]="count + ' items'"
+        >
+          <span *ngIf="count > 0" class="count-num">{{ count }}</span>
+        </span>
+      </button>
+
+      <!-- Mobile Hamburger Button -->
+      <button
+        type="button"
+        class="icon-action-btn mobile-hamburger"
+        (click)="toggleMenu()"
+        [attr.aria-expanded]="isMenuOpen"
+        aria-label="Toggle Navigation"
+      >
+        <span class="hamburger-lines" [class.is-open]="isMenuOpen">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ── 4. Mobile Navigation Dropdown Sheet ──────────────────── -->
+  <div
+    class="mobile-nav-sheet"
+    [class.is-open]="isMenuOpen"
+    aria-label="Mobile Navigation"
+  >
+    <div class="mobile-nav-sheet-inner">
+
+      <!-- Mobile Links List -->
+      <ul class="mobile-sheet-links" role="list">
+        <li>
+          <a routerLink="/" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="is-active" (click)="closeMenu()">
+            {{ 'NAV.HOME' | translate }}
+          </a>
+        </li>
+        <li>
+          <a routerLink="/shop" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="is-active" (click)="closeMenu()">
+            {{ 'NAV.SHOP' | translate }}
+          </a>
+        </li>
+        <li>
+          <a href="javascript:void(0)" (click)="scrollToAbout($event)">
+            {{ 'NAV.ABOUT_US' | translate }}
+          </a>
+        </li>
+        <li>
+          <a href="javascript:void(0)" (click)="scrollToContact($event)">
+            {{ 'NAV.CONTACT' | translate }}
+          </a>
+        </li>
+        <li>
+          <a routerLink="/track" (click)="closeMenu()">
+            {{ 'NAV.TRACK_ORDER' | translate }}
+          </a>
+        </li>
+      </ul>
+
+      <!-- Mobile Search Form -->
+      <form class="mobile-sheet-search" (ngSubmit)="submitSearch()" role="search">
+        <input
+          class="mobile-sheet-input"
+          type="search"
+          [placeholder]="'NAV.SEARCH_PLACEHOLDER' | translate"
+          [formControl]="searchControl"
+          autocomplete="off"
+        />
+        <button type="submit" class="mobile-sheet-submit" aria-label="Search">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </button>
+      </form>
+
+      <!-- Language Toggle Footer -->
+      <div class="mobile-sheet-footer">
+        <button type="button" class="mobile-sheet-lang-btn" (click)="switchLanguage(); closeMenu()">
+          <span>{{ (currentLang$ | async) === 'ar' ? 'Switch to English' : 'التحويل إلى العربية' }}</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+</header>
+
+

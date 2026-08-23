@@ -1,0 +1,60 @@
+<!-- ── Loading Skeleton ─────────────────────────────────── -->
+<div class="fb-poster-skeleton" *ngIf="isLoading" aria-hidden="true">
+  <div class="fb-poster-skeleton__shimmer"></div>
+</div>
+
+<!-- ── Grand Cinematic Poster Billboard ─────────────────── -->
+<section
+  class="featured-poster-section"
+  *ngIf="!isLoading && featured"
+  aria-label="Featured Poster"
+>
+  <a
+    [routerLink]="featured.link"
+    class="featured-poster-card"
+    [attr.aria-label]="featured.title"
+  >
+    <!-- ① POSTER IMAGE CONTAINER -->
+    <div class="poster-image-wrap">
+      <img
+        [src]="featured.image"
+        [alt]="featured.title"
+        class="poster-main-img"
+        loading="eager"
+        decoding="async"
+      />
+
+      <!-- Discount Badge on Photo -->
+      <div class="poster-top-badge" *ngIf="featured.discountPct && featured.discountPct > 0">
+        <span class="badge-fire">🔥</span>
+        <span>{{ 'FEATURED_BANNER.SAVE_PERCENT' | translate: { percent: featured.discountPct } }}</span>
+      </div>
+
+      <!-- Desktop-only bottom vignette -->
+      <div class="poster-bottom-vignette" aria-hidden="true"></div>
+    </div>
+
+    <!-- ② POSTER ACTION PANEL (Integrated Bottom on Mobile, Floating Glass on Desktop) -->
+    <div class="poster-floating-bar">
+      <div class="poster-bar-info">
+        <span class="poster-bar-tag" *ngIf="featured.tagline">{{ featured.tagline }}</span>
+        <h3 class="poster-bar-title">{{ featured.title }}</h3>
+      </div>
+
+      <div class="poster-bar-actions">
+        <div class="poster-bar-pricing">
+          <span class="poster-price-current">{{ featured.price | number }} {{ 'COMMON.CURRENCY' | translate }}</span>
+          <span
+            class="poster-price-slashed"
+            *ngIf="featured.originalPrice && featured.originalPrice > featured.price"
+          >{{ featured.originalPrice | number }} {{ 'COMMON.CURRENCY' | translate }}</span>
+        </div>
+
+        <span class="poster-cta-btn">
+          <span>{{ 'FEATURED_BANNER.SHOP_NOW' | translate }}</span>
+        </span>
+      </div>
+    </div>
+
+  </a>
+</section>

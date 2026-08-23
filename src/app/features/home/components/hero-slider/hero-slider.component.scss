@@ -1,0 +1,683 @@
+// ══════════════════════════════════════════════════════════════
+// VITATRIX HERO SECTION SCSS
+// Block A: Ultra-Minimalist GSAP Typography
+// Block B: Edge-to-Edge Banner + ScrollTrigger Floating Elements
+// ══════════════════════════════════════════════════════════════
+
+// ── Shimmer Keyframe (Skeleton) ───────────────────────────────
+@keyframes skShimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+// ══════════════════════════════════════════════════════════════
+// BACKGROUND ANIMATION KEYFRAMES
+// ══════════════════════════════════════════════════════════════
+
+@keyframes fruitFloat1 {
+  0%   { transform: translateY(0)   rotate(0deg)   scale(1);    opacity: 0.18; }
+  25%  { transform: translateY(-18px) rotate(6deg)  scale(1.06); opacity: 0.28; }
+  50%  { transform: translateY(-8px)  rotate(-4deg) scale(0.96); opacity: 0.22; }
+  75%  { transform: translateY(-22px) rotate(8deg)  scale(1.08); opacity: 0.3;  }
+  100% { transform: translateY(0)   rotate(0deg)   scale(1);    opacity: 0.18; }
+}
+@keyframes fruitFloat2 {
+  0%   { transform: translateY(0)    rotate(0deg)   scale(1);    opacity: 0.16; }
+  30%  { transform: translateY(14px) rotate(-8deg)  scale(0.94); opacity: 0.26; }
+  60%  { transform: translateY(-6px) rotate(5deg)   scale(1.05); opacity: 0.2;  }
+  85%  { transform: translateY(10px) rotate(-5deg)  scale(0.98); opacity: 0.24; }
+  100% { transform: translateY(0)    rotate(0deg)   scale(1);    opacity: 0.16; }
+}
+@keyframes fruitFloat3 {
+  0%   { transform: translateY(0) translateX(0)    rotate(0deg)    scale(1);    opacity: 0.14; }
+  20%  { transform: translateY(-14px) translateX(8px) rotate(-6deg)  scale(1.07); opacity: 0.25; }
+  55%  { transform: translateY(6px)  translateX(-5px) rotate(4deg)   scale(0.95); opacity: 0.18; }
+  80%  { transform: translateY(-18px) translateX(4px) rotate(-3deg)  scale(1.04); opacity: 0.27; }
+  100% { transform: translateY(0) translateX(0)    rotate(0deg)    scale(1);    opacity: 0.14; }
+}
+@keyframes fruitDrift {
+  0%   { transform: translate(0, 0)     rotate(0deg); }
+  33%  { transform: translate(12px, -15px) rotate(12deg); }
+  66%  { transform: translate(-8px, 8px)  rotate(-8deg); }
+  100% { transform: translate(0, 0)     rotate(0deg); }
+}
+@keyframes sparkleFlicker {
+  0%, 100% { opacity: 0.12; transform: scale(0.85) rotate(0deg); }
+  20%       { opacity: 0.6;  transform: scale(1.2) rotate(45deg); }
+  40%       { opacity: 0.1;  transform: scale(0.7) rotate(90deg); }
+  70%       { opacity: 0.55; transform: scale(1.3) rotate(180deg); }
+}
+@keyframes sparkleFlicker2 {
+  0%, 100% { opacity: 0.08; transform: scale(0.9) rotate(0deg); }
+  35%       { opacity: 0.5;  transform: scale(1.35) rotate(-60deg); }
+  55%       { opacity: 0.07; transform: scale(0.75) rotate(-120deg); }
+  80%       { opacity: 0.45; transform: scale(1.2) rotate(-200deg); }
+}
+@keyframes arrowWobble {
+  0%, 100% { transform: rotate(0deg) scale(1); opacity: 0.45; }
+  25%       { transform: rotate(6deg) scale(1.05) translateY(-4px); opacity: 0.7; }
+  50%       { transform: rotate(-3deg) scale(0.97); opacity: 0.4; }
+  75%       { transform: rotate(4deg) scale(1.03) translateY(-2px); opacity: 0.65; }
+}
+@keyframes arrowWobble2 {
+  0%, 100% { transform: scaleX(-1) rotate(0deg) scale(1); opacity: 0.4; }
+  30%       { transform: scaleX(-1) rotate(-7deg) scale(1.06) translateY(-5px); opacity: 0.65; }
+  60%       { transform: scaleX(-1) rotate(3deg) scale(0.96); opacity: 0.35; }
+  85%       { transform: scaleX(-1) rotate(-4deg) scale(1.04); opacity: 0.6; }
+}
+@keyframes arrowWobble3 {
+  0%, 100% { transform: rotate(0deg) scale(1) translateY(0); opacity: 0.38; }
+  40%       { transform: rotate(-10deg) scale(1.08) translateY(-6px); opacity: 0.6; }
+  70%       { transform: rotate(5deg) scale(0.95) translateY(3px); opacity: 0.32; }
+}
+@keyframes arrowWobble4 {
+  0%, 100% { transform: rotate(0deg) scale(1); opacity: 0.35; }
+  35%       { transform: rotate(8deg) scale(1.07) translateX(4px); opacity: 0.6; }
+  65%       { transform: rotate(-5deg) scale(0.95) translateX(-2px); opacity: 0.3; }
+}
+@keyframes orbitSpin1 {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(360deg); }
+}
+@keyframes orbitSpin2 {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(-360deg); }
+}
+
+// ── Main Hero Section Wrapper ─────────────────────────────────
+.hero-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  overflow-x: hidden;
+  background-color: var(--bg-app, #fdfbf7);
+}
+
+// ══════════════════════════════════════════════════════════════
+// BLOCK A — ULTRA-MINIMALIST TYPOGRAPHY STRIP
+// ══════════════════════════════════════════════════════════════
+.hero-text-strip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  padding: 2.75rem 1.5rem 2.5rem;
+
+  @media (min-width: 768px) {
+    padding: 4rem 2rem 3.5rem;
+  }
+
+  @media (min-width: 1200px) {
+    padding: 5rem 2rem 4rem;
+  }
+
+  // ── Hero Logo Image ──────────────────────────────────────────
+  .hero-logo-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.75rem;
+    position: relative;
+    z-index: 2;
+
+    .hero-brand-logo-img {
+      max-width: 85vw;
+      width: auto;
+      height: 72px;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.05));
+      transition: transform 0.3s ease;
+
+      @media (min-width: 640px) {
+        height: 92px;
+      }
+
+      @media (min-width: 900px) {
+        height: 112px;
+      }
+
+      @media (min-width: 1200px) {
+        height: 130px;
+      }
+
+      &:hover {
+        transform: scale(1.02);
+      }
+    }
+  }
+
+  // ── Brand Name (Fallback) ──────────────────────────────────
+  .hero-brand {
+    direction: ltr !important;
+    unicode-bidi: isolate !important;
+    font-family: 'Plus Jakarta Sans', 'Readex Pro', -apple-system, sans-serif;
+    font-size: clamp(2.6rem, 6vw, 5.5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: var(--primary-900, #064e3b);
+    margin: 0 0 0.8rem;
+    will-change: opacity, letter-spacing;
+
+    // VitaTrix SLEEP WELL Purple Gradient
+    background: linear-gradient(135deg, #5e439b 0%, #422c71 55%, #20174b 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  // ── Slogan ───────────────────────────────────────────────────
+  .hero-slogan {
+    font-size: clamp(1.1rem, 2.4vw, 1.65rem);
+    font-weight: 500;
+    line-height: 1.55;
+    color: var(--text-muted, #64748b);
+    margin: 0;
+    max-width: 720px;
+    letter-spacing: 0;
+    will-change: opacity, filter;
+    position: relative;
+    z-index: 2;
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+// HERO BACKGROUND ANIMATION LAYER
+// ══════════════════════════════════════════════════════════════
+
+// ── Container ────────────────────────────────────────────────
+.hero-bg-anim {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+// ── Floating Fruits ──────────────────────────────────────────
+.bg-fruit {
+  position: absolute;
+  font-size: 2rem;
+  user-select: none;
+  will-change: transform, opacity;
+  filter: blur(0.3px);
+  line-height: 1;
+
+  @media (min-width: 768px) { font-size: 2.4rem; }
+  @media (min-width: 1200px) { font-size: 2.8rem; }
+}
+
+// Positions & individual animation assignments
+.fruit-1  { top: 8%;  left: 3%;   animation: fruitFloat1 7.2s ease-in-out infinite; animation-delay: 0s;    }
+.fruit-2  { top: 14%; right: 4%;  animation: fruitFloat2 8.5s ease-in-out infinite; animation-delay: -1.5s; }
+.fruit-3  { top: 5%;  left: 18%;  animation: fruitFloat3 6.8s ease-in-out infinite; animation-delay: -2.2s; }
+.fruit-4  { top: 6%;  right: 20%; animation: fruitFloat1 9.1s ease-in-out infinite; animation-delay: -3.8s; }
+.fruit-5  { top: 72%; left: 2%;   animation: fruitFloat2 7.6s ease-in-out infinite; animation-delay: -1.1s; }
+.fruit-6  { top: 75%; right: 3%;  animation: fruitFloat3 8.2s ease-in-out infinite; animation-delay: -4.5s; }
+.fruit-7  { top: 35%; left: 1.5%; animation: fruitFloat1 6.4s ease-in-out infinite; animation-delay: -0.7s; }
+.fruit-8  { top: 40%; right: 2%;  animation: fruitFloat2 9.8s ease-in-out infinite; animation-delay: -2.9s; }
+.fruit-9  { top: 85%; left: 12%;  animation: fruitFloat3 7.9s ease-in-out infinite; animation-delay: -3.3s; }
+.fruit-10 { top: 82%; right: 14%; animation: fruitFloat1 8.7s ease-in-out infinite; animation-delay: -5.1s; }
+.fruit-11 { top: 55%; left: 6%;   animation: fruitDrift  11s ease-in-out infinite;  animation-delay: -2.0s; }
+.fruit-12 { top: 20%; left: calc(50% - 1.5rem); animation: fruitFloat2 10.3s ease-in-out infinite; animation-delay: -6.2s; }
+
+// ── Sparkle Stars ─────────────────────────────────────────────
+.bg-sparkle {
+  position: absolute;
+  font-size: 1rem;
+  color: #10b981;
+  user-select: none;
+  will-change: transform, opacity;
+  opacity: 0.12;
+}
+.sp-1 { top: 12%;  left: 8%;   color: #5e439b; animation: sparkleFlicker  3.4s ease-in-out infinite; animation-delay: 0s;    font-size: 1.1rem; }
+.sp-2 { top: 22%;  right: 10%; color: #d2bbf0; animation: sparkleFlicker2 4.1s ease-in-out infinite; animation-delay: -1.2s; font-size: 0.9rem; }
+.sp-3 { top: 60%;  left: 9%;   color: #5e439b; animation: sparkleFlicker  2.9s ease-in-out infinite; animation-delay: -0.6s; font-size: 1.3rem; }
+.sp-4 { top: 65%;  right: 8%;  color: #20174b; animation: sparkleFlicker2 3.7s ease-in-out infinite; animation-delay: -2.4s; font-size: 0.85rem;}
+.sp-5 { top: 88%;  left: 22%;  color: #9c7bd3; animation: sparkleFlicker  4.5s ease-in-out infinite; animation-delay: -1.8s; font-size: 1.2rem; }
+.sp-6 { top: 90%;  right: 24%; color: #5e439b; animation: sparkleFlicker2 3.1s ease-in-out infinite; animation-delay: -3.0s; font-size: 0.95rem;}
+.sp-7 { top: 3%;   left: 38%;  color: #d2bbf0; animation: sparkleFlicker  5.2s ease-in-out infinite; animation-delay: -0.3s; font-size: 1.4rem; }
+.sp-8 { top: 48%;  right: 30%; color: #20174b; animation: sparkleFlicker2 2.6s ease-in-out infinite; animation-delay: -4.1s; font-size: 0.8rem; }
+
+// ── Doodle Arrows ─────────────────────────────────────────────
+.bg-arrow {
+  position: absolute;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+.arrow-1 {
+  width: clamp(50px, 7vw, 90px);
+  height: auto;
+  top: 15%;
+  left: 12%;
+  animation: arrowWobble 5.5s ease-in-out infinite;
+  animation-delay: -1.0s;
+}
+.arrow-2 {
+  width: clamp(45px, 6vw, 80px);
+  height: auto;
+  top: 18%;
+  right: 13%;
+  animation: arrowWobble2 6.2s ease-in-out infinite;
+  animation-delay: -2.5s;
+}
+.arrow-3 {
+  width: clamp(38px, 5vw, 68px);
+  height: auto;
+  top: 70%;
+  left: 15%;
+  animation: arrowWobble3 7.0s ease-in-out infinite;
+  animation-delay: -3.5s;
+}
+.arrow-4 {
+  width: clamp(40px, 5.5vw, 74px);
+  height: auto;
+  top: 68%;
+  right: 16%;
+  animation: arrowWobble4 5.8s ease-in-out infinite;
+  animation-delay: -0.8s;
+}
+
+// ── Orbit Rings ───────────────────────────────────────────────
+.orbit-ring {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  top: 50%;
+  left: 50%;
+  border-style: dashed;
+  will-change: transform;
+  opacity: 0.06;
+}
+.ring-1 {
+  width: min(460px, 85vw);
+  height: min(460px, 85vw);
+  border-width: 1.5px;
+  border-color: #5e439b;
+  animation: orbitSpin1 28s linear infinite;
+}
+.ring-2 {
+  width: min(320px, 60vw);
+  height: min(320px, 60vw);
+  border-width: 1px;
+  border-color: #d2bbf0;
+  animation: orbitSpin2 20s linear infinite;
+  animation-delay: -8s;
+}
+
+// Make sure the strip itself is positioned and never overflows
+.hero-text-strip {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+// ══════════════════════════════════════════════════════════════
+// BLOCK B — EDGE-TO-EDGE BANNER
+// ══════════════════════════════════════════════════════════════
+.hero-banner-bleed {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  overflow: hidden;
+}
+
+.hero-banner-frame {
+  position: relative;
+  width: 100%;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent;
+  overflow: hidden;
+  will-change: transform, opacity;
+
+  .hero-banner-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    max-width: none !important;
+    transform-origin: center center;
+    will-change: transform;
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+// BLOCK C — EDITORIAL BRAND MANIFESTO STRIP
+// ══════════════════════════════════════════════════════════════
+.hero-manifesto-strip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: clamp(2.5rem, 6vw, 4.5rem) 1.25rem clamp(1.8rem, 4vw, 3rem);
+  gap: clamp(10px, 2vw, 16px);
+  box-sizing: border-box;
+
+  .manifesto-headline-wrap {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 0.5rem;
+  }
+
+  .manifesto-curly-arrow {
+    position: absolute;
+    top: -34px;
+    right: -14px;
+    width: 48px;
+    height: 40px;
+    color: #5e439b; // VitaTrix SLEEP WELL Purple
+    pointer-events: none;
+    z-index: 10;
+    transform: scaleX(-1) rotate(-10deg);
+    transform-origin: center center;
+    animation: arrowNudgeRtl 2.4s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
+
+    @media (min-width: 576px) {
+      top: -46px;
+      right: -36px;
+      width: 66px;
+      height: 55px;
+    }
+
+    @media (min-width: 992px) {
+      top: -58px;
+      right: -62px;
+      width: 84px;
+      height: 70px;
+    }
+
+    .curly-arrow-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      overflow: visible;
+      filter: drop-shadow(0 4px 10px rgba(94, 67, 155, 0.45));
+    }
+
+    .arrow-loop {
+      stroke-dasharray: 300;
+      stroke-dashoffset: 0;
+    }
+
+    .arrow-head {
+      transform-origin: 91px 63px;
+    }
+  }
+
+  :host-context([dir='ltr']) .manifesto-curly-arrow {
+    right: auto;
+    left: -14px;
+    transform: rotate(10deg);
+    animation: arrowNudgeLtr 2.4s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
+
+    @media (min-width: 576px) {
+      left: -36px;
+    }
+
+    @media (min-width: 992px) {
+      left: -62px;
+    }
+  }
+
+  .manifesto-headline {
+    font-size: clamp(1.85rem, 5.2vw, 3rem);
+    font-weight: 900;
+    color: #20174b;
+    font-family: 'Readex Pro', 'Noto Kufi Arabic', sans-serif;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    margin: 0;
+    text-align: center;
+    word-break: break-word;
+  }
+
+  .manifesto-body {
+    font-size: clamp(0.98rem, 2.2vw, 1.25rem);
+    font-weight: 500;
+    color: #475569;
+    line-height: 1.75;
+    margin: 0;
+    text-align: center;
+    max-width: 780px;
+    padding: 0 0.25rem;
+  }
+}
+
+// ── Playful Rhythmic Pointing Nudge (RTL / Arabic) ─────────────
+@keyframes arrowNudgeRtl {
+  0%, 100% {
+    transform: scaleX(-1) rotate(-10deg) translate(0, 0) scale(1);
+    filter: drop-shadow(0 4px 10px rgba(94, 67, 155, 0.4));
+  }
+  24% {
+    transform: scaleX(-1) rotate(-16deg) translate(-10px, 8px) scale(1.08);
+    filter: drop-shadow(0 6px 14px rgba(16, 185, 129, 0.6));
+  }
+  42% {
+    transform: scaleX(-1) rotate(-8deg) translate(-2px, 2px) scale(0.98);
+    filter: drop-shadow(0 3px 8px rgba(16, 185, 129, 0.35));
+  }
+  60% {
+    transform: scaleX(-1) rotate(-14deg) translate(-7px, 6px) scale(1.05);
+    filter: drop-shadow(0 5px 12px rgba(16, 185, 129, 0.5));
+  }
+  80% {
+    transform: scaleX(-1) rotate(-9deg) translate(-1px, 1px) scale(1);
+    filter: drop-shadow(0 4px 10px rgba(94, 67, 155, 0.4));
+  }
+}
+
+// ── Playful Rhythmic Pointing Nudge (LTR / English) ────────────
+@keyframes arrowNudgeLtr {
+  0%, 100% {
+    transform: rotate(10deg) translate(0, 0) scale(1);
+    filter: drop-shadow(0 4px 10px rgba(94, 67, 155, 0.4));
+  }
+  24% {
+    transform: rotate(16deg) translate(10px, 8px) scale(1.08);
+    filter: drop-shadow(0 6px 14px rgba(16, 185, 129, 0.6));
+  }
+  42% {
+    transform: rotate(8deg) translate(2px, 2px) scale(0.98);
+    filter: drop-shadow(0 3px 8px rgba(16, 185, 129, 0.35));
+  }
+  60% {
+    transform: rotate(14deg) translate(7px, 6px) scale(1.05);
+    filter: drop-shadow(0 5px 12px rgba(16, 185, 129, 0.5));
+  }
+  80% {
+    transform: rotate(9deg) translate(1px, 1px) scale(1);
+    filter: drop-shadow(0 4px 10px rgba(94, 67, 155, 0.4));
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+// SCROLLTRIGGER FLOATING ELEMENTS
+// ══════════════════════════════════════════════════════════════
+.hero-floating-elements {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 5;
+}
+
+@keyframes floatBob1 {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-12px) rotate(6deg); }
+}
+
+@keyframes floatBob2 {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(14px) rotate(-8deg); }
+}
+
+@keyframes floatBob3 {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-10px) rotate(-5deg); }
+}
+
+.floating-item {
+  position: absolute;
+  will-change: transform, opacity;
+  z-index: 10;
+  user-select: none;
+  pointer-events: none;
+
+  // On very small mobile screens, show core 6 items for maximum clarity
+  @media (max-width: 600px) {
+    &.item-7, &.item-8, &.item-11,
+    &.item-9, &.item-10, &.item-12 {
+      display: none;
+    }
+  }
+
+  .floating-bubble {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.38);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1.5px solid rgba(255, 255, 255, 0.65);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.14);
+    font-size: 1.35rem;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    @media (min-width: 768px) {
+      width: 52px;
+      height: 52px;
+      font-size: 1.75rem;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
+    }
+
+    @media (min-width: 992px) {
+      width: 66px;
+      height: 66px;
+      font-size: 2.25rem;
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.18);
+    }
+
+    // Organic continuous floating bob animations with varied rhythms
+    &.bubble-glow-red {
+      box-shadow: 0 12px 26px rgba(239, 68, 68, 0.25);
+      animation: floatBob1 4.2s ease-in-out infinite;
+    }
+    &.bubble-glow-green {
+      box-shadow: 0 12px 26px rgba(34, 197, 94, 0.25);
+      animation: floatBob2 4.8s ease-in-out infinite 0.4s;
+    }
+    &.bubble-glow-orange {
+      box-shadow: 0 12px 26px rgba(249, 115, 22, 0.25);
+      animation: floatBob3 3.8s ease-in-out infinite 0.8s;
+    }
+    &.bubble-glow-blue {
+      box-shadow: 0 12px 26px rgba(59, 130, 246, 0.25);
+      animation: floatBob1 4.5s ease-in-out infinite 0.2s;
+    }
+    &.bubble-glow-yellow {
+      box-shadow: 0 12px 26px rgba(234, 179, 8, 0.25);
+      animation: floatBob2 4s ease-in-out infinite 0.6s;
+    }
+    &.bubble-glow-purple {
+      box-shadow: 0 12px 26px rgba(168, 85, 247, 0.25);
+      animation: floatBob3 4.6s ease-in-out infinite 0.3s;
+    }
+    &.bubble-glow-gold {
+      box-shadow: 0 12px 26px rgba(251, 191, 36, 0.3);
+      animation: floatBob1 3.6s ease-in-out infinite 0.9s;
+    }
+    &.bubble-glow-pink {
+      box-shadow: 0 12px 26px rgba(244, 63, 94, 0.25);
+      animation: floatBob2 4.4s ease-in-out infinite 0.5s;
+    }
+    &.bubble-glow-emerald {
+      box-shadow: 0 12px 26px rgba(16, 185, 129, 0.25);
+      animation: floatBob3 4.1s ease-in-out infinite 0.7s;
+    }
+  }
+
+  // Left column particles
+  &.floating-left {
+    &.item-1  { top: 8%;  left: 2%; }
+    &.item-2  { top: 26%; left: 4.5%; }
+    &.item-3  { top: 48%; left: 1.5%; }
+    &.item-7  { top: 68%; left: 4%; }
+    &.item-8  { top: 85%; left: 2%; }
+    &.item-11 { top: 38%; left: 7.5%; }
+  }
+
+  // Right column particles
+  &.floating-right {
+    &.item-4  { top: 10%; right: 2%; }
+    &.item-5  { top: 28%; right: 4.5%; }
+    &.item-6  { top: 50%; right: 1.5%; }
+    &.item-9  { top: 69%; right: 4%; }
+    &.item-10 { top: 87%; right: 2%; }
+    &.item-12 { top: 40%; right: 7.5%; }
+  }
+}
+
+// ── Skeleton Loader ───────────────────────────────────────────
+.hero-section--skeleton {
+  .hero-text-strip {
+    padding: 3rem 1.5rem 2.5rem;
+  }
+
+  .sk-shimmer {
+    background: linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.04) 0%,
+      rgba(0, 0, 0, 0.09) 50%,
+      rgba(0, 0, 0, 0.04) 100%
+    );
+    background-size: 200% 100%;
+    animation: skShimmer 1.8s infinite ease-in-out;
+    border-radius: 12px;
+  }
+
+  .sk-brand {
+    width: 240px;
+    height: 58px;
+    border-radius: 14px;
+    margin-bottom: 0.85rem;
+  }
+
+  .sk-slogan {
+    width: 480px;
+    max-width: 88%;
+    height: 26px;
+    border-radius: 8px;
+  }
+
+  .sk-image-box {
+    width: 100%;
+    aspect-ratio: 16 / 7;
+    min-height: 320px;
+    border-radius: 0;
+  }
+}

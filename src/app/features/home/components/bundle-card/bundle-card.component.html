@@ -1,0 +1,257 @@
+﻿<!-- == Section — "اصنع باقتك" Dynamic Bundle Cards ============================================== -->
+<section
+  class="bc-section"
+  aria-label="باقات اصنع باقتك الخاصة"
+  *ngIf="!isLoading && bundles.length > 0"
+>
+  <div class="bc-container">
+
+    <!-- -- Section Header ---------------------------------------------------- -->
+    <div class="bc-header">
+      <span class="bc-header-pill">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
+        </svg>
+        باقة مخصصة لك
+      </span>
+      <h2 class="bc-header-title">اصنع باقتك الخاصة 🎯</h2>
+      <p class="bc-header-subtitle">
+        ثلاثة منتجات من اختيارك الحر — بسعر واحد مميز
+      </p>
+    </div>
+
+    <!-- -- Bundle Cards ------------------------------------------------------- -->
+    <div class="bc-cards-grid">
+      <article
+        class="bc-card"
+        *ngFor="let bundle of bundles; trackBy: trackById"
+        [attr.id]="'bundle-' + bundle._id"
+      >
+
+        <!-- Badge -->
+        <div class="bc-card-badges" *ngIf="bundle.badgeText || bundle.discountPercentage > 0">
+          <span class="bc-badge bc-badge--discount" *ngIf="bundle.discountPercentage > 0">
+            وفر {{ bundle.discountPercentage }}%
+          </span>
+          <span class="bc-badge bc-badge--custom" *ngIf="bundle.badgeText">
+            {{ bundle.badgeText }}
+          </span>
+        </div>
+
+        <!-- Title -->
+        <div class="bc-card-header">
+          <h3 class="bc-card-title">{{ bundle.title }}</h3>
+          <p class="bc-card-desc" *ngIf="bundle.description">{{ bundle.description }}</p>
+          <!-- Pool size hint -->
+          <p class="bc-card-pool-hint">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            اختر من بين {{ getAllowedProducts(bundle).length }} منتجات متاحة
+          </p>
+        </div>
+
+        <!-- == 3-Slot Row ====================================================== -->
+        <div class="bc-slots" dir="rtl">
+
+          <ng-container *ngFor="let slotIdx of [0, 1, 2]">
+
+            <!-- Divider (between slots) -->
+            <span class="bc-slot-plus" *ngIf="slotIdx > 0" aria-hidden="true">+</span>
+
+            <!-- Slot: Empty / Interactive -->
+            <div
+              class="bc-slot bc-slot--interactive"
+              *ngIf="!getSlotProduct(bundle._id, slotIdx)"
+            >
+              <button
+                class="bc-slot-pick-btn"
+                type="button"
+                (click)="openModalForSlot(bundle._id, slotIdx)"
+                [attr.aria-label]="slotAria[slotIdx] + ' لباقة ' + bundle.title"
+                [attr.id]="'bundle-slot' + slotIdx + '-pick-' + bundle._id"
+              >
+                <span class="bc-slot-number" aria-hidden="true">{{ slotIdx + 1 }}</span>
+                <span class="bc-slot-pick-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="28" height="28" fill="none"
+                    stroke="currentColor" stroke-width="2.2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="16"/>
+                    <line x1="8" y1="12" x2="16" y2="12"/>
+                  </svg>
+                </span>
+                <span class="bc-slot-pick-label">{{ slotLabels[slotIdx] }}</span>
+              </button>
+            </div>
+
+            <!-- Slot: Filled / Chosen Product -->
+            <div
+              class="bc-slot bc-slot--filled"
+              [class.bc-slot--check-anim]="isSlotCheckAnimating(bundle._id, slotIdx)"
+              *ngIf="getSlotProduct(bundle._id, slotIdx) as p"
+            >
+              <div
+                class="bc-slot-img-wrap"
+                (click)="openModalForSlot(bundle._id, slotIdx)"
+                role="button"
+                [attr.aria-label]="'تغيير ' + slotLabels[slotIdx]"
+                tabindex="0"
+                (keydown.enter)="openModalForSlot(bundle._id, slotIdx)"
+              >
+                <img
+                  class="bc-slot-img"
+                  [src]="formatMediaUrl(p.image)"
+                  [alt]="p.name"
+                  loading="lazy"
+                />
+                <!-- Checkmark overlay -->
+                <div class="bc-slot-check" [class.visible]="isSlotCheckAnimating(bundle._id, slotIdx)" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="36" height="36" fill="none"
+                    stroke="#fff" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </div>
+                <!-- Change hint -->
+                <div class="bc-slot-change-hint" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                    <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/>
+                  </svg>
+                  تغيير
+                </div>
+              </div>
+              <span class="bc-slot-number bc-slot-number--filled" aria-hidden="true">{{ slotIdx + 1 }}</span>
+              <p class="bc-slot-name">{{ p.name }}</p>
+            </div>
+
+          </ng-container>
+
+        </div><!-- /.bc-slots -->
+
+        <!-- == Pricing & CTA ================================================== -->
+        <div class="bc-card-footer">
+          <div class="bc-pricing">
+            <span class="bc-price-current">
+              {{ bundle.bundlePrice | number }}<small> ج.م</small>
+            </span>
+            <span class="bc-price-original" *ngIf="bundle.originalPrice > bundle.bundlePrice">
+              {{ bundle.originalPrice | number }} ج.م
+            </span>
+            <span class="bc-price-save" *ngIf="bundle.originalPrice > bundle.bundlePrice">
+              وفر {{ (bundle.originalPrice - bundle.bundlePrice) | number }} ج.م
+            </span>
+          </div>
+
+          <button
+            class="bc-cta-btn"
+            type="button"
+            [class.bc-cta-btn--active]="allSlotsSelected(bundle._id)"
+            [class.bc-cta-btn--loading]="isAddingBundle(bundle._id)"
+            [disabled]="!allSlotsSelected(bundle._id) || isAddingBundle(bundle._id)"
+            (click)="addBundleToCart(bundle, $event)"
+            [attr.id]="'bundle-add-cart-' + bundle._id"
+            [attr.aria-label]="'أضف الباقة للسلة: ' + bundle.title"
+          >
+            <svg
+              *ngIf="!isAddingBundle(bundle._id)"
+              viewBox="0 0 24 24" width="18" height="18" fill="none"
+              stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <path d="M16 10a4 4 0 0 1-8 0"/>
+            </svg>
+            <span *ngIf="!allSlotsSelected(bundle._id) && !isAddingBundle(bundle._id)">
+              اختر المنتجات الثلاثة أولاً
+            </span>
+            <span *ngIf="allSlotsSelected(bundle._id) && !isAddingBundle(bundle._id)">
+              أضف الباقة للسلة 🛒
+            </span>
+            <span *ngIf="isAddingBundle(bundle._id)">
+              تمت الإضافة ✓
+            </span>
+          </button>
+        </div>
+
+        <!-- == Product Selection Modal ======================================== -->
+        <div
+          class="bc-modal-backdrop"
+          *ngIf="isModalOpen(bundle._id)"
+          (click)="onBackdropClick(bundle._id, $event)"
+          role="dialog"
+          [attr.aria-label]="getActiveSlotLabel(bundle._id) + ' لباقة ' + bundle.title"
+          aria-modal="true"
+        >
+          <div class="bc-modal">
+            <!-- Modal Header -->
+            <div class="bc-modal-header">
+              <div class="bc-modal-header-text">
+                <h4 class="bc-modal-title">{{ getActiveSlotLabel(bundle._id) }}</h4>
+                <p class="bc-modal-subtitle">اختر منتجًا من القائمة ليكمل باقتك</p>
+              </div>
+              <button
+                class="bc-modal-close"
+                type="button"
+                (click)="closeModal(bundle._id)"
+                aria-label="إغلاق نافذة الاختيار"
+              >
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none"
+                  stroke="currentColor" stroke-width="2.5"
+                  stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="18" y1="6" x2="6" y2="18"/>
+                  <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Products Grid -->
+            <div class="bc-modal-grid" dir="rtl">
+              <button
+                class="bc-modal-product"
+                type="button"
+                *ngFor="let product of getAllowedProducts(bundle); trackBy: trackByProductId"
+                [class.bc-modal-product--selected]="getSlotProduct(bundle._id, getActiveSlotIdx(bundle._id))?._id === product._id"
+                (click)="selectProductForSlot(bundle, product)"
+                [attr.id]="'bundle-option-' + bundle._id + '-' + product._id"
+                [attr.aria-label]="'اختر: ' + product.name"
+              >
+                <div class="bc-modal-product-img-wrap">
+                  <img
+                    class="bc-modal-product-img"
+                    [src]="formatMediaUrl(product.image)"
+                    [alt]="product.name"
+                    loading="lazy"
+                  />
+                  <!-- Selected checkmark -->
+                  <div
+                    class="bc-modal-product-check"
+                    *ngIf="getSlotProduct(bundle._id, getActiveSlotIdx(bundle._id))?._id === product._id"
+                    aria-hidden="true"
+                  >
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
+                      stroke="#fff" stroke-width="3"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                  </div>
+                </div>
+                <p class="bc-modal-product-name">{{ product.name }}</p>
+                <p class="bc-modal-product-price" *ngIf="product.variants?.[0]?.price">
+                  {{ product.variants[0].price | number }} ج.م
+                </p>
+              </button>
+            </div>
+          </div><!-- /.bc-modal -->
+        </div><!-- /.bc-modal-backdrop -->
+
+      </article>
+    </div><!-- /.bc-cards-grid -->
+  </div><!-- /.bc-container -->
+</section>
+
+<!-- Skeleton while loading -->
+<section class="bc-section bc-section--skeleton" *ngIf="isLoading" aria-busy="true">
+  <div class="bc-container">
+    <div class="bc-skeleton-header sk-shimmer"></div>
+    <div class="bc-skeleton-card sk-shimmer"></div>
+  </div>
+</section>

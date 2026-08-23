@@ -1,0 +1,77 @@
+<article class="product-card-360" *ngIf="product">
+  <!-- ── Image Stage ────────────────────────────────────────── -->
+  <a [routerLink]="['/shop', product.slug]" class="product-card-360__stage" [attr.aria-label]="product.name">
+    <div class="product-card-360__img-box">
+      <img
+        [src]="product.image || 'assets/images/hero-fallback.webp'"
+        [alt]="product.name"
+        class="product-card-360__img"
+        loading="lazy"
+      />
+    </div>
+
+    <!-- Badges -->
+    <div class="product-card-360__badges">
+      <span class="card-badge badge--bestseller" *ngIf="product.isBestSeller">
+        🏆 {{ 'PRODUCT.BEST_SELLER' | translate }}
+      </span>
+      <span class="card-badge badge--featured" *ngIf="product.isFeatured && !product.isBestSeller">
+        ⭐ {{ 'PRODUCT.FEATURED' | translate }}
+      </span>
+      <span
+        class="card-badge badge--discount"
+        *ngIf="selectedVariant && selectedVariant.discountPercentage > 0"
+      >
+        -{{ selectedVariant.discountPercentage }}%
+      </span>
+    </div>
+  </a>
+
+  <!-- ── Product Details (Centered 360 Nutrition Style) ──────── -->
+  <div class="product-card-360__details">
+    <!-- Title -->
+    <h3 class="product-card-360__title">
+      <a [routerLink]="['/shop', product.slug]">{{ product.name }}</a>
+    </h3>
+
+    <!-- Price -->
+    <div class="product-card-360__pricing" *ngIf="selectedVariant">
+      <span class="price-main">LE {{ selectedVariant.price | number:'1.2-2' }}</span>
+      <span
+        class="price-old"
+        *ngIf="selectedVariant.originalPrice && selectedVariant.originalPrice > selectedVariant.price"
+      >
+        LE {{ selectedVariant.originalPrice | number:'1.2-2' }}
+      </span>
+    </div>
+
+    <!-- Variant Selector (if multiple) -->
+    <div class="product-card-360__variants" *ngIf="product.variants && product.variants.length > 1" role="group">
+      <button
+        *ngFor="let v of product.variants; trackBy: trackByCount"
+        type="button"
+        class="variant-btn"
+        [class.is-active]="v === selectedVariant"
+        (click)="selectVariant(v)"
+      >
+        {{ v.count }} {{ 'COMMON.PIECES' | translate }}
+      </button>
+    </div>
+
+    <!-- Action Button (Add to Cart) -->
+    <button
+      type="button"
+      class="product-card-360__cta"
+      (click)="addToCart($event)"
+      [attr.aria-label]="'PRODUCT.ADD_TO_CART' | translate"
+    >
+      <svg class="cart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <path d="M16 10a4 4 0 0 1-8 0"/>
+      </svg>
+      <span>{{ 'PRODUCT.ADD_TO_CART' | translate }}</span>
+    </button>
+  </div>
+</article>
+

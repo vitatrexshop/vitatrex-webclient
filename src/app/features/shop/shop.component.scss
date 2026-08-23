@@ -1,0 +1,258 @@
+// ══════════════════════════════════════════════════════════════
+// Vitatrix Shop Page — 360 Nutrition Luxury Showcase
+// Palette: Solar Amber (#f59e0b), Slate Dark (#111827), Neutral Canvas (#fdfbf7)
+// ══════════════════════════════════════════════════════════════
+
+.shop-page {
+  padding-top: var(--space-8, 2rem);
+  padding-bottom: var(--space-16, 4rem);
+  font-family: 'Readex Pro', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+// ── 1. Shop Header ───────────────────────────────────────────
+.shop-header {
+  text-align: center;
+  margin-bottom: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+
+  .shop-header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: #5e439b;
+    background: #ede4f8;
+    border: 1px solid #d8c8ee;
+    padding: 4px 16px;
+    border-radius: 9999px;
+  }
+
+  &__title {
+    font-size: 2.1rem;
+    font-weight: 900;
+    color: #111827;
+    margin: 0;
+    line-height: 1.2;
+
+    @media (min-width: 768px) {
+      font-size: 2.6rem;
+    }
+  }
+
+  &__subtitle {
+    font-size: 0.95rem;
+    color: #6b7280;
+    max-width: 600px;
+    line-height: 1.6;
+    margin: 0;
+  }
+}
+
+// ── 2. Filters Bar ───────────────────────────────────────────
+.shop-filters-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 36px;
+  padding: 12px 16px;
+  background: #ffffff;
+  border-radius: 24px;
+  border: 1px solid #f1f5f9;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+
+  @media (min-width: 860px) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.category-chips-scroll {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: none; // Firefox
+  &::-webkit-scrollbar { display: none; } // Chrome
+
+  .chip-360 {
+    padding: 8px 18px;
+    border-radius: 9999px;
+    border: 1.5px solid #e5e7eb;
+    background: #ffffff;
+    color: #4b5563;
+    font-weight: 700;
+    font-size: 0.88rem;
+    font-family: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    .chip-icon {
+      width: 16px;
+      height: 16px;
+      object-fit: contain;
+    }
+
+    &:hover {
+      border-color: #5e439b;
+      color: #20174b;
+      background: #ede4f8;
+      transform: translateY(-1px);
+    }
+
+    &.is-active {
+      border-color: #20174b;
+      background: linear-gradient(135deg, #5e439b 0%, #20174b 100%) !important;
+      color: #ffffff !important;
+      box-shadow: 0 4px 14px rgba(32, 23, 75, 0.3);
+      transform: scale(1.02);
+    }
+  }
+}
+
+// Search Input Box
+.shop-search-box {
+  position: relative;
+  width: 100%;
+
+  @media (min-width: 860px) {
+    max-width: 280px;
+    flex-shrink: 0;
+  }
+
+  .search-icon {
+    position: absolute;
+    inset-inline-start: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    color: #9ca3af;
+    pointer-events: none;
+  }
+
+  .search-input {
+    width: 100%;
+    height: 42px;
+    padding-inline-start: 40px;
+    padding-inline-end: 14px;
+    border-radius: 9999px;
+    border: 1.5px solid #e5e7eb;
+    background: #fafafa;
+    color: #111827;
+    font-size: 0.88rem;
+    font-family: inherit;
+    outline: none;
+    transition: all 0.2s ease;
+
+    &:focus {
+      border-color: #5e439b;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(94, 67, 155, 0.18);
+    }
+
+    &::placeholder {
+      color: #9ca3af;
+    }
+  }
+}
+
+// ── 3. Product Grid (3-Column 360 Nutrition Signature Layout) ─
+.shop-grid-section {
+  width: 100%;
+}
+
+.grid-360 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+
+  @media (min-width: 860px) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+
+  &--bundles {
+    @media (min-width: 860px) {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+  }
+}
+
+// ── 4. Empty State ───────────────────────────────────────────
+.no-results-box {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 64px 20px;
+  background: #ffffff;
+  border-radius: 24px;
+  border: 1px dashed #e5e7eb;
+  gap: 12px;
+
+  .no-results-icon {
+    font-size: 3rem;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .no-results-title {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #111827;
+    margin: 0;
+  }
+
+  .no-results-desc {
+    font-size: 0.92rem;
+    color: #6b7280;
+    max-width: 450px;
+    margin: 0 0 12px 0;
+  }
+
+  .no-results-btn {
+    padding: 10px 24px;
+    border-radius: 9999px;
+    background: linear-gradient(135deg, #5e439b 0%, #20174b 100%);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 0.88rem;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(32, 23, 75, 0.25);
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: linear-gradient(135deg, #7152b7 0%, #2b1f63 100%);
+      transform: translateY(-1px);
+    }
+  }
+}
+
+// ── 5. Skeleton Shimmer Placeholder ──────────────────────────
+.skeleton-card-360 {
+  aspect-ratio: 1 / 1.3;
+  background: #f3f4f6;
+  border-radius: 20px;
+  animation: shimmerShop 1.5s infinite;
+}
+
+@keyframes shimmerShop {
+  0%   { opacity: 0.5; }
+  50%  { opacity: 1; }
+  100% { opacity: 0.5; }
+}
+

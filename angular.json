@@ -44,8 +44,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "15kb",
+                  "maximumError": "30kb"
                 }
               ],
               "outputHashing": "all"
@@ -68,7 +68,8 @@
               "browserTarget": "vitatrix_webclient:build:production"
             },
             "development": {
-              "browserTarget": "vitatrix_webclient:build:development"
+              "browserTarget": "vitatrix_webclient:build:development",
+              "proxyConfig": "src/proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"
@@ -100,5 +101,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "698ad58c-7b90-4224-8fcf-c79432250f6d"
   }
 }

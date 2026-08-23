@@ -1,0 +1,155 @@
+<!-- ══════════════════════════════════════════════════════════════
+     VITATRIX MOBILE FLOATING BOTTOM DOCK NAVIGATION
+     Exact Reference Match: Rounded floating pill with orange border,
+     elevated center Shop button, Cart with dynamic badge, Search & Account
+     ══════════════════════════════════════════════════════════════ -->
+
+<!-- Quick Search Popup Sheet for Mobile -->
+<div
+  class="mobile-search-sheet"
+  [class.is-open]="isSearchOpen"
+  aria-hidden="!isSearchOpen"
+>
+  <div class="search-sheet-backdrop" (click)="closeSearch()"></div>
+  <div class="search-sheet-card">
+    <div class="search-sheet-header">
+      <h3 class="search-sheet-title">{{ 'COMMON.SEARCH' | translate }}</h3>
+      <button
+        type="button"
+        class="search-sheet-close"
+        (click)="closeSearch()"
+        [attr.aria-label]="'COMMON.CLOSE' | translate"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <form class="search-sheet-form" (ngSubmit)="submitSearch()">
+      <div class="search-sheet-input-wrap">
+        <svg class="search-sheet-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input
+          #searchInput
+          type="search"
+          class="search-sheet-input"
+          [placeholder]="'NAV.SEARCH_PLACEHOLDER' | translate"
+          [formControl]="searchControl"
+          autocomplete="off"
+        />
+        <button type="submit" class="search-sheet-btn">
+          {{ 'COMMON.SEARCH' | translate }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Main Floating Dock Container -->
+<nav
+  class="mobile-bottom-dock"
+  [class.is-hidden]="(isCartDrawerOpen$ | async) || (isCheckoutPage$ | async)"
+  aria-label="Mobile Navigation"
+>
+  <div class="dock-container">
+
+    <!-- 1. الرئيسية (Home) -->
+    <a
+      routerLink="/"
+      [routerLinkActiveOptions]="{ exact: true }"
+      routerLinkActive="is-active"
+      class="dock-item"
+      (click)="closeSearch()"
+      aria-label="Home"
+    >
+      <div class="dock-icon-wrap">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9.5L12 3l9 6.5V20a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 20V9.5z"/>
+        </svg>
+      </div>
+      <span class="dock-label">{{ 'NAV.HOME' | translate }}</span>
+    </a>
+
+    <!-- 2. بحث (Search) -->
+    <button
+      type="button"
+      class="dock-item dock-btn"
+      [class.is-active]="isSearchOpen"
+      (click)="toggleSearch()"
+      aria-label="Search"
+    >
+      <div class="dock-icon-wrap">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="7.5"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </div>
+      <span class="dock-label">{{ 'NAV.SEARCH' | translate }}</span>
+    </button>
+
+    <!-- 3. تسوق (Center Highlighted Shop Button) -->
+    <a
+      routerLink="/shop"
+      routerLinkActive="is-active"
+      class="dock-item dock-item--center"
+      (click)="closeSearch()"
+      aria-label="Shop"
+    >
+      <div class="center-circle-btn">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9.5L12 3l9 6.5V20a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 20V9.5z"/>
+          <path d="M9 13.5h6v7.5H9z"/>
+        </svg>
+      </div>
+      <span class="dock-label center-label">{{ 'NAV.SHOP_NOW' | translate }}</span>
+    </a>
+
+    <!-- 4. السلة (Cart with Badge) -->
+    <button
+      type="button"
+      class="dock-item dock-btn"
+      (click)="openCart()"
+      aria-label="Cart"
+    >
+      <div class="dock-icon-wrap">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="20" r="1.2"/>
+          <circle cx="19" cy="20" r="1.2"/>
+          <path d="M1 1h4l2.68 12.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+
+        <!-- Dynamic Counter Badge -->
+        <span
+          *ngIf="(itemCount$ | async) as count"
+          class="dock-badge"
+          [class.has-count]="count > 0"
+        >
+          {{ count }}
+        </span>
+      </div>
+      <span class="dock-label">{{ 'NAV.CART' | translate }}</span>
+    </button>
+
+    <!-- 5. حسابي (Account / Order Track) -->
+    <a
+      routerLink="/track"
+      routerLinkActive="is-active"
+      class="dock-item"
+      (click)="closeSearch()"
+      aria-label="Account"
+    >
+      <div class="dock-icon-wrap">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </div>
+      <span class="dock-label">{{ 'NAV.ACCOUNT' | translate }}</span>
+    </a>
+
+  </div>
+</nav>

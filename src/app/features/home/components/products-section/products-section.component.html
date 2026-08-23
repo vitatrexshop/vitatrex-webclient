@@ -1,0 +1,75 @@
+<section class="products-section" aria-labelledby="products-sec-title">
+
+  <!-- ── Section Header ──────────────────────────────────────── -->
+  <div class="section-header container">
+    <span class="section-tag">{{ 'PRODUCTS_SECTION.TAG' | translate }}</span>
+    <h2 id="products-sec-title" class="section-title">{{ 'PRODUCTS_SECTION.TITLE' | translate }}</h2>
+    <p class="section-subtitle">{{ 'PRODUCTS_SECTION.SUBTITLE' | translate }}</p>
+  </div>
+
+  <!-- ── Dynamic Category Filter Bar ─────────────────────────── -->
+  <div class="category-pills-bar container" role="tablist" aria-label="تصنيفات المنتجات">
+    <button
+      *ngFor="let cat of categories"
+      type="button"
+      class="category-pill"
+      [class.is-active]="(selectedCategory$ | async) === cat.id"
+      [attr.aria-selected]="(selectedCategory$ | async) === cat.id"
+      role="tab"
+      (click)="setCategory(cat.id)"
+    >
+      {{ cat.labelKey | translate }}
+    </button>
+  </div>
+
+  <!-- ── Truly Endless Marquee Slider ────────────────────────── -->
+  <ng-container *ngIf="filteredProducts$ | async as products; else loading">
+
+    <!-- Empty State -->
+    <div class="empty-fallback container" *ngIf="products.length === 0">
+      <p>{{ 'PRODUCTS_SECTION.EMPTY' | translate }}</p>
+    </div>
+
+    <!-- Endless Marquee Wrapper -->
+    <div
+      *ngIf="products.length > 0"
+      class="featured-marquee-wrapper"
+      [class.is-paused]="isPaused"
+      (mouseenter)="isPaused = true"
+      (mouseleave)="isPaused = false"
+      (touchstart)="isPaused = true"
+      (touchend)="isPaused = false"
+      aria-label="عرض المنتجات المتحركة"
+    >
+      <div class="featured-marquee-track" [class.is-paused]="isPaused">
+
+        <!-- Pass 1 -->
+        <div
+          class="product-card-item"
+          *ngFor="let prod of getRepeatedProducts(products); let i = index; trackBy: trackByIndex"
+        >
+          <app-product-card [product]="prod"></app-product-card>
+        </div>
+
+        <!-- Pass 2 (Exact Duplicate for seamless endless looping) -->
+        <div
+          class="product-card-item"
+          *ngFor="let prod of getRepeatedProducts(products); let i = index; trackBy: trackByIndex"
+          aria-hidden="true"
+        >
+          <app-product-card [product]="prod"></app-product-card>
+        </div>
+
+      </div>
+    </div>
+
+  </ng-container>
+
+  <!-- ── Loading Skeleton ─────────────────────────────────────── -->
+  <ng-template #loading>
+    <div class="section-skeleton-marquee" aria-hidden="true">
+      <div class="skeleton-card" *ngFor="let i of [1,2,3,4,5]"></div>
+    </div>
+  </ng-template>
+
+</section>

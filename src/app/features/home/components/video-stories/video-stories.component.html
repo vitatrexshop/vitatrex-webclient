@@ -1,0 +1,320 @@
+<!-- ══════════════════════════════════════════════════════════════
+     VITATRIX VIDEO STORIES / REELS — Section 4
+     Instagram-Style Interactive Video Stories Row & Reel Player
+     ══════════════════════════════════════════════════════════════ -->
+
+<section #storiesSection class="video-stories-section" aria-label="قصص وتجارب فيتاتريكس">
+  <div class="vt-container">
+
+    <!-- ── Section Header ─────────────────────────────────────── -->
+    <div class="stories-section-header">
+      <span class="stories-badge-tag">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" class="badge-icon">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
+        </svg>
+        {{ 'STORIES_SECTION.TAG' | translate }}
+      </span>
+      <h2 class="stories-section-title">
+        {{ 'STORIES_SECTION.TITLE' | translate }}
+      </h2>
+      <p class="stories-section-subtitle">
+        {{ 'STORIES_SECTION.SUBTITLE' | translate }}
+      </p>
+    </div>
+
+    <!-- ── SKELETON LOADER STATE ──────────────────────────────── -->
+    <div *ngIf="isLoading" class="stories-track-wrapper" aria-busy="true">
+      <div class="stories-track">
+        <div *ngFor="let sk of [1, 2, 3, 4, 5]" class="story-reel-card story-card--skeleton">
+          <div class="story-card-skeleton sk-shimmer"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── LOADED STORIES BAR ROW (INSTA REEL CARDS) ───────────── -->
+    <div *ngIf="!isLoading && stories.length > 0" class="stories-track-wrapper">
+      <!-- Left Navigation Arrow (Desktop) -->
+      <button
+        class="stories-nav-btn prev-btn"
+        type="button"
+        (click)="scrollTrack('left')"
+        aria-label="تمرير للخلف"
+      >
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+          <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+        </svg>
+      </button>
+
+      <!-- Scrollable Track of Instagram / 360 Reel Showcase Cards -->
+      <div #storiesTrack class="stories-track" role="list">
+        <article
+          *ngFor="let story of stories; let i = index"
+          class="story-reel-card"
+          role="listitem"
+          tabindex="0"
+          (click)="openStory(i)"
+          (keydown.enter)="openStory(i)"
+          [attr.aria-label]="story.title"
+        >
+          <!-- Full-Bleed Clean Showcase Media -->
+          <div class="story-card-media">
+            <img
+              [src]="formatMediaUrl(story.posterUrl)"
+              [alt]="story.title"
+              class="story-card-img"
+              loading="lazy"
+              (error)="onPosterError($event)"
+            />
+          </div>
+
+          <!-- Subtle Frosted Glass Play Indicator -->
+          <div class="story-card-play-hover" aria-hidden="true">
+            <div class="play-glass-btn">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- Right Navigation Arrow (Desktop) -->
+      <button
+        class="stories-nav-btn next-btn"
+        type="button"
+        (click)="scrollTrack('right')"
+        aria-label="تمرير للأمام"
+      >
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+          <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/>
+        </svg>
+      </button>
+    </div>
+
+  </div><!-- /.vt-container -->
+
+  <!-- ════════════════════════════════════════════════════════════
+       FULL-SCREEN INSTAGRAM-STYLE REEL MODAL PLAYER
+       ════════════════════════════════════════════════════════════ -->
+  <div
+    #modalElement
+    *ngIf="isModalOpen && currentStory"
+    class="story-reel-modal"
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-label]="currentStory.title"
+    (click)="closeModal()"
+    (touchstart)="onTouchStart($event)"
+    (touchend)="onTouchEnd($event)"
+  >
+    <!-- Dark Glass Blur Backdrop -->
+    <div class="reel-backdrop"></div>
+
+    <!-- Desktop Outside Left Nav Arrow -->
+    <button
+      class="modal-outside-nav prev"
+      type="button"
+      (click)="prevStory($event)"
+      *ngIf="activeStoryIndex > 0"
+      [attr.aria-label]="'STORIES_SECTION.PREV' | translate"
+    >
+      <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+      </svg>
+    </button>
+
+    <!-- Desktop Outside Right Nav Arrow -->
+    <button
+      class="modal-outside-nav next"
+      type="button"
+      (click)="nextStory($event)"
+      *ngIf="activeStoryIndex < stories.length - 1"
+      [attr.aria-label]="'STORIES_SECTION.NEXT' | translate"
+    >
+      <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+        <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/>
+      </svg>
+    </button>
+
+    <!-- ── Center Vertical Reel Viewport Card (9:16) ───────────── -->
+    <div class="reel-viewport-frame" (click)="$event.stopPropagation()">
+
+      <!-- Top Dark Shadow Gradient for Header Legibility -->
+      <div class="reel-top-gradient" aria-hidden="true"></div>
+
+      <!-- Top Story Progress Segments -->
+      <div class="story-progress-segments" aria-hidden="true">
+        <div
+          *ngFor="let s of stories; let idx = index"
+          class="progress-segment-track"
+        >
+          <div
+            class="progress-segment-fill"
+            [style.width.%]="idx < activeStoryIndex ? 100 : (idx === activeStoryIndex ? videoProgress : 0)"
+          ></div>
+        </div>
+      </div>
+
+      <!-- Top Story Header Bar -->
+      <div class="reel-top-header">
+        <div class="story-author-info">
+          <img
+            [src]="formatMediaUrl(currentStory.posterUrl)"
+            [alt]="currentStory.title"
+            class="story-author-avatar"
+            (error)="onPosterError($event)"
+          />
+          <div class="story-author-meta">
+            <span class="story-author-name">Vitatrex 🌿</span>
+            <span class="story-author-tag">{{ currentStory.title }}</span>
+          </div>
+        </div>
+
+        <div class="reel-top-actions">
+          <!-- Fit Mode Toggle (Contain full video vs Cover frame) -->
+          <button
+            class="reel-ctrl-icon reel-fit-toggle"
+            type="button"
+            (click)="toggleFitMode($event)"
+            [attr.title]="(fitMode === 'contain' ? 'STORIES_SECTION.FIT_COVER' : 'STORIES_SECTION.FIT_CONTAIN') | translate"
+            [attr.aria-label]="(fitMode === 'contain' ? 'STORIES_SECTION.FIT_COVER' : 'STORIES_SECTION.FIT_CONTAIN') | translate"
+          >
+            <svg *ngIf="fitMode === 'contain'" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+              <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+            </svg>
+            <svg *ngIf="fitMode === 'cover'" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+              <path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-14v3h3v2h2V5h-5z"/>
+            </svg>
+          </button>
+
+          <!-- Play / Pause Toggle -->
+          <button
+            class="reel-ctrl-icon"
+            type="button"
+            (click)="togglePlay($event)"
+            [attr.aria-label]="isPlaying ? ('STORIES_SECTION.PAUSE' | translate) : ('STORIES_SECTION.PLAY' | translate)"
+          >
+            <svg *ngIf="isPlaying" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+              <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+            </svg>
+            <svg *ngIf="!isPlaying" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+          </button>
+
+          <!-- Mute / Unmute Toggle -->
+          <button
+            class="reel-ctrl-icon"
+            type="button"
+            (click)="toggleMute($event)"
+            [attr.aria-label]="isMuted ? ('STORIES_SECTION.UNMUTE' | translate) : ('STORIES_SECTION.MUTE' | translate)"
+          >
+            <svg *ngIf="isMuted" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+              <path d="M16.5 12A4.5 4.5 0 0014 7.97v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51A8.796 8.796 0 0021 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06A8.99 8.99 0 0017.73 18l1.98 1.98L21 18.7 5.3 3 4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+            </svg>
+            <svg *ngIf="!isMuted" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+              <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0014 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+            </svg>
+          </button>
+
+          <!-- Close Button (Inside Frame) -->
+          <button
+            class="reel-ctrl-icon reel-close-icon"
+            type="button"
+            (click)="closeModal()"
+            [attr.aria-label]="'STORIES_SECTION.CLOSE' | translate"
+          >
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ── HTML5 Vertical Reel Video & Ambient Layer ───────────── -->
+      <div class="reel-video-layer" (click)="togglePlay($event)">
+        <!-- Ambient blurred backdrop for letterboxed videos -->
+        <div class="reel-ambient-layer" aria-hidden="true">
+          <img
+            [src]="formatMediaUrl(currentStory.posterUrl)"
+            [alt]="''"
+            class="ambient-backdrop-img"
+            (error)="onPosterError($event)"
+          />
+          <div class="ambient-overlay-shade"></div>
+        </div>
+
+        <video
+          #reelVideo
+          class="reel-video-element"
+          [ngClass]="'fit-' + fitMode"
+          [src]="formatVideoUrl(currentStory.videoUrl)"
+          [poster]="formatMediaUrl(currentStory.posterUrl)"
+          muted
+          [muted]="isMuted"
+          playsinline
+          webkit-playsinline
+          autoplay
+          preload="auto"
+          (play)="onVideoPlay()"
+          (pause)="onVideoPause()"
+          (timeupdate)="onVideoTimeUpdate()"
+          (ended)="onVideoEnded()"
+          (loadeddata)="onVideoLoaded()"
+          (error)="onVideoError($event)"
+        ></video>
+
+        <!-- Tap Zones for Previous / Next -->
+        <div class="reel-tap-zone zone-prev" (click)="prevStory($event)"></div>
+        <div class="reel-tap-zone zone-next" (click)="nextStory($event)"></div>
+
+        <!-- Large Glowing Center Play Button (Shown when paused) -->
+        <button
+          *ngIf="!isPlaying"
+          class="reel-center-play-btn"
+          type="button"
+          (click)="togglePlay($event)"
+          aria-label="تشغيل الفيديو"
+        >
+          <svg viewBox="0 0 24 24" width="38" height="38" fill="currentColor">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+        </button>
+
+        <!-- Play/Pause Splash Icon Feedback -->
+        <div *ngIf="showPlayPauseFeedback" class="reel-feedback-icon" aria-hidden="true">
+          <svg *ngIf="showPlayPauseFeedback === 'play'" viewBox="0 0 24 24" width="48" height="48" fill="currentColor">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+          <svg *ngIf="showPlayPauseFeedback === 'pause'" viewBox="0 0 24 24" width="48" height="48" fill="currentColor">
+            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- ── Floating Bottom Product CTA Card ─────────────────── -->
+      <div class="reel-bottom-overlay">
+        <div class="reel-product-cta-card">
+          <div class="product-cta-text">
+            <span class="product-cta-label">{{ currentStory.title }}</span>
+            <span class="product-cta-sub">فيتامينات طبيعية 100% بدون سكر مضاف</span>
+          </div>
+
+          <button
+            class="product-cta-btn"
+            type="button"
+            (click)="navigateToProduct(currentStory.productLink, $event)"
+          >
+            <span>{{ 'STORIES_SECTION.SHOP_PRODUCT' | translate }}</span>
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+              <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+    </div><!-- /.reel-viewport-frame -->
+
+  </div><!-- /.story-reel-modal -->
+
+</section>

@@ -1,0 +1,524 @@
+// ──────────────────────────────────────────────────────────────
+// Flavor Switcher — Premium Showcase & Interactive Explorer
+// ──────────────────────────────────────────────────────────────
+
+.fs-section {
+  padding-block: var(--space-16, 64px);
+  background: #fdfbf7; // Warm clean cream canvas
+  position: relative;
+}
+
+// ── Section Header ───────────────────────────────────────────
+.fs-header {
+  text-align: center;
+  margin-bottom: 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+
+  &__tag {
+    display: inline-block;
+    font-size: 0.82rem;
+    font-weight: 800;
+    color: #5e439b;
+    background: #ede4f8;
+    border: 1px solid #d8c8ee;
+    padding: 6px 18px;
+    border-radius: 9999px;
+    letter-spacing: 0.03em;
+  }
+
+  &__title {
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 900;
+    color: #20174b;
+    margin: 0;
+    font-family: 'Readex Pro', 'Noto Kufi Arabic', 'Plus Jakarta Sans', sans-serif;
+    line-height: 1.25;
+  }
+
+  &__sub {
+    font-size: 1.05rem;
+    color: #64748b;
+    margin: 0;
+    max-width: 540px;
+    line-height: 1.65;
+  }
+}
+
+// ── Product Selector Strip ───────────────────────────────────
+.fs-selector-strip {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding-bottom: 20px;
+  margin-bottom: 28px;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: #fed7aa transparent;
+
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #fed7aa;
+    border-radius: 9999px;
+  }
+
+  @media (min-width: 768px) {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    overflow: visible;
+  }
+}
+
+.fs-selector-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #ffffff;
+  border: 2px solid #f1f5f9;
+  border-radius: 20px;
+  padding: 12px 18px;
+  cursor: pointer;
+  text-align: right;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  min-width: 210px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  font-family: inherit;
+
+  &:hover {
+    transform: translateY(-3px);
+    border-color: #5e439b;
+    box-shadow: 0 10px 24px rgba(94, 67, 155, 0.12);
+  }
+
+  &.is-active {
+    background: #ffffff;
+    border-color: #5e439b;
+    box-shadow: 0 12px 30px rgba(94, 67, 155, 0.2);
+    transform: translateY(-4px);
+
+    .fs-selector-card__name {
+      color: #5e439b;
+    }
+  }
+
+  &__img-wrap {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.08));
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    overflow: hidden;
+  }
+
+  &__name {
+    font-size: 0.92rem;
+    font-weight: 800;
+    color: #1e1b4b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__price {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #64748b;
+  }
+
+  &__badge {
+    position: absolute;
+    top: -8px;
+    inset-inline-end: 12px;
+    font-size: 0.65rem;
+    font-weight: 800;
+    background: #5e439b;
+    color: #ffffff;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    box-shadow: 0 2px 8px rgba(94, 67, 155, 0.35);
+  }
+}
+
+// ── Main Showcase Panel ──────────────────────────────────────
+.fs-showcase-panel {
+  background: #ffffff;
+  border: 1.5px solid #ded4f0;
+  border-radius: 36px;
+  box-shadow: 0 20px 60px rgba(32, 23, 75, 0.08);
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  animation: fs-panel-fade-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+
+  @media (min-width: 900px) {
+    grid-template-columns: 1fr 1.15fr;
+  }
+}
+
+@keyframes fs-panel-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ── 1. Visual Showcase Column (Left in RTL) ───────────────────
+.fs-showcase__visual {
+  position: relative;
+  background: linear-gradient(135deg, #f5f0fc 0%, #ede4f8 50%, #faf7fe 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 32px;
+  min-height: 360px;
+  overflow: hidden;
+
+  @media (min-width: 900px) {
+    min-height: 480px;
+  }
+}
+
+.visual-aura-glow {
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, rgba(94, 67, 155, 0.25) 0%, rgba(32, 23, 75, 0.12) 50%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: aura-pulse 4s ease-in-out infinite alternate;
+}
+
+@keyframes aura-pulse {
+  from { transform: scale(0.85); opacity: 0.7; }
+  to   { transform: scale(1.15); opacity: 1; }
+}
+
+.visual-jar-frame {
+  position: relative;
+  width: 260px;
+  height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  @media (min-width: 768px) {
+    width: 320px;
+    height: 320px;
+  }
+}
+
+.visual-jar-img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 20px 35px rgba(225, 29, 72, 0.2));
+  animation: jar-gentle-float 3.6s ease-in-out infinite alternate;
+}
+
+@keyframes jar-gentle-float {
+  from { transform: translateY(0) rotate(0deg); }
+  to   { transform: translateY(-12px) rotate(1.5deg); }
+}
+
+// Floating Glassmorphism Badges
+.fs-floating-badge {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(254, 215, 170, 0.8);
+  padding: 8px 16px;
+  border-radius: 9999px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  white-space: nowrap;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #1e1b4b;
+  z-index: 2;
+
+  .badge-icon {
+    font-size: 1rem;
+  }
+
+  &.badge-top-right {
+    top: 10px;
+    inset-inline-end: -10px;
+    animation: badge-float-a 3.8s ease-in-out infinite alternate;
+  }
+
+  &.badge-bottom-left {
+    bottom: 10px;
+    inset-inline-start: -10px;
+    animation: badge-float-b 3.4s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes badge-float-a {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-8px); }
+}
+
+@keyframes badge-float-b {
+  from { transform: translateY(0); }
+  to   { transform: translateY(8px); }
+}
+
+// ── 2. Product Details Column (Right in RTL) ──────────────────
+.fs-showcase__info {
+  padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  text-align: right;
+
+  @media (min-width: 900px) {
+    padding: 48px 44px;
+  }
+}
+
+// Category Pill
+.info-category-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #5e439b;
+  background: #ede4f8;
+  border: 1px solid #d8c8ee;
+  padding: 5px 16px;
+  border-radius: 9999px;
+
+  .pill-sparkle {
+    font-size: 0.9rem;
+  }
+}
+
+// Title & Desc
+.info-title {
+  font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+  font-weight: 900;
+  color: #1e1b4b;
+  margin: 0;
+  line-height: 1.25;
+  font-family: 'Readex Pro', 'Noto Kufi Arabic', 'Plus Jakarta Sans', sans-serif;
+}
+
+.info-desc {
+  font-size: 1.02rem;
+  color: #64748b;
+  line-height: 1.7;
+  margin: 0;
+}
+
+// Benefits Checklist
+.info-benefits-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #334155;
+  }
+
+  .check-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    background: #dcfce7;
+    color: #15803d;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: 900;
+    flex-shrink: 0;
+  }
+}
+
+// Pricing Row
+.info-pricing-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-top: 4px;
+
+  .price-current {
+    font-size: 2rem;
+    font-weight: 900;
+    color: #1e1b4b;
+    font-family: 'Readex Pro', 'Plus Jakarta Sans', sans-serif;
+  }
+
+  .price-original {
+    font-size: 1.15rem;
+    color: #94a3b8;
+    text-decoration: line-through;
+  }
+
+  .price-savings-badge {
+    font-size: 0.82rem;
+    font-weight: 800;
+    background: #fef2f2;
+    color: #e11d48;
+    border: 1px solid #fecdd3;
+    padding: 3px 12px;
+    border-radius: 9999px;
+  }
+}
+
+// Action Buttons
+.info-actions-row {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  flex-wrap: wrap;
+  padding-top: 6px;
+}
+
+.btn-showcase-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #5e439b 0%, #20174b 100%);
+  color: #ffffff;
+  font-size: 0.98rem;
+  font-weight: 800;
+  padding: 14px 32px;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(94, 67, 155, 0.35);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: inherit;
+
+  &:hover {
+    background: linear-gradient(135deg, #7152b7 0%, #2b1f63 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(32, 23, 75, 0.45);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.btn-showcase-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #ffffff;
+  color: #20174b;
+  border: 1.5px solid #d8c8ee;
+  font-size: 0.92rem;
+  font-weight: 800;
+  padding: 13px 26px;
+  border-radius: 9999px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  font-family: inherit;
+
+  &:hover {
+    border-color: #5e439b;
+    color: #5e439b;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(94, 67, 155, 0.12);
+  }
+
+  .btn-arrow {
+    font-size: 1.1rem;
+    transition: transform 0.2s ease;
+  }
+
+  &:hover .btn-arrow {
+    transform: translateX(-4px);
+  }
+}
+
+// Trust Badges Bar
+.info-trust-bar {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding-top: 14px;
+  border-top: 1px solid #f1f5f9;
+  margin-top: 6px;
+
+  .trust-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #64748b;
+  }
+
+  .trust-icon {
+    font-size: 0.95rem;
+  }
+}
+
+// LTR Adjustments
+[dir="ltr"] {
+  .fs-selector-card {
+    text-align: left;
+  }
+
+  .fs-showcase__info {
+    text-align: left;
+  }
+
+  .info-category-pill {
+    align-self: flex-start;
+  }
+
+  .btn-showcase-secondary {
+    .btn-arrow {
+      order: 2;
+    }
+    &:hover .btn-arrow {
+      transform: translateX(4px);
+    }
+  }
+}

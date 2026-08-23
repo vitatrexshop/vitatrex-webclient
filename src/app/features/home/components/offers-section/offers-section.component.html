@@ -1,0 +1,399 @@
+<!-- ══════════════════════════════════════════════════════════════════════════
+     OFFERS SECTION — Dynamic Promotional Slider + 3-Slot Interactive Bundles
+     Glassmorphism + Neon Glows + Olly Aesthetic
+     ══════════════════════════════════════════════════════════════════════════ -->
+<section
+  #offersSection
+  class="offers-section"
+  aria-label="العروض والباقات الترويجية"
+  *ngIf="!isLoading && promotions.length > 0"
+>
+  <div class="offers-container">
+
+    <!-- ── Section Header ────────────────────────────────────────────── -->
+    <div class="offers-header">
+      <div class="offers-header-text">
+        <span class="offers-badge-pill">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
+          </svg>
+          {{ 'OFFERS_SECTION.HEADER_PILL' | translate }}
+        </span>
+        <h2 class="offers-title">
+          {{ 'OFFERS_SECTION.TITLE' | translate }}
+        </h2>
+        <p class="offers-subtitle">
+          {{ 'OFFERS_SECTION.SUBTITLE' | translate }}
+        </p>
+      </div>
+    </div>
+
+    <!-- ── Swiper Slider Shell ───────────────────────────────────────── -->
+    <div #swiperEl class="swiper offers-swiper">
+      <div class="swiper-wrapper">
+
+        <!-- SLIDE: Unified Promotion Card (Offer OR Interactive Bundle) -->
+        <article
+          *ngFor="let item of promotions; trackBy: trackById"
+          class="swiper-slide offer-slide"
+          [attr.data-theme]="getOfferTheme(item)"
+          [attr.id]="'promo-slide-' + (item.id || item._id)"
+        >
+          <!-- ═══════════════════════════════════════════════════════════
+               CASE 1: STANDARD PROMOTIONAL OFFER (Single/Multi Pack)
+               ═══════════════════════════════════════════════════════════ -->
+          <div *ngIf="item.type === 'offer'" class="offer-showcase-frame offer-showcase-frame--standard">
+            <!-- Dynamic Subtle Glow -->
+            <div class="offer-spotlight-glow" aria-hidden="true"></div>
+
+            <!-- Top Discount Pill Badge -->
+            <div class="offer-top-badges">
+              <span
+                class="offer-badge-pill discount-pill"
+                *ngIf="item.discountPercentage > 0"
+              >
+                وفر {{ item.discountPercentage }}% 🔥
+              </span>
+              <span
+                class="offer-badge-pill custom-pill"
+                *ngIf="item.badgeText"
+              >
+                {{ item.badgeText }}
+              </span>
+            </div>
+
+            <!-- Stage Display (Image) -->
+            <div class="offer-banner-stage">
+              <img
+                *ngIf="item.image"
+                [src]="formatMediaUrl(item.image)"
+                [alt]="item.title"
+                class="offers-banner-img"
+                loading="lazy"
+              />
+              <div class="offer-banner-overlay" aria-hidden="true"></div>
+            </div>
+
+            <!-- Simple, Modern & Responsive Bottom Action Card -->
+            <div class="offer-bottom-card" dir="rtl">
+              <div class="offer-card-content">
+                <div class="offer-card-meta">
+                  <h3 class="offer-card-title">{{ item.title }}</h3>
+                  <p class="offer-card-desc" *ngIf="item.description">{{ item.description }}</p>
+                </div>
+
+                <div class="offer-card-action-row">
+                  <div class="offer-card-prices">
+                    <div class="offer-price-main">
+                      <span class="offer-price-amount">{{ item.discountedPrice | number }}</span>
+                      <span class="offer-price-cur">{{ 'COMMON.CURRENCY' | translate }}</span>
+                    </div>
+                    <div class="offer-price-sub" *ngIf="item.originalPrice > item.discountedPrice">
+                      <span class="offer-price-del">{{ item.originalPrice | number }} {{ 'COMMON.CURRENCY' | translate }}</span>
+                      <span class="offer-save-badge">وفر {{ (item.originalPrice - item.discountedPrice) | number }} {{ 'COMMON.CURRENCY' | translate }}</span>
+                    </div>
+                  </div>
+
+                  <button
+                    class="offer-cta-btn"
+                    type="button"
+                    [class.is-loading]="isAdding(item.id || item._id || '')"
+                    [disabled]="isAdding(item.id || item._id || '')"
+                    (click)="handleAddToCart(item, $event)"
+                    [attr.aria-label]="'OFFERS_SECTION.ADD_TO_CART' | translate"
+                  >
+                    <ng-container *ngIf="!isAdding(item.id || item._id || '')">
+                      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <path d="M16 10a4 4 0 0 1-8 0"/>
+                      </svg>
+                      <span>{{ 'OFFERS_SECTION.ADD_TO_CART' | translate }}</span>
+                    </ng-container>
+                    <ng-container *ngIf="isAdding(item.id || item._id || '')">
+                      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <polyline points="20 6 9 17 4 12"/>
+                      </svg>
+                      <span>{{ 'OFFERS_SECTION.ADDED' | translate }}</span>
+                    </ng-container>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ═══════════════════════════════════════════════════════════
+               CASE 2: INTERACTIVE 3-SLOT BUNDLE SLIDE ("اصنع باقتك")
+               ═══════════════════════════════════════════════════════════ -->
+          <div *ngIf="item.type === 'bundle'" class="offer-showcase-frame offer-showcase-frame--bundle">
+            <div class="offer-spotlight-glow" aria-hidden="true"></div>
+
+            <!-- Top Discount Badges -->
+            <div class="offer-top-badges">
+              <span
+                class="offer-badge-pill discount-pill"
+                *ngIf="item.discountPercentage > 0"
+              >
+                وفر {{ item.discountPercentage }}% 🔥
+              </span>
+              <span
+                class="offer-badge-pill custom-pill"
+                *ngIf="item.badgeText"
+              >
+                {{ item.badgeText }}
+              </span>
+            </div>
+
+            <!-- ── Interactive 3-Slot Stage ────────────────────────── -->
+            <div class="bundle-interactive-stage" dir="rtl">
+              <div class="bundle-stage-header">
+                <span class="bundle-stage-tag">باقة اصنع باقتك 🎯</span>
+                <h3 class="bundle-stage-title">{{ item.title }}</h3>
+                <p class="bundle-stage-desc" *ngIf="item.description">{{ item.description }}</p>
+              </div>
+
+              <!-- 3 Interactive Slots Row -->
+              <div class="bundle-slots-container">
+                <ng-container *ngFor="let slotIdx of [0, 1, 2]">
+
+                  <!-- Plus Divider (between slots) -->
+                  <div class="bundle-slot-divider" *ngIf="slotIdx > 0" aria-hidden="true">
+                    <span>+</span>
+                  </div>
+
+                  <!-- Slot: Empty / Interactive -->
+                  <div
+                    class="bundle-slot"
+                    *ngIf="!getSlotProduct(item.id || item._id || '', slotIdx)"
+                  >
+                    <div
+                      class="bundle-slot-card bundle-slot-card--pick"
+                      (click)="openModalForSlot(asBundle(item), slotIdx, $event)"
+                      role="button"
+                      tabindex="0"
+                      (keydown.enter)="openModalForSlot(asBundle(item), slotIdx, $event)"
+                      [attr.aria-label]="slotLabels[slotIdx] + ' لباقة ' + item.title"
+                      [attr.id]="'offer-slot-' + slotIdx + '-' + (item.id || item._id)"
+                    >
+                      <span class="bundle-slot-number-badge">{{ slotIdx + 1 }}</span>
+                      <div class="bundle-slot-pick-box">
+                        <span class="bundle-slot-pick-icon">
+                          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="8" x2="12" y2="16"/>
+                            <line x1="8" y1="12" x2="16" y2="12"/>
+                          </svg>
+                        </span>
+                        <span class="bundle-slot-pick-btn-label">{{ slotLabels[slotIdx] }}</span>
+                        <span class="bundle-slot-pick-sub">انقر للاختيار ✨</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Slot: Filled / Chosen Product -->
+                  <div
+                    class="bundle-slot"
+                    *ngIf="getSlotProduct(item.id || item._id || '', slotIdx) as prod"
+                  >
+                    <div
+                      class="bundle-slot-card bundle-slot-card--chosen"
+                      [class.is-checking]="isSlotCheckAnimating(item.id || item._id || '', slotIdx)"
+                      (click)="openModalForSlot(asBundle(item), slotIdx, $event)"
+                      role="button"
+                      tabindex="0"
+                      (keydown.enter)="openModalForSlot(asBundle(item), slotIdx, $event)"
+                      [attr.aria-label]="'تغيير ' + slotLabels[slotIdx] + ': ' + prod.name"
+                      [attr.id]="'offer-slot-filled-' + slotIdx + '-' + (item.id || item._id)"
+                    >
+                      <span class="bundle-slot-number-badge bundle-slot-number-badge--filled">{{ slotIdx + 1 }}</span>
+                      <div class="bundle-slot-img-wrap">
+                        <img
+                          [src]="formatMediaUrl(prod.image)"
+                          [alt]="prod.name"
+                          class="bundle-slot-img"
+                          loading="lazy"
+                        />
+                        <!-- Checkmark Pulse Overlay -->
+                        <div class="bundle-slot-check-overlay" [class.show]="isSlotCheckAnimating(item.id || item._id || '', slotIdx)" aria-hidden="true">
+                          <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"/>
+                          </svg>
+                        </div>
+                        <!-- Change Hint Pill -->
+                        <div class="bundle-slot-change-pill" aria-hidden="true">
+                          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2">
+                            <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/>
+                          </svg>
+                          تغيير
+                        </div>
+                      </div>
+                      <span class="bundle-slot-title">{{ prod.name }}</span>
+                    </div>
+                  </div>
+
+                </ng-container>
+              </div>
+
+              <!-- ── Centered, Sleek & Responsive Action & Summary Bar ── -->
+              <div class="bundle-action-bar">
+                <div class="bundle-action-pricing">
+                  <div class="bundle-price-group">
+                    <span class="bundle-price-current">
+                      {{ (item.discountedPrice || item.bundlePrice || 0) | number }}
+                      <small>{{ 'COMMON.CURRENCY' | translate }}</small>
+                    </span>
+                    <span
+                      class="bundle-price-original"
+                      *ngIf="item.originalPrice > (item.discountedPrice || item.bundlePrice || 0)"
+                    >
+                      {{ item.originalPrice | number }} {{ 'COMMON.CURRENCY' | translate }}
+                    </span>
+                  </div>
+                  <span
+                    class="bundle-savings-badge"
+                    *ngIf="item.originalPrice > (item.discountedPrice || item.bundlePrice || 0)"
+                  >
+                    وفر {{ (item.originalPrice - (item.discountedPrice || item.bundlePrice || 0)) | number }} {{ 'COMMON.CURRENCY' | translate }}
+                  </span>
+                </div>
+
+                <!-- Dynamic Add Bundle to Cart Button -->
+                <button
+                  class="bundle-submit-btn"
+                  type="button"
+                  [class.is-ready]="allSlotsSelected(item.id || item._id || '')"
+                  [class.is-loading]="isAdding(item.id || item._id || '')"
+                  [disabled]="isAdding(item.id || item._id || '')"
+                  (click)="addBundleToCart(asBundle(item), $event)"
+                  [attr.aria-label]="'أضف الباقة للسلة: ' + item.title"
+                  [attr.id]="'offer-bundle-add-btn-' + (item.id || item._id)"
+                >
+                  <ng-container *ngIf="!isAdding(item.id || item._id || '')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                      <line x1="3" y1="6" x2="21" y2="6"/>
+                      <path d="M16 10a4 4 0 0 1-8 0"/>
+                    </svg>
+                    <span *ngIf="!allSlotsSelected(item.id || item._id || '')">
+                      اختر المنتجات الثلاثة أولاً
+                    </span>
+                    <span *ngIf="allSlotsSelected(item.id || item._id || '')">
+                      أضف الباقة للسلة 🛒
+                    </span>
+                  </ng-container>
+                  <ng-container *ngIf="isAdding(item.id || item._id || '')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    <span>تمت الإضافة بنجاح ✓</span>
+                  </ng-container>
+                </button>
+              </div>
+
+            </div><!-- /.bundle-interactive-stage -->
+          </div>
+        </article>
+      </div>
+
+      <!-- Navigation Arrows -->
+      <button class="offers-nav offers-nav--prev" type="button" aria-label="العرض السابق">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      </button>
+      <button class="offers-nav offers-nav--next" type="button" aria-label="العرض التالي">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </button>
+
+      <!-- Pagination Dots -->
+      <div class="offers-pagination" role="tablist" aria-label="صفحات العروض"></div>
+    </div>
+
+    <!-- ── Empty State ──────────────────────────────────────────────── -->
+    <div
+      *ngIf="!isLoading && promotions.length === 0"
+      class="offers-empty"
+      role="status"
+    >
+      <span class="offers-empty__icon" aria-hidden="true">🎁</span>
+      <p>{{ 'OFFERS_SECTION.EMPTY' | translate }}</p>
+    </div>
+
+  </div>
+
+  <!-- ═════════════════════════════════════════════════════════════════
+       Interactive Product Selection Modal (Targeting Active Slot)
+       ═════════════════════════════════════════════════════════════════ -->
+  <div
+    class="bc-modal-backdrop"
+    *ngIf="activeModalBundle && isModalOpen(activeModalBundle.id || activeModalBundle._id || '')"
+    (click)="onBackdropClick($event)"
+    role="dialog"
+    [attr.aria-label]="getActiveSlotLabel(activeModalBundle.id || activeModalBundle._id || '') + ' لباقة ' + activeModalBundle.title"
+    aria-modal="true"
+  >
+    <div class="bc-modal">
+      <!-- Modal Header -->
+      <div class="bc-modal-header">
+        <div class="bc-modal-header-text">
+          <h4 class="bc-modal-title">{{ getActiveSlotLabel(activeModalBundle.id || activeModalBundle._id || '') }} 🎯</h4>
+          <p class="bc-modal-subtitle">اختر منتجًا من قائمة المنتجات المتاحة للباقة</p>
+        </div>
+        <button
+          class="bc-modal-close"
+          type="button"
+          (click)="closeModal()"
+          aria-label="إغلاق نافذة الاختيار"
+        >
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none"
+            stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Products Grid -->
+      <div class="bc-modal-grid" dir="rtl">
+        <button
+          class="bc-modal-product"
+          type="button"
+          *ngFor="let product of getSelectableProducts(activeModalBundle); trackBy: trackByProductId"
+          [class.bc-modal-product--selected]="getSlotProduct(activeModalBundle.id || activeModalBundle._id || '', getActiveSlotIdx(activeModalBundle.id || activeModalBundle._id || ''))?._id === product._id"
+          (click)="selectProductForSlot(activeModalBundle, product, $event)"
+          [attr.id]="'bundle-option-' + (activeModalBundle.id || activeModalBundle._id) + '-' + product._id"
+          [attr.aria-label]="'اختر: ' + product.name"
+        >
+          <div class="bc-modal-product-img-wrap">
+            <img
+              class="bc-modal-product-img"
+              [src]="formatMediaUrl(product.image)"
+              [alt]="product.name"
+              loading="lazy"
+            />
+            <!-- Selected Checkmark -->
+            <div
+              class="bc-modal-product-check"
+              *ngIf="getSlotProduct(activeModalBundle.id || activeModalBundle._id || '', getActiveSlotIdx(activeModalBundle.id || activeModalBundle._id || ''))?._id === product._id"
+              aria-hidden="true"
+            >
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
+                stroke="#fff" stroke-width="3"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </div>
+          </div>
+          <p class="bc-modal-product-name">{{ product.name }}</p>
+          <p class="bc-modal-product-price" *ngIf="product.variants?.[0]?.price">
+            {{ product.variants[0].price | number }} ج.م
+          </p>
+        </button>
+      </div>
+    </div><!-- /.bc-modal -->
+  </div><!-- /.bc-modal-backdrop -->
+
+</section>

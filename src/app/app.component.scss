@@ -1,0 +1,15 @@
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+
+  &__main {
+    flex: 1;
+    // Ensure smooth scroll-to-top on route change
+    scroll-behavior: smooth;
+
+    @media (max-width: 991px) {
+      padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+    }
+  }
+}

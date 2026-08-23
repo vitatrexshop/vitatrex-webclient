@@ -1,0 +1,33 @@
+.announcement-bar {
+  background: linear-gradient(90deg, #5e439b, #20174b);
+  color: #fff;
+  height: 38px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+
+  &__track {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-6);
+    white-space: nowrap;
+    // Override RTL for physical left-to-right track layout (content reads RTL inside)
+    direction: ltr;
+    animation: ticker 28s linear infinite;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.015em;
+  }
+
+  .sep {
+    color: #d2bbf0;
+    font-size: 0.65rem;
+    opacity: 0.9;
+  }
+}
+
+// Scroll from right to left (standard news ticker direction)
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}

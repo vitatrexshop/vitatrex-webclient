@@ -1,0 +1,1174 @@
+// ══════════════════════════════════════════════════════════════════════
+// OFFERS & BUNDLES PROMOTIONAL SECTION
+// Optimized for 60-120 FPS Smooth Performance & Universal Responsiveness
+// ══════════════════════════════════════════════════════════════════════
+
+// ── Dynamic Color Themes per Slide ────────────────────────────────────
+[data-theme="immune"],
+.theme-immune {
+  --theme-accent: #84cc16;
+  --theme-glow: rgba(132, 204, 22, 0.35);
+  --theme-highlight-text: #ffffff;
+  --theme-badge-bg: rgba(132, 204, 22, 0.22);
+  --theme-badge-border: rgba(132, 204, 22, 0.6);
+  --theme-badge-glow: rgba(132, 204, 22, 0.4);
+  --theme-price-color: #a3e635;
+  --theme-btn-gradient: linear-gradient(135deg, #84cc16 0%, #4d7c0f 100%);
+  --theme-btn-shadow: rgba(132, 204, 22, 0.35);
+}
+
+[data-theme="iron"],
+.theme-iron {
+  --theme-accent: #f43f5e;
+  --theme-glow: rgba(244, 63, 94, 0.35);
+  --theme-highlight-text: #ffffff;
+  --theme-badge-bg: rgba(244, 63, 94, 0.22);
+  --theme-badge-border: rgba(244, 63, 94, 0.6);
+  --theme-badge-glow: rgba(244, 63, 94, 0.4);
+  --theme-price-color: #fb7185;
+  --theme-btn-gradient: linear-gradient(135deg, #f43f5e 0%, #be123c 100%);
+  --theme-btn-shadow: rgba(244, 63, 94, 0.35);
+}
+
+[data-theme="sleep"],
+.theme-sleep {
+  --theme-accent: #a855f7;
+  --theme-glow: rgba(168, 85, 247, 0.35);
+  --theme-highlight-text: #ffffff;
+  --theme-badge-bg: rgba(168, 85, 247, 0.25);
+  --theme-badge-border: rgba(168, 85, 247, 0.6);
+  --theme-badge-glow: rgba(168, 85, 247, 0.4);
+  --theme-price-color: #c084fc;
+  --theme-btn-gradient: linear-gradient(135deg, #9333ea 0%, #6b21a8 100%);
+  --theme-btn-shadow: rgba(147, 51, 234, 0.35);
+}
+
+// ── Section Container ─────────────────────────────────────────────────
+.offers-section {
+  width: 100%;
+  padding: 2.5rem 0 4rem;
+  position: relative;
+  background: #19123b;
+  background: radial-gradient(circle at 50% 15%, #271a54 0%, #19123b 65%, #0f0a26 100%);
+  box-sizing: border-box;
+  contain: layout style;
+  overflow: hidden;
+
+  @media (min-width: 768px) {
+    padding: 3.5rem 0 5rem;
+  }
+}
+
+.offers-container {
+  width: 92vw;
+  max-width: 1240px;
+  margin: 0 auto;
+  position: relative;
+  box-sizing: border-box;
+
+  @media (min-width: 768px) {
+    width: 86vw;
+  }
+}
+
+// ── Section Header ────────────────────────────────────────────────────
+.offers-header {
+  margin-bottom: 2rem;
+
+  .offers-header-text {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 720px;
+
+    .offers-badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: rgba(94, 67, 155, 0.4);
+      color: #e9d5ff;
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      border-radius: 9999px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      font-family: 'Readex Pro', 'Outfit', sans-serif;
+      width: fit-content;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+
+      svg {
+        color: #c084fc;
+      }
+    }
+
+    .offers-title {
+      font-size: clamp(1.75rem, 3.2vw, 2.4rem);
+      font-weight: 900;
+      color: #ffffff;
+      font-family: 'Readex Pro', 'Outfit', sans-serif;
+      margin: 0;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+    }
+
+    .offers-subtitle {
+      font-size: clamp(0.92rem, 1.4vw, 1.05rem);
+      color: #cbd5e1;
+      margin: 0;
+      line-height: 1.6;
+    }
+  }
+}
+
+// ── Swiper Slider Track & Slide ───────────────────────────────────────
+.offers-swiper {
+  width: 100%;
+  padding-bottom: 2.75rem !important;
+  overflow: visible !important;
+  position: relative;
+}
+
+.offer-slide {
+  width: 100%;
+  box-sizing: border-box;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+}
+
+// ── Unified Showcase Frame ────────────────────────────────────────────
+.offer-showcase-frame {
+  position: relative;
+  width: 100%;
+  min-height: 380px;
+  border-radius: 24px;
+  overflow: hidden;
+  background: #120c29;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  transform: translate3d(0, 0, 0);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+
+  @media (min-width: 900px) {
+    aspect-ratio: 16 / 9;
+    max-height: 560px;
+  }
+
+  &:hover {
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55), 0 0 30px var(--theme-glow);
+
+    .offers-banner-img {
+      transform: scale(1.02);
+    }
+  }
+
+  // Lightweight spotlight glow using pure radial gradient
+  .offer-spotlight-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+    height: 70%;
+    background: radial-gradient(circle, var(--theme-glow) 0%, rgba(0, 0, 0, 0) 70%);
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.6;
+  }
+
+  // ── Standard Offer Banner Stage ─────────────────────────────────────
+  .offer-banner-stage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 380px;
+    display: block;
+    z-index: 2;
+
+    .offers-banner-img {
+      width: 100%;
+      height: 100%;
+      min-height: 380px;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      transform: translate3d(0, 0, 0);
+      transition: transform 0.5s ease-out;
+    }
+
+    .offer-banner-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(25, 18, 59, 0.15) 0%,
+        rgba(25, 18, 59, 0.05) 40%,
+        rgba(15, 10, 38, 0.8) 100%
+      );
+      pointer-events: none;
+    }
+  }
+
+  // ── Interactive 3-Slot Bundle Stage ─────────────────────────────────
+  &--bundle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 28px 20px;
+    min-height: 440px;
+    background: radial-gradient(circle at 50% 20%, #291b5c 0%, #171038 65%, #0e0924 100%);
+    box-sizing: border-box;
+
+    @media (min-width: 768px) {
+      padding: 34px 32px;
+      min-height: 500px;
+    }
+
+    @media (max-width: 639px) {
+      padding: 18px 12px;
+      min-height: unset;
+    }
+
+    .bundle-interactive-stage {
+      position: relative;
+      z-index: 3;
+      width: 100%;
+      max-width: 860px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+
+      .bundle-stage-header {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+
+        .bundle-stage-tag {
+          font-size: 0.76rem;
+          font-weight: 800;
+          color: #c084fc;
+          background: rgba(168, 85, 247, 0.18);
+          border: 1px solid rgba(168, 85, 247, 0.35);
+          border-radius: 9999px;
+          padding: 3px 12px;
+          font-family: 'Readex Pro', sans-serif;
+        }
+
+        .bundle-stage-title {
+          font-size: clamp(1.15rem, 2.2vw, 1.45rem);
+          font-weight: 900;
+          color: #ffffff;
+          margin: 0;
+          font-family: 'Readex Pro', sans-serif;
+        }
+
+        .bundle-stage-desc {
+          font-size: clamp(0.8rem, 1.2vw, 0.9rem);
+          color: #cbd5e1;
+          margin: 0;
+          max-width: 580px;
+        }
+      }
+
+      .bundle-slots-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        margin-top: 8px;
+
+        @media (max-width: 600px) {
+          gap: 6px;
+        }
+      }
+
+      .bundle-slot-divider {
+        font-size: 1.35rem;
+        font-weight: 900;
+        color: #a855f7;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: rgba(168, 85, 247, 0.2);
+        border: 1px solid rgba(168, 85, 247, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+
+        @media (max-width: 600px) {
+          width: 24px;
+          height: 24px;
+          font-size: 1rem;
+        }
+      }
+
+      .bundle-slot {
+        flex: 1;
+        max-width: 210px;
+        min-width: 95px;
+
+        .bundle-slot-card {
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 8px;
+          background: rgba(32, 23, 75, 0.85);
+          border: 1.5px solid rgba(255, 255, 255, 0.15);
+          border-radius: 18px;
+          padding: 12px 10px;
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+          transition: transform 0.25s ease, border-color 0.25s ease;
+
+          @media (max-width: 600px) {
+            padding: 8px 6px;
+            border-radius: 14px;
+          }
+
+          .bundle-slot-number-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: #ffffff;
+            font-size: 0.68rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 8px rgba(168, 85, 247, 0.6);
+            z-index: 3;
+            border: 1.5px solid rgba(255, 255, 255, 0.4);
+
+            &--filled {
+              background: linear-gradient(135deg, #10b981, #059669);
+              box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+            }
+          }
+
+          .bundle-slot-img-wrap {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1;
+            max-width: 130px;
+            border-radius: 14px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+
+            .bundle-slot-img {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            }
+
+            .bundle-slot-check-overlay {
+              position: absolute;
+              inset: 0;
+              background: rgba(16, 185, 129, 0.85);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              opacity: 0;
+              transform: scale(0.6);
+              transition: all 0.3s ease;
+              pointer-events: none;
+
+              &.show {
+                opacity: 1;
+                transform: scale(1);
+              }
+            }
+
+            .bundle-slot-change-pill {
+              position: absolute;
+              top: 6px;
+              right: 6px;
+              background: rgba(32, 23, 75, 0.9);
+              border: 1px solid rgba(168, 85, 247, 0.5);
+              color: #e9d5ff;
+              font-size: 0.66rem;
+              font-weight: 800;
+              padding: 2px 6px;
+              border-radius: 9999px;
+              display: flex;
+              align-items: center;
+              gap: 3px;
+
+              @media (max-width: 600px) {
+                font-size: 0.55rem;
+                padding: 1px 4px;
+                top: 3px;
+                right: 3px;
+              }
+            }
+          }
+
+          .bundle-slot-title {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: #ffffff;
+            font-family: 'Readex Pro', sans-serif;
+            text-align: center;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+
+            @media (max-width: 600px) {
+              font-size: 0.68rem;
+            }
+          }
+
+          // Pick Button Slot
+          &--pick {
+            cursor: pointer;
+            border: 2px dashed rgba(168, 85, 247, 0.6);
+            background: rgba(94, 67, 155, 0.3);
+
+            &:hover {
+              background: rgba(94, 67, 155, 0.45);
+              border-color: #a855f7;
+              transform: translateY(-2px);
+            }
+
+            .bundle-slot-pick-box {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              gap: 6px;
+              padding: 18px 4px;
+              text-align: center;
+
+              @media (max-width: 600px) {
+                padding: 10px 2px;
+                gap: 4px;
+              }
+
+              .bundle-slot-pick-icon {
+                color: #c084fc;
+              }
+
+              .bundle-slot-pick-btn-label {
+                font-size: 0.8rem;
+                font-weight: 900;
+                color: #ffffff;
+                font-family: 'Readex Pro', sans-serif;
+
+                @media (max-width: 600px) {
+                  font-size: 0.68rem;
+                }
+              }
+
+              .bundle-slot-pick-sub {
+                font-size: 0.68rem;
+                font-weight: 700;
+                color: #fbbf24;
+
+                @media (max-width: 600px) {
+                  font-size: 0.58rem;
+                }
+              }
+            }
+          }
+
+          // Chosen Slot
+          &--chosen {
+            cursor: pointer;
+            border-color: rgba(16, 185, 129, 0.5);
+
+            &:hover {
+              border-color: #10b981;
+              transform: translateY(-2px);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// ── Floating Top-Right Discount Badges ─────────────────────────────────
+.offer-top-badges {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+
+  @media (min-width: 768px) {
+    top: 22px;
+    right: 22px;
+    gap: 10px;
+  }
+
+  .offer-badge-pill {
+    padding: 6px 14px;
+    border-radius: 9999px;
+    font-size: 0.82rem;
+    font-weight: 800;
+    font-family: 'Readex Pro', 'Outfit', sans-serif;
+    letter-spacing: 0.01em;
+
+    &.discount-pill {
+      background: var(--theme-badge-bg);
+      color: #ffffff;
+      border: 1.5px solid var(--theme-badge-border);
+      box-shadow: 0 4px 14px var(--theme-badge-glow);
+    }
+
+    &.custom-pill {
+      background: rgba(22, 14, 52, 0.88);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+    }
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// REDESIGNED BOTTOM-RIGHT ACTION CARD (Simple, Clean & 100% Responsive)
+// ══════════════════════════════════════════════════════════════════════
+.offer-bottom-card {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  max-width: 440px;
+  min-width: 290px;
+  z-index: 5;
+  background: rgba(18, 12, 45, 0.92);
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  border-radius: 20px;
+  padding: 16px 20px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 0 20px rgba(124, 58, 237, 0.15);
+  box-sizing: border-box;
+  transform: translate3d(0, 0, 0);
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+
+  @media (min-width: 768px) {
+    bottom: 24px;
+    right: 24px;
+  }
+
+  @media (max-width: 639px) {
+    bottom: 12px;
+    right: 12px;
+    left: 12px;
+    max-width: unset;
+    min-width: unset;
+    padding: 12px 14px;
+    border-radius: 16px;
+  }
+
+  &:hover {
+    border-color: rgba(168, 85, 247, 0.65);
+    box-shadow: 0 20px 42px rgba(0, 0, 0, 0.6), 0 0 25px var(--theme-glow);
+  }
+
+  .offer-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+
+    @media (max-width: 639px) {
+      gap: 10px;
+    }
+  }
+
+  // Card Meta: Title & Description
+  .offer-card-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    overflow: hidden;
+
+    .offer-card-title {
+      color: #ffffff;
+      font-size: clamp(1rem, 1.8vw, 1.2rem);
+      font-weight: 900;
+      font-family: 'Readex Pro', 'Outfit', sans-serif;
+      margin: 0;
+      line-height: 1.3;
+      white-space: normal;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .offer-card-desc {
+      color: #cbd5e1;
+      font-size: 0.82rem;
+      line-height: 1.45;
+      margin: 0;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+
+      @media (max-width: 520px) {
+        display: none; // Keep card minimal & compact on small mobile screens
+      }
+    }
+  }
+
+  // Card Action Row: Prices on one side, CTA on the other
+  .offer-card-action-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 4px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+    @media (max-width: 440px) {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 10px;
+    }
+  }
+
+  // Clean, High-Contrast Pricing Block
+  .offer-card-prices {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+
+    @media (max-width: 440px) {
+      flex-direction: row;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+
+    .offer-price-main {
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+
+      .offer-price-amount {
+        color: #4ade80;
+        font-size: clamp(1.25rem, 2.2vw, 1.45rem);
+        font-weight: 900;
+        font-family: 'Readex Pro', 'Outfit', sans-serif;
+        line-height: 1;
+      }
+
+      .offer-price-cur {
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 0.8rem;
+        font-weight: 700;
+        font-family: 'Readex Pro', sans-serif;
+      }
+    }
+
+    .offer-price-sub {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+
+      .offer-price-del {
+        color: #94a3b8;
+        font-size: 0.8rem;
+        text-decoration: line-through;
+        font-weight: 600;
+      }
+
+      .offer-save-badge {
+        color: #fbbf24;
+        font-size: 0.72rem;
+        font-weight: 800;
+        background: rgba(245, 158, 11, 0.16);
+        border: 1px solid rgba(245, 158, 11, 0.38);
+        border-radius: 9999px;
+        padding: 1px 7px;
+        white-space: nowrap;
+      }
+    }
+  }
+
+  // Modern CTA Button
+  .offer-cta-btn {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 9999px;
+    background: var(--theme-btn-gradient, linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%));
+    color: #ffffff;
+    font-size: 0.88rem;
+    font-weight: 800;
+    font-family: 'Readex Pro', 'Outfit', sans-serif;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 16px var(--theme-btn-shadow, rgba(124, 58, 237, 0.4));
+    white-space: nowrap;
+    transform: translate3d(0, 0, 0);
+    transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
+
+    @media (max-width: 440px) {
+      width: 100%;
+      padding: 10px 14px;
+    }
+
+    svg {
+      flex-shrink: 0;
+    }
+
+    &:hover:not(:disabled) {
+      transform: translateY(-2px);
+      filter: brightness(1.08);
+      box-shadow: 0 6px 20px var(--theme-btn-shadow, rgba(124, 58, 237, 0.5));
+    }
+
+    &.is-loading,
+    &:disabled {
+      opacity: 0.9;
+      cursor: not-allowed;
+    }
+  }
+}
+
+// ── Unified Bundle Action & Pricing Bar ───────────────────────────────
+.bundle-action-bar {
+  width: 100%;
+  max-width: 640px;
+  margin-top: 6px;
+  background: rgba(22, 14, 52, 0.92);
+  border: 1.5px solid rgba(168, 85, 247, 0.32);
+  border-radius: 18px;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+  box-sizing: border-box;
+  transform: translate3d(0, 0, 0);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+
+  &:hover {
+    border-color: rgba(168, 85, 247, 0.6);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  }
+
+  .bundle-action-pricing {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+
+    .bundle-price-group {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .bundle-price-current {
+      color: #a3e635;
+      font-size: clamp(1.22rem, 2.2vw, 1.55rem);
+      font-weight: 900;
+      font-family: 'Readex Pro', 'Outfit', sans-serif;
+      line-height: 1;
+
+      small {
+        font-size: 0.76rem;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.85);
+        margin-inline-start: 3px;
+      }
+    }
+
+    .bundle-price-original {
+      color: rgba(255, 255, 255, 0.45);
+      font-size: 0.86rem;
+      text-decoration: line-through;
+    }
+
+    .bundle-savings-badge {
+      display: inline-flex;
+      align-items: center;
+      color: #fbbf24;
+      font-size: 0.74rem;
+      font-weight: 800;
+      font-family: 'Readex Pro', sans-serif;
+      background: rgba(245, 158, 11, 0.18);
+      border: 1px solid rgba(245, 158, 11, 0.45);
+      border-radius: 9999px;
+      padding: 3px 10px;
+      white-space: nowrap;
+    }
+  }
+
+  .bundle-submit-btn {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 22px;
+    border-radius: 9999px;
+    font-size: 0.88rem;
+    font-weight: 800;
+    font-family: 'Readex Pro', 'Outfit', sans-serif;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: transform 0.2s ease, filter 0.2s ease;
+
+    background: rgba(168, 85, 247, 0.25);
+    color: #e9d5ff;
+    border: 1.5px solid rgba(168, 85, 247, 0.4);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+
+    svg {
+      color: #c084fc;
+    }
+
+    &:hover:not(:disabled) {
+      background: rgba(168, 85, 247, 0.4);
+      border-color: #c084fc;
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+
+    &.is-ready {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      border: none;
+      color: #ffffff;
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+
+      svg {
+        color: #ffffff;
+      }
+
+      &:hover:not(:disabled) {
+        background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+        transform: translateY(-2px);
+      }
+    }
+
+    &.is-loading {
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      border: none;
+      color: #ffffff;
+      cursor: not-allowed;
+      opacity: 0.92;
+    }
+  }
+
+  @media (max-width: 639px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    margin-top: 4px;
+
+    .bundle-action-pricing {
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .bundle-submit-btn {
+      width: 100%;
+      padding: 11px 16px;
+      font-size: 0.84rem;
+      border-radius: 12px;
+    }
+  }
+}
+
+// ── Sleek Navigation Arrows ───────────────────────────────────────────
+.offers-nav {
+  position: absolute;
+  top: calc(50% - 1.25rem);
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: rgba(22, 14, 52, 0.85);
+  border: 1.5px solid rgba(168, 85, 247, 0.4);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #ffffff;
+  transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+
+  svg {
+    width: 20px;
+    height: 20px;
+    color: #ffffff;
+  }
+
+  &:hover {
+    background: rgba(94, 67, 155, 0.95);
+    border-color: #c084fc;
+    transform: translateY(-50%) scale(1.08);
+  }
+
+  &--prev {
+    right: -22px;
+    @media (max-width: 1024px) {
+      right: 10px;
+    }
+  }
+
+  &--next {
+    left: -22px;
+    @media (max-width: 1024px) {
+      left: 10px;
+    }
+  }
+
+  &.swiper-button-disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  @media (max-width: 639px) {
+    width: 38px;
+    height: 38px;
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+}
+
+// ── Modern Pagination Dots ────────────────────────────────────────────
+.offers-pagination {
+  position: absolute;
+  bottom: 0.5rem !important;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  z-index: 10;
+
+  ::ng-deep .swiper-pagination-bullet {
+    width: 10px;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.35);
+    opacity: 1;
+    border-radius: 9999px;
+    transition: width 0.25s ease, background-color 0.25s ease;
+    cursor: pointer;
+  }
+
+  ::ng-deep .swiper-pagination-bullet-active {
+    width: 28px;
+    background: #a855f7;
+    border-radius: 9999px;
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.7);
+  }
+}
+
+// ── Empty State ───────────────────────────────────────────────────────
+.offers-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 48px 24px;
+  text-align: center;
+  background: rgba(32, 23, 75, 0.6);
+  border-radius: 24px;
+  border: 1px solid rgba(156, 123, 211, 0.2);
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  font-weight: 700;
+
+  &__icon {
+    font-size: 2.5rem;
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// Product Selection Modal (Targeting Active Slot)
+// ══════════════════════════════════════════════════════════════════════
+.bc-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  background: rgba(10, 6, 26, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: bc-fade-in 0.2s ease-out forwards;
+}
+
+.bc-modal {
+  width: 100%;
+  max-width: 580px;
+  background: #1c1340;
+  background: radial-gradient(circle at 50% 0%, #2c1e63 0%, #1a123d 70%, #120b2d 100%);
+  border: 1.5px solid rgba(168, 85, 247, 0.35);
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+  animation: bc-scale-up 0.25s ease-out forwards;
+  box-sizing: border-box;
+
+  @media (max-width: 600px) {
+    padding: 18px 14px;
+    border-radius: 20px;
+    max-height: 88vh;
+    overflow-y: auto;
+  }
+
+  .bc-modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+    .bc-modal-title {
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: #ffffff;
+      margin: 0;
+      font-family: 'Readex Pro', sans-serif;
+    }
+
+    .bc-modal-subtitle {
+      font-size: 0.85rem;
+      color: #c4b5fd;
+      margin: 4px 0 0;
+    }
+
+    .bc-modal-close {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #e2e8f0;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background: rgba(232, 27, 56, 0.85);
+        color: #ffffff;
+        border-color: #e81b38;
+      }
+    }
+  }
+
+  .bc-modal-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 12px;
+
+    @media (max-width: 480px) {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .bc-modal-product {
+      background: rgba(32, 23, 75, 0.6);
+      border: 1.5px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      padding: 12px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+      text-align: center;
+
+      &:hover {
+        border-color: #a855f7;
+        background: rgba(94, 67, 155, 0.4);
+        transform: translateY(-2px);
+      }
+
+      &--selected {
+        border-color: #10b981;
+        background: rgba(16, 185, 129, 0.22);
+      }
+
+      .bc-modal-product-img-wrap {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 1;
+        border-radius: 12px;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.05);
+
+        .bc-modal-product-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .bc-modal-product-check {
+          position: absolute;
+          inset: 0;
+          background: rgba(16, 185, 129, 0.85);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+
+      .bc-modal-product-name {
+        font-size: 0.78rem;
+        font-weight: 800;
+        color: #ffffff;
+        font-family: 'Readex Pro', sans-serif;
+        margin: 0;
+        line-height: 1.25;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .bc-modal-product-price {
+        font-size: 0.72rem;
+        font-weight: 900;
+        color: #fbbf24;
+        margin: 0;
+      }
+    }
+  }
+}
+
+@keyframes bc-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes bc-scale-up {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}

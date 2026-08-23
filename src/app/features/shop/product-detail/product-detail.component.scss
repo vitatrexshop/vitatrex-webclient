@@ -1,0 +1,806 @@
+// ══════════════════════════════════════════════════════════════
+// Product Detail Page — 360 Nutrition Minimalist & Vibrant Aesthetic
+// Palette: Solar Gold/Amber (#f59e0b / #d97706), Slate Dark (#111827), Neutral Light (#fafafa)
+// ══════════════════════════════════════════════════════════════
+
+.detail-page {
+  padding-top: var(--space-6, 1.5rem);
+  padding-bottom: var(--space-16, 4rem);
+  color: #111827;
+  font-family: 'Readex Pro', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+// ── Top Breadcrumb / Back Link ──────────────────────────────
+.detail-breadcrumb {
+  margin-bottom: 24px;
+
+  &__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #6b7280;
+    transition: color 0.2s ease, transform 0.2s ease;
+
+    .arrow {
+      font-size: 1.1rem;
+      transition: transform 0.2s ease;
+    }
+
+    &:hover {
+      color: #f59e0b;
+
+      .arrow {
+        transform: translateX(-3px);
+      }
+    }
+  }
+}
+
+// ── 2-Column Showcase Grid ──────────────────────────────────
+.product-showcase-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 36px;
+  align-items: start;
+
+  @media (min-width: 900px) {
+    grid-template-columns: 1.1fr 1fr;
+    gap: 56px;
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+// ── LEFT COLUMN: Gallery & Vertical Thumbnails
+// ══════════════════════════════════════════════════════════════
+
+.gallery-column {
+  width: 100%;
+}
+
+.gallery-wrapper {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 16px;
+
+  @media (min-width: 640px) {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 20px;
+  }
+}
+
+// Vertical Thumbnails Strip (matching 360 Nutrition screenshot)
+.vertical-thumbnails {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+
+  @media (min-width: 640px) {
+    flex-direction: column;
+    overflow-x: visible;
+    flex-shrink: 0;
+  }
+
+  .thumb-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    border: 2px solid #e5e7eb;
+    background: #ffffff;
+    cursor: pointer;
+    overflow: hidden;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    flex-shrink: 0;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      transition: transform 0.2s ease;
+    }
+
+    &.is-active {
+      border-color: #8b5cf6; // Purple active border matching screenshot
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+      transform: scale(1.04);
+    }
+
+    &:hover:not(.is-active) {
+      border-color: #d1d5db;
+      transform: translateY(-2px);
+    }
+  }
+}
+
+// Main Large Showcase Image Card
+.main-image-card {
+  flex: 1;
+  position: relative;
+  background: #ffffff;
+  border-radius: 24px;
+  border: 1px solid #f3f4f6;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 380px;
+  padding: 32px 24px;
+  overflow: hidden;
+
+  @media (min-width: 768px) {
+    min-height: 480px;
+    padding: 40px 32px;
+  }
+
+  .showcase-badge {
+    position: absolute;
+    top: 16px;
+    inset-inline-start: 16px;
+    background: #f59e0b;
+    color: #ffffff;
+    font-size: 0.78rem;
+    font-weight: 800;
+    padding: 4px 14px;
+    border-radius: 9999px;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
+    z-index: 5;
+  }
+
+  .main-image-stage {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .showcase-main-img {
+    max-width: 100%;
+    max-height: 440px;
+    object-fit: contain;
+    filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.07));
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+// ── RIGHT COLUMN: Product Info & 360 Conversion Flow
+// ══════════════════════════════════════════════════════════════
+
+.info-column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: start;
+}
+
+// Bold Uppercase Product Title
+.product-title-360 {
+  font-size: 2rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #111827;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  margin: 0 0 16px 0;
+
+  @media (min-width: 768px) {
+    font-size: 2.4rem;
+  }
+}
+
+// Health & Category Benefit Pills Row (Matching 360 Nutrition)
+.health-pills-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+  width: 100%;
+
+  .health-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 14px;
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    border: 1.5px solid #e5e7eb;
+    background: #ffffff;
+    color: #374151;
+    transition: transform 0.15s ease;
+
+    &:hover {
+      transform: translateY(-1px);
+    }
+
+    .pill-emoji {
+      font-size: 0.95rem;
+      line-height: 1;
+    }
+
+    // Color Variations
+    &.pill--green {
+      border-color: #86efac;
+      color: #166534;
+      background: #f0fdf4;
+    }
+
+    &.pill--blue {
+      border-color: #93c5fd;
+      color: #1e40af;
+      background: #eff6ff;
+    }
+
+    &.pill--orange {
+      border-color: #fdba74;
+      color: #9a3412;
+      background: #fff7ed;
+    }
+
+    &.pill--purple {
+      border-color: #d8b4fe;
+      color: #6b21a8;
+      background: #faf5ff;
+    }
+
+    &.pill--pink {
+      border-color: #f9a8d4;
+      color: #9d174d;
+      background: #fdf2f8;
+    }
+
+    &.pill--amber {
+      border-color: #fde047;
+      color: #854d0e;
+      background: #fefce8;
+    }
+
+    &.pill--teal {
+      border-color: #5eead4;
+      color: #115e59;
+      background: #f0fdfa;
+    }
+  }
+}
+
+// Price Row
+.price-row-360 {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 24px;
+
+  .price-value {
+    font-size: 1.85rem;
+    font-weight: 900;
+    color: #111827;
+    letter-spacing: -0.01em;
+  }
+
+  .price-slashed {
+    font-size: 1.15rem;
+    color: #9ca3af;
+    text-decoration: line-through;
+  }
+
+  .price-discount-tag {
+    background: #fee2e2;
+    color: #b91c1c;
+    font-size: 0.8rem;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 6px;
+  }
+}
+
+// Accordion Section: DESCRIPTION
+.accordion-section {
+  width: 100%;
+  border-top: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+  padding-block: 16px;
+  margin-bottom: 24px;
+
+  .accordion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-align: start;
+
+    .accordion-header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .accordion-icon {
+      font-size: 1.1rem;
+    }
+
+    .accordion-title {
+      font-size: 0.95rem;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #111827;
+    }
+
+    .accordion-toggle-symbol {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #6b7280;
+      line-height: 1;
+    }
+  }
+
+  .accordion-body {
+    padding-top: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .description-headline {
+      font-size: 1.25rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: #111827;
+      margin: 0;
+      line-height: 1.3;
+    }
+
+    .description-text {
+      font-size: 0.92rem;
+      color: #4b5563;
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    .how-it-works-box {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-top: 6px;
+
+      .how-it-works-title {
+        font-size: 0.95rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        color: #111827;
+        margin: 0;
+      }
+
+      .how-it-works-text {
+        font-size: 0.9rem;
+        color: #4b5563;
+        line-height: 1.65;
+        margin: 0;
+      }
+
+      .benefits-bullet-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .benefit-bullet-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #374151;
+
+        .bullet-dot {
+          font-size: 0.85rem;
+        }
+      }
+    }
+  }
+}
+
+// Size / Variant Picker
+.variants-picker {
+  width: 100%;
+  margin-bottom: 20px;
+
+  .picker-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #111827;
+    margin-bottom: 10px;
+  }
+
+  .picker-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .picker-btn {
+    padding: 8px 18px;
+    border-radius: 9999px;
+    border: 1.5px solid #e5e7eb;
+    background: #ffffff;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #374151;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+
+    &.is-active {
+      border-color: #f59e0b;
+      background: #fffbeb;
+      color: #b45309;
+    }
+
+    &:hover:not(.is-active) {
+      border-color: #d1d5db;
+    }
+
+    .picker-btn-discount {
+      font-size: 0.72rem;
+      background: #fee2e2;
+      color: #b91c1c;
+      padding: 1px 6px;
+      border-radius: 9999px;
+    }
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+// ── Purchase CTA Flow (Quantity + Add to Cart + Buy It Now)
+// ══════════════════════════════════════════════════════════════
+
+.purchase-cta-flow {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+// Row 1: Quantity + Add to Cart
+.cta-row-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+// Capsule Quantity Selector (- 1 +)
+.capsule-qty {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 9999px;
+  height: 52px;
+  background: #ffffff;
+  padding-inline: 8px;
+  min-width: 120px;
+
+  .qty-btn {
+    width: 36px;
+    height: 100%;
+    border: none;
+    background: none;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #6b7280;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s ease;
+
+    &:hover {
+      color: #f59e0b;
+    }
+  }
+
+  .qty-number {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #111827;
+    min-width: 32px;
+    text-align: center;
+  }
+}
+
+// 360 Nutrition Style Buttons (Solar Gold/Amber CTA)
+.btn-360 {
+  height: 52px;
+  border-radius: 9999px;
+  font-size: 0.95rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  // ADD TO CART: Vibrant Solar Orange/Gold
+  &-add {
+    flex: 1;
+    background: #f59e0b;
+    color: #ffffff;
+    box-shadow: 0 4px 16px rgba(245, 158, 11, 0.35);
+
+    .cart-svg-icon {
+      width: 18px;
+      height: 18px;
+    }
+
+    &:hover {
+      background: #d97706;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(245, 158, 11, 0.45);
+    }
+  }
+
+  // BUY IT NOW: Full Width Matching Solar Orange/Gold
+  &-buynow {
+    width: 100%;
+    background: #f59e0b;
+    color: #ffffff;
+    box-shadow: 0 4px 16px rgba(245, 158, 11, 0.35);
+
+    &:hover {
+      background: #d97706;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(245, 158, 11, 0.45);
+    }
+  }
+}
+
+// Trust Guarantees Strip
+.trust-guarantees {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  width: 100%;
+  padding-top: 16px;
+  border-top: 1px solid #f3f4f6;
+
+  .guarantee-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #6b7280;
+
+    .g-icon {
+      font-size: 1rem;
+    }
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+// ── BOTTOM SECTION: Suggestions / Related Products
+// ══════════════════════════════════════════════════════════════
+
+.suggestions-section {
+  margin-top: 72px;
+  padding-top: 48px;
+  border-top: 1px solid #e5e7eb;
+
+  .suggestions-header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+
+  .suggestions-title {
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: #111827;
+    margin: 0 0 8px 0;
+  }
+
+  .suggestions-subtitle {
+    font-size: 0.95rem;
+    color: #6b7280;
+    margin: 0;
+  }
+
+  .suggestions-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+  }
+}
+
+.suggest-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  }
+
+  &__link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  &__img-wrap {
+    background: #fafafa;
+    padding: 20px;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      transition: transform 0.3s ease;
+    }
+  }
+
+  &:hover &__img-wrap img {
+    transform: scale(1.06);
+  }
+
+  &__body {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+  }
+
+  &__name {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #111827;
+    margin: 0;
+    line-height: 1.35;
+  }
+
+  &__price {
+    font-size: 1.05rem;
+    font-weight: 900;
+    color: #111827;
+    margin-top: auto;
+    padding-top: 6px;
+  }
+
+  &__btn {
+    margin: 0 16px 16px 16px;
+    padding: 10px 16px;
+    border-radius: 9999px;
+    background: #f59e0b;
+    color: #ffffff;
+    border: none;
+    font-weight: 800;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+
+    &:hover {
+      background: #d97706;
+      transform: translateY(-1px);
+    }
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+// ── Skeleton Loader
+// ══════════════════════════════════════════════════════════════
+
+.detail-page-skeleton {
+  padding-top: 2rem;
+
+  .sk-back {
+    width: 120px;
+    height: 20px;
+    background: #f3f4f6;
+    border-radius: 6px;
+    margin-bottom: 24px;
+  }
+
+  .sk-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 36px;
+
+    @media (min-width: 768px) {
+      grid-template-columns: 1.1fr 1fr;
+      gap: 56px;
+    }
+  }
+
+  .sk-gallery {
+    aspect-ratio: 1 / 1;
+    background: #f3f4f6;
+    border-radius: 24px;
+    animation: shimmer 1.5s infinite;
+  }
+
+  .sk-info {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .sk-line {
+    height: 24px;
+    background: #f3f4f6;
+    border-radius: 6px;
+    animation: shimmer 1.5s infinite;
+
+    &--lg { width: 85%; height: 42px; }
+    &--sm { width: 45%; }
+    &--md { width: 95%; height: 70px; }
+  }
+
+  .sk-blocks {
+    height: 120px;
+    background: #f3f4f6;
+    border-radius: 16px;
+    animation: shimmer 1.5s infinite;
+  }
+}
+
+@keyframes shimmer {
+  0% { opacity: 0.5; }
+  50% { opacity: 1; }
+  100% { opacity: 0.5; }
+}
+

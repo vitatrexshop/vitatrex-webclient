@@ -1,0 +1,161 @@
+<section
+  class="fs-section"
+  *ngIf="products.length > 0"
+  aria-label="Product Showcase"
+>
+  <div class="container">
+
+    <!-- ── Section Header ──────────────────────────────────── -->
+    <div class="fs-header">
+      <span class="fs-header__tag">{{ 'FLAVOR_SWITCHER.TAG' | translate }}</span>
+      <h2 class="fs-header__title">{{ 'FLAVOR_SWITCHER.TITLE' | translate }}</h2>
+      <p class="fs-header__sub">{{ 'FLAVOR_SWITCHER.SUBTITLE' | translate }}</p>
+    </div>
+
+    <!-- ── Product Selector Strip / Mini Cards ─────────────── -->
+    <div class="fs-selector-strip" role="tablist" aria-label="اختر المنتج">
+      <button
+        *ngFor="let p of products; let i = index"
+        type="button"
+        class="fs-selector-card"
+        [class.is-active]="p._id === activeProduct?._id"
+        (click)="setActive(p)"
+        role="tab"
+        [attr.aria-selected]="p._id === activeProduct?._id"
+      >
+        <div class="fs-selector-card__img-wrap">
+          <img
+            [src]="p.image"
+            [alt]="p.name"
+            class="fs-selector-card__img"
+            loading="lazy"
+          />
+        </div>
+        <div class="fs-selector-card__content">
+          <span class="fs-selector-card__name">{{ p.name }}</span>
+          <span class="fs-selector-card__price" *ngIf="p.variants?.length">
+            {{ p.variants[0].price | number }} {{ 'COMMON.CURRENCY' | translate }}
+          </span>
+        </div>
+        <span class="fs-selector-card__badge" *ngIf="p.isBestSeller">⭐ {{ 'PRODUCT.BEST_SELLER' | translate }}</span>
+      </button>
+    </div>
+
+    <!-- ── Main Showcase Stage Panel ───────────────────────── -->
+    <div class="fs-showcase-panel" *ngIf="activeProduct && activeVariant" #stage>
+
+      <!-- ── Visual Showcase Column (Left in RTL) ──────────── -->
+      <div class="fs-showcase__visual">
+        <!-- Ambient radial color glow behind the product -->
+        <div class="visual-aura-glow" aria-hidden="true"></div>
+
+        <!-- Product Image Stage Frame -->
+        <div class="visual-jar-frame" #jar (mousemove)="onMouseMove($event)" (mouseleave)="onMouseLeave()">
+          <img
+            [src]="activeProduct.image"
+            [alt]="activeProduct.name"
+            class="visual-jar-img"
+          />
+
+          <!-- Floating Badges -->
+          <div class="fs-floating-badge badge-top-right">
+            <span class="badge-icon">🌿</span>
+            <span class="badge-text">{{ 'HERO.NATURAL_100' | translate }}</span>
+          </div>
+
+          <div class="fs-floating-badge badge-bottom-left">
+            <span class="badge-icon">🍏</span>
+            <span class="badge-text">{{ 'HERO.NO_SUGAR' | translate }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Product Details Column (Right in RTL) ─────────── -->
+      <div class="fs-showcase__info">
+
+        <!-- Category Tag -->
+        <div class="info-category-pill">
+          <span class="pill-sparkle">✨</span>
+          <span>
+            {{ activeProduct.category === 'immunity' ? ('PRODUCTS_SECTION.CAT_IMMUNITY' | translate)
+               : activeProduct.category === 'kids' ? ('PRODUCTS_SECTION.CAT_KIDS' | translate)
+               : activeProduct.category === 'sleep' ? ('PRODUCTS_SECTION.CAT_SLEEP' | translate)
+               : ('PRODUCTS_SECTION.CAT_ALL' | translate) }}
+          </span>
+        </div>
+
+        <!-- Product Title -->
+        <h3 class="info-title">{{ activeProduct.name }}</h3>
+
+        <!-- Description -->
+        <p class="info-desc" *ngIf="activeProduct.description">
+          {{ activeProduct.description }}
+        </p>
+
+        <!-- Benefits Checklist -->
+        <ul class="info-benefits-list" *ngIf="activeProduct.benefits?.length" role="list">
+          <li *ngFor="let b of activeProduct.benefits">
+            <span class="check-icon" aria-hidden="true">✓</span>
+            <span class="benefit-text">{{ b }}</span>
+          </li>
+        </ul>
+
+        <!-- Pricing Row -->
+        <div class="info-pricing-row">
+          <span class="price-current">
+            {{ activeVariant.price | number }} {{ 'COMMON.CURRENCY' | translate }}
+          </span>
+          <span
+            class="price-original"
+            *ngIf="activeVariant.originalPrice && activeVariant.originalPrice > activeVariant.price"
+          >
+            {{ activeVariant.originalPrice | number }} {{ 'COMMON.CURRENCY' | translate }}
+          </span>
+          <span
+            class="price-savings-badge"
+            *ngIf="activeVariant.discountPercentage && activeVariant.discountPercentage > 0"
+          >
+            {{ 'OFFERS_SECTION.SAVE_TAG' | translate: { percent: activeVariant.discountPercentage } }}
+          </span>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="info-actions-row">
+          <button
+            type="button"
+            class="btn-showcase-primary"
+            (click)="addToCart($event)"
+            [attr.aria-label]="'PRODUCT.ADD_TO_CART' | translate"
+          >
+            <span class="btn-icon">🛒</span>
+            <span>{{ 'FLAVOR_SWITCHER.ADD_TO_CART' | translate }}</span>
+          </button>
+
+          <a [routerLink]="['/shop', activeProduct.slug]" class="btn-showcase-secondary">
+            <span>{{ 'FLAVOR_SWITCHER.VIEW_PRODUCT' | translate }}</span>
+            <span class="btn-arrow">←</span>
+          </a>
+        </div>
+
+        <!-- Trust Badges Bar -->
+        <div class="info-trust-bar">
+          <div class="trust-item">
+            <span class="trust-icon">🚚</span>
+            <span>{{ 'FLAVOR_SWITCHER.FAST_SHIPPING' | translate }}</span>
+          </div>
+          <div class="trust-item">
+            <span class="trust-icon">🔒</span>
+            <span>{{ 'FLAVOR_SWITCHER.COD' | translate }}</span>
+          </div>
+          <div class="trust-item">
+            <span class="trust-icon">↩️</span>
+            <span>{{ 'FLAVOR_SWITCHER.FREE_RETURN' | translate }}</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>

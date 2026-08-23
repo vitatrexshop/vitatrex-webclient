@@ -1,0 +1,104 @@
+<main class="track-page">
+
+  <!-- ── Loading State ──────────────────────────────────────────────────────── -->
+  <div *ngIf="isLoading" class="state-container" aria-busy="true" aria-live="polite">
+    <div class="track-spinner" role="status"></div>
+    <p class="state-text">{{ 'TRACKING.LOADING' | translate }}</p>
+  </div>
+
+  <!-- ── Error State ────────────────────────────────────────────────────────── -->
+  <div
+    *ngIf="!isLoading && errorMessage"
+    class="state-container error-state"
+    role="alert"
+    aria-live="assertive"
+  >
+    <span class="state-icon" aria-hidden="true">⚠️</span>
+    <p class="state-text">{{ errorMessage }}</p>
+    <a routerLink="/" class="btn-home">{{ 'COMMON.BACK_HOME' | translate }}</a>
+  </div>
+
+  <!-- ── Track Card ─────────────────────────────────────────────────────────── -->
+  <ng-container *ngIf="!isLoading && trackingData && !errorMessage">
+    <div class="track-card">
+
+      <!-- ── Header ─────────────────────────────────────────────────────────── -->
+      <header class="track-header">
+        <div class="order-badge">
+          {{ 'TRACKING.ORDER_NUM_PREFIX' | translate }} <strong>{{ trackingData.orderNumber }}</strong>
+        </div>
+        <span
+          class="status-chip"
+          [ngClass]="'status-' + trackingData.orderStatus"
+        >
+          {{ ('TRACKING.STATUS.' + (trackingData.orderStatus | uppercase)) | translate }}
+        </span>
+      </header>
+
+      <!-- ── Cancelled Banner ───────────────────────────────────────────────── -->
+      <div *ngIf="isCancelled" class="cancelled-banner" role="alert">
+        {{ 'TRACKING.CANCELLED_NOTICE' | translate }}
+      </div>
+
+      <!-- ── Order Progress Stepper ─────────────────────────────────────────── -->
+      <div *ngIf="!isCancelled" class="stepper" role="list">
+        <div
+          *ngFor="let step of steps; let i = index; trackBy: trackByIndex"
+          class="step"
+          role="listitem"
+          [class.step--completed]="i < currentStep"
+          [class.step--active]="i === currentStep"
+          [attr.aria-current]="i === currentStep ? 'step' : null"
+        >
+          <!-- Node circle -->
+          <div class="step__node">
+            <span class="step__icon" aria-hidden="true">{{ step.icon }}</span>
+          </div>
+          <!-- Label -->
+          <p class="step__label">{{ step.key | translate }}</p>
+          <!-- Connector line — skipped on last step -->
+          <div
+            *ngIf="i < steps.length - 1"
+            class="step__connector"
+            aria-hidden="true"
+          ></div>
+        </div>
+      </div>
+
+      <!-- ── Dates Grid ─────────────────────────────────────────────────────── -->
+      <dl class="dates-grid">
+        <div class="dates-grid__item">
+          <dt>{{ 'TRACKING.ORDER_DATE' | translate }}</dt>
+          <dd>{{ trackingData.createdAt | date: 'mediumDate' }}</dd>
+        </div>
+        <div class="dates-grid__item">
+          <dt>{{ 'TRACKING.ESTIMATED_DELIVERY' | translate }}</dt>
+          <dd>
+            <ng-container *ngIf="trackingData.estimatedDelivery; else noDelivery">
+              {{ trackingData.estimatedDelivery | date: 'mediumDate' }}
+            </ng-container>
+            <ng-template #noDelivery>
+              <span class="text-muted">{{ 'TRACKING.DELIVERY_TIME_FRAME' | translate }}</span>
+            </ng-template>
+          </dd>
+        </div>
+      </dl>
+
+      <!-- ── Items Summary ──────────────────────────────────────────────────── -->
+      <section class="items-section">
+        <h2 class="items-section__title">{{ 'TRACKING.ORDER_ITEMS' | translate }}</h2>
+        <ul class="items-list">
+          <li
+            *ngFor="let item of trackingData.items; trackBy: trackByItemName"
+            class="items-list__item"
+          >
+            <span class="items-list__name">{{ item.name }}</span>
+            <span class="items-list__qty">× {{ item.quantity }}</span>
+          </li>
+        </ul>
+      </section>
+
+    </div>
+  </ng-container>
+
+</main>
