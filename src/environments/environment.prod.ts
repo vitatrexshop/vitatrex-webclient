@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://api.vitatrix.com',
+  apiUrl: 'https://api.vitatrexshop.com',
+  mediaBaseUrl: 'https://api.vitatrexshop.com',
 };

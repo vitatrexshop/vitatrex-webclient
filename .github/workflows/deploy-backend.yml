@@ -1,0 +1,29 @@
+﻿name: 🚀 Deploy Backend API → api.vitatrexshop.com
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy Backend via SSH
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🔐 Deploy & Restart via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: 65002
+          script: |
+            cd ~/domains/api.vitatrexshop.com/public_html
+            git pull origin main
+            npm install --omit=dev
+            pm2 restart vitatrex-api || pm2 start server.js --name vitatrex-api
+            pm2 save

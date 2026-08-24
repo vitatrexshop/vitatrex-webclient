@@ -24,6 +24,7 @@ import { CartDrawerService } from '../../../../core/services/cart-drawer.service
 import { UnifiedPromotion, PromotionOffer, PromotionBundle } from '../../../../core/models/promotion.model';
 import { OfferItem } from '../../../../core/models/offer.model';
 import { Product } from '../../../../core/models/product.model';
+import { environment } from '../../../../../environments/environment';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
@@ -592,8 +593,8 @@ export class OffersSectionComponent implements AfterViewInit, OnDestroy {
     ) {
       return raw;
     }
-    if (raw.startsWith('/uploads')) return `http://localhost:5000${raw}`;
-    if (raw.startsWith('uploads')) return `http://localhost:5000/${raw}`;
+    if (raw.startsWith('/uploads')) return `${environment.mediaBaseUrl}${raw}`;
+    if (raw.startsWith('uploads')) return `${environment.mediaBaseUrl}/${raw}`;
     return raw;
   }
 

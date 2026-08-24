@@ -21,6 +21,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { StoryService } from '../../../../core/services/story.service';
 import { Story } from '../../../../core/models/story.model';
+import { environment } from '../../../../../environments/environment';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
@@ -194,8 +195,8 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
     if (raw.startsWith('http://') || raw.startsWith('https://') || raw.startsWith('blob:')) {
       return raw;
     }
-    if (raw.startsWith('/uploads')) return `http://localhost:5000${raw}`;
-    if (raw.startsWith('uploads')) return `http://localhost:5000/${raw}`;
+    if (raw.startsWith('/uploads')) return `${environment.mediaBaseUrl}${raw}`;
+    if (raw.startsWith('uploads')) return `${environment.mediaBaseUrl}/${raw}`;
     return raw;
   }
 
@@ -217,9 +218,9 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
     if (raw.startsWith('http://') || raw.startsWith('https://') || raw.startsWith('blob:')) {
       return raw;
     }
-    if (raw.startsWith('/uploads')) return `http://localhost:5000${raw}`;
-    if (raw.startsWith('uploads')) return `http://localhost:5000/${raw}`;
-    return `http://localhost:5000/${raw}`;
+    if (raw.startsWith('/uploads')) return `${environment.mediaBaseUrl}${raw}`;
+    if (raw.startsWith('uploads')) return `${environment.mediaBaseUrl}/${raw}`;
+    return `${environment.mediaBaseUrl}/${raw}`;
   }
 
   onPosterError(event: Event): void {

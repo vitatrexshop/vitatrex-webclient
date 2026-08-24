@@ -1,4 +1,4 @@
-﻿import {
+import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -15,6 +15,7 @@ import { ToastService } from '../../core/services/toast.service';
 import { CartItem } from '../../core/models/cart.model';
 import { OrderInput, PaymentMethod, CreateOrderData } from '../../core/models/order.model';
 import { OrderTrackingService } from '../track-order/order-tracking.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-checkout',
@@ -165,8 +166,8 @@ export class CheckoutComponent implements OnInit {
     if (!url) return '';
     const raw = url.trim();
     if (raw.startsWith('http') || raw.startsWith('blob:') || raw.startsWith('assets/')) return raw;
-    if (raw.startsWith('/uploads')) return `http://localhost:5000${raw}`;
-    if (raw.startsWith('uploads')) return `http://localhost:5000/${raw}`;
+    if (raw.startsWith('/uploads')) return `${environment.mediaBaseUrl}${raw}`;
+    if (raw.startsWith('uploads')) return `${environment.mediaBaseUrl}/${raw}`;
     return raw;
   }
 }

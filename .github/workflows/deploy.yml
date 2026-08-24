@@ -1,0 +1,43 @@
+﻿name: 🚀 Deploy Web Client → vitatrexshop.com
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    name: Build & Deploy Frontend
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 🏗️ Build Angular (production)
+        # يستخدم ng build --configuration production مباشرة
+        # fileReplacements في angular.json تستبدل environment.ts بـ environment.prod.ts تلقائياً
+        run: npm run build:prod
+
+      - name: 📤 Deploy to Hostinger via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          # Angular 16 → المخرجات مباشرة في dist/vitatrix_webclient/ (بدون browser/)
+          local-dir: ./dist/vitatrix_webclient/
+          server-dir: /public_html/
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**

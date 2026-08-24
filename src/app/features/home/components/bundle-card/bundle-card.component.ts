@@ -1,4 +1,4 @@
-﻿import {
+import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -18,6 +18,7 @@ import { CartService } from '../../../../core/services/cart.service';
 import { CartDrawerService } from '../../../../core/services/cart-drawer.service';
 import { Bundle } from '../../../../core/models/bundle.model';
 import { Product } from '../../../../core/models/product.model';
+import { environment } from '../../../../../environments/environment';
 
 /** Labels for each slot index */
 const SLOT_LABELS = ['اختر منتجك الأول', 'اختر منتجك الثاني', 'اختر منتجك الثالث'];
@@ -201,8 +202,8 @@ export class BundleCardComponent implements OnInit {
     if (!url) return '';
     const raw = url.trim();
     if (raw.startsWith('http') || raw.startsWith('blob:') || raw.startsWith('assets/')) return raw;
-    if (raw.startsWith('/uploads')) return `http://localhost:5000${raw}`;
-    if (raw.startsWith('uploads'))  return `http://localhost:5000/${raw}`;
+    if (raw.startsWith('/uploads')) return `${environment.mediaBaseUrl}${raw}`;
+    if (raw.startsWith('uploads'))  return `${environment.mediaBaseUrl}/${raw}`;
     return raw;
   }
 

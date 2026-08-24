@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { CartService } from '../../../core/services/cart.service';
 import { CartDrawerService } from '../../../core/services/cart-drawer.service';
 import { CartItem } from '../../../core/models/cart.model';
+import { environment } from '../../../../environments/environment';
 
 /**
  * Slide-over shopping cart drawer.
@@ -70,8 +71,8 @@ export class CartDrawerComponent {
     if (!url) return '';
     const raw = url.trim();
     if (raw.startsWith('http') || raw.startsWith('blob:') || raw.startsWith('assets/')) return raw;
-    if (raw.startsWith('/uploads')) return `http://localhost:5000${raw}`;
-    if (raw.startsWith('uploads')) return `http://localhost:5000/${raw}`;
+    if (raw.startsWith('/uploads')) return `${environment.mediaBaseUrl}${raw}`;
+    if (raw.startsWith('uploads')) return `${environment.mediaBaseUrl}/${raw}`;
     return raw;
   }
 
