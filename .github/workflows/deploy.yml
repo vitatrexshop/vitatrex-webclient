@@ -1,4 +1,4 @@
-﻿name: 🚀 Deploy Web Client → vitatrexshop.com
+name: 🚀 Deploy Web Client → vitatrexshop.com
 
 on:
   push:
@@ -24,8 +24,6 @@ jobs:
         run: npm ci
 
       - name: 🏗️ Build Angular (production)
-        # يستخدم ng build --configuration production مباشرة
-        # fileReplacements في angular.json تستبدل environment.ts بـ environment.prod.ts تلقائياً
         run: npm run build:prod
 
       - name: 📤 Deploy to Hostinger via FTP
@@ -34,9 +32,8 @@ jobs:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASSWORD }}
-          # Angular 16 → المخرجات مباشرة في dist/vitatrix_webclient/ (بدون browser/)
           local-dir: ./dist/vitatrix_webclient/
-          server-dir: /public_html/
+          server-dir: /domains/vitatrexshop.com/public_html/
           exclude: |
             **/.git*
             **/.git*/**
