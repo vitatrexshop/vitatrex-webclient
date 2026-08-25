@@ -144,48 +144,61 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
 
   fetchStories(): void {
     this.isLoading = true;
-    this.cdr.detectChanges();
+    this.cdr.markForCheck();
 
     this.storyService
       .getStories()
       .pipe(
-        catchError(() => of(null)),
+        catchError((err) => {
+          console.warn('[VideoStories] API error, using fallback stories:', err);
+          return of(null);
+        }),
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe({
         next: (res) => {
           if (res && res.success && Array.isArray(res.data) && res.data.length > 0) {
-            const active = res.data.filter((s) => s.isActive !== false);
-            if (active.length > 0 && active.length < 4) {
-              this.stories = [...active, ...this.fallbackStories.slice(active.length)];
-            } else if (active.length > 0) {
+            // isActive may come as undefined from older DB docs — treat undefined as active
+            const active = res.data.filter((s) => s.isActive !== false && s.isActive !== null);
+            if (active.length >= 4) {
               this.stories = active;
+            } else if (active.length > 0) {
+              // Pad with fallback so we always show at least 4 cards
+              const pad = this.fallbackStories
+                .filter((f) => !active.find((a) => a._id === f._id))
+                .slice(0, Math.max(0, 4 - active.length));
+              this.stories = [...active, ...pad];
             } else {
               this.stories = this.fallbackStories;
             }
           } else {
             this.stories = this.fallbackStories;
           }
+
           this.isLoading = false;
+          // Use markForCheck (not detectChanges) – compatible with OnPush in production
+          this.cdr.markForCheck();
+          // Also call detectChanges to guarantee the view refreshes on first render
           this.cdr.detectChanges();
 
           if (this.isBrowser) {
             setTimeout(() => {
               this.initScrollAnimation();
               ScrollTrigger.refresh();
-            }, 60);
+            }, 80);
           }
         },
         error: () => {
           this.stories = this.fallbackStories;
           this.isLoading = false;
+          this.cdr.markForCheck();
           this.cdr.detectChanges();
 
           if (this.isBrowser) {
             setTimeout(() => {
               this.initScrollAnimation();
               ScrollTrigger.refresh();
-            }, 60);
+            }, 80);
           }
         },
       });
@@ -455,14 +468,20 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
   navigateToProduct(productLink?: string, event?: Event): void {
     if (event) event.stopPropagation();
     this.closeModal();
-    if (!productLink) {
+
+    // Double-sanitize the link in case it came from an old cached response
+    const sanitized = this.storyService.sanitizeProductLink(productLink);
+
+    if (!sanitized) {
       this.router.navigate(['/products']);
       return;
     }
-    if (productLink.startsWith('http://') || productLink.startsWith('https://')) {
-      window.open(productLink, '_blank');
+
+    // After sanitization, any remaining http/https absolute URL is intentionally external
+    if (sanitized.startsWith('http://') || sanitized.startsWith('https://')) {
+      window.open(sanitized, '_blank');
     } else {
-      this.router.navigate([productLink]);
+      this.router.navigate([sanitized]);
     }
   }
 
