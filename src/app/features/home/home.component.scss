@@ -12,36 +12,16 @@
 
 // ── Section Wrapper ──────────────────────────────────────────
 .vt-section {
-  min-height: 250px;
   position: relative;
-  // Initial state — will transition smoothly upon reveal
-  opacity: 0;
-  transform: translateY(20px);
-  transition:
-    opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform;
-
-  &.vt-revealed {
-    opacity: 1;
-    transform: none;
-    will-change: auto;
-  }
+  width: 100%;
+  opacity: 1;
+  transform: none;
 }
 
 // ── Reveal animations for staggered children ─────────────────
 .vt-reveal {
-  opacity: 0;
-  transform: translateY(20px);
-  transition:
-    opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform;
-
-  &.vt-revealed {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  opacity: 1;
+  transform: none;
 }
 
 // ── Page-level container ─────────────────────────────────────
@@ -93,23 +73,14 @@
 // ── Offers Section Wrapper — Luxury Deep Purple Strip ────────
 .vt-offers-wrapper {
   width: 100%;
-  min-height: 480px;
   background: radial-gradient(circle at 50% 20%, #2a1d63 0%, #20174b 75%, #18113c 100%);
   overflow: hidden;
-
-  @media (max-width: 768px) {
-    min-height: 380px;
-  }
 }
 
 // ── Video Stories Wrapper ─────────────────────────────────────
 .vt-stories-wrapper {
   width: 100%;
-  min-height: 360px;
-
-  @media (max-width: 768px) {
-    min-height: 300px;
-  }
+  overflow: hidden;
 }
 
 

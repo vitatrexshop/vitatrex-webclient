@@ -266,19 +266,25 @@ export class HeroSliderComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.ctx = gsap.context(() => {
       // 1. Brand Name reveal
-      gsap.from('.hero-brand', {
-        opacity: 0, letterSpacing: '10px', duration: 1.2, ease: 'power3.out',
-      });
+      gsap.fromTo(
+        '.hero-brand',
+        { opacity: 0.85, letterSpacing: '2px' },
+        { opacity: 1, letterSpacing: '0px', duration: 0.8, ease: 'power2.out', clearProps: 'all' }
+      );
 
       // 2. Slogan blur-to-focus
-      gsap.from('.hero-slogan', {
-        opacity: 0, filter: 'blur(5px)', duration: 0.8, delay: 0.4, ease: 'power3.out',
-      });
+      gsap.fromTo(
+        '.hero-slogan',
+        { opacity: 0.85 },
+        { opacity: 1, duration: 0.6, delay: 0.2, ease: 'power2.out', clearProps: 'all' }
+      );
 
       // 3. Banner reveal
-      gsap.from('.hero-banner-frame', {
-        opacity: 0, y: 20, scale: 0.99, duration: 0.85, delay: 0.15, ease: 'power2.out',
-      });
+      gsap.fromTo(
+        '.hero-banner-frame',
+        { opacity: 0.85, y: 15, scale: 0.99 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.7, delay: 0.1, ease: 'power2.out', clearProps: 'all' }
+      );
 
       // 4. ScrollTrigger scrub — banner fruits swoop in as you scroll
       const scrollTl = gsap.timeline({
@@ -308,19 +314,13 @@ export class HeroSliderComponent implements OnInit, AfterViewInit, OnDestroy {
       if (manifestoEl) {
         gsap.fromTo(
           manifestoEl,
-          { opacity: 0, y: 24 },
+          { opacity: 0.85, y: 15 },
           {
             opacity: 1,
             y: 0,
-            duration: 0.85,
-            ease: 'power3.out',
+            duration: 0.6,
+            ease: 'power2.out',
             clearProps: 'all',
-            scrollTrigger: {
-              trigger: manifestoEl,
-              start: 'top 95%',
-              once: true,
-              toggleActions: 'play none none none',
-            },
           }
         );
         gsap.fromTo(

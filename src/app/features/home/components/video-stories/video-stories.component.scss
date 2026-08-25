@@ -62,19 +62,13 @@
 // ── Main Section Container ────────────────────────────────────
 .video-stories-section {
   width: 100%;
-  min-height: 380px;
-  padding: 3.5rem 0 2.5rem;
+  padding: 1.75rem 0 2rem;
   position: relative;
   overflow: visible;
   box-sizing: border-box;
 
   @media (min-width: 768px) {
-    padding: 4.5rem 0 3.5rem;
-    min-height: 440px;
-  }
-
-  @media (max-width: 600px) {
-    min-height: 300px;
+    padding: 3.5rem 0 3rem;
   }
 }
 
@@ -93,11 +87,15 @@
 // ── Section Header ────────────────────────────────────────────
 .stories-section-header {
   text-align: center;
-  margin-bottom: 2.25rem;
+  margin-bottom: 1.25rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
+
+  @media (min-width: 768px) {
+    margin-bottom: 2rem;
+  }
 
   .stories-badge-tag {
     display: inline-flex;

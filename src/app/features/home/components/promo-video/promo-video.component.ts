@@ -251,23 +251,22 @@ export class PromoVideoComponent implements OnInit, OnDestroy {
     }, 1000);
 
     this.ctx = gsap.context(() => {
-      // 1. Entrance animation for the video container
-      gsap.from('.promo-video-container', {
-        opacity: 0,
-        scale: 0.96,
-        y: 30,
-        duration: 0.8,
-        ease: 'power2.out',
-        clearProps: 'all',
-        onComplete: () => clearTimeout(safetyTimer),
-        scrollTrigger: {
-          trigger: section,
-          start: 'top 88%',
-          once: true,
-          toggleActions: 'play none none none',
-          onEnter: () => clearTimeout(safetyTimer),
-        },
-      });
+      // 1. Entrance animation for the video container (guaranteed visible)
+      const container = section.querySelector<HTMLElement>('.promo-video-container');
+      if (container) {
+        gsap.fromTo(
+          container,
+          { opacity: 0.85, scale: 0.98, y: 15 },
+          {
+            opacity: 1,
+            scale: 1,
+            y: 0,
+            duration: 0.6,
+            ease: 'power2.out',
+            clearProps: 'all',
+          }
+        );
+      }
 
       // 2. Parallax floating fruit particles timeline with smooth scrub
       const scrollTl = gsap.timeline({
@@ -349,19 +348,13 @@ export class PromoVideoComponent implements OnInit, OnDestroy {
       if (statementEl) {
         gsap.fromTo(
           statementEl,
-          { opacity: 0, y: 24 },
+          { opacity: 0.85, y: 15 },
           {
             opacity: 1,
             y: 0,
-            duration: 0.85,
-            ease: 'power3.out',
+            duration: 0.6,
+            ease: 'power2.out',
             clearProps: 'all',
-            scrollTrigger: {
-              trigger: statementEl,
-              start: 'top 95%',
-              once: true,
-              toggleActions: 'play none none none',
-            },
           }
         );
 

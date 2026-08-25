@@ -46,8 +46,7 @@
 // ── Section Container ─────────────────────────────────────────────────
 .offers-section {
   width: 100%;
-  min-height: 480px;
-  padding: 2.5rem 0 4rem;
+  padding: 1.75rem 0 2rem;
   position: relative;
   background: #19123b;
   background: radial-gradient(circle at 50% 15%, #271a54 0%, #19123b 65%, #0f0a26 100%);
@@ -56,12 +55,7 @@
   overflow: hidden;
 
   @media (min-width: 768px) {
-    padding: 3.5rem 0 5rem;
-    min-height: 540px;
-  }
-
-  @media (max-width: 600px) {
-    min-height: 380px;
+    padding: 3rem 0 3.5rem;
   }
 }
 
@@ -129,9 +123,13 @@
 // ── Swiper Slider Track & Slide ───────────────────────────────────────
 .offers-swiper {
   width: 100%;
-  padding-bottom: 2.75rem !important;
+  padding-bottom: 2rem !important;
   overflow: visible !important;
   position: relative;
+
+  @media (min-width: 768px) {
+    padding-bottom: 2.5rem !important;
+  }
 }
 
 .offer-slide {

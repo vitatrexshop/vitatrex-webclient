@@ -535,49 +535,46 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
 
     this.ctx?.revert();
 
-    // Safety fallback: if GSAP/ScrollTrigger doesn't fire within 2s, force cards visible
-    const safetyTimer = setTimeout(() => {
-      const cards = section.querySelectorAll<HTMLElement>('.story-reel-card');
-      cards.forEach((c) => {
-        c.style.opacity = '1';
-        c.style.transform = '';
-      });
-    }, 2000);
+    // Ensure baseline visibility immediately
+    const header = section.querySelector<HTMLElement>('.stories-section-header');
+    if (header) {
+      header.style.opacity = '1';
+    }
+    const cards = section.querySelectorAll<HTMLElement>('.story-reel-card');
+    cards.forEach((c) => {
+      c.style.opacity = '1';
+    });
 
     this.ctx = gsap.context(() => {
-      // Header entrance
-      gsap.from('.stories-section-header', {
-        opacity: 0,
-        y: 25,
-        duration: 0.8,
-        ease: 'power3.out',
-        clearProps: 'all',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top 85%',
-          once: true,
-          toggleActions: 'play none none none',
-        },
-      });
+      // Subtle smooth entrance without ever hiding elements
+      if (header) {
+        gsap.fromTo(
+          header,
+          { opacity: 0.85, y: 15 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            ease: 'power2.out',
+            clearProps: 'all',
+          }
+        );
+      }
 
-      // Stagger Instagram Reel Cards
-      gsap.from('.story-reel-card', {
-        opacity: 0,
-        y: 35,
-        scale: 0.92,
-        duration: 0.7,
-        stagger: 0.08,
-        ease: 'power3.out',
-        clearProps: 'all',
-        onComplete: () => clearTimeout(safetyTimer),
-        scrollTrigger: {
-          trigger: section,
-          start: 'top 82%',
-          once: true,
-          toggleActions: 'play none none none',
-          onEnter: () => clearTimeout(safetyTimer),
-        },
-      });
+      if (cards.length > 0) {
+        gsap.fromTo(
+          cards,
+          { opacity: 0.85, y: 15 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.5,
+            stagger: 0.05,
+            ease: 'power2.out',
+            clearProps: 'all',
+          }
+        );
+      }
     }, section);
   }
 }
