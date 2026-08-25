@@ -45,21 +45,15 @@
   position: relative;
   overflow: hidden;
   width: 100%;
-  min-height: 480px;
-  padding: 3rem 0 2.5rem;
+  // No fixed min-height — let content define the height naturally
+  padding: 2rem 0 2rem;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: var(--bg-app, #fcfaff);
-  will-change: transform, opacity;
 
   @media (min-width: 768px) {
-    padding: 4.5rem 0 3.5rem;
-    min-height: 580px;
-  }
-
-  @media (max-width: 600px) {
-    min-height: 380px;
+    padding: 3.5rem 0 3rem;
   }
 }
 
@@ -467,6 +461,20 @@
 
 // ── Skeleton Loader Styles ───────────────────────────────────
 .promo-video-section--skeleton {
+  .promo-video-container {
+    // Match exact width of loaded state
+    width: 92vw;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    @media (min-width: 768px) {
+      width: 80vw;
+    }
+  }
+
   .sk-shimmer {
     background: linear-gradient(
       90deg,
@@ -481,22 +489,26 @@
   .sk-video {
     width: 100%;
     aspect-ratio: 16 / 9;
-    border-radius: 32px;
+    border-radius: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: #ede4f8;
+
+    @media (min-width: 768px) {
+      border-radius: 32px;
+    }
   }
 
   .sk-play-icon {
-    width: 80px;
-    height: 80px;
+    width: 72px;
+    height: 72px;
     border-radius: 9999px;
     background: rgba(94, 67, 155, 0.2);
   }
 
   .sk-statement {
-    margin-top: 3.5rem;
+    margin-top: 2.25rem;
     margin-bottom: 1rem;
     display: flex;
     flex-direction: column;
@@ -504,10 +516,9 @@
     gap: 14px;
     width: 100%;
     max-width: 680px;
-    min-height: 100px;
 
     @media (max-width: 768px) {
-      margin-top: 2.25rem;
+      margin-top: 1.5rem;
       gap: 10px;
     }
 

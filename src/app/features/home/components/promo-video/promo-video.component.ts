@@ -236,20 +236,6 @@ export class PromoVideoComponent implements OnInit, OnDestroy {
 
     this.ctx?.revert();
 
-    // Safety fallback: if GSAP/ScrollTrigger doesn't fire within 1s, force container & statement visible
-    const safetyTimer = setTimeout(() => {
-      const container = section.querySelector<HTMLElement>('.promo-video-container');
-      if (container) {
-        container.style.opacity = '1';
-        container.style.transform = '';
-      }
-      const statement = section.querySelector<HTMLElement>('.promo-video-statement');
-      if (statement) {
-        statement.style.opacity = '1';
-        statement.style.transform = '';
-      }
-    }, 1000);
-
     this.ctx = gsap.context(() => {
       // 1. Entrance animation for the video container (guaranteed visible)
       const container = section.querySelector<HTMLElement>('.promo-video-container');
