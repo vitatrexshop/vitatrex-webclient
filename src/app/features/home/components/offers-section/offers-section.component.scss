@@ -73,7 +73,12 @@
 
 // ── Section Header ────────────────────────────────────────────────────
 .offers-header {
-  margin-bottom: 2rem;
+  margin-bottom: 1.75rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
 
   .offers-header-text {
     display: flex;
@@ -102,7 +107,7 @@
     }
 
     .offers-title {
-      font-size: clamp(1.75rem, 3.2vw, 2.4rem);
+      font-size: clamp(1.6rem, 3.2vw, 2.3rem);
       font-weight: 900;
       color: #ffffff;
       font-family: 'Readex Pro', 'Outfit', sans-serif;
@@ -112,11 +117,19 @@
     }
 
     .offers-subtitle {
-      font-size: clamp(0.92rem, 1.4vw, 1.05rem);
+      font-size: clamp(0.88rem, 1.4vw, 1.02rem);
       color: #cbd5e1;
       margin: 0;
       line-height: 1.6;
     }
+  }
+
+  // Header Nav Controls (Top outside of cards)
+  .offers-header-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
   }
 }
 
@@ -124,7 +137,7 @@
 .offers-swiper {
   width: 100%;
   padding-bottom: 2rem !important;
-  overflow: visible !important;
+  overflow: hidden;
   position: relative;
 
   @media (min-width: 768px) {
@@ -143,17 +156,15 @@
 .offer-showcase-frame {
   position: relative;
   width: 100%;
-  min-height: 380px;
-  border-radius: 24px;
+  border-radius: 20px;
   overflow: hidden;
   background: #120c29;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.08);
   transform: translate3d(0, 0, 0);
   transition: transform 0.35s ease, box-shadow 0.35s ease;
 
-  @media (min-width: 900px) {
-    aspect-ratio: 16 / 9;
-    max-height: 560px;
+  @media (min-width: 768px) {
+    border-radius: 24px;
   }
 
   &:hover {
@@ -179,20 +190,38 @@
   }
 
   // ── Standard Offer Banner Stage ─────────────────────────────────────
+  &--standard {
+    display: flex;
+    flex-direction: column;
+    aspect-ratio: 16 / 10;
+    min-height: 260px;
+    max-height: 540px;
+
+    @media (min-width: 768px) {
+      aspect-ratio: 16 / 9;
+      min-height: 360px;
+    }
+
+    @media (min-width: 1200px) {
+      aspect-ratio: 21 / 9;
+      max-height: 480px;
+    }
+  }
+
   .offer-banner-stage {
     position: relative;
     width: 100%;
     height: 100%;
-    min-height: 380px;
+    flex: 1;
     display: block;
     z-index: 2;
+    overflow: hidden;
 
     .offers-banner-img {
       width: 100%;
       height: 100%;
-      min-height: 380px;
       object-fit: cover;
-      object-position: center;
+      object-position: center center;
       display: block;
       transform: translate3d(0, 0, 0);
       transition: transform 0.5s ease-out;
@@ -203,9 +232,9 @@
       inset: 0;
       background: linear-gradient(
         180deg,
-        rgba(25, 18, 59, 0.15) 0%,
-        rgba(25, 18, 59, 0.05) 40%,
-        rgba(15, 10, 38, 0.8) 100%
+        rgba(25, 18, 59, 0.12) 0%,
+        rgba(25, 18, 59, 0.05) 45%,
+        rgba(15, 10, 38, 0.82) 100%
       );
       pointer-events: none;
     }
@@ -217,19 +246,13 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 28px 20px;
-    min-height: 440px;
+    padding: 22px 14px;
+    min-height: auto;
     background: radial-gradient(circle at 50% 20%, #291b5c 0%, #171038 65%, #0e0924 100%);
     box-sizing: border-box;
 
     @media (min-width: 768px) {
-      padding: 34px 32px;
-      min-height: 500px;
-    }
-
-    @media (max-width: 639px) {
-      padding: 18px 12px;
-      min-height: unset;
+      padding: 32px 28px;
     }
 
     .bundle-interactive-stage {
@@ -241,14 +264,25 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
 
+      // ── Bundle Header with Non-Colliding Badges ───────────────────
       .bundle-stage-header {
         text-align: center;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 6px;
+        gap: 8px;
+        width: 100%;
+
+        .bundle-header-badges {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          flex-wrap: wrap;
+          margin-bottom: 2px;
+        }
 
         .bundle-stage-tag {
           font-size: 0.76rem;
@@ -257,45 +291,67 @@
           background: rgba(168, 85, 247, 0.18);
           border: 1px solid rgba(168, 85, 247, 0.35);
           border-radius: 9999px;
-          padding: 3px 12px;
+          padding: 4px 12px;
           font-family: 'Readex Pro', sans-serif;
         }
 
         .bundle-stage-title {
-          font-size: clamp(1.15rem, 2.2vw, 1.45rem);
+          font-size: clamp(1.2rem, 2.4vw, 1.55rem);
           font-weight: 900;
           color: #ffffff;
           margin: 0;
           font-family: 'Readex Pro', sans-serif;
+          line-height: 1.3;
         }
 
         .bundle-stage-desc {
-          font-size: clamp(0.8rem, 1.2vw, 0.9rem);
+          font-size: clamp(0.82rem, 1.2vw, 0.92rem);
           color: #cbd5e1;
           margin: 0;
           max-width: 580px;
+          line-height: 1.5;
         }
       }
 
+      // ── 3 Interactive Slots Container (Mobile Scroll Snap + Desktop Flex) ─
       .bundle-slots-container {
         display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
+        align-items: stretch;
         width: 100%;
-        margin-top: 8px;
+        margin-top: 4px;
+        box-sizing: border-box;
+        direction: rtl;
 
-        @media (max-width: 600px) {
-          gap: 6px;
+        // Mobile (< 640px): Smooth Horizontal Scroll Snap
+        @media (max-width: 639px) {
+          justify-content: flex-start;
+          gap: 12px;
+          overflow-x: auto;
+          scroll-snap-type: x mandatory;
+          -webkit-overflow-scrolling: touch;
+          padding: 6px 4px 12px;
+          scrollbar-width: none;
+          &::-webkit-scrollbar {
+            display: none;
+          }
+        }
+
+        // Tablet & Desktop (>= 640px): Centered Even Flex Row
+        @media (min-width: 640px) {
+          justify-content: center;
+          align-items: center;
+          gap: 12px;
+          overflow-x: visible;
         }
       }
 
+      // Plus Divider between slots
       .bundle-slot-divider {
-        font-size: 1.35rem;
+        font-size: 1.25rem;
         font-weight: 900;
         color: #a855f7;
-        width: 32px;
-        height: 32px;
+        width: 30px;
+        height: 30px;
         border-radius: 50%;
         background: rgba(168, 85, 247, 0.2);
         border: 1px solid rgba(168, 85, 247, 0.4);
@@ -304,57 +360,70 @@
         justify-content: center;
         flex-shrink: 0;
 
-        @media (max-width: 600px) {
-          width: 24px;
-          height: 24px;
-          font-size: 1rem;
+        @media (max-width: 639px) {
+          display: none; // Hidden on mobile cards for clean swipe cards
         }
       }
 
+      // Individual Slot Column
       .bundle-slot {
-        flex: 1;
-        max-width: 210px;
-        min-width: 95px;
+        box-sizing: border-box;
+
+        @media (max-width: 639px) {
+          flex: 0 0 74vw;
+          max-width: 240px;
+          min-width: 190px;
+          scroll-snap-align: center;
+        }
+
+        @media (min-width: 640px) {
+          flex: 1;
+          max-width: 220px;
+          min-width: 150px;
+        }
 
         .bundle-slot-card {
           position: relative;
           display: flex;
           flex-direction: column;
           align-items: center;
+          justify-content: center;
           gap: 8px;
+          min-height: 180px;
+          height: 100%;
           background: rgba(32, 23, 75, 0.85);
           border: 1.5px solid rgba(255, 255, 255, 0.15);
           border-radius: 18px;
-          padding: 12px 10px;
+          padding: 14px 12px;
           box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-          transition: transform 0.25s ease, border-color 0.25s ease;
+          box-sizing: border-box;
+          transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 
-          @media (max-width: 600px) {
-            padding: 8px 6px;
-            border-radius: 14px;
+          &:active {
+            transform: scale(0.98);
           }
 
           .bundle-slot-number-badge {
             position: absolute;
             top: -8px;
             right: -8px;
-            width: 22px;
-            height: 22px;
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
             background: linear-gradient(135deg, #a855f7, #6366f1);
             color: #ffffff;
-            font-size: 0.68rem;
+            font-size: 0.72rem;
             font-weight: 900;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 8px rgba(168, 85, 247, 0.6);
+            box-shadow: 0 0 10px rgba(168, 85, 247, 0.6);
             z-index: 3;
             border: 1.5px solid rgba(255, 255, 255, 0.4);
 
             &--filled {
               background: linear-gradient(135deg, #10b981, #059669);
-              box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+              box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
             }
           }
 
@@ -362,7 +431,7 @@
             position: relative;
             width: 100%;
             aspect-ratio: 1;
-            max-width: 130px;
+            max-width: 120px;
             border-radius: 14px;
             overflow: hidden;
             background: rgba(255, 255, 255, 0.05);
@@ -401,46 +470,35 @@
               color: #e9d5ff;
               font-size: 0.66rem;
               font-weight: 800;
-              padding: 2px 6px;
+              padding: 2px 7px;
               border-radius: 9999px;
               display: flex;
               align-items: center;
               gap: 3px;
-
-              @media (max-width: 600px) {
-                font-size: 0.55rem;
-                padding: 1px 4px;
-                top: 3px;
-                right: 3px;
-              }
             }
           }
 
           .bundle-slot-title {
-            font-size: 0.78rem;
+            font-size: 0.82rem;
             font-weight: 800;
             color: #ffffff;
             font-family: 'Readex Pro', sans-serif;
             text-align: center;
-            line-height: 1.3;
+            line-height: 1.35;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
-
-            @media (max-width: 600px) {
-              font-size: 0.68rem;
-            }
           }
 
-          // Pick Button Slot
+          // Pick Button Slot (Empty)
           &--pick {
             cursor: pointer;
             border: 2px dashed rgba(168, 85, 247, 0.6);
-            background: rgba(94, 67, 155, 0.3);
+            background: rgba(94, 67, 155, 0.25);
 
             &:hover {
-              background: rgba(94, 67, 155, 0.45);
+              background: rgba(94, 67, 155, 0.4);
               border-color: #a855f7;
               transform: translateY(-2px);
             }
@@ -451,37 +509,28 @@
               align-items: center;
               justify-content: center;
               gap: 6px;
-              padding: 18px 4px;
+              padding: 16px 6px;
               text-align: center;
-
-              @media (max-width: 600px) {
-                padding: 10px 2px;
-                gap: 4px;
-              }
 
               .bundle-slot-pick-icon {
                 color: #c084fc;
+                display: flex;
+                align-items: center;
+                justify-content: center;
               }
 
               .bundle-slot-pick-btn-label {
-                font-size: 0.8rem;
+                font-size: 0.84rem;
                 font-weight: 900;
                 color: #ffffff;
                 font-family: 'Readex Pro', sans-serif;
-
-                @media (max-width: 600px) {
-                  font-size: 0.68rem;
-                }
+                line-height: 1.3;
               }
 
               .bundle-slot-pick-sub {
-                font-size: 0.68rem;
+                font-size: 0.72rem;
                 font-weight: 700;
                 color: #fbbf24;
-
-                @media (max-width: 600px) {
-                  font-size: 0.58rem;
-                }
               }
             }
           }
@@ -502,11 +551,11 @@
   }
 }
 
-// ── Floating Top-Right Discount Badges ─────────────────────────────────
+// ── Floating Top-Right Discount Badges (Standard Slide) ───────────────
 .offer-top-badges {
   position: absolute;
-  top: 18px;
-  right: 18px;
+  top: 14px;
+  right: 14px;
   z-index: 5;
   display: flex;
   align-items: center;
@@ -514,8 +563,8 @@
   pointer-events: none;
 
   @media (min-width: 768px) {
-    top: 22px;
-    right: 22px;
+    top: 20px;
+    right: 20px;
     gap: 10px;
   }
 
@@ -528,10 +577,10 @@
     letter-spacing: 0.01em;
 
     &.discount-pill {
-      background: var(--theme-badge-bg);
+      background: var(--theme-badge-bg, #ef4444);
       color: #ffffff;
-      border: 1.5px solid var(--theme-badge-border);
-      box-shadow: 0 4px 14px var(--theme-badge-glow);
+      border: 1.5px solid var(--theme-badge-border, #f87171);
+      box-shadow: 0 4px 14px var(--theme-badge-glow, rgba(239, 68, 68, 0.4));
     }
 
     &.custom-pill {
@@ -900,62 +949,51 @@
   }
 }
 
-// ── Sleek Navigation Arrows ───────────────────────────────────────────
+// ── Sleek Header Navigation Arrows (Non-Overlapping) ──────────────────
 .offers-nav {
-  position: absolute;
-  top: calc(50% - 1.25rem);
-  transform: translateY(-50%);
+  position: relative;
   z-index: 10;
-  width: 46px;
-  height: 46px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
-  background: rgba(22, 14, 52, 0.85);
+  background: rgba(32, 23, 75, 0.85);
   border: 1.5px solid rgba(168, 85, 247, 0.4);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   color: #ffffff;
-  transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+  transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 
   svg {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     color: #ffffff;
   }
 
-  &:hover {
+  &:hover:not(.swiper-button-disabled) {
     background: rgba(94, 67, 155, 0.95);
     border-color: #c084fc;
-    transform: translateY(-50%) scale(1.08);
+    transform: scale(1.08);
+    box-shadow: 0 6px 20px rgba(168, 85, 247, 0.5);
   }
 
-  &--prev {
-    right: -22px;
-    @media (max-width: 1024px) {
-      right: 10px;
-    }
-  }
-
-  &--next {
-    left: -22px;
-    @media (max-width: 1024px) {
-      left: 10px;
-    }
+  &:active:not(.swiper-button-disabled) {
+    transform: scale(0.95);
   }
 
   &.swiper-button-disabled {
-    opacity: 0.3;
-    pointer-events: none;
+    opacity: 0.35;
+    cursor: not-allowed;
   }
 
   @media (max-width: 639px) {
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
     svg {
-      width: 16px;
-      height: 16px;
+      width: 15px;
+      height: 15px;
     }
   }
 }

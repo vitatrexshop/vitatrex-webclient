@@ -62,6 +62,20 @@
           {{ 'OFFERS_SECTION.SUBTITLE' | translate }}
         </p>
       </div>
+
+      <!-- Navigation Arrows (In header, never overlapping cards) -->
+      <div class="offers-header-nav" *ngIf="promotions.length > 1">
+        <button class="offers-nav offers-nav--next" type="button" aria-label="العرض التالي">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+        </button>
+        <button class="offers-nav offers-nav--prev" type="button" aria-label="العرض السابق">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </button>
+      </div>
     </div>
 
     <!-- ── Swiper Slider Shell ───────────────────────────────────────── -->
@@ -164,32 +178,31 @@
           <div *ngIf="item.type === 'bundle'" class="offer-showcase-frame offer-showcase-frame--bundle">
             <div class="offer-spotlight-glow" aria-hidden="true"></div>
 
-            <!-- Top Discount Badges -->
-            <div class="offer-top-badges">
-              <span
-                class="offer-badge-pill discount-pill"
-                *ngIf="item.discountPercentage > 0"
-              >
-                وفر {{ item.discountPercentage }}% 🔥
-              </span>
-              <span
-                class="offer-badge-pill custom-pill"
-                *ngIf="item.badgeText"
-              >
-                {{ item.badgeText }}
-              </span>
-            </div>
-
             <!-- ── Interactive 3-Slot Stage ────────────────────────── -->
             <div class="bundle-interactive-stage" dir="rtl">
               <div class="bundle-stage-header">
-                <span class="bundle-stage-tag">باقة اصنع باقتك 🎯</span>
+                <!-- Badges in Natural Flow (Never Overlapping Title) -->
+                <div class="bundle-header-badges">
+                  <span class="bundle-stage-tag">باقة اصنع باقتك 🎯</span>
+                  <span
+                    class="offer-badge-pill discount-pill"
+                    *ngIf="item.discountPercentage > 0"
+                  >
+                    وفر {{ item.discountPercentage }}% 🔥
+                  </span>
+                  <span
+                    class="offer-badge-pill custom-pill"
+                    *ngIf="item.badgeText"
+                  >
+                    {{ item.badgeText }}
+                  </span>
+                </div>
                 <h3 class="bundle-stage-title">{{ item.title }}</h3>
                 <p class="bundle-stage-desc" *ngIf="item.description">{{ item.description }}</p>
               </div>
 
-              <!-- 3 Interactive Slots Row -->
-              <div class="bundle-slots-container">
+              <!-- 3 Interactive Slots Row (RTL from 1 to 3) -->
+              <div class="bundle-slots-container" dir="rtl">
                 <ng-container *ngFor="let slotIdx of [0, 1, 2]">
 
                   <!-- Plus Divider (between slots) -->
@@ -214,7 +227,7 @@
                       <span class="bundle-slot-number-badge">{{ slotIdx + 1 }}</span>
                       <div class="bundle-slot-pick-box">
                         <span class="bundle-slot-pick-icon">
-                          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="12" cy="12" r="10"/>
                             <line x1="12" y1="8" x2="12" y2="16"/>
                             <line x1="8" y1="12" x2="16" y2="12"/>
@@ -330,18 +343,6 @@
           </div>
         </article>
       </div>
-
-      <!-- Navigation Arrows -->
-      <button class="offers-nav offers-nav--prev" type="button" aria-label="العرض السابق">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <polyline points="15 18 9 12 15 6"/>
-        </svg>
-      </button>
-      <button class="offers-nav offers-nav--next" type="button" aria-label="العرض التالي">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <polyline points="9 18 15 12 9 6"/>
-        </svg>
-      </button>
 
       <!-- Pagination Dots -->
       <div class="offers-pagination" role="tablist" aria-label="صفحات العروض"></div>

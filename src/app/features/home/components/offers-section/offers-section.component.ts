@@ -289,6 +289,7 @@ export class OffersSectionComponent implements AfterViewInit, OnDestroy {
   private initSwiper(): void {
     const el = this.swiperEl?.nativeElement;
     if (!el) return;
+    const section = this.sectionEl?.nativeElement;
 
     this.swiper?.destroy(true, true);
 
@@ -311,8 +312,8 @@ export class OffersSectionComponent implements AfterViewInit, OnDestroy {
         dynamicBullets: true,
       },
       navigation: {
-        nextEl: el.querySelector<HTMLElement>('.offers-nav--next') ?? undefined,
-        prevEl: el.querySelector<HTMLElement>('.offers-nav--prev') ?? undefined,
+        nextEl: section?.querySelector<HTMLElement>('.offers-nav--next') ?? undefined,
+        prevEl: section?.querySelector<HTMLElement>('.offers-nav--prev') ?? undefined,
       },
     });
   }
