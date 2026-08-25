@@ -7,6 +7,23 @@ import { Product } from '../models/product.model';
 
 const PRODUCTS_API = '/api/v1/products';
 
+export interface SearchResult {
+  docs: Product[];
+  total: number;
+  page: number;
+  totalPages: number;
+  strategy: 'text' | 'regex' | 'none';
+}
+
+export interface SearchParams {
+  q: string;
+  page?: number;
+  limit?: number;
+  category?: string;
+  minPrice?: number;
+  maxPrice?: number;
+}
+
 /**
  * All product-related data fetching for the storefront.
  * Handles array responses, wrapped `{ data: [...] }`, and `{ products: [...] }` formats safely.
@@ -56,4 +73,22 @@ export class ProductService {
       map((products) => products.filter((p) => Boolean(p.isFeatured)))
     );
   }
+
+  /**
+   * Full-text product search using the MongoDB text index.
+   * Supports pagination, category filter, and price range.
+   */
+  searchProducts(params: SearchParams): Observable<SearchResult> {
+    let httpParams = new HttpParams().set('q', params.q);
+    if (params.page)     httpParams = httpParams.set('page',     String(params.page));
+    if (params.limit)    httpParams = httpParams.set('limit',    String(params.limit));
+    if (params.category) httpParams = httpParams.set('category', params.category);
+    if (params.minPrice) httpParams = httpParams.set('minPrice', String(params.minPrice));
+    if (params.maxPrice) httpParams = httpParams.set('maxPrice', String(params.maxPrice));
+
+    return this.api.get<SearchResult>(`${PRODUCTS_API}/search`, httpParams).pipe(
+      map((res: any) => (res?.data ?? res) as SearchResult)
+    );
+  }
 }
+

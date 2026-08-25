@@ -15,6 +15,7 @@ import { BadgeComponent } from './components/badge/badge.component';
 import { ToastComponent } from './components/toast/toast.component';
 import { MarqueeBarComponent } from './components/marquee-bar/marquee-bar.component';
 import { MobileBottomNavComponent } from './components/mobile-bottom-nav/mobile-bottom-nav.component';
+import { HighlightPipe } from './pipes/highlight.pipe';
 
 const SHARED_COMPONENTS = [
   HeaderComponent,
@@ -28,10 +29,11 @@ const SHARED_COMPONENTS = [
   ToastComponent,
   MarqueeBarComponent,
   MobileBottomNavComponent,
+  HighlightPipe,
 ];
 
 /**
- * SharedModule — barrel exports all shared components and re-exports common utilities.
+ * SharedModule — barrel exports all shared components, pipes, and re-exports common utilities.
  * Imports NgOptimizedImage for highly optimized image rendering.
  * Re-exports TranslateModule so all feature modules get the translate pipe automatically.
  */

@@ -1,25 +1,33 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
+  ElementRef,
   HostListener,
   inject,
+  OnDestroy,
+  OnInit,
   signal,
+  ViewChild,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subject, of } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap, takeUntil, catchError, tap } from 'rxjs/operators';
 import { CartService } from '../../../core/services/cart.service';
 import { CartDrawerService } from '../../../core/services/cart-drawer.service';
 import { LanguageService, LanguageCode } from '../../../core/services/language.service';
+import { ProductService, SearchResult } from '../../../core/services/product.service';
+import { Product } from '../../../core/models/product.model';
 
 /**
  * Redesigned luxury glassmorphism header with multi-link navigation.
- * - Comprehensive links: Home, Shop/All Products, Offers & Bundles, Health Quiz, Track Order
+ * - Comprehensive links: Home, Shop, About Us, Contact, Track Order
  * - Scroll-aware frosted glass elevation
  * - Real-time reactive cart count badge with pulse animation
  * - Language switcher (Arabic / English)
- * - Expandable search capsule
- * - Interactive mobile navigation drawer with category shortcuts
+ * - Expandable search capsule with live 300ms debounced suggestions dropdown
+ * - Interactive mobile navigation drawer with live search preview
  */
 @Component({
   selector: 'app-header',
@@ -27,19 +35,67 @@ import { LanguageService, LanguageCode } from '../../../core/services/language.s
   styleUrls: ['./header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HeaderComponent {
-  private readonly cartService = inject(CartService);
+export class HeaderComponent implements OnInit, OnDestroy {
+  private readonly cartService       = inject(CartService);
   private readonly cartDrawerService = inject(CartDrawerService);
-  private readonly languageService = inject(LanguageService);
-  private readonly router = inject(Router);
+  private readonly languageService   = inject(LanguageService);
+  private readonly productService    = inject(ProductService);
+  private readonly router            = inject(Router);
+  private readonly cdr               = inject(ChangeDetectorRef);
 
-  readonly itemCount$: Observable<number> = this.cartService.itemCount$;
+  readonly itemCount$: Observable<number>        = this.cartService.itemCount$;
   readonly currentLang$: Observable<LanguageCode> = this.languageService.currentLang$;
 
   readonly isScrolled = signal(false);
-  isMenuOpen = false;
+  isMenuOpen   = false;
   isSearchOpen = false;
   readonly searchControl = new FormControl('', { nonNullable: true });
+
+  // ── Live Search State ──────────────────────────────────────────────────────
+  searchResults: Product[]  = [];
+  totalSearchResults        = 0;
+  isSearchLoading           = false;
+  showDropdown              = false;
+  private readonly destroy$ = new Subject<void>();
+
+  @ViewChild('searchInputField') searchInputField?: ElementRef<HTMLInputElement>;
+
+  ngOnInit(): void {
+    // 300ms debounce on keystrokes -> distinctUntilChanged -> switchMap to MongoDB search
+    this.searchControl.valueChanges.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      tap((term) => {
+        const trimmed = term?.trim() || '';
+        if (trimmed.length < 2) {
+          this.searchResults      = [];
+          this.totalSearchResults = 0;
+          this.showDropdown       = false;
+          this.isSearchLoading    = false;
+          this.cdr.markForCheck();
+        } else {
+          this.isSearchLoading = true;
+          this.showDropdown    = true;
+          this.cdr.markForCheck();
+        }
+      }),
+      switchMap((term) => {
+        const trimmed = term?.trim() || '';
+        if (trimmed.length < 2) return of(null);
+        return this.productService.searchProducts({ q: trimmed, limit: 5 }).pipe(
+          catchError(() => of(null))
+        );
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe((result: SearchResult | null) => {
+      this.isSearchLoading    = false;
+      this.searchResults      = result?.docs ?? [];
+      this.totalSearchResults = result?.total ?? 0;
+      const currentTerm       = this.searchControl.value.trim();
+      this.showDropdown       = (this.isSearchOpen || this.isMenuOpen) && currentTerm.length >= 2;
+      this.cdr.markForCheck();
+    });
+  }
 
   @HostListener('window:scroll', [])
   onWindowScroll(): void {
@@ -54,6 +110,11 @@ export class HeaderComponent {
     if (this.isMenuOpen && !target.closest('.site-header-wrapper')) {
       this.closeMenu();
     }
+    // Close live suggestions dropdown when clicking outside search wrapper
+    if (this.showDropdown && !target.closest('.search-action-wrap') && !target.closest('.mobile-sheet-search-wrap')) {
+      this.showDropdown = false;
+      this.cdr.markForCheck();
+    }
   }
 
   toggleMenu(): void {
@@ -65,10 +126,34 @@ export class HeaderComponent {
 
   closeMenu(): void {
     this.isMenuOpen = false;
+    this.showDropdown = false;
   }
 
   toggleSearch(): void {
     this.isSearchOpen = !this.isSearchOpen;
+    if (this.isSearchOpen) {
+      setTimeout(() => {
+        this.searchInputField?.nativeElement?.focus();
+      }, 100);
+    } else {
+      this.clearSearch();
+    }
+  }
+
+  clearSearch(): void {
+    this.searchControl.reset();
+    this.searchResults      = [];
+    this.totalSearchResults = 0;
+    this.showDropdown       = false;
+    this.isSearchLoading    = false;
+    this.cdr.markForCheck();
+  }
+
+  navigateToProduct(slug: string): void {
+    this.clearSearch();
+    this.isSearchOpen = false;
+    this.closeMenu();
+    this.router.navigate(['/shop', slug]);
   }
 
   openCart(): void {
@@ -109,8 +194,13 @@ export class HeaderComponent {
   submitSearch(): void {
     const term = this.searchControl.value.trim();
     this.router.navigate(['/shop'], term ? { queryParams: { q: term } } : {});
-    this.searchControl.reset();
+    this.clearSearch();
     this.isSearchOpen = false;
     this.closeMenu();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

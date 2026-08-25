@@ -1,6 +1,7 @@
 <!-- ══════════════════════════════════════════════════════════════
      VITATRIX CLEAN MINIMALIST FLOATING NAVBAR
      Matches Reference: Logo | HOME SHOP ABOUT US CONTACT | EN ⌵  🔍 👤 🛍️
+     With Live Debounced Search Dropdown & Highlight
      ══════════════════════════════════════════════════════════════ -->
 
 <header class="site-header-wrapper" [class.is-scrolled]="isScrolled()">
@@ -88,7 +89,7 @@
         </svg>
       </button>
 
-      <!-- Search Icon Button & Expandable Form -->
+      <!-- Search Icon Button & Expandable Form with Live Overlay Dropdown -->
       <div class="search-action-wrap" [class.is-open]="isSearchOpen">
         <form
           class="search-expandable-form"
@@ -96,6 +97,7 @@
           role="search"
         >
           <input
+            #searchInputField
             class="search-input-field"
             type="search"
             [placeholder]="'NAV.SEARCH_PLACEHOLDER' | translate"
@@ -104,6 +106,27 @@
             [attr.tabindex]="isSearchOpen ? 0 : -1"
             autocomplete="off"
           />
+
+          <!-- Loading Spinner Indicator -->
+          <span class="search-inline-spinner" *ngIf="isSearchLoading" aria-label="Loading">
+            <svg class="spin-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-dashoffset="10" stroke-linecap="round"/>
+            </svg>
+          </span>
+
+          <!-- Clear / Reset Button -->
+          <button
+            *ngIf="searchControl.value"
+            type="button"
+            class="search-clear-btn"
+            (click)="clearSearch()"
+            aria-label="Clear search"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
         </form>
 
         <button
@@ -118,6 +141,69 @@
             <path d="M21 21l-4.35-4.35"/>
           </svg>
         </button>
+
+        <!-- ── Desktop Instant Search Overlay Dropdown Menu ───────── -->
+        <div
+          class="search-suggestions-dropdown"
+          *ngIf="isSearchOpen && showDropdown"
+          role="listbox"
+          aria-label="Search suggestions"
+        >
+          <!-- Loading State inside Dropdown -->
+          <div class="search-drop-loading" *ngIf="isSearchLoading && searchResults.length === 0">
+            <svg class="spin-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-dashoffset="10" stroke-linecap="round"/>
+            </svg>
+            <span>{{ (currentLang$ | async) === 'ar' ? 'جاري البحث في المنتجات...' : 'Searching products...' }}</span>
+          </div>
+
+          <!-- Results List -->
+          <div class="search-drop-list" *ngIf="!isSearchLoading && searchResults.length > 0">
+            <div class="search-drop-header">
+              <span>{{ (currentLang$ | async) === 'ar' ? 'نتائج البحث' : 'Suggested Products' }}</span>
+              <span class="results-count">{{ totalSearchResults }} {{ (currentLang$ | async) === 'ar' ? 'منتج' : 'items' }}</span>
+            </div>
+
+            <a
+              *ngFor="let item of searchResults"
+              href="javascript:void(0)"
+              (click)="navigateToProduct(item.slug)"
+              class="search-drop-item"
+            >
+              <div class="search-drop-thumb">
+                <img [src]="item.image" [alt]="item.name" loading="lazy" />
+              </div>
+              <div class="search-drop-info">
+                <div class="search-drop-name" [innerHTML]="item.name | highlight:searchControl.value"></div>
+                <div class="search-drop-meta">
+                  <span class="search-drop-price">{{ item.variants[0].price }} EGP</span>
+                  <span class="search-drop-badge" *ngIf="item.isBestSeller">Best Seller</span>
+                  <span class="search-drop-badge search-drop-badge--feat" *ngIf="item.isFeatured">Featured</span>
+                </div>
+              </div>
+            </a>
+
+            <!-- View All Results Button -->
+            <button type="button" class="search-drop-view-all" (click)="submitSearch()">
+              <span>{{ (currentLang$ | async) === 'ar' ? 'عرض جميع النتائج' : 'View all results' }}</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Zero Results Fallback UI -->
+          <div class="search-drop-empty" *ngIf="!isSearchLoading && searchResults.length === 0">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              <line x1="8" y1="11" x2="14" y2="11"/>
+            </svg>
+            <h4>{{ (currentLang$ | async) === 'ar' ? 'لا توجد نتائج مطابقة' : 'No products found' }}</h4>
+            <p>{{ (currentLang$ | async) === 'ar' ? 'جرب البحث بكلمات أخرى مثل: فيتامين، بروتين، زنك' : 'Try searching for: Vitamin, Gummy, Collagen' }}</p>
+          </div>
+        </div>
+
       </div>
 
       <!-- User Account Profile Button (links to /track) -->
@@ -213,22 +299,64 @@
         </li>
       </ul>
 
-      <!-- Mobile Search Form -->
-      <form class="mobile-sheet-search" (ngSubmit)="submitSearch()" role="search">
-        <input
-          class="mobile-sheet-input"
-          type="search"
-          [placeholder]="'NAV.SEARCH_PLACEHOLDER' | translate"
-          [formControl]="searchControl"
-          autocomplete="off"
-        />
-        <button type="submit" class="mobile-sheet-submit" aria-label="Search">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"/>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-          </svg>
-        </button>
-      </form>
+      <!-- Mobile Search Form with Live Suggestions -->
+      <div class="mobile-sheet-search-wrap">
+        <form class="mobile-sheet-search" (ngSubmit)="submitSearch()" role="search">
+          <input
+            class="mobile-sheet-input"
+            type="search"
+            [placeholder]="'NAV.SEARCH_PLACEHOLDER' | translate"
+            [formControl]="searchControl"
+            autocomplete="off"
+          />
+          <button
+            *ngIf="searchControl.value"
+            type="button"
+            class="mobile-search-clear"
+            (click)="clearSearch()"
+            aria-label="Clear"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+          <button type="submit" class="mobile-sheet-submit" aria-label="Search">
+            <svg *ngIf="!isSearchLoading" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <svg *ngIf="isSearchLoading" class="spin-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-dashoffset="10" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </form>
+
+        <!-- Mobile Live Search Suggestions -->
+        <div class="mobile-search-suggestions" *ngIf="showDropdown && isMenuOpen">
+          <div class="mobile-search-drop-list" *ngIf="!isSearchLoading && searchResults.length > 0">
+            <a
+              *ngFor="let item of searchResults"
+              href="javascript:void(0)"
+              (click)="navigateToProduct(item.slug)"
+              class="mobile-search-drop-item"
+            >
+              <img [src]="item.image" [alt]="item.name" loading="lazy" />
+              <div class="mobile-drop-info">
+                <span class="mobile-drop-name" [innerHTML]="item.name | highlight:searchControl.value"></span>
+                <span class="mobile-drop-price">{{ item.variants[0].price }} EGP</span>
+              </div>
+            </a>
+            <button type="button" class="mobile-drop-view-all" (click)="submitSearch()">
+              {{ (currentLang$ | async) === 'ar' ? 'عرض الكل (' + totalSearchResults + ')' : 'View all (' + totalSearchResults + ')' }}
+            </button>
+          </div>
+
+          <div class="mobile-search-empty" *ngIf="!isSearchLoading && searchResults.length === 0">
+            <span>{{ (currentLang$ | async) === 'ar' ? 'لا توجد نتائج' : 'No products found' }}</span>
+          </div>
+        </div>
+      </div>
 
       <!-- Language Toggle Footer -->
       <div class="mobile-sheet-footer">
@@ -240,5 +368,3 @@
     </div>
   </div>
 </header>
-
-

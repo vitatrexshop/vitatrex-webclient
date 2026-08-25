@@ -547,20 +547,23 @@ body {
     font-weight: 900 !important;
   }
 
-  // Badges in Purple Theme
+  // Badges Minimal Luxury Theme
   .badge--bestseller, .badge-bestseller {
-    background: linear-gradient(135deg, #5e439b, #20174b) !important;
-    color: #ffffff !important;
+    background: #f5f3ff !important;
+    color: #6d28d9 !important;
+    border: 1px solid rgba(109, 40, 217, 0.22) !important;
   }
 
   .badge--featured, .badge-featured {
-    background: #20174b !important;
-    color: #ffffff !important;
+    background: #eff6ff !important;
+    color: #1d4ed8 !important;
+    border: 1px solid rgba(29, 78, 216, 0.22) !important;
   }
 
   .badge--discount {
-    background: #5e439b !important;
-    color: #ffffff !important;
+    background: #fff1f2 !important;
+    color: #e11d48 !important;
+    border: 1px solid rgba(225, 29, 72, 0.22) !important;
   }
 }
 
