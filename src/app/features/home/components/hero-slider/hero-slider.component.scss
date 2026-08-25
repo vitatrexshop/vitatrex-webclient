@@ -17,7 +17,7 @@
   align-items: center;
   width: 100%;
   overflow-x: hidden;
-  background-color: var(--bg-app, #fdfbf7);
+  background: linear-gradient(135deg, #1A0B2E 0%, #321359 50%, #150727 100%);
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -56,7 +56,7 @@
       width: auto;
       height: 72px;
       object-fit: contain;
-      filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.05));
+      filter: brightness(0) invert(1) drop-shadow(0 4px 16px rgba(0, 0, 0, 0.35));
       transition: transform 0.3s ease;
 
       @media (min-width: 640px) {
@@ -86,12 +86,12 @@
     font-weight: 900;
     line-height: 1.05;
     letter-spacing: -0.03em;
-    color: var(--primary-900, #064e3b);
+    color: #ffffff;
     margin: 0 0 0.8rem;
     will-change: opacity, letter-spacing;
 
     // VitaTrix SLEEP WELL Purple Gradient
-    background: linear-gradient(135deg, #5e439b 0%, #422c71 55%, #20174b 100%);
+    background: linear-gradient(135deg, #ffffff 0%, #e2d4f8 55%, #c4b5fd 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -102,7 +102,7 @@
     font-size: clamp(1.1rem, 2.4vw, 1.65rem);
     font-weight: 500;
     line-height: 1.55;
-    color: var(--text-muted, #64748b);
+    color: #E2D9F3;
     margin: 0;
     max-width: 720px;
     letter-spacing: 0;
@@ -181,7 +181,7 @@
     right: -14px;
     width: 48px;
     height: 40px;
-    color: #5e439b; // VitaTrix SLEEP WELL Purple
+    color: #c4b5fd; // Soft violet highlight for dark purple background
     pointer-events: none;
     z-index: 10;
     transform: scaleX(-1) rotate(-10deg);
@@ -238,7 +238,7 @@
   .manifesto-headline {
     font-size: clamp(1.85rem, 5.2vw, 3rem);
     font-weight: 900;
-    color: #20174b;
+    color: #ffffff;
     font-family: 'Readex Pro', 'Noto Kufi Arabic', sans-serif;
     line-height: 1.25;
     letter-spacing: -0.015em;
@@ -250,7 +250,7 @@
   .manifesto-body {
     font-size: clamp(0.98rem, 2.2vw, 1.25rem);
     font-weight: 500;
-    color: #475569;
+    color: rgba(255, 255, 255, 0.85);
     line-height: 1.75;
     margin: 0;
     text-align: center;
@@ -309,6 +309,8 @@
 
 // ── Skeleton Loader ───────────────────────────────────────────
 .hero-section--skeleton {
+  background: linear-gradient(135deg, #1A0B2E 0%, #321359 50%, #150727 100%);
+
   .hero-text-strip {
     padding: 3rem 1.5rem 2.5rem;
   }
@@ -316,9 +318,9 @@
   .sk-shimmer {
     background: linear-gradient(
       90deg,
-      rgba(0, 0, 0, 0.04) 0%,
-      rgba(0, 0, 0, 0.09) 50%,
-      rgba(0, 0, 0, 0.04) 100%
+      rgba(255, 255, 255, 0.04) 0%,
+      rgba(255, 255, 255, 0.12) 50%,
+      rgba(255, 255, 255, 0.04) 100%
     );
     background-size: 200% 100%;
     animation: skShimmer 1.8s infinite ease-in-out;

@@ -565,8 +565,12 @@ body {
 }
 
 // ── Hero Section & Banner ───────────────────────────────────
+#home-hero {
+  background: linear-gradient(135deg, #1A0B2E 0%, #321359 50%, #150727 100%);
+}
+
 .hero-slider {
-  background: #f7f4fc !important;
+  background: linear-gradient(135deg, #1A0B2E 0%, #321359 50%, #150727 100%) !important;
 }
 
 .hero-slide__title {
