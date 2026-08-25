@@ -12,12 +12,14 @@
 
 // ── Section Wrapper ──────────────────────────────────────────
 .vt-section {
-  // Initial hidden state — revealed by IntersectionObserver
+  min-height: 250px;
+  position: relative;
+  // Initial state — will transition smoothly upon reveal
   opacity: 0;
-  transform: translateY(32px);
+  transform: translateY(20px);
   transition:
-    opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: opacity, transform;
 
   &.vt-revealed {
@@ -91,7 +93,23 @@
 // ── Offers Section Wrapper — Luxury Deep Purple Strip ────────
 .vt-offers-wrapper {
   width: 100%;
+  min-height: 480px;
   background: radial-gradient(circle at 50% 20%, #2a1d63 0%, #20174b 75%, #18113c 100%);
   overflow: hidden;
+
+  @media (max-width: 768px) {
+    min-height: 380px;
+  }
 }
+
+// ── Video Stories Wrapper ─────────────────────────────────────
+.vt-stories-wrapper {
+  width: 100%;
+  min-height: 360px;
+
+  @media (max-width: 768px) {
+    min-height: 300px;
+  }
+}
+
 

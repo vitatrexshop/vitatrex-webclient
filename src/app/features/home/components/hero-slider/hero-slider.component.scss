@@ -90,8 +90,13 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
+  min-height: 520px;
   overflow-x: hidden;
   background-color: var(--bg-app, #fdfbf7);
+
+  @media (max-width: 768px) {
+    min-height: 380px;
+  }
 }
 
 // ══════════════════════════════════════════════════════════════

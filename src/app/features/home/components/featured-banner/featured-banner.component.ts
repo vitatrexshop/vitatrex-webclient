@@ -62,7 +62,7 @@ export class FeaturedBannerComponent implements OnInit {
       .subscribe(({ products, offers }) => {
         this.featured = this.resolve(products, offers);
         this.isLoading = false;
-        this.cdr.markForCheck();
+        this.cdr.detectChanges();
       });
   }
 

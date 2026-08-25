@@ -139,7 +139,7 @@ export class HeroSliderComponent implements OnInit, AfterViewInit, OnDestroy {
   // ──────────────────────────────────────────────────────────────
   fetchData(): void {
     this.isLoading = true;
-    this.cdr.markForCheck();
+    this.cdr.detectChanges();
 
     this.settingsService
       .getHeroSettings()
@@ -151,21 +151,22 @@ export class HeroSliderComponent implements OnInit, AfterViewInit, OnDestroy {
         next: (settings) => {
           this.heroSettings = settings;
           this.isLoading    = false;
-          this.cdr.markForCheck();
+          this.cdr.detectChanges();
           if (this.isBrowser) {
             setTimeout(() => {
               this.initScrollTriggerAnimations();
+              ScrollTrigger.refresh();
               // Now that *ngIf rendered the fruits, wire up interactive parallax
               this.ngZone.runOutsideAngular(() => {
                 this.initMouseParallax();
                 this.initScrollParallax();
               });
-            }, 80);
+            }, 60);
           }
         },
         error: () => {
           this.isLoading = false;
-          this.cdr.markForCheck();
+          this.cdr.detectChanges();
         },
       });
   }

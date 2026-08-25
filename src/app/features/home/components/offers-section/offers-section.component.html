@@ -2,6 +2,42 @@
      OFFERS SECTION — Dynamic Promotional Slider + 3-Slot Interactive Bundles
      Glassmorphism + Neon Glows + Olly Aesthetic
      ══════════════════════════════════════════════════════════════════════════ -->
+
+<!-- ── SKELETON LOADER STATE (Prevents Layout Collapse & Shifting) ────────── -->
+<section
+  *ngIf="isLoading"
+  class="offers-section offers-section--skeleton"
+  aria-busy="true"
+  aria-label="جاري تحميل العروض"
+>
+  <div class="offers-container">
+    <!-- Header Skeleton -->
+    <div class="offers-header-sk">
+      <div class="sk-pill sk-shimmer"></div>
+      <div class="sk-title sk-shimmer"></div>
+      <div class="sk-subtitle sk-shimmer"></div>
+    </div>
+
+    <!-- Card Skeleton -->
+    <div class="offers-card-sk">
+      <div class="sk-card-top sk-shimmer">
+        <div class="sk-card-badge sk-shimmer"></div>
+      </div>
+      <div class="sk-card-bottom">
+        <div class="sk-card-info">
+          <div class="sk-line sk-line-title sk-shimmer"></div>
+          <div class="sk-line sk-line-desc sk-shimmer"></div>
+        </div>
+        <div class="sk-card-action">
+          <div class="sk-price sk-shimmer"></div>
+          <div class="sk-btn sk-shimmer"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── LOADED OFFERS SECTION ─────────────────────────────────────────────── -->
 <section
   #offersSection
   class="offers-section"

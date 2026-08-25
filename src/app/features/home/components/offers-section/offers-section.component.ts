@@ -234,7 +234,7 @@ export class OffersSectionComponent implements AfterViewInit, OnDestroy {
 
   private fetchPromotions(): void {
     this.isLoading = true;
-    this.cdr.markForCheck();
+    this.cdr.detectChanges();
 
     this.promotionService
       .getCombinedPromotions()
@@ -267,15 +267,19 @@ export class OffersSectionComponent implements AfterViewInit, OnDestroy {
         });
 
         this.isLoading = false;
-        this.cdr.markForCheck();
+        this.cdr.detectChanges();
 
         if (this.isBrowser && this.promotions.length > 0) {
           setTimeout(() => {
             this.initSwiper();
             this.initScrollTrigger();
-          }, 80);
+            ScrollTrigger.refresh();
+          }, 60);
         } else if (this.isBrowser) {
-          setTimeout(() => this.initScrollTrigger(), 80);
+          setTimeout(() => {
+            this.initScrollTrigger();
+            ScrollTrigger.refresh();
+          }, 60);
         }
       });
   }
@@ -321,6 +325,20 @@ export class OffersSectionComponent implements AfterViewInit, OnDestroy {
 
     this.ctx?.revert();
 
+    // Safety fallback: if GSAP/ScrollTrigger doesn't fire within 1s, force elements visible
+    const safetyTimer = setTimeout(() => {
+      const header = section.querySelector<HTMLElement>('.offers-header');
+      if (header) {
+        header.style.opacity = '1';
+        header.style.transform = '';
+      }
+      const swiperTarget = section.querySelector<HTMLElement>('.offers-swiper');
+      if (swiperTarget) {
+        swiperTarget.style.opacity = '1';
+        swiperTarget.style.transform = '';
+      }
+    }, 1000);
+
     this.ctx = gsap.context(() => {
       const header = section.querySelector('.offers-header');
       if (header) {
@@ -332,9 +350,10 @@ export class OffersSectionComponent implements AfterViewInit, OnDestroy {
             y: 0,
             duration: 0.6,
             ease: 'power2.out',
+            clearProps: 'all',
             scrollTrigger: {
               trigger: section,
-              start: 'top 85%',
+              start: 'top 88%',
               once: true,
             },
           }
@@ -351,10 +370,13 @@ export class OffersSectionComponent implements AfterViewInit, OnDestroy {
             y: 0,
             duration: 0.7,
             ease: 'power2.out',
+            clearProps: 'all',
+            onComplete: () => clearTimeout(safetyTimer),
             scrollTrigger: {
               trigger: section,
-              start: 'top 80%',
+              start: 'top 85%',
               once: true,
+              onEnter: () => clearTimeout(safetyTimer),
             },
           }
         );

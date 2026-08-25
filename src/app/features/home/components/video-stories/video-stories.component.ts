@@ -144,7 +144,7 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
 
   fetchStories(): void {
     this.isLoading = true;
-    this.cdr.markForCheck();
+    this.cdr.detectChanges();
 
     this.storyService
       .getStories()
@@ -167,19 +167,25 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
             this.stories = this.fallbackStories;
           }
           this.isLoading = false;
-          this.cdr.markForCheck();
+          this.cdr.detectChanges();
 
           if (this.isBrowser) {
-            setTimeout(() => this.initScrollAnimation(), 80);
+            setTimeout(() => {
+              this.initScrollAnimation();
+              ScrollTrigger.refresh();
+            }, 60);
           }
         },
         error: () => {
           this.stories = this.fallbackStories;
           this.isLoading = false;
-          this.cdr.markForCheck();
+          this.cdr.detectChanges();
 
           if (this.isBrowser) {
-            setTimeout(() => this.initScrollAnimation(), 80);
+            setTimeout(() => {
+              this.initScrollAnimation();
+              ScrollTrigger.refresh();
+            }, 60);
           }
         },
       });

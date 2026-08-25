@@ -71,7 +71,7 @@ export class PromoVideoComponent implements OnInit, OnDestroy {
 
   fetchData(): void {
     this.isLoading = true;
-    this.cdr.markForCheck();
+    this.cdr.detectChanges();
 
     this.settings
       .getPromoVideoSettings()
@@ -83,18 +83,19 @@ export class PromoVideoComponent implements OnInit, OnDestroy {
         next: (data) => {
           this.promoVideo = data;
           this.isLoading = false;
-          this.cdr.markForCheck();
+          this.cdr.detectChanges();
 
           if (this.isBrowser) {
             setTimeout(() => {
               this.initScrollAnimation();
               this.tryAutoplay();
-            }, 80);
+              ScrollTrigger.refresh();
+            }, 60);
           }
         },
         error: () => {
           this.isLoading = false;
-          this.cdr.markForCheck();
+          this.cdr.detectChanges();
         },
       });
   }
@@ -235,14 +236,19 @@ export class PromoVideoComponent implements OnInit, OnDestroy {
 
     this.ctx?.revert();
 
-    // Safety fallback: if GSAP/ScrollTrigger doesn't fire within 1.5s, force container visible
+    // Safety fallback: if GSAP/ScrollTrigger doesn't fire within 1s, force container & statement visible
     const safetyTimer = setTimeout(() => {
       const container = section.querySelector<HTMLElement>('.promo-video-container');
       if (container) {
         container.style.opacity = '1';
         container.style.transform = '';
       }
-    }, 1500);
+      const statement = section.querySelector<HTMLElement>('.promo-video-statement');
+      if (statement) {
+        statement.style.opacity = '1';
+        statement.style.transform = '';
+      }
+    }, 1000);
 
     this.ctx = gsap.context(() => {
       // 1. Entrance animation for the video container
