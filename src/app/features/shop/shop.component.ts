@@ -53,12 +53,12 @@ export class ShopComponent implements OnInit {
       switchMap(() => this.categoryService.getCategories()),
       map((dbCats) => {
         const allName = this.languageService.currentLang === 'ar' ? 'الكل' : 'All';
-        const bundleName = this.languageService.currentLang === 'ar' ? 'باقات التوفير 🎁' : 'Value Bundles 🎁';
+        const bundleName = this.languageService.currentLang === 'ar' ? 'باقات التوفير' : 'Value Bundles';
 
         const allTab: FilterTab = { id: 'all', name: allName, slug: 'all' };
         const dynamicTabs: FilterTab[] = dbCats.map((cat) => ({
           id: cat._id,
-          name: cat.icon && !cat.icon.startsWith('http') ? `${cat.icon} ${cat.name}` : cat.name,
+          name: cat.icon && !cat.icon.startsWith('http') ? cat.name : cat.name,
           slug: cat.slug,
           icon: cat.icon,
         }));
@@ -67,7 +67,7 @@ export class ShopComponent implements OnInit {
       }),
       catchError(() => of([
         { id: 'all', name: this.languageService.currentLang === 'ar' ? 'الكل' : 'All', slug: 'all' },
-        { id: 'bundle', name: this.languageService.currentLang === 'ar' ? 'باقات التوفير 🎁' : 'Value Bundles 🎁', slug: 'bundle', isBundle: true }
+        { id: 'bundle', name: this.languageService.currentLang === 'ar' ? 'باقات التوفير' : 'Value Bundles', slug: 'bundle', isBundle: true }
       ]))
     );
 

@@ -1,10 +1,7 @@
-// ── Backdrop ──────────────────────────────────────────────────
 .cart-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.52);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background: rgba(15, 23, 42, 0.65);
   z-index: 100000;
   opacity: 0;
   visibility: hidden;

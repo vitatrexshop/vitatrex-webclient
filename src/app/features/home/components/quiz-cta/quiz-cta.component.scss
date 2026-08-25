@@ -45,14 +45,13 @@
   }
 
   &__badge {
-    background: rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.25);
     color: #fff;
     font-size: 0.82rem;
     font-weight: 800;
     padding: 6px 16px;
     border-radius: var(--radius-full);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
   }
 
   &__title {
@@ -78,42 +77,22 @@
     height: 140px;
     width: 100%;
     display: none;
-    @media (min-width: 768px) { display: block; }
+    @media (min-width: 768px) { 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .quiz-visual-card {
+      width: 110px;
+      height: 110px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1.5px solid rgba(255, 255, 255, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+    }
   }
-}
-
-// Playful elements
-.gummy-floating {
-  position: absolute;
-  font-size: 3rem;
-  line-height: 1;
-
-  &.gum-1 {
-    top: 10%; right: 20%;
-    animation: float-g-1 4s ease-in-out infinite alternate;
-  }
-  &.gum-2 {
-    bottom: 20%; left: 30%;
-    animation: float-g-2 5s ease-in-out infinite alternate;
-  }
-  &.gum-3 {
-    top: 40%; left: 10%;
-    font-size: 4rem;
-    animation: float-g-3 6s ease-in-out infinite alternate;
-  }
-}
-
-@keyframes float-g-1 {
-  0% { transform: translateY(0) rotate(0deg); }
-  100% { transform: translateY(-15px) rotate(15deg); }
-}
-
-@keyframes float-g-2 {
-  0% { transform: translateY(0) rotate(0deg); }
-  100% { transform: translateY(20px) rotate(-10deg); }
-}
-
-@keyframes float-g-3 {
-  0% { transform: translateY(0) scale(1); }
-  100% { transform: translateY(-10px) scale(1.15); }
 }

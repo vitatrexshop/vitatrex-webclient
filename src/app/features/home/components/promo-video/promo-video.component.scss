@@ -134,9 +134,7 @@
     width: 44px;
     height: 44px;
     border-radius: 9999px;
-    background: rgba(32, 23, 75, 0.85);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: #20174b;
     border: 1.5px solid rgba(255, 255, 255, 0.35);
     color: #ffffff;
     display: flex;
@@ -169,8 +167,6 @@
   height: 76px;
   border-radius: 9999px;
   background: linear-gradient(135deg, #5e439b 0%, #20174b 100%);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   border: 2.5px solid rgba(255, 255, 255, 0.85);
   color: #ffffff;
   display: flex;

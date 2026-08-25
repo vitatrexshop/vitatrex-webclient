@@ -126,23 +126,23 @@ export class ProductDetailComponent implements OnInit {
 
     // Defaults & dynamic mapping
     if (catName.includes('مناعة') || catName.includes('immun')) {
-      pills.push({ label: 'المناعة والوقاية', emoji: '💧', colorClass: 'pill--blue' });
-      pills.push({ label: 'العناية اليومية', emoji: '🧃', colorClass: 'pill--green' });
+      pills.push({ label: 'المناعة والوقاية', emoji: '', colorClass: 'pill--blue' });
+      pills.push({ label: 'العناية اليومية', emoji: '', colorClass: 'pill--green' });
     } else if (catName.includes('أطفال') || catName.includes('kid')) {
-      pills.push({ label: 'صحة الأطفال والنمو', emoji: '👶', colorClass: 'pill--orange' });
-      pills.push({ label: 'العناية اليومية', emoji: '🧃', colorClass: 'pill--green' });
+      pills.push({ label: 'صحة الأطفال والنمو', emoji: '', colorClass: 'pill--orange' });
+      pills.push({ label: 'العناية اليومية', emoji: '', colorClass: 'pill--green' });
     } else if (catName.includes('نوم') || catName.includes('sleep')) {
-      pills.push({ label: 'نوم واسترخاء عميق', emoji: '🌙', colorClass: 'pill--purple' });
-      pills.push({ label: 'صحة الجهاز العصبي', emoji: '✨', colorClass: 'pill--pink' });
+      pills.push({ label: 'نوم واسترخاء عميق', emoji: '', colorClass: 'pill--purple' });
+      pills.push({ label: 'صحة الجهاز العصبي', emoji: '', colorClass: 'pill--pink' });
     } else {
-      pills.push({ label: 'العناية اليومية', emoji: '🧃', colorClass: 'pill--green' });
-      pills.push({ label: 'دعم المناعة', emoji: '💧', colorClass: 'pill--blue' });
+      pills.push({ label: 'العناية اليومية', emoji: '', colorClass: 'pill--green' });
+      pills.push({ label: 'دعم المناعة', emoji: '', colorClass: 'pill--blue' });
     }
 
     // Add general health tags
-    pills.push({ label: 'حيوية ونشاط', emoji: '🧓', colorClass: 'pill--amber' });
-    pills.push({ label: 'صحة الرجال', emoji: '🧔', colorClass: 'pill--teal' });
-    pills.push({ label: 'صحة السيدات', emoji: '👩', colorClass: 'pill--pink' });
+    pills.push({ label: 'حيوية ونشاط', emoji: '', colorClass: 'pill--amber' });
+    pills.push({ label: 'صحة الرجال', emoji: '', colorClass: 'pill--teal' });
+    pills.push({ label: 'صحة السيدات', emoji: '', colorClass: 'pill--pink' });
 
     return pills;
   }
@@ -151,31 +151,31 @@ export class ProductDetailComponent implements OnInit {
   getHeadline(product: Product): string {
     const name = product.name?.toLowerCase() || '';
     if (name.includes('d3') || name.includes('sun') || name.includes('شمس')) {
-      return 'YOUR DAILY DOSE OF SUNSHINE 🌞';
+      return 'YOUR DAILY DOSE OF SUNSHINE';
     }
     if (name.includes('iron') || name.includes('حديد')) {
-      return 'YOUR DAILY DOSE OF STRENGTH & ENERGY ⚡';
+      return 'YOUR DAILY DOSE OF STRENGTH & ENERGY';
     }
     if (name.includes('vision') || name.includes('عين')) {
-      return 'YOUR DAILY SHIELD FOR BRIGHT VISION 👁️';
+      return 'YOUR DAILY SHIELD FOR BRIGHT VISION';
     }
     if (name.includes('sleep') || name.includes('نوم')) {
-      return 'YOUR TICKET TO DEEP & RESTFUL SLEEP 🌙';
+      return 'YOUR TICKET TO DEEP & RESTFUL SLEEP';
     }
-    return 'YOUR DAILY DOSE OF HEALTH & VITALITY ✨';
+    return 'YOUR DAILY DOSE OF HEALTH & VITALITY';
   }
 
   getCategoryName(product: Product): string {
-    if (!product?.category) return 'الفيتامينات والمكملات 🌿';
+    if (!product?.category) return 'الفيتامينات والمكملات';
     if (typeof product.category === 'object' && product.category.name) {
       return product.category.name;
     }
     const cat = String(product.category).toLowerCase();
-    if (cat.includes('immunity')) return 'المناعة والوقاية 🛡️';
-    if (cat.includes('kids')) return 'الأطفال 👶';
-    if (cat.includes('energy')) return 'طاقة وتركيز ⚡';
-    if (cat.includes('sleep')) return 'نوم واسترخاء 😴';
-    return String(product.category) || 'الفيتامينات والمكملات 🌿';
+    if (cat.includes('immunity')) return 'المناعة والوقاية';
+    if (cat.includes('kids')) return 'الأطفال';
+    if (cat.includes('energy')) return 'طاقة وتركيز';
+    if (cat.includes('sleep')) return 'نوم واسترخاء';
+    return String(product.category) || 'الفيتامينات والمكملات';
   }
 
   increment(): void {
@@ -191,7 +191,7 @@ export class ProductDetailComponent implements OnInit {
   addToCart(product: Product): void {
     if (!this.selectedVariant) return;
     this.cartService.addToCart(product, this.selectedVariant, this.quantity);
-    this.toastService.show(`تمت إضافة ${product.name} إلى السلة ✅`, 'success');
+    this.toastService.show(`تمت إضافة ${product.name} إلى السلة`, 'success');
     this.cartDrawerService.open();
   }
 
@@ -205,7 +205,7 @@ export class ProductDetailComponent implements OnInit {
     const variant = product.variants?.[0];
     if (!variant) return;
     this.cartService.addToCart(product, variant, 1);
-    this.toastService.show(`تمت إضافة ${product.name} إلى السلة ✅`, 'success');
+    this.toastService.show(`تمت إضافة ${product.name} إلى السلة`, 'success');
     this.cartDrawerService.open();
   }
 

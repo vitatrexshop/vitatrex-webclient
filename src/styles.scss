@@ -632,10 +632,8 @@ body {
 
 // ── Header & Navigation Bar ─────────────────────────────────
 .site-header {
-  background: rgba(252, 250, 255, 0.96) !important;
+  background: #ffffff !important;
   border-bottom: 1px solid var(--border-subtle) !important;
-  backdrop-filter: blur(12px) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
 }
 
 // ── LTR (English) Adjustments & Font Stacks ─────────────────

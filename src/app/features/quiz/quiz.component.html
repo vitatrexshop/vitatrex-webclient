@@ -2,7 +2,12 @@
   <h2>{{ 'QUIZ.START_TITLE' | translate }}</h2>
   <p style="color: #64748b; margin-top: 10px;">{{ 'QUIZ.START_SUB' | translate }}</p>
   <div style="margin-top: 30px; background: #fff; padding: 40px; border-radius: 24px; border: 1px solid #fed7aa; display: inline-block; max-width: 600px;">
-    <span style="font-size: 3rem; display: block; margin-bottom: 15px;">🧪</span>
+    <div style="margin-bottom: 15px; color: #5e439b; display: flex; justify-content: center;">
+      <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 11l3 3L22 4"/>
+        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+      </svg>
+    </div>
     <p style="font-size: 1.1rem; font-weight: 700; color: #1e1b4b;">{{ 'QUIZ.COMING_SOON' | translate }}</p>
     <a routerLink="/shop" class="btn btn--primary" style="margin-top: 20px;">{{ 'COMMON.START_SHOPPING' | translate }}</a>
   </div>

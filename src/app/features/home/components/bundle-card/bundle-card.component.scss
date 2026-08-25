@@ -1,4 +1,4 @@
-﻿// ══════════════════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════════════════
 // Bundle Card Component — "اصنع باقتك"
 // Design: Premium dark-glass cards with emerald accents, slot animations,
 // modal backdrop, product selection grid, CTA morphing
@@ -506,8 +506,7 @@
   position: fixed;
   inset: 0;
   z-index: 9999;
-  background: rgba(10, 20, 15, 0.65);
-  backdrop-filter: blur(6px);
+  background: rgba(10, 20, 15, 0.75);
   display: flex;
   align-items: center;
   justify-content: center;

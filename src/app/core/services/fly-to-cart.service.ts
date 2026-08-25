@@ -10,7 +10,7 @@ export class FlyToCartService {
    * Triggers a parabolic fly animation of a dynamic gummy/badge particle
    * starting from mouse click coordinates to the header cart button.
    */
-  fly(event: MouseEvent, emoji: string = '🍓'): void {
+  fly(event: MouseEvent, iconOrEmoji?: string): void {
     if (!isPlatformBrowser(this.platformId)) return;
 
     // Find the cart icon in the header
@@ -24,7 +24,11 @@ export class FlyToCartService {
     // Create the particle element
     const particle = document.createElement('div');
     particle.className = 'fly-cart-particle';
-    particle.innerHTML = emoji;
+    if (iconOrEmoji) {
+      particle.textContent = iconOrEmoji;
+    } else {
+      particle.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+    }
     
     // Style the particle (position fixed to match clientX/clientY coords)
     Object.assign(particle.style, {

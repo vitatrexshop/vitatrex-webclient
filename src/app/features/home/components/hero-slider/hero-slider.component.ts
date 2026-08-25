@@ -47,7 +47,7 @@ export class HeroSliderComponent implements OnInit, OnDestroy {
     'https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&w=1920&q=85';
   readonly defaultBrandName = 'Vitatrex';
   readonly defaultSlogan    =
-    'فيتامينات طبيعية 100% بدون سكر مضاف — لصحة ونشاط عائلتك كل يوم ✨';
+    'فيتامينات طبيعية 100% بدون سكر مضاف — لصحة ونشاط عائلتك كل يوم';
 
   constructor(@Inject(PLATFORM_ID) platformId: object) {
     this.isBrowser = isPlatformBrowser(platformId);

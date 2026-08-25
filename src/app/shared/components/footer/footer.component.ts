@@ -23,7 +23,7 @@ export class FooterComponent {
     }
 
     this.isSubscribed = true;
-    this.toastService.success('شكراً لاشتراكك! ستصلك أحدث العروض والخصومات الحصرية 🎉');
+    this.toastService.success('شكراً لاشتراكك! ستصلك أحدث العروض والخصومات الحصرية');
     this.emailControl.reset();
   }
 

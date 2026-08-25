@@ -1,4 +1,4 @@
-﻿<!-- ── Backdrop ───────────────────────────────────────────── -->
+<!-- ── Backdrop ───────────────────────────────────────────── -->
 <div
   class="cart-backdrop"
   [class.is-visible]="isOpen$ | async"
@@ -17,7 +17,11 @@
   <!-- Header -->
   <div class="cart-drawer__header">
     <div class="cart-drawer__header-left">
-      <span class="cart-drawer__emoji">🛒</span>
+      <svg class="cart-drawer__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <path d="M16 10a4 4 0 0 1-8 0"/>
+      </svg>
       <h2 class="cart-drawer__title" id="cart-drawer-title">
         {{ 'CART.TITLE' | translate }}
         <span class="cart-drawer__count" *ngIf="(itemCount$ | async) as n">({{ n }})</span>
@@ -36,7 +40,13 @@
 
     <!-- Empty State -->
     <div class="cart-drawer__empty" *ngIf="items.length === 0">
-      <div class="cart-empty-icon">🛒</div>
+      <div class="cart-empty-icon">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 0 1-8 0"/>
+        </svg>
+      </div>
       <h3>{{ 'CART.EMPTY_TITLE' | translate }}</h3>
       <p>{{ 'CART.EMPTY_SUB' | translate }}</p>
       <a routerLink="/shop" class="btn btn--primary" (click)="close()">{{ 'COMMON.START_SHOPPING' | translate }}</a>
@@ -48,7 +58,7 @@
       <div class="cart-drawer__shipping" *ngIf="cartTotal$ | async as total">
         <ng-container *ngIf="total < FREE_SHIPPING_THRESHOLD">
           <p class="shipping-text">
-            {{ 'CART.FREE_SHIPPING_REMAINING' | translate: { amount: (getRemaining(total) | number) } }} 🚚
+            {{ 'CART.FREE_SHIPPING_REMAINING' | translate: { amount: (getRemaining(total) | number) } }}
           </p>
           <div class="shipping-track">
             <div
@@ -81,7 +91,7 @@
 
           <div class="cart-item__details">
             <div class="cart-item__header-line">
-              <span class="cart-item__badge" *ngIf="item.isBundle">باقة مخصصة 🎯</span>
+              <span class="cart-item__badge" *ngIf="item.isBundle">باقة مخصصة</span>
               <p class="cart-item__name">{{ item.product.name }}</p>
             </div>
 

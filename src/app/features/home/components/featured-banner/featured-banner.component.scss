@@ -148,13 +148,11 @@
     align-items: center;
     justify-content: space-between;
     gap: 20px;
-    background: rgba(255, 253, 255, 0.94);
-    backdrop-filter: blur(24px) saturate(180%);
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    background: #ffffff;
     border: 1.5px solid #ded4f0;
     border-radius: 26px;
     padding: 18px 30px;
-    box-shadow: 0 20px 50px rgba(32, 23, 75, 0.12);
+    box-shadow: 0 12px 36px rgba(32, 23, 75, 0.1);
   }
 }
 

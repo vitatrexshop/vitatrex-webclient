@@ -17,7 +17,10 @@
       <!-- ── Shipping Information ─────────────────────────────── -->
       <section class="form-card">
         <div class="form-card__header">
-          <span class="form-card__icon">📦</span>
+          <svg class="form-card__icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
           <h2 class="form-card__title">{{ 'CHECKOUT.PERSONAL_INFO' | translate }}</h2>
         </div>
 
@@ -106,7 +109,10 @@
       <!-- ── Payment Method Selection ─────────────────────────── -->
       <section class="form-card">
         <div class="form-card__header">
-          <span class="form-card__icon">💳</span>
+          <svg class="form-card__icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+            <line x1="1" y1="10" x2="23" y2="10"/>
+          </svg>
           <h2 class="form-card__title">{{ 'CHECKOUT.PAYMENT_METHOD' | translate }}</h2>
         </div>
 
@@ -120,7 +126,12 @@
             aria-pressed="true"
             id="payment-cod"
           >
-            <div class="payment-card__icon">🏠</div>
+            <div class="payment-card__icon">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="6" width="20" height="12" rx="2"/>
+                <circle cx="12" cy="12" r="2"/>
+              </svg>
+            </div>
             <div class="payment-card__info">
               <span class="payment-card__name">{{ 'CHECKOUT.COD' | translate }}</span>
               <span class="payment-card__desc">{{ 'CHECKOUT.COD_DESC' | translate }}</span>
@@ -136,12 +147,17 @@
             aria-disabled="true"
             id="payment-card"
           >
-            <div class="payment-card__icon">💳</div>
+            <div class="payment-card__icon">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                <line x1="1" y1="10" x2="23" y2="10"/>
+              </svg>
+            </div>
             <div class="payment-card__info">
               <span class="payment-card__name">{{ 'CHECKOUT.CARD' | translate }}</span>
               <span class="payment-card__desc">{{ 'CHECKOUT.CARD_DISABLED' | translate }}</span>
             </div>
-            <span class="payment-card__soon-badge">قريباً 💳</span>
+            <span class="payment-card__soon-badge">قريباً</span>
           </button>
         </div>
       </section>
@@ -204,7 +220,7 @@
           </div>
           <div class="totals-row">
             <span>{{ 'CHECKOUT.SHIPPING_FEE' | translate }}</span>
-            <span class="totals-row__shipping-free" *ngIf="shippingCost === 0">{{ 'CHECKOUT.FREE_SHIPPING_BADGE' | translate }} 🎉</span>
+            <span class="totals-row__shipping-free" *ngIf="shippingCost === 0">{{ 'CHECKOUT.FREE_SHIPPING_BADGE' | translate }}</span>
             <span *ngIf="shippingCost > 0">{{ shippingCost | number }} {{ 'COMMON.CURRENCY' | translate }}</span>
           </div>
           <div class="totals-row totals-row--free-note" *ngIf="shippingCost > 0">
@@ -221,7 +237,10 @@
 
         <!-- Payment method summary badge -->
         <div class="summary-payment-badge">
-          <span class="payment-badge-icon">🏠</span>
+          <svg class="payment-badge-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="6" width="20" height="12" rx="2"/>
+            <circle cx="12" cy="12" r="2"/>
+          </svg>
           <div>
             <div class="payment-badge-label">{{ 'CHECKOUT.PAYMENT_METHOD' | translate }}</div>
             <div class="payment-badge-value">{{ 'CHECKOUT.COD' | translate }}</div>

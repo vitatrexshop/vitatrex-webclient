@@ -74,7 +74,7 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
   readonly fallbackStories: Story[] = [
     {
       _id: 'demo-1',
-      title: 'طاقة ونشاط طوال اليوم ⚡',
+      title: 'طاقة ونشاط طوال اليوم',
       videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
       posterUrl: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=600&q=80',
       productLink: '/products',
@@ -83,7 +83,7 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
     },
     {
       _id: 'demo-2',
-      title: 'نوم عميق ومريح كل ليلة 🌙',
+      title: 'نوم عميق ومريح كل ليلة',
       videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
       posterUrl: 'https://images.unsplash.com/photo-1550989460-0adf9ea622e2?auto=format&fit=crop&w=600&q=80',
       productLink: '/products',
@@ -92,7 +92,7 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
     },
     {
       _id: 'demo-3',
-      title: 'مناعة قوية ونشاط دائم 🛡️',
+      title: 'مناعة قوية ونشاط دائم',
       videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
       posterUrl: 'https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&w=600&q=80',
       productLink: '/products',
@@ -101,7 +101,7 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
     },
     {
       _id: 'demo-4',
-      title: 'بشرة نضرة وشعر صحي ✨',
+      title: 'بشرة نضرة وشعر صحي',
       videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyBlazes.mp4',
       posterUrl: 'https://images.unsplash.com/photo-1512290900672-1f02e6005b76?auto=format&fit=crop&w=600&q=80',
       productLink: '/products',
@@ -110,7 +110,7 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
     },
     {
       _id: 'demo-5',
-      title: 'فيتامينات طبيعية للأطفال 🍓',
+      title: 'فيتامينات طبيعية للأطفال',
       videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4',
       posterUrl: 'https://images.unsplash.com/photo-1556911073-38141963c9e0?auto=format&fit=crop&w=600&q=80',
       productLink: '/products',

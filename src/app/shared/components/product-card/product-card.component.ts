@@ -48,18 +48,9 @@ export class ProductCardComponent implements OnChanges {
   addToCart(event: MouseEvent): void {
     if (!this.product || !this.selectedVariant) return;
     this.cartService.addToCart(this.product, this.selectedVariant, 1);
-    this.flyToCartService.fly(event, this.getEmoji());
-    this.toastService.show(`تمت إضافة ${this.product.name} للسلة ✅`, 'success');
+    this.flyToCartService.fly(event);
+    this.toastService.show(`تمت إضافة ${this.product.name} للسلة`, 'success');
     this.cartDrawerService.open();
-  }
-
-  private getEmoji(): string {
-    if (!this.product) return '🍓';
-    const text = (this.product.name + ' ' + (this.product.category || '')).toLowerCase();
-    if (text.includes('kids') || text.includes('طفل') || text.includes('أطفال') || text.includes('صغار')) return '👶';
-    if (text.includes('immune') || text.includes('مناعة') || text.includes('وقاية') || text.includes('درع')) return '🛡️';
-    if (text.includes('sleep') || text.includes('نوم') || text.includes('هدوء')) return '😴';
-    return '🍓';
   }
 
   trackByCount(_: number, v: Variant): number {

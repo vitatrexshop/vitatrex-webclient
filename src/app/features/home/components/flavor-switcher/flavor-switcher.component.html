@@ -37,7 +37,7 @@
             {{ p.variants[0].price | number }} {{ 'COMMON.CURRENCY' | translate }}
           </span>
         </div>
-        <span class="fs-selector-card__badge" *ngIf="p.isBestSeller">⭐ {{ 'PRODUCT.BEST_SELLER' | translate }}</span>
+        <span class="fs-selector-card__badge" *ngIf="p.isBestSeller">{{ 'PRODUCT.BEST_SELLER' | translate }}</span>
       </button>
     </div>
 
@@ -59,12 +59,16 @@
 
           <!-- Floating Badges -->
           <div class="fs-floating-badge badge-top-right">
-            <span class="badge-icon">🌿</span>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" class="badge-icon" aria-hidden="true">
+              <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>
+            </svg>
             <span class="badge-text">{{ 'HERO.NATURAL_100' | translate }}</span>
           </div>
 
           <div class="fs-floating-badge badge-bottom-left">
-            <span class="badge-icon">🍏</span>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" class="badge-icon" aria-hidden="true">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
             <span class="badge-text">{{ 'HERO.NO_SUGAR' | translate }}</span>
           </div>
         </div>
@@ -75,7 +79,6 @@
 
         <!-- Category Tag -->
         <div class="info-category-pill">
-          <span class="pill-sparkle">✨</span>
           <span>
             {{ activeProduct.category === 'immunity' ? ('PRODUCTS_SECTION.CAT_IMMUNITY' | translate)
                : activeProduct.category === 'kids' ? ('PRODUCTS_SECTION.CAT_KIDS' | translate)
@@ -127,7 +130,11 @@
             (click)="addToCart($event)"
             [attr.aria-label]="'PRODUCT.ADD_TO_CART' | translate"
           >
-            <span class="btn-icon">🛒</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <path d="M16 10a4 4 0 0 1-8 0"/>
+            </svg>
             <span>{{ 'FLAVOR_SWITCHER.ADD_TO_CART' | translate }}</span>
           </button>
 
@@ -140,15 +147,26 @@
         <!-- Trust Badges Bar -->
         <div class="info-trust-bar">
           <div class="trust-item">
-            <span class="trust-icon">🚚</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="1" y="3" width="15" height="13"/>
+              <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+              <circle cx="5.5" cy="18.5" r="2.5"/>
+              <circle cx="18.5" cy="18.5" r="2.5"/>
+            </svg>
             <span>{{ 'FLAVOR_SWITCHER.FAST_SHIPPING' | translate }}</span>
           </div>
           <div class="trust-item">
-            <span class="trust-icon">🔒</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
             <span>{{ 'FLAVOR_SWITCHER.COD' | translate }}</span>
           </div>
           <div class="trust-item">
-            <span class="trust-icon">↩️</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="1 4 1 10 7 10"/>
+              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+            </svg>
             <span>{{ 'FLAVOR_SWITCHER.FREE_RETURN' | translate }}</span>
           </div>
         </div>

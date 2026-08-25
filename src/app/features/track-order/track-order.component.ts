@@ -24,11 +24,11 @@ export class TrackOrderComponent implements OnInit {
   isLoading = true;
   errorMessage: string | null = null;
 
-  readonly steps: ReadonlyArray<{ key: string; icon: string }> = [
-    { key: 'TRACKING.STEP_SUBMITTED', icon: '📋' },
-    { key: 'TRACKING.STEP_PROCESSING', icon: '📦' },
-    { key: 'TRACKING.STEP_SHIPPED', icon: '🚚' },
-    { key: 'TRACKING.STEP_DELIVERED', icon: '✅' },
+  readonly steps: ReadonlyArray<{ key: string }> = [
+    { key: 'TRACKING.STEP_SUBMITTED' },
+    { key: 'TRACKING.STEP_PROCESSING' },
+    { key: 'TRACKING.STEP_SHIPPED' },
+    { key: 'TRACKING.STEP_DELIVERED' },
   ];
 
   private readonly statusStepMap: Readonly<Record<string, number>> = {

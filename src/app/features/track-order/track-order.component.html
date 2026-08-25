@@ -13,7 +13,11 @@
     role="alert"
     aria-live="assertive"
   >
-    <span class="state-icon" aria-hidden="true">⚠️</span>
+    <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="state-icon" aria-hidden="true">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="12" y1="8" x2="12" y2="12"/>
+      <line x1="12" y1="16" x2="12.01" y2="16"/>
+    </svg>
     <p class="state-text">{{ errorMessage }}</p>
     <a routerLink="/" class="btn-home">{{ 'COMMON.BACK_HOME' | translate }}</a>
   </div>
@@ -52,7 +56,12 @@
         >
           <!-- Node circle -->
           <div class="step__node">
-            <span class="step__icon" aria-hidden="true">{{ step.icon }}</span>
+            <span class="step__icon" aria-hidden="true">
+              <svg *ngIf="i < currentStep" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              <span *ngIf="i >= currentStep">{{ i + 1 }}</span>
+            </span>
           </div>
           <!-- Label -->
           <p class="step__label">{{ step.key | translate }}</p>
