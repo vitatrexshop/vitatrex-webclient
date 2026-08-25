@@ -237,129 +237,32 @@ export class PromoVideoComponent implements OnInit, OnDestroy {
     this.ctx?.revert();
 
     this.ctx = gsap.context(() => {
-      // 1. Entrance animation for the video container (guaranteed visible)
+      // 1. Entrance animation for the video container
       const container = section.querySelector<HTMLElement>('.promo-video-container');
       if (container) {
         gsap.fromTo(
           container,
           { opacity: 0.85, scale: 0.98, y: 15 },
-          {
-            opacity: 1,
-            scale: 1,
-            y: 0,
-            duration: 0.6,
-            ease: 'power2.out',
-            clearProps: 'all',
-          }
+          { opacity: 1, scale: 1, y: 0, duration: 0.6, ease: 'power2.out', clearProps: 'all' }
         );
       }
 
-      // 2. Parallax floating fruit particles timeline with smooth scrub
-      const scrollTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: section,
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: 1.2,
-          invalidateOnRefresh: true,
-        },
-      });
-
-      // Left floating items
-      scrollTl.fromTo(
-        '.float-left.pv-item-1',
-        { y: -120, x: -40, rotation: -25, opacity: 0.2, scale: 0.8 },
-        { y: 140, x: 25, rotation: 35, opacity: 1, scale: 1.15, ease: 'none' },
-        0
-      );
-      scrollTl.fromTo(
-        '.float-left.pv-item-2',
-        { y: -160, x: -60, rotation: 30, opacity: 0.2, scale: 0.75 },
-        { y: 190, x: 30, rotation: -40, opacity: 1, scale: 1.25, ease: 'none' },
-        0.05
-      );
-      scrollTl.fromTo(
-        '.float-left.pv-item-3',
-        { y: -140, x: -30, rotation: -35, opacity: 0.2, scale: 0.8 },
-        { y: 170, x: 20, rotation: 30, opacity: 1, scale: 1.2, ease: 'none' },
-        0.1
-      );
-      scrollTl.fromTo(
-        '.float-left.pv-item-4',
-        { y: -180, x: -50, rotation: 40, opacity: 0.15, scale: 0.7 },
-        { y: 210, x: 35, rotation: -30, opacity: 1, scale: 1.2, ease: 'none' },
-        0.15
-      );
-      scrollTl.fromTo(
-        '.float-left.pv-item-5',
-        { y: -130, x: -35, rotation: -20, opacity: 0.2, scale: 0.85 },
-        { y: 150, x: 20, rotation: 45, opacity: 1, scale: 1.15, ease: 'none' },
-        0.2
-      );
-
-      // Right floating items
-      scrollTl.fromTo(
-        '.float-right.pv-item-6',
-        { y: -130, x: 40, rotation: 25, opacity: 0.2, scale: 0.8 },
-        { y: 150, x: -25, rotation: -35, opacity: 1, scale: 1.15, ease: 'none' },
-        0
-      );
-      scrollTl.fromTo(
-        '.float-right.pv-item-7',
-        { y: -170, x: 60, rotation: -35, opacity: 0.2, scale: 0.75 },
-        { y: 200, x: -35, rotation: 40, opacity: 1, scale: 1.25, ease: 'none' },
-        0.05
-      );
-      scrollTl.fromTo(
-        '.float-right.pv-item-8',
-        { y: -150, x: 30, rotation: 30, opacity: 0.2, scale: 0.8 },
-        { y: 180, x: -20, rotation: -30, opacity: 1, scale: 1.2, ease: 'none' },
-        0.1
-      );
-      scrollTl.fromTo(
-        '.float-right.pv-item-9',
-        { y: -190, x: 50, rotation: -40, opacity: 0.15, scale: 0.7 },
-        { y: 220, x: -40, rotation: 35, opacity: 1, scale: 1.2, ease: 'none' },
-        0.15
-      );
-      scrollTl.fromTo(
-        '.float-right.pv-item-10',
-        { y: -140, x: 35, rotation: 20, opacity: 0.2, scale: 0.85 },
-        { y: 160, x: -25, rotation: -45, opacity: 1, scale: 1.15, ease: 'none' },
-        0.2
-      );
-
-      // 3. Editorial Statement Scroll Reveal (Safe & guaranteed visibility)
+      // 2. Editorial Statement reveal
       const statementEl = section.querySelector<HTMLElement>('.promo-video-statement');
       if (statementEl) {
         gsap.fromTo(
           statementEl,
           { opacity: 0.85, y: 15 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.6,
-            ease: 'power2.out',
-            clearProps: 'all',
-          }
+          { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out', clearProps: 'all' }
         );
 
         gsap.fromTo(
           '.sparkle-star',
           { scale: 0, opacity: 0, rotation: -45 },
           {
-            scale: 1,
-            opacity: 1,
-            rotation: 0,
-            duration: 0.6,
-            stagger: 0.15,
-            ease: 'back.out(2)',
-            clearProps: 'all',
-            scrollTrigger: {
-              trigger: statementEl,
-              start: 'top 95%',
-              once: true,
-            },
+            scale: 1, opacity: 1, rotation: 0,
+            duration: 0.6, stagger: 0.15, ease: 'back.out(2)', clearProps: 'all',
+            scrollTrigger: { trigger: statementEl, start: 'top 95%', once: true },
           }
         );
 
@@ -367,18 +270,12 @@ export class PromoVideoComponent implements OnInit, OnDestroy {
           '.swoosh-path',
           { strokeDashoffset: 180 },
           {
-            strokeDashoffset: 0,
-            duration: 0.75,
-            ease: 'power2.out',
-            clearProps: 'strokeDashoffset',
-            scrollTrigger: {
-              trigger: statementEl,
-              start: 'top 95%',
-              once: true,
-            },
+            strokeDashoffset: 0, duration: 0.75, ease: 'power2.out', clearProps: 'strokeDashoffset',
+            scrollTrigger: { trigger: statementEl, start: 'top 95%', once: true },
           }
         );
       }
     }, section);
   }
 }
+

@@ -25,21 +25,6 @@
   }
 }
 
-@keyframes floatBob1 {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50%      { transform: translateY(-12px) rotate(6deg); }
-}
-
-@keyframes floatBob2 {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50%      { transform: translateY(14px) rotate(-8deg); }
-}
-
-@keyframes floatBob3 {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50%      { transform: translateY(-10px) rotate(-5deg); }
-}
-
 // ── Main Section Shell ────────────────────────────────────────
 .promo-video-section {
   position: relative;
@@ -54,87 +39,6 @@
 
   @media (min-width: 768px) {
     padding: 3.5rem 0 3rem;
-  }
-}
-
-// ── Floating Particles in Whitespaces ─────────────────────────
-.promo-floating-elements {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  overflow: hidden;
-  z-index: 2;
-}
-
-.promo-float-item {
-  position: absolute;
-  will-change: transform, opacity;
-  z-index: 3;
-  user-select: none;
-  pointer-events: none;
-
-  @media (max-width: 600px) {
-    &.pv-item-3, &.pv-item-4, &.pv-item-5,
-    &.pv-item-8, &.pv-item-9, &.pv-item-10 {
-      display: none;
-    }
-  }
-
-  .float-bubble {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 9999px;
-    background: rgba(255, 255, 255, 0.65);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1.5px solid rgba(255, 255, 255, 0.85);
-    box-shadow: 0 8px 18px rgba(32, 23, 75, 0.08);
-    font-size: 1.25rem;
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-
-    @media (min-width: 768px) {
-      width: 48px;
-      height: 48px;
-      font-size: 1.65rem;
-      box-shadow: 0 10px 22px rgba(32, 23, 75, 0.12);
-    }
-
-    @media (min-width: 992px) {
-      width: 62px;
-      height: 62px;
-      font-size: 2.15rem;
-      box-shadow: 0 12px 28px rgba(32, 23, 75, 0.14);
-    }
-
-    &.bubble-glow-red    { box-shadow: 0 12px 26px rgba(94, 67, 155, 0.22); animation: floatBob1 4.4s ease-in-out infinite; }
-    &.bubble-glow-yellow { box-shadow: 0 12px 26px rgba(94, 67, 155, 0.22); animation: floatBob2 4.1s ease-in-out infinite 0.3s; }
-    &.bubble-glow-blue   { box-shadow: 0 12px 26px rgba(94, 67, 155, 0.22); animation: floatBob3 4.7s ease-in-out infinite 0.6s; }
-    &.bubble-glow-green  { box-shadow: 0 12px 26px rgba(94, 67, 155, 0.22); animation: floatBob1 3.9s ease-in-out infinite 0.2s; }
-    &.bubble-glow-gold   { box-shadow: 0 12px 26px rgba(94, 67, 155, 0.26); animation: floatBob2 4.5s ease-in-out infinite 0.8s; }
-    &.bubble-glow-orange { box-shadow: 0 12px 26px rgba(94, 67, 155, 0.22); animation: floatBob3 4.2s ease-in-out infinite 0.5s; }
-    &.bubble-glow-purple { box-shadow: 0 12px 26px rgba(94, 67, 155, 0.28); animation: floatBob1 4.8s ease-in-out infinite 0.1s; }
-    &.bubble-glow-pink   { box-shadow: 0 12px 26px rgba(94, 67, 155, 0.22); animation: floatBob2 3.7s ease-in-out infinite 0.7s; }
-  }
-
-  // Left Whitespace Column
-  &.float-left {
-    &.pv-item-1 { top: 8%;  left: 2%; }
-    &.pv-item-2 { top: 28%; left: 4.5%; }
-    &.pv-item-3 { top: 52%; left: 1.5%; }
-    &.pv-item-4 { top: 72%; left: 4%; }
-    &.pv-item-5 { top: 89%; left: 2.2%; }
-  }
-
-  // Right Whitespace Column
-  &.float-right {
-    &.pv-item-6  { top: 10%; right: 2%; }
-    &.pv-item-7  { top: 30%; right: 4.5%; }
-    &.pv-item-8  { top: 54%; right: 1.5%; }
-    &.pv-item-9  { top: 74%; right: 4%; }
-    &.pv-item-10 { top: 90%; right: 2.2%; }
   }
 }
 
