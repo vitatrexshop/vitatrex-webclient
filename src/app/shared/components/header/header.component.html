@@ -96,6 +96,14 @@
           (ngSubmit)="submitSearch()"
           role="search"
         >
+          <!-- Lead Magnifier Icon for Mobile Full Overlay -->
+          <span class="search-lead-icon" aria-hidden="true">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="7.5"/>
+              <path d="M21 21l-4.35-4.35"/>
+            </svg>
+          </span>
+
           <input
             #searchInputField
             class="search-input-field"
@@ -132,13 +140,18 @@
         <button
           type="button"
           class="icon-action-btn search-btn"
+          [class.is-active]="isSearchOpen"
           (click)="toggleSearch()"
           [attr.aria-expanded]="isSearchOpen"
-          [attr.aria-label]="'COMMON.SEARCH' | translate"
+          [attr.aria-label]="(isSearchOpen ? 'COMMON.CLOSE' : 'COMMON.SEARCH') | translate"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <svg *ngIf="!isSearchOpen" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <circle cx="11" cy="11" r="7.5"/>
             <path d="M21 21l-4.35-4.35"/>
+          </svg>
+          <svg *ngIf="isSearchOpen" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
         </button>
 
