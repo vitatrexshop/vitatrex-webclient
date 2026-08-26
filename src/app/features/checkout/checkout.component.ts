@@ -11,9 +11,10 @@ import { take } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 import { CartService } from '../../core/services/cart.service';
 import { OrderService } from '../../core/services/order.service';
+import { ShippingService } from '../../core/services/shipping.service';
 import { ToastService } from '../../core/services/toast.service';
 import { CartItem } from '../../core/models/cart.model';
-import { OrderInput, PaymentMethod, CreateOrderData } from '../../core/models/order.model';
+import { OrderInput, PaymentMethod, CreateOrderData, GovernorateOption } from '../../core/models/order.model';
 import { OrderTrackingService } from '../track-order/order-tracking.service';
 import { environment } from '../../../environments/environment';
 
@@ -27,6 +28,7 @@ export class CheckoutComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly cartService = inject(CartService);
   private readonly orderService = inject(OrderService);
+  private readonly shippingService = inject(ShippingService);
   private readonly toastService = inject(ToastService);
   private readonly router = inject(Router);
   private readonly cdr = inject(ChangeDetectorRef);
@@ -37,12 +39,33 @@ export class CheckoutComponent implements OnInit {
   cartItems: CartItem[] = [];
   cartTotal = 0;
   isSubmitting = false;
+  isLoadingGovernorates = true;
+
+  governorates: GovernorateOption[] = [];
 
   readonly SHIPPING_THRESHOLD = 500;
-  readonly SHIPPING_COST = 50;
+
+  get selectedGovernorateOption(): GovernorateOption | null {
+    const govName = this.form?.get('governorate')?.value;
+    if (!govName) return null;
+    return this.governorates.find((g) => g.governorate === govName) ?? null;
+  }
+
+  get baseShippingFee(): number {
+    return this.selectedGovernorateOption ? this.selectedGovernorateOption.fee : 0;
+  }
 
   get shippingCost(): number {
-    return this.cartTotal >= this.SHIPPING_THRESHOLD ? 0 : this.SHIPPING_COST;
+    if (!this.selectedGovernorateOption) return 0;
+    return this.cartTotal >= this.SHIPPING_THRESHOLD ? 0 : this.baseShippingFee;
+  }
+
+  get isFreeShipping(): boolean {
+    return !!this.selectedGovernorateOption && this.cartTotal >= this.SHIPPING_THRESHOLD;
+  }
+
+  get deliveryTimeHours(): number | null {
+    return this.selectedGovernorateOption?.deliveryTimeHours ?? null;
   }
 
   get orderTotal(): number {
@@ -57,9 +80,27 @@ export class CheckoutComponent implements OnInit {
     this.form = this.fb.group({
       name:           ['', [Validators.required, Validators.minLength(3)]],
       phone:          ['', [Validators.required, Validators.pattern(/^(01)[0-9]{9}$/)]],
-      city:           ['', Validators.required],
+      governorate:    ['', Validators.required],
       addressDetails: ['', [Validators.required, Validators.minLength(10)]],
       paymentMethod:  ['cod', Validators.required],
+    });
+
+    // Re-render when governorate changes to immediately recalculate shipping breakdown
+    this.form.get('governorate')?.valueChanges.subscribe(() => {
+      this.cdr.markForCheck();
+    });
+
+    // Load dynamic governorates from backend
+    this.shippingService.getGovernorates().subscribe({
+      next: (list) => {
+        this.governorates = list;
+        this.isLoadingGovernorates = false;
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.isLoadingGovernorates = false;
+        this.cdr.markForCheck();
+      },
     });
 
     this.cartService.cartItems$.pipe(take(1)).subscribe((items) => {
@@ -81,7 +122,7 @@ export class CheckoutComponent implements OnInit {
       return this.translate.instant('CHECKOUT.ERRORS.REQUIRED');
     }
     if (ctrl.hasError('minlength')) {
-      return field === 'name' 
+      return field === 'name'
         ? this.translate.instant('CHECKOUT.ERRORS.MIN_NAME')
         : this.translate.instant('CHECKOUT.ERRORS.MIN_ADDRESS');
     }
@@ -103,13 +144,14 @@ export class CheckoutComponent implements OnInit {
     this.isSubmitting = true;
     this.cdr.markForCheck();
 
-    const { name, phone, city, addressDetails, paymentMethod } = this.form.value;
+    const { name, phone, governorate, addressDetails, paymentMethod } = this.form.value;
 
     const payload: OrderInput = {
       customer: {
         name,
         phone,
-        city,
+        city: governorate, // backward compatibility
+        governorate,
         address: addressDetails,
       },
       items: this.cartItems.flatMap((item) => {
@@ -171,4 +213,3 @@ export class CheckoutComponent implements OnInit {
     return raw;
   }
 }
-

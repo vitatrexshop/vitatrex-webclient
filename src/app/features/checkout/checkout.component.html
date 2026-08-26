@@ -54,40 +54,28 @@
             <span class="field-error" *ngIf="getFieldError('phone') as err" role="alert">{{ err }}</span>
           </div>
 
-          <!-- City -->
-          <div class="field-group" [class.has-error]="isInvalid('city')">
-            <label class="field-label" for="city">{{ 'CHECKOUT.CITY' | translate }} <span class="required">*</span></label>
-            <select id="city" class="field-input field-select" formControlName="city">
+          <!-- Governorate Dropdown (Dynamic API-driven) -->
+          <div class="field-group" [class.has-error]="isInvalid('governorate')">
+            <label class="field-label" for="governorate">{{ 'CHECKOUT.CITY' | translate }} <span class="required">*</span></label>
+            <select id="governorate" class="field-input field-select" formControlName="governorate">
               <option value="" disabled selected>{{ 'CHECKOUT.SELECT_CITY' | translate }}</option>
-              <option value="Cairo">القاهرة - Cairo</option>
-              <option value="Giza">الجيزة - Giza</option>
-              <option value="Alexandria">الإسكندرية - Alexandria</option>
-              <option value="Qalyubia">القليوبية - Qalyubia</option>
-              <option value="Sharqia">الشرقية - Sharqia</option>
-              <option value="Dakahlia">الدقهلية - Dakahlia</option>
-              <option value="Beheira">البحيرة - Beheira</option>
-              <option value="Monufia">المنوفية - Monufia</option>
-              <option value="Gharbia">الغربية - Gharbia</option>
-              <option value="Kafr El Sheikh">كفر الشيخ - Kafr El Sheikh</option>
-              <option value="Ismailia">الإسماعيلية - Ismailia</option>
-              <option value="Suez">السويس - Suez</option>
-              <option value="Port Said">بورسعيد - Port Said</option>
-              <option value="Fayoum">الفيوم - Fayoum</option>
-              <option value="Beni Suef">بني سويف - Beni Suef</option>
-              <option value="Minya">المنيا - Minya</option>
-              <option value="Asyut">أسيوط - Asyut</option>
-              <option value="Sohag">سوهاج - Sohag</option>
-              <option value="Qena">قنا - Qena</option>
-              <option value="Luxor">الأقصر - Luxor</option>
-              <option value="Aswan">أسوان - Aswan</option>
-              <option value="Red Sea">البحر الأحمر - Red Sea</option>
-              <option value="Matrouh">مطروح - Matrouh</option>
-              <option value="North Sinai">شمال سيناء - North Sinai</option>
-              <option value="South Sinai">جنوب سيناء - South Sinai</option>
-              <option value="New Valley">الوادي الجديد - New Valley</option>
-              <option value="Damietta">دمياط - Damietta</option>
+              <option *ngFor="let g of governorates" [value]="g.governorate">
+                {{ g.governorate }} ({{ g.fee }} {{ 'COMMON.CURRENCY' | translate }})
+              </option>
             </select>
-            <span class="field-error" *ngIf="getFieldError('city') as err" role="alert">{{ err }}</span>
+            <span class="field-error" *ngIf="getFieldError('governorate') as err" role="alert">{{ err }}</span>
+
+            <!-- Dynamic Estimated Delivery Notice Badge -->
+            <div class="delivery-badge" *ngIf="selectedGovernorateOption as opt">
+              <svg class="delivery-badge__icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+              <span class="delivery-badge__text">
+                {{ 'CHECKOUT.ESTIMATED_DELIVERY' | translate: { hours: opt.deliveryTimeHours } }}
+              </span>
+              <span class="delivery-badge__zone" *ngIf="opt.zoneName">({{ opt.zoneName }})</span>
+            </div>
           </div>
 
           <!-- Address Details -->
@@ -218,13 +206,30 @@
             <span>{{ 'CART.SUBTOTAL' | translate }}</span>
             <span>{{ cartTotal | number }} {{ 'COMMON.CURRENCY' | translate }}</span>
           </div>
+
           <div class="totals-row">
             <span>{{ 'CHECKOUT.SHIPPING_FEE' | translate }}</span>
-            <span class="totals-row__shipping-free" *ngIf="shippingCost === 0">{{ 'CHECKOUT.FREE_SHIPPING_BADGE' | translate }}</span>
-            <span *ngIf="shippingCost > 0">{{ shippingCost | number }} {{ 'COMMON.CURRENCY' | translate }}</span>
+            <!-- Free shipping when threshold met -->
+            <span class="totals-row__shipping-free" *ngIf="isFreeShipping">{{ 'CHECKOUT.FREE_SHIPPING_BADGE' | translate }}</span>
+            <!-- Dynamic fee when governorate is selected -->
+            <span *ngIf="!isFreeShipping && selectedGovernorateOption">{{ shippingCost | number }} {{ 'COMMON.CURRENCY' | translate }}</span>
+            <!-- Prompt to select governorate if not chosen -->
+            <span class="totals-row__prompt" *ngIf="!selectedGovernorateOption">{{ 'CHECKOUT.SELECT_GOV_FOR_SHIPPING' | translate }}</span>
           </div>
-          <div class="totals-row totals-row--free-note" *ngIf="shippingCost > 0">
+
+          <div class="totals-row totals-row--free-note" *ngIf="shippingCost > 0 && cartTotal < SHIPPING_THRESHOLD">
             <span>{{ 'CART.FREE_SHIPPING_REMAINING' | translate: { amount: (SHIPPING_THRESHOLD - cartTotal | number) } }}</span>
+          </div>
+
+          <!-- Estimated Delivery Notice in Summary -->
+          <div class="summary-delivery-note" *ngIf="selectedGovernorateOption as opt">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="1" y="3" width="15" height="13"/>
+              <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+              <circle cx="5.5" cy="18.5" r="2.5"/>
+              <circle cx="18.5" cy="18.5" r="2.5"/>
+            </svg>
+            <span>{{ 'CHECKOUT.ESTIMATED_DELIVERY' | translate: { hours: opt.deliveryTimeHours } }}</span>
           </div>
 
           <div class="totals-divider"></div>

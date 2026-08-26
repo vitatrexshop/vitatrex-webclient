@@ -26,6 +26,16 @@ export const PAYMENT_METHOD_LABELS: Record<PaymentMethod, string> = {
 };
 
 /**
+ * Egyptian governorate shipping matrix option returned by /api/v1/shipping/governorates
+ */
+export interface GovernorateOption {
+  governorate: string;
+  fee: number;
+  deliveryTimeHours: number;
+  zoneName?: string;
+}
+
+/**
  * Customer contact and shipping details attached to an order.
  * `email` is optional (guest checkout).
  */
@@ -34,7 +44,8 @@ export interface CustomerInfo {
   phone: string;
   email?: string | null;
   address: string;
-  city: string;
+  city?: string;
+  governorate: string;
 }
 
 /**
@@ -73,7 +84,10 @@ export interface Order {
   orderNumber: string;
   customer: CustomerInfo;
   items: OrderItem[];
+  subtotal?: number;
+  shippingFee?: number;
   totalAmount: number;
+  estimatedDeliveryDate?: string | null;
   paymentMethod: PaymentMethod;
   paymentStatus: PaymentStatus;
   orderStatus: OrderStatus;

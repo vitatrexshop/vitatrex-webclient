@@ -246,7 +246,9 @@
       "MIN_NAME": "Please enter your full name (at least 3 characters)",
       "INVALID_PHONE": "Invalid phone number (must start with 01 and contain 11 digits)",
       "MIN_ADDRESS": "Please enter address details (at least 10 characters)"
-    }
+    },
+    "ESTIMATED_DELIVERY": "Delivery within {{hours}} hours",
+    "SELECT_GOV_FOR_SHIPPING": "Calculated upon selecting governorate"
   },
   "ORDER_SUCCESS": {
     "SEARCH_PLACEHOLDER": "Enter order number (e.g. VT-66084)",
