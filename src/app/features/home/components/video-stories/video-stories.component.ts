@@ -56,6 +56,11 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
   isLoading = true;
   stories: Story[] = [];
 
+  /** Track poster URLs that have already errored so we don't infinite-loop */
+  private brokenPosters = new Set<string>();
+  /** Counter for cycling through fallback posters on 404 */
+  private fallbackPosterIndex = 0;
+
   // Modal Reel State
   isModalOpen = false;
   activeStoryIndex = 0;
@@ -128,6 +133,7 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.brokenPosters.clear();
     if (this.feedbackTimeout) {
       clearTimeout(this.feedbackTimeout);
     }
@@ -160,14 +166,18 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
           if (res && res.success && Array.isArray(res.data) && res.data.length > 0) {
             // isActive may come as undefined from older DB docs — treat undefined as active
             const active = res.data.filter((s) => s.isActive !== false && s.isActive !== null);
-            if (active.length >= 4) {
-              this.stories = active;
-            } else if (active.length > 0) {
-              // Pad with fallback so we always show at least 4 cards
-              const pad = this.fallbackStories
-                .filter((f) => !active.find((a) => a._id === f._id))
-                .slice(0, Math.max(0, 4 - active.length));
-              this.stories = [...active, ...pad];
+
+            if (active.length > 0) {
+              // Always show ALL DB stories first; pad with fallbacks up to minCards
+              const MIN_CARDS = 5;
+              if (active.length < MIN_CARDS) {
+                const pad = this.fallbackStories
+                  .filter((f) => !active.find((a) => a._id === f._id))
+                  .slice(0, MIN_CARDS - active.length);
+                this.stories = [...active, ...pad];
+              } else {
+                this.stories = active;
+              }
             } else {
               this.stories = this.fallbackStories;
             }
@@ -244,9 +254,17 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
 
   onPosterError(event: Event): void {
     const img = event.target as HTMLImageElement;
-    if (img && this.fallbackStories.length > 0) {
-      img.src = this.fallbackStories[0].posterUrl;
-    }
+    if (!img) return;
+
+    // Prevent infinite error loops: if this src already failed once, give up
+    const failedSrc = img.src;
+    if (this.brokenPosters.has(failedSrc)) return;
+    this.brokenPosters.add(failedSrc);
+
+    // Cycle through fallback posters so each broken card shows a different one
+    const fallback = this.fallbackStories[this.fallbackPosterIndex % this.fallbackStories.length];
+    this.fallbackPosterIndex++;
+    img.src = fallback.posterUrl;
   }
 
   onVideoError(event: Event): void {
