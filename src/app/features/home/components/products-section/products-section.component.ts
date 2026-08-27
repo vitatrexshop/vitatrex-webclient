@@ -151,6 +151,9 @@ export class ProductsSectionComponent implements OnInit, OnDestroy {
   }
 
   private buildShelfProducts(backendProds: Product[]): void {
+    // Always start with the 5 curated shelf products — never append unmatched backend items
+    // whose raw images (marketing banners etc.) would break the visual design.
+    // We only update price/stock for a curated item if the backend has a matching slug/name.
     const items: HappyShelfItem[] = [...this.defaultShelfProducts];
 
     if (backendProds?.length) {
@@ -159,29 +162,20 @@ export class ProductsSectionComponent implements OnInit, OnDestroy {
           (i) => i.slug === bp.slug || i.name.toLowerCase() === bp.name.toLowerCase()
         );
         if (existingIdx !== -1) {
+          // Update price and availability from live backend data
           items[existingIdx].rawProduct = bp;
           if (bp.variants?.[0]?.price) {
             items[existingIdx].price = bp.variants[0].price;
           }
-        } else {
           const isAvailable =
             (bp as any).inStock !== false &&
             (bp.variants?.[0]?.stock === undefined ||
               bp.variants[0].stock > 0 ||
               bp.variants[0].stock === -1);
-
-          items.push({
-            _id: bp._id,
-            name: bp.name,
-            slug: bp.slug,
-            price: bp.variants?.[0]?.price || 410.00,
-            originalPrice: bp.variants?.[0]?.originalPrice ?? null,
-            image: bp.image || bp.images?.[0] || 'assets/bottles/sleep.png',
-            inStock: isAvailable,
-            category: typeof bp.category === 'object' ? bp.category?.name : bp.category,
-            rawProduct: bp,
-          });
+          items[existingIdx].inStock = isAvailable;
         }
+        // Unmatched backend products are intentionally ignored:
+        // the Happy Shelf shows only the 5 curated premium products.
       });
     }
 

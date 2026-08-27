@@ -71,6 +71,9 @@
     display: none;
   }
 
+  // Allow the hover CTA button to overflow vertically without clipping
+  overflow-y: visible;
+
   @media (max-width: 1149px) {
     gap: 20px;
   }
@@ -129,7 +132,10 @@
 .shelf-card__media-wrap {
   position: relative;
   width: 100%;
-  margin-bottom: 16px;
+  // Extra bottom padding so the absolutely-positioned CTA button sits
+  // fully inside the wrap and is never clipped by scroll containers
+  padding-bottom: 56px;
+  margin-bottom: 4px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -137,7 +143,7 @@
   // Reveal the hover CTA when the parent card is hovered
   .shelf-product-card:hover & .shelf-card__add-btn {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(-50%) translateY(0);
     pointer-events: auto;
   }
 }
