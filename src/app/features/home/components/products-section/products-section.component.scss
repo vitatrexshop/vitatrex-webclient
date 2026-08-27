@@ -1,16 +1,16 @@
 // ══════════════════════════════════════════════════════════════
 // THE HAPPY SHELF PRODUCT SLIDER SCSS
-// Exact Clone of Visual Specs:
-// - Background: #F19C24 (Solid Vibrant Orange)
+// Rebranded with Site Primary Brand Purple Palette:
+// - Background: Deep Midnight Purple (#20174b / var(--purple-deep))
 // - Title: THE HAPPY SHELF (Bold, Uppercase, Centered, White)
 // - Transparent Cards (No white container boxes, no borders)
 // - 5 Simultaneous Cards on Desktop
-// - White Text Titles & Prices
-// - Pill-shaped Outline 'Notify me' Button on Out-of-Stock
+// - Crisp High-Contrast White Text Titles & Prices
+// - Purple / Glassmorphism Pill-shaped 'Notify me' Button on Out-of-Stock
 // ══════════════════════════════════════════════════════════════
 
 .happy-shelf-section {
-  background-color: #F19C24;
+  background: radial-gradient(circle at 50% 30%, #31206d 0%, var(--purple-deep, #20174b) 65%, #18113c 100%);
   width: 100%;
   padding: clamp(3rem, 5.5vw, 5rem) 0 clamp(3.5rem, 6vw, 5.5rem);
   position: relative;
@@ -43,7 +43,7 @@
   margin: 0;
   text-align: center;
   line-height: 1.15;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
 }
 
 // ── 2. Carousel Wrapper ───────────────────────────────────────
@@ -181,9 +181,9 @@
     color 0.2s ease,
     box-shadow 0.2s ease;
 
-  // Solid white pill shape — dark bold uppercase text
+  // Solid white pill shape — dark brand purple bold uppercase text
   background: #ffffff;
-  color: #1a1a2e;
+  color: var(--purple-deep, #20174b);
   border: none;
   border-radius: 9999px;
   padding: 10px 20px;
@@ -199,7 +199,7 @@
   justify-content: center;
   gap: 7px;
   cursor: pointer;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
   box-sizing: border-box;
 
   // Override transform properly — keep translateX(-50%) + translateY
@@ -209,24 +209,27 @@
   }
 
   &:hover {
-    background: #1a1a2e;
+    background: var(--purple-primary, #5e439b);
     color: #ffffff;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.26);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
   }
 
   &:active {
     transform: translateX(-50%) scale(0.96) !important;
   }
 
-  // Notify variant: orange pill look
+  // Notify variant: sleek frosted purple / white glassmorphism outline
   &--notify {
-    background: #F19C24;
+    background: rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     color: #ffffff;
-    border: 1.5px solid #ffffff;
+    border: 1.5px solid rgba(255, 255, 255, 0.9);
 
     &:hover {
       background: #ffffff;
-      color: #F19C24;
+      color: var(--purple-deep, #20174b);
+      border-color: #ffffff;
     }
   }
 
@@ -261,12 +264,12 @@
   height: auto;
   width: auto;
   object-fit: contain;
-  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.16));
+  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.35));
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), filter 0.35s ease;
 
   .shelf-product-card:hover & {
     transform: translateY(-8px) scale(1.04);
-    filter: drop-shadow(0 18px 32px rgba(0, 0, 0, 0.22));
+    filter: drop-shadow(0 20px 36px rgba(0, 0, 0, 0.45));
   }
 }
 
@@ -292,10 +295,11 @@
   a {
     color: #ffffff;
     text-decoration: none;
-    transition: opacity 0.2s ease;
+    transition: opacity 0.2s ease, color 0.2s ease;
 
     &:hover {
-      opacity: 0.88;
+      opacity: 0.9;
+      color: var(--color-brand-200, #e7d9f7);
     }
   }
 }
@@ -317,10 +321,12 @@
 }
 
 // ── 7. Out-of-Stock Pill Button ('Notify me') ─────────────────
-// Orange background with crisp white border and white text
+// Frosted glass brand outline button with crisp white border and white text
 .shelf-card__notify-btn {
-  background-color: #F19C24;
-  border: 1.8px solid #ffffff;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1.8px solid rgba(255, 255, 255, 0.85);
   border-radius: 9999px;
   color: #ffffff;
   font-family: var(--font-heading, 'Plus Jakarta Sans', 'Readex Pro', sans-serif);
@@ -339,9 +345,10 @@
 
   &:hover {
     background-color: #ffffff;
-    color: #F19C24;
+    color: var(--purple-deep, #20174b);
+    border-color: #ffffff;
     transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.16);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
   }
 
   &:active {
@@ -388,10 +395,10 @@
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.18);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1.5px solid rgba(255, 255, 255, 0.6);
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -399,13 +406,14 @@
   cursor: pointer;
   z-index: 10;
   transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
 
   &:hover {
     background: #ffffff;
-    color: #F19C24;
+    color: var(--purple-deep, #20174b);
+    border-color: #ffffff;
     transform: translateY(-50%) scale(1.08);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4);
   }
 
   &:active {
@@ -430,7 +438,7 @@
   }
 }
 
-// ── 10. Right Edge Indicator Bar (Matching Reference Mockup) ───
+// ── 10. Right Edge Indicator Bar ──────────────────────────────
 .shelf-right-indicator {
   position: absolute;
   right: -2px;
@@ -438,7 +446,7 @@
   bottom: 20%;
   width: 4px;
   border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.2);
   overflow: hidden;
   pointer-events: none;
 
