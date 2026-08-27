@@ -1,18 +1,16 @@
 // ══════════════════════════════════════════════════════════════
 // THE HAPPY SHELF PRODUCT SLIDER SCSS
-// Rebranded with Site Primary Brand Purple Palette:
-// - Background: Deep Midnight Purple (#20174b / var(--purple-deep))
-// - Title: THE HAPPY SHELF (Bold, Uppercase, Centered, White)
-// - Transparent Cards (No white container boxes, no borders)
-// - 5 Simultaneous Cards on Desktop
-// - Crisp High-Contrast White Text Titles & Prices
-// - Purple / Glassmorphism Pill-shaped 'Notify me' Button on Out-of-Stock
+// Soft Lilac / Cream Brand Palette (#FAF7FE)
+// - Clean separation from deep purple footer wave
+// - 5 Simultaneous transparent bottle cards on desktop
+// - High-contrast Deep Brand Purple typography & pricing
+// - Modern pill buttons with smooth hover animations
 // ══════════════════════════════════════════════════════════════
 
 .happy-shelf-section {
-  background: radial-gradient(circle at 50% 30%, #31206d 0%, var(--purple-deep, #20174b) 65%, #18113c 100%);
+  background: linear-gradient(180deg, #f8f5fd 0%, #faf7fe 40%, #f3ecfb 100%);
   width: 100%;
-  padding: clamp(3rem, 5.5vw, 5rem) 0 clamp(3.5rem, 6vw, 5.5rem);
+  padding: clamp(3.5rem, 6vw, 5.5rem) 0 clamp(4.5rem, 7vw, 6.5rem);
   position: relative;
   overflow: hidden;
   box-sizing: border-box;
@@ -38,12 +36,11 @@
   font-size: clamp(1.75rem, 3.5vw, 2.65rem);
   font-weight: 900;
   text-transform: uppercase;
-  color: #ffffff;
+  color: var(--purple-deep, #20174b);
   letter-spacing: 0.04em;
   margin: 0;
   text-align: center;
   line-height: 1.15;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
 }
 
 // ── 2. Carousel Wrapper ───────────────────────────────────────
@@ -110,17 +107,14 @@
 
   // Responsive breakpoints
   @media (max-width: 1149px) and (min-width: 900px) {
-    // 4 Cards on small desktop / laptop
     flex: 0 0 calc((100% - 3 * 20px) / 4);
   }
 
   @media (max-width: 899px) and (min-width: 640px) {
-    // 3 Cards on tablet
     flex: 0 0 calc((100% - 2 * 16px) / 3);
   }
 
   @media (max-width: 639px) {
-    // 1.5 - 2 Cards on mobile
     flex: 0 0 calc((100% - 14px) / 1.6);
     max-width: 220px;
   }
@@ -128,12 +122,9 @@
 
 // ── 5. Bottle Image Stage & Hover CTA Overlay ───────────────
 
-// Outer wrap: positions the floating CTA button relative to the image
 .shelf-card__media-wrap {
   position: relative;
   width: 100%;
-  // Extra bottom padding so the absolutely-positioned CTA button sits
-  // fully inside the wrap and is never clipped by scroll containers
   padding-bottom: 56px;
   margin-bottom: 4px;
   display: flex;
@@ -156,13 +147,12 @@
 
   &:focus-visible {
     border-radius: 16px;
-    outline: 2px solid #ffffff;
+    outline: 2px solid var(--purple-primary, #5e439b);
     outline-offset: 4px;
   }
 }
 
 // ── Hover Capsule CTA Button (ADD TO CART / NOTIFY ME) ────────
-// Positioned absolutely over the lower portion of the bottle image
 .shelf-card__add-btn {
   position: absolute;
   bottom: 14px;
@@ -181,9 +171,9 @@
     color 0.2s ease,
     box-shadow 0.2s ease;
 
-  // Solid white pill shape — dark brand purple bold uppercase text
-  background: #ffffff;
-  color: var(--purple-deep, #20174b);
+  // Solid Deep Brand Purple pill shape — crisp white uppercase bold text
+  background: var(--purple-deep, #20174b);
+  color: #ffffff;
   border: none;
   border-radius: 9999px;
   padding: 10px 20px;
@@ -199,10 +189,9 @@
   justify-content: center;
   gap: 7px;
   cursor: pointer;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 24px rgba(32, 23, 75, 0.25);
   box-sizing: border-box;
 
-  // Override transform properly — keep translateX(-50%) + translateY
   .shelf-product-card:hover & {
     transform: translateX(-50%) translateY(0);
     opacity: 1;
@@ -211,25 +200,24 @@
   &:hover {
     background: var(--purple-primary, #5e439b);
     color: #ffffff;
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 10px 28px rgba(94, 67, 155, 0.35);
   }
 
   &:active {
     transform: translateX(-50%) scale(0.96) !important;
   }
 
-  // Notify variant: sleek frosted purple / white glassmorphism outline
+  // Notify variant: white pill with purple outline
   &--notify {
-    background: rgba(255, 255, 255, 0.16);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    color: #ffffff;
-    border: 1.5px solid rgba(255, 255, 255, 0.9);
+    background: #ffffff;
+    color: var(--purple-primary, #5e439b);
+    border: 1.5px solid var(--purple-primary, #5e439b);
+    box-shadow: 0 6px 18px rgba(94, 67, 155, 0.12);
 
     &:hover {
-      background: #ffffff;
-      color: var(--purple-deep, #20174b);
-      border-color: #ffffff;
+      background: var(--purple-primary, #5e439b);
+      color: #ffffff;
+      border-color: var(--purple-primary, #5e439b);
     }
   }
 
@@ -264,16 +252,16 @@
   height: auto;
   width: auto;
   object-fit: contain;
-  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.35));
+  filter: drop-shadow(0 14px 28px rgba(32, 23, 75, 0.12));
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), filter 0.35s ease;
 
   .shelf-product-card:hover & {
     transform: translateY(-8px) scale(1.04);
-    filter: drop-shadow(0 20px 36px rgba(0, 0, 0, 0.45));
+    filter: drop-shadow(0 20px 36px rgba(32, 23, 75, 0.18));
   }
 }
 
-// ── 6. Card Details (White Bold Centered Text) ─────────────────
+// ── 6. Card Details (High-Contrast Purple Text) ───────────────
 .shelf-card__content {
   display: flex;
   flex-direction: column;
@@ -293,13 +281,12 @@
   line-height: 1.3;
 
   a {
-    color: #ffffff;
+    color: var(--purple-deep, #20174b);
     text-decoration: none;
-    transition: opacity 0.2s ease, color 0.2s ease;
+    transition: color 0.2s ease;
 
     &:hover {
-      opacity: 0.9;
-      color: var(--color-brand-200, #e7d9f7);
+      color: var(--purple-primary, #5e439b);
     }
   }
 }
@@ -312,7 +299,7 @@
 }
 
 .shelf-card__price {
-  color: #ffffff;
+  color: var(--purple-primary, #5e439b);
   font-family: var(--font-heading, 'Plus Jakarta Sans', 'Readex Pro', sans-serif);
   font-size: clamp(0.98rem, 1.15vw, 1.14rem);
   font-weight: 700;
@@ -321,14 +308,12 @@
 }
 
 // ── 7. Out-of-Stock Pill Button ('Notify me') ─────────────────
-// Frosted glass brand outline button with crisp white border and white text
+// Clean pill outline button with brand purple styling
 .shelf-card__notify-btn {
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  border: 1.8px solid rgba(255, 255, 255, 0.85);
+  background: #ffffff;
+  border: 1.8px solid var(--purple-primary, #5e439b);
   border-radius: 9999px;
-  color: #ffffff;
+  color: var(--purple-primary, #5e439b);
   font-family: var(--font-heading, 'Plus Jakarta Sans', 'Readex Pro', sans-serif);
   font-size: 0.88rem;
   font-weight: 700;
@@ -342,13 +327,14 @@
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   box-sizing: border-box;
   margin-top: 2px;
+  box-shadow: 0 4px 14px rgba(94, 67, 155, 0.08);
 
   &:hover {
-    background-color: #ffffff;
-    color: var(--purple-deep, #20174b);
-    border-color: #ffffff;
+    background-color: var(--purple-primary, #5e439b);
+    color: #ffffff;
+    border-color: var(--purple-primary, #5e439b);
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 6px 20px rgba(94, 67, 155, 0.25);
   }
 
   &:active {
@@ -358,7 +344,7 @@
 
 // ── 8. In-Stock Action (Quick View) ───────────────────────────
 .shelf-card__view-btn {
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--purple-primary, #5e439b);
   font-family: var(--font-heading, 'Plus Jakarta Sans', 'Readex Pro', sans-serif);
   font-size: 0.82rem;
   font-weight: 600;
@@ -374,13 +360,13 @@
 
   .shelf-product-card:hover & {
     opacity: 1;
-    color: #ffffff;
+    color: var(--purple-deep, #20174b);
   }
 
   @media (hover: none) {
     opacity: 0.9;
     text-decoration: none;
-    border: 1px solid rgba(255, 255, 255, 0.45);
+    border: 1px solid var(--purple-primary, #5e439b);
     border-radius: 9999px;
     padding: 5px 14px;
     margin-top: 2px;
@@ -395,25 +381,23 @@
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1.5px solid rgba(255, 255, 255, 0.5);
-  color: #ffffff;
+  background: #ffffff;
+  border: 1.5px solid #e7d9f7;
+  color: var(--purple-deep, #20174b);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   z-index: 10;
   transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 16px rgba(32, 23, 75, 0.08);
 
   &:hover {
-    background: #ffffff;
-    color: var(--purple-deep, #20174b);
-    border-color: #ffffff;
+    background: var(--purple-deep, #20174b);
+    color: #ffffff;
+    border-color: var(--purple-deep, #20174b);
     transform: translateY(-50%) scale(1.08);
-    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 8px 25px rgba(32, 23, 75, 0.2);
   }
 
   &:active {
@@ -446,7 +430,7 @@
   bottom: 20%;
   width: 4px;
   border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(32, 23, 75, 0.1);
   overflow: hidden;
   pointer-events: none;
 
@@ -459,7 +443,7 @@
   width: 100%;
   height: 35%;
   border-radius: 9999px;
-  background: #ffffff;
+  background: var(--purple-primary, #5e439b);
   position: absolute;
   transition: top 0.15s ease-out;
 }
