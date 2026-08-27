@@ -366,9 +366,16 @@
     "CONTACT_US": "تواصل معنا",
     "FAQ": "الأسئلة الشائعة",
     "SHIPPING_DELIVERY": "الشحن والتوصيل",
-    "ALL_OFFERS": "كل العروض",
     "SUBSCRIBE_SUCCESS": "شكراً لاشتراكك! ستصلك أحدث العروض والخصومات الحصرية",
     "INVALID_EMAIL": "يرجى إدخال بريد إلكتروني صحيح",
     "RIGHTS": "© {{year}} فيتاتريكس Vitatrex — جميع الحقوق محفوظة"
+  },
+  "HAPPY_SHELF": {
+    "TITLE": "THE HAPPY SHELF",
+    "NOTIFY_ME": "Notify me",
+    "NOTIFY_SUCCESS": "سنقوم بإشعارك فور توفر هذا المنتج مجدداً!",
+    "OUT_OF_STOCK": "نفد من المخزون",
+    "IN_STOCK": "متوفر",
+    "QUICK_ADD": "أضف للسلة"
   }
 }

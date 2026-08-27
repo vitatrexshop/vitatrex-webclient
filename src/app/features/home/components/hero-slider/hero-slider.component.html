@@ -32,12 +32,13 @@
   <header class="hero-text-strip">
     <div class="hero-logo-wrapper">
       <img
-        src="assets/logo.png"
+        src="assets/logo-white.png"
         [alt]="brandName"
         class="hero-brand-logo-img"
         width="280"
         height="75"
         loading="eager"
+        decoding="async"
       />
     </div>
     <p class="hero-slogan" *ngIf="slogan">{{ slogan }}</p>

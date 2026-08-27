@@ -366,9 +366,16 @@
     "CONTACT_US": "Contact Us",
     "FAQ": "FAQ",
     "SHIPPING_DELIVERY": "Shipping & Delivery",
-    "ALL_OFFERS": "All Offers",
     "SUBSCRIBE_SUCCESS": "Thank you for subscribing! You'll receive the latest offers and exclusive discounts",
     "INVALID_EMAIL": "Please enter a valid email address",
     "RIGHTS": "© {{year}} Vitatrex — All Rights Reserved"
+  },
+  "HAPPY_SHELF": {
+    "TITLE": "THE HAPPY SHELF",
+    "NOTIFY_ME": "Notify me",
+    "NOTIFY_SUCCESS": "We'll notify you as soon as this product is back in stock!",
+    "OUT_OF_STOCK": "Out of Stock",
+    "IN_STOCK": "In Stock",
+    "QUICK_ADD": "Quick Add"
   }
 }

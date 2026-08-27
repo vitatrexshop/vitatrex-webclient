@@ -47,32 +47,39 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.85rem;
     position: relative;
     z-index: 2;
+    width: 100%;
+    max-width: 100%;
 
     .hero-brand-logo-img {
-      max-width: 85vw;
+      max-width: min(85vw, 290px);
       width: auto;
-      height: 72px;
+      height: auto;
+      max-height: 72px;
       object-fit: contain;
-      filter: brightness(0) invert(1) drop-shadow(0 4px 16px rgba(0, 0, 0, 0.35));
-      transition: transform 0.3s ease;
+      filter: drop-shadow(0 4px 18px rgba(0, 0, 0, 0.4));
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      image-rendering: -webkit-optimize-contrast;
 
       @media (min-width: 640px) {
-        height: 92px;
+        max-width: 340px;
+        max-height: 92px;
       }
 
       @media (min-width: 900px) {
-        height: 112px;
+        max-width: 390px;
+        max-height: 112px;
       }
 
       @media (min-width: 1200px) {
-        height: 130px;
+        max-width: 440px;
+        max-height: 130px;
       }
 
       &:hover {
-        transform: scale(1.02);
+        transform: scale(1.025);
       }
     }
   }
