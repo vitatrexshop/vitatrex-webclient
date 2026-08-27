@@ -13,8 +13,10 @@ import { CartService } from '../../core/services/cart.service';
 import { OrderService } from '../../core/services/order.service';
 import { ShippingService } from '../../core/services/shipping.service';
 import { ToastService } from '../../core/services/toast.service';
+import { CouponService } from '../../core/services/coupon.service';
 import { CartItem } from '../../core/models/cart.model';
 import { OrderInput, PaymentMethod, CreateOrderData, GovernorateOption } from '../../core/models/order.model';
+import { ApplyCouponResponse } from '../../core/models/coupon.model';
 import { OrderTrackingService } from '../track-order/order-tracking.service';
 import { environment } from '../../../environments/environment';
 
@@ -30,6 +32,7 @@ export class CheckoutComponent implements OnInit {
   private readonly orderService = inject(OrderService);
   private readonly shippingService = inject(ShippingService);
   private readonly toastService = inject(ToastService);
+  private readonly couponService = inject(CouponService);
   private readonly router = inject(Router);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly trackingService = inject(OrderTrackingService);
@@ -42,6 +45,12 @@ export class CheckoutComponent implements OnInit {
   isLoadingGovernorates = true;
 
   governorates: GovernorateOption[] = [];
+
+  // ── Coupon State ──────────────────────────────────────────────────────────
+  couponCode = '';
+  appliedCoupon: ApplyCouponResponse | null = null;
+  couponError: string | null = null;
+  isApplyingCoupon = false;
 
   readonly SHIPPING_THRESHOLD = 500;
 
@@ -68,12 +77,24 @@ export class CheckoutComponent implements OnInit {
     return this.selectedGovernorateOption?.deliveryTimeHours ?? null;
   }
 
+  /** Discount amount from applied coupon (0 if none) */
+  get couponDiscount(): number {
+    return this.appliedCoupon ? this.appliedCoupon.discountAmount : 0;
+  }
+
+  /** Final order total = subtotal + shipping - coupon discount */
   get orderTotal(): number {
-    return this.cartTotal + this.shippingCost;
+    return Math.max(0, this.cartTotal + this.shippingCost - this.couponDiscount);
   }
 
   get selectedPaymentMethod(): PaymentMethod {
     return this.form?.get('paymentMethod')?.value ?? 'cod';
+  }
+
+  /** Returns true if this cart item has the lowest unit price (coupon target) */
+  isLowestPricedItem(item: CartItem): boolean {
+    if (!this.appliedCoupon || this.cartItems.length <= 1) return false;
+    return item.selectedVariant.price === this.appliedCoupon.lowestItemPrice;
   }
 
   ngOnInit(): void {
@@ -108,6 +129,46 @@ export class CheckoutComponent implements OnInit {
       this.cartTotal = items.reduce((sum, i) => sum + i.itemTotal, 0);
       this.cdr.markForCheck();
     });
+  }
+
+  // ── Coupon Methods ────────────────────────────────────────────────────────
+
+  applyCoupon(): void {
+    const code = this.couponCode.trim();
+    if (!code || this.isApplyingCoupon) return;
+
+    this.isApplyingCoupon = true;
+    this.couponError = null;
+    this.cdr.markForCheck();
+
+    const cartItemsPayload = this.cartItems.map((item) => ({
+      price: item.selectedVariant.price,
+      quantity: item.quantity,
+      name: item.product.name,
+    }));
+
+    this.couponService.applyCoupon({ code, cartItems: cartItemsPayload }).subscribe({
+      next: (result) => {
+        this.appliedCoupon = result;
+        this.isApplyingCoupon = false;
+        this.couponError = null;
+        this.toastService.show(`تم تطبيق كوبون "${result.appliedCouponCode}" — خصم ${result.discountAmount} جنيه`, 'success');
+        this.cdr.markForCheck();
+      },
+      error: (err) => {
+        this.appliedCoupon = null;
+        this.isApplyingCoupon = false;
+        this.couponError = err?.error?.message || 'كود الخصم غير صالح.';
+        this.cdr.markForCheck();
+      },
+    });
+  }
+
+  removeCoupon(): void {
+    this.appliedCoupon = null;
+    this.couponCode = '';
+    this.couponError = null;
+    this.cdr.markForCheck();
   }
 
   selectPayment(method: PaymentMethod): void {
@@ -171,6 +232,11 @@ export class CheckoutComponent implements OnInit {
         ];
       }),
       paymentMethod,
+      // Pass coupon data if applied
+      ...(this.appliedCoupon && {
+        couponCode: this.appliedCoupon.appliedCouponCode,
+        discountAmount: this.appliedCoupon.discountAmount,
+      }),
     };
 
     this.orderService.submitGuestOrder(payload).subscribe({

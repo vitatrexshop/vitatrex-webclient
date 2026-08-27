@@ -176,6 +176,7 @@
         <div class="summary-items">
           <div
             class="summary-item"
+            [class.summary-item--lowest]="isLowestPricedItem(item)"
             *ngFor="let item of cartItems; trackBy: trackByItem"
           >
             <div class="summary-item__img-wrap">
@@ -195,9 +196,80 @@
               <p class="summary-item__variant summary-item__variant--bundle" *ngIf="item.isBundle && item.bundleMeta">
                 {{ item.bundleMeta.includedSummary }}
               </p>
+              <!-- Lowest-price coupon badge -->
+              <span class="coupon-target-badge" *ngIf="isLowestPricedItem(item)">
+                <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><circle cx="7" cy="7" r="1.5" fill="currentColor"/></svg>
+                خصم الكوبون مُطبَّق هنا
+              </span>
             </div>
             <div class="summary-item__price">{{ item.itemTotal | number }} {{ 'COMMON.CURRENCY' | translate }}</div>
           </div>
+        </div>
+
+        <!-- ── Coupon Input Section ─────────────────────────── -->
+        <div class="coupon-section">
+          <!-- Applied State -->
+          <div class="coupon-applied" *ngIf="appliedCoupon; else couponInput">
+            <div class="coupon-applied__info">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+                <circle cx="7" cy="7" r="1.5" fill="currentColor"/>
+              </svg>
+              <div>
+                <span class="coupon-applied__code">{{ appliedCoupon.appliedCouponCode }}</span>
+                <span class="coupon-applied__desc">وفّرت {{ appliedCoupon.discountAmount | number }} جنيه</span>
+              </div>
+            </div>
+            <button
+              type="button"
+              class="coupon-remove-btn"
+              (click)="removeCoupon()"
+              id="remove-coupon-btn"
+              aria-label="إزالة كوبون الخصم"
+            >
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+
+          <!-- Input State -->
+          <ng-template #couponInput>
+            <div class="coupon-input-row">
+              <div class="coupon-input-wrap">
+                <svg class="coupon-input-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+                  <circle cx="7" cy="7" r="1.5" fill="currentColor"/>
+                </svg>
+                <input
+                  id="coupon-code-input"
+                  type="text"
+                  class="coupon-input"
+                  [(ngModel)]="couponCode"
+                  [ngModelOptions]="{standalone: true}"
+                  placeholder="أدخل كود الخصم"
+                  dir="ltr"
+                  [disabled]="isApplyingCoupon"
+                  (keyup.enter)="applyCoupon()"
+                  autocomplete="off"
+                  spellcheck="false"
+                />
+              </div>
+              <button
+                type="button"
+                class="coupon-apply-btn"
+                (click)="applyCoupon()"
+                [disabled]="!couponCode.trim() || isApplyingCoupon"
+                id="apply-coupon-btn"
+              >
+                <span *ngIf="!isApplyingCoupon">تطبيق</span>
+                <span *ngIf="isApplyingCoupon" class="coupon-spinner"></span>
+              </button>
+            </div>
+            <!-- Error message -->
+            <div class="coupon-error" *ngIf="couponError" role="alert">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+              {{ couponError }}
+            </div>
+          </ng-template>
         </div>
 
         <!-- Totals -->
@@ -219,6 +291,25 @@
 
           <div class="totals-row totals-row--free-note" *ngIf="shippingCost > 0 && cartTotal < SHIPPING_THRESHOLD">
             <span>{{ 'CART.FREE_SHIPPING_REMAINING' | translate: { amount: (SHIPPING_THRESHOLD - cartTotal | number) } }}</span>
+          </div>
+
+          <!-- ── Coupon Discount Row ───────────────────────────── -->
+          <div class="totals-row totals-row--coupon" *ngIf="appliedCoupon">
+            <div class="coupon-discount-label">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+                <circle cx="7" cy="7" r="1.5" fill="currentColor"/>
+              </svg>
+              <span>خصم الكوبون</span>
+              <span class="coupon-code-chip">{{ appliedCoupon.appliedCouponCode }}</span>
+            </div>
+            <span class="coupon-discount-amount">− {{ appliedCoupon.discountAmount | number }} {{ 'COMMON.CURRENCY' | translate }}</span>
+          </div>
+
+          <!-- Lowest-priced item note under coupon row -->
+          <div class="coupon-lowest-note" *ngIf="appliedCoupon">
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            الخصم مُطبَّق على أرخص منتج في سلتك ({{ appliedCoupon.lowestItemPrice | number }} جنيه)
           </div>
 
           <!-- Estimated Delivery Notice in Summary -->
