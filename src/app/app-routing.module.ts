@@ -46,6 +46,25 @@ const routes: Routes = [
       ),
   },
   {
+    path: 'shipping-policy',
+    loadChildren: () =>
+      import('./features/shipping-policy/shipping-policy.module').then(
+        (m) => m.ShippingPolicyModule
+      ),
+  },
+  {
+    path: 'return-policy',
+    loadChildren: () =>
+      import('./features/return-policy/return-policy.module').then(
+        (m) => m.ReturnPolicyModule
+      ),
+  },
+  {
+    path: 'shipping',
+    redirectTo: 'shipping-policy',
+    pathMatch: 'full',
+  },
+  {
     path: '404',
     loadChildren: () =>
       import('./features/not-found/not-found.module').then(

@@ -310,6 +310,16 @@
             {{ 'NAV.TRACK_ORDER' | translate }}
           </a>
         </li>
+        <li>
+          <a routerLink="/shipping-policy" routerLinkActive="is-active" (click)="closeMenu()">
+            {{ 'FOOTER.SHIPPING_DELIVERY' | translate }}
+          </a>
+        </li>
+        <li>
+          <a routerLink="/return-policy" routerLinkActive="is-active" (click)="closeMenu()">
+            {{ 'FOOTER.RETURN_POLICY' | translate }}
+          </a>
+        </li>
       </ul>
 
       <!-- Mobile Search Form with Live Suggestions -->

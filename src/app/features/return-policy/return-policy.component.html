@@ -1,0 +1,257 @@
+<div class="policy-page return-policy-page">
+  <!-- ── 1. Hero Header Banner ────────────────────────────────── -->
+  <header class="policy-hero">
+    <div class="policy-hero__bg" aria-hidden="true">
+      <div class="glow glow-1"></div>
+      <div class="glow glow-2"></div>
+      <div class="hero-pattern"></div>
+    </div>
+
+    <div class="container policy-hero__content">
+      <!-- Breadcrumb Navigation -->
+      <nav class="policy-breadcrumb" aria-label="Breadcrumb">
+        <a routerLink="/" class="breadcrumb-link">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9.5L12 3l9 6.5V20a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 20V9.5z"/>
+          </svg>
+          <span>{{ 'RETURN_POLICY.BREADCRUMB_HOME' | translate }}</span>
+        </a>
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        <span class="breadcrumb-current">{{ 'RETURN_POLICY.BREADCRUMB_CURRENT' | translate }}</span>
+      </nav>
+
+      <!-- Badge Pill -->
+      <div class="policy-pill">
+        <span class="pill-dot"></span>
+        <span class="pill-text">{{ 'RETURN_POLICY.BADGE' | translate }}</span>
+      </div>
+
+      <!-- Main Headline -->
+      <h1 class="policy-title">{{ 'RETURN_POLICY.TITLE' | translate }}</h1>
+      <p class="policy-subtitle">{{ 'RETURN_POLICY.SUBTITLE' | translate }}</p>
+
+      <!-- Trust Badges Row -->
+      <div class="hero-stats-row">
+        <div class="hero-stat-item">
+          <div class="stat-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">جودة وسلامة 100%</span>
+            <span class="stat-label">منتجات أصلية ومطابقة</span>
+          </div>
+        </div>
+
+        <div class="hero-stat-item">
+          <div class="stat-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">خلال 48 ساعة</span>
+            <span class="stat-label">للإبلاغ عن المنتجات التالفة</span>
+          </div>
+        </div>
+
+        <div class="hero-stat-item">
+          <div class="stat-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">دعم فوري</span>
+            <span class="stat-label">متابعة وحل سريع لطلبك</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── 2. Policy Main Body ───────────────────────────────────── -->
+  <main class="policy-main">
+    <div class="container policy-body-container">
+
+      <section class="policy-section section--return" id="return-policy-content">
+        <div class="section-header">
+          <div class="section-badge-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="1 4 1 10 7 10"/>
+              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+            </svg>
+          </div>
+          <div>
+            <h2 class="section-heading">{{ 'RETURN_POLICY.TITLE' | translate }}</h2>
+            <span class="section-sub">{{ 'RETURN_POLICY.LAST_UPDATED' | translate }}</span>
+          </div>
+        </div>
+
+        <!-- Point 1: Safety & Quality Commitment (Intro Card) -->
+        <div class="intro-callout-box">
+          <div class="quote-icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+            </svg>
+          </div>
+          <p class="intro-text">{{ 'RETURN_POLICY.POINT1' | translate }}</p>
+        </div>
+
+        <!-- Policy Steps & Rules List -->
+        <div class="return-steps-grid">
+
+          <!-- Point 2: 48 hours for damaged/mismatched goods -->
+          <article class="return-step-card">
+            <div class="step-badge-circle">
+              <span class="step-num">48h</span>
+            </div>
+            <div class="step-content">
+              <div class="step-icon-bar">
+                <div class="step-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12 6 12 12 16 14"/>
+                  </svg>
+                </div>
+                <h3 class="step-title">الإبلاغ عن المنتجات التالفة أو غير المطابقة</h3>
+              </div>
+              <p class="step-desc">{{ 'RETURN_POLICY.POINT2' | translate }}</p>
+            </div>
+          </article>
+
+          <!-- Point 3: PROMINENT ALERT BOX (Non-returnable condition for opened packages) -->
+          <div class="return-alert-box" role="alert">
+            <div class="alert-header">
+              <div class="alert-icon-wrap">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                  <line x1="12" y1="9" x2="12" y2="13"/>
+                  <line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+              </div>
+              <div class="alert-title-wrap">
+                <h3 class="alert-title">تنبيه هام بشأن المنتجات المفتوحة</h3>
+                <span class="alert-tag">معايير الجودة والسلامة الصحية</span>
+              </div>
+            </div>
+            <div class="alert-body">
+              <p class="alert-text">{{ 'RETURN_POLICY.POINT3_ALERT' | translate }}</p>
+            </div>
+          </div>
+
+          <!-- Point 4: Return/replacement coordination upon approval -->
+          <article class="return-step-card">
+            <div class="step-badge-circle step-badge--green">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </div>
+            <div class="step-content">
+              <div class="step-icon-bar">
+                <div class="step-icon step-icon--green">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                    <circle cx="8.5" cy="7" r="4"/>
+                    <polyline points="17 11 19 13 23 9"/>
+                  </svg>
+                </div>
+                <h3 class="step-title">إجراءات استلام المنتج والتعويض</h3>
+              </div>
+              <p class="step-desc">{{ 'RETURN_POLICY.POINT4' | translate }}</p>
+            </div>
+          </article>
+
+          <!-- Point 5: Inquiries and support contact email -->
+          <article class="return-step-card card--support">
+            <div class="step-badge-circle step-badge--purple">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                <polyline points="22,6 12,13 2,6"/>
+              </svg>
+            </div>
+            <div class="step-content">
+              <div class="step-icon-bar">
+                <div class="step-icon step-icon--purple">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                  </svg>
+                </div>
+                <h3 class="step-title">خدمة العملاء وطلبات الإرجاع</h3>
+              </div>
+              <p class="step-desc">
+                {{ 'RETURN_POLICY.POINT5' | translate }}
+                <a [href]="'mailto:' + emailAddress" class="email-link" dir="ltr">{{ emailAddress }}</a>
+              </p>
+            </div>
+          </article>
+
+        </div>
+
+        <!-- ── Prominent Footer Slogan Badge ─────────────────────── -->
+        <div class="policy-slogan-badge-wrap">
+          <div class="policy-slogan-card">
+            <div class="slogan-icon">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+              </svg>
+            </div>
+            <div class="slogan-content">
+              <span class="slogan-prefix">شعارنا الدائم</span>
+              <h3 class="slogan-main-text">{{ 'RETURN_POLICY.FOOTER_BADGE' | translate }}</h3>
+            </div>
+            <div class="slogan-leaf-glow" aria-hidden="true"></div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ── 3. Quick Action Cards ──────────────────────────────── -->
+      <section class="policy-quick-links" aria-label="روابط سريعة">
+        <div class="quick-link-card">
+          <div class="ql-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="1" y="3" width="15" height="13"/>
+              <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+              <circle cx="5.5" cy="18.5" r="2.5"/>
+              <circle cx="18.5" cy="18.5" r="2.5"/>
+            </svg>
+          </div>
+          <div class="ql-info">
+            <h4>سياسة التسليم والشحن والتوصيل</h4>
+            <p>تعرف على مدد التوصيل ورسوم الشحن لجميع المحافظات</p>
+          </div>
+          <a routerLink="/shipping-policy" class="ql-action-btn">
+            <span>عرض السياسة</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <polyline points="15 18 9 12 15 6"/>
+            </svg>
+          </a>
+        </div>
+
+        <div class="quick-link-card">
+          <div class="ql-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+            </svg>
+          </div>
+          <div class="ql-info">
+            <h4>تتبع حالة شحنتك</h4>
+            <p>تابع حالة شحنتك الحالية برقم الطلب ورقم الهاتف</p>
+          </div>
+          <a routerLink="/track" class="ql-action-btn">
+            <span>تتبع الطلب</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <polyline points="15 18 9 12 15 6"/>
+            </svg>
+          </a>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>

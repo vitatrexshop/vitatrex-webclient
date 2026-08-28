@@ -1,0 +1,343 @@
+<div class="policy-page shipping-policy-page">
+  <!-- ── 1. Hero Header Banner ────────────────────────────────── -->
+  <header class="policy-hero">
+    <div class="policy-hero__bg" aria-hidden="true">
+      <div class="glow glow-1"></div>
+      <div class="glow glow-2"></div>
+      <div class="hero-pattern"></div>
+    </div>
+
+    <div class="container policy-hero__content">
+      <!-- Breadcrumb Navigation -->
+      <nav class="policy-breadcrumb" aria-label="Breadcrumb">
+        <a routerLink="/" class="breadcrumb-link">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9.5L12 3l9 6.5V20a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 20V9.5z"/>
+          </svg>
+          <span>{{ 'SHIPPING_POLICY.BREADCRUMB_HOME' | translate }}</span>
+        </a>
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        <span class="breadcrumb-current">{{ 'SHIPPING_POLICY.BREADCRUMB_CURRENT' | translate }}</span>
+      </nav>
+
+      <!-- Badge Pill -->
+      <div class="policy-pill">
+        <span class="pill-dot"></span>
+        <span class="pill-text">{{ 'SHIPPING_POLICY.BADGE' | translate }}</span>
+      </div>
+
+      <!-- Main Headline -->
+      <h1 class="policy-title">{{ 'SHIPPING_POLICY.TITLE' | translate }}</h1>
+      <p class="policy-subtitle">{{ 'SHIPPING_POLICY.SUBTITLE' | translate }}</p>
+
+      <!-- Fast Trust Stats Bar -->
+      <div class="hero-stats-row">
+        <div class="hero-stat-item">
+          <div class="stat-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="1" y="3" width="15" height="13"/>
+              <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+              <circle cx="5.5" cy="18.5" r="2.5"/>
+              <circle cx="18.5" cy="18.5" r="2.5"/>
+            </svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">24-72h</span>
+            <span class="stat-label">توصيل سريع لكافة المحافظات</span>
+          </div>
+        </div>
+
+        <div class="hero-stat-item">
+          <div class="stat-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">100% آمن</span>
+            <span class="stat-label">تغليف محكم ومؤمن</span>
+          </div>
+        </div>
+
+        <div class="hero-stat-item">
+          <div class="stat-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">2-3 أيام</span>
+            <span class="stat-label">تجهيز وشحن فوري</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── 2. Policy Main Body ───────────────────────────────────── -->
+  <main class="policy-main">
+    <div class="container policy-body-container">
+
+      <!-- ════════════════════════════════════════════════════════════
+           SECTION 1: سياسة التسليم
+           ════════════════════════════════════════════════════════════ -->
+      <section class="policy-section section--delivery" id="delivery-policy">
+        <div class="section-header">
+          <div class="section-badge-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+          </div>
+          <div>
+            <h2 class="section-heading">{{ 'SHIPPING_POLICY.SECTION1.HEADING' | translate }}</h2>
+            <span class="section-sub">{{ 'SHIPPING_POLICY.LAST_UPDATED' | translate }}</span>
+          </div>
+        </div>
+
+        <!-- Section 1 Intro Box -->
+        <div class="intro-callout-box">
+          <div class="quote-icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+            </svg>
+          </div>
+          <p class="intro-text">{{ 'SHIPPING_POLICY.SECTION1.INTRO' | translate }}</p>
+        </div>
+
+        <!-- 4 Subsections Grid Cards -->
+        <div class="policy-subsections-grid">
+
+          <!-- Subsection 1: وقت معالجة الطلبات -->
+          <article class="policy-card">
+            <div class="card-icon-wrap icon-purple">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+            </div>
+            <div class="card-content">
+              <h3 class="card-title">{{ 'SHIPPING_POLICY.SECTION1.SUB1_TITLE' | translate }}</h3>
+              <p class="card-text">{{ 'SHIPPING_POLICY.SECTION1.SUB1_TEXT' | translate }}</p>
+            </div>
+          </article>
+
+          <!-- Subsection 2: مدة التوصيل -->
+          <article class="policy-card">
+            <div class="card-icon-wrap icon-indigo">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="1" y="3" width="15" height="13"/>
+                <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+                <circle cx="5.5" cy="18.5" r="2.5"/>
+                <circle cx="18.5" cy="18.5" r="2.5"/>
+              </svg>
+            </div>
+            <div class="card-content">
+              <h3 class="card-title">{{ 'SHIPPING_POLICY.SECTION1.SUB2_TITLE' | translate }}</h3>
+              <p class="card-text">{{ 'SHIPPING_POLICY.SECTION1.SUB2_TEXT' | translate }}</p>
+            </div>
+          </article>
+
+          <!-- Subsection 3: رسوم الشحن -->
+          <article class="policy-card">
+            <div class="card-icon-wrap icon-emerald">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="1" x2="12" y2="23"/>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+              </svg>
+            </div>
+            <div class="card-content">
+              <h3 class="card-title">{{ 'SHIPPING_POLICY.SECTION1.SUB3_TITLE' | translate }}</h3>
+              <p class="card-text">{{ 'SHIPPING_POLICY.SECTION1.SUB3_TEXT' | translate }}</p>
+            </div>
+          </article>
+
+          <!-- Subsection 4: الطلبات المتأخرة أو المفقودة -->
+          <article class="policy-card card--support">
+            <div class="card-icon-wrap icon-amber">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                <polyline points="22,6 12,13 2,6"/>
+              </svg>
+            </div>
+            <div class="card-content">
+              <h3 class="card-title">{{ 'SHIPPING_POLICY.SECTION1.SUB4_TITLE' | translate }}</h3>
+              <p class="card-text">
+                في حال تأخر طلبك عن المدة المتوقعة أو واجهت أي مشكلة تتعلق بالتوصيل، يرجى التواصل معنا عبر البريد الإلكتروني:
+                <a [href]="'mailto:' + emailAddress" class="email-link" dir="ltr">{{ emailAddress }}</a>
+                وسنعمل على متابعة الأمر مع شركة الشحن ومساعدتك في حل المشكلة في أسرع وقت ممكن.
+              </p>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════════
+           SECTION 2: سياسة الشحن والتوصيل
+           ════════════════════════════════════════════════════════════ -->
+      <section class="policy-section section--shipping" id="shipping-policy">
+        <div class="section-header">
+          <div class="section-badge-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+              <line x1="12" y1="22.08" x2="12" y2="12"/>
+            </svg>
+          </div>
+          <div>
+            <h2 class="section-heading">{{ 'SHIPPING_POLICY.SECTION2.HEADING' | translate }}</h2>
+            <span class="section-sub">تفاصيل الشحن والتغطية الجغرافية</span>
+          </div>
+        </div>
+
+        <!-- Section 2 Intro Box -->
+        <div class="intro-callout-box intro--secondary">
+          <div class="quote-icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+            </svg>
+          </div>
+          <p class="intro-text">{{ 'SHIPPING_POLICY.SECTION2.INTRO' | translate }}</p>
+        </div>
+
+        <!-- 5 Details List / Cards -->
+        <div class="shipping-details-list">
+
+          <!-- Detail 1: Cairo & Giza -->
+          <div class="shipping-detail-item highlight-item">
+            <div class="detail-number">01</div>
+            <div class="detail-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+              </svg>
+            </div>
+            <div class="detail-text-wrap">
+              <h4 class="detail-headline">القاهرة والجيزة</h4>
+              <p class="detail-paragraph">القاهرة والجيزة: يتم توصيل الطلبات خلال 24 ساعة من تأكيد الطلب.</p>
+            </div>
+            <span class="delivery-speed-pill">24 ساعة</span>
+          </div>
+
+          <!-- Detail 2: Other governorates -->
+          <div class="shipping-detail-item">
+            <div class="detail-number">02</div>
+            <div class="detail-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="2" y1="12" x2="22" y2="12"/>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+            </div>
+            <div class="detail-text-wrap">
+              <h4 class="detail-headline">باقي محافظات الجمهورية</h4>
+              <p class="detail-paragraph">باقي محافظات الجمهورية: يتم التوصيل خلال مدة تتراوح من 24 إلى 72 ساعة، حسب موقع العميل وشركة الشحن.</p>
+            </div>
+            <span class="delivery-speed-pill delivery-speed-pill--standard">24–72 ساعة</span>
+          </div>
+
+          <!-- Detail 3: Remote areas -->
+          <div class="shipping-detail-item">
+            <div class="detail-number">03</div>
+            <div class="detail-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="16" x2="12" y2="12"/>
+                <line x1="12" y1="8" x2="12.01" y2="8"/>
+              </svg>
+            </div>
+            <div class="detail-text-wrap">
+              <h4 class="detail-headline">المناطق النائية والحالات الاستثنائية</h4>
+              <p class="detail-paragraph">في بعض المناطق النائية أو الحالات الاستثنائية، قد تستغرق عملية التوصيل وقتًا إضافيًا.</p>
+            </div>
+          </div>
+
+          <!-- Detail 4: Packaging -->
+          <div class="shipping-detail-item">
+            <div class="detail-number">04</div>
+            <div class="detail-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+            </div>
+            <div class="detail-text-wrap">
+              <h4 class="detail-headline">تغليف الطلبات</h4>
+              <p class="detail-paragraph">تغليف الطلبات: جميع طلبات فيتاتريكس يتم تجهيزها وتغليفها بعناية قبل الشحن، مع التأكد من أن العبوة مغلقة ومؤمنة جيدًا للحفاظ على المنتج أثناء النقل وحتى وصوله إلى العميل بحالة سليمة.</p>
+            </div>
+          </div>
+
+          <!-- Detail 5: Order tracking -->
+          <div class="shipping-detail-item">
+            <div class="detail-number">05</div>
+            <div class="detail-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+              </svg>
+            </div>
+            <div class="detail-text-wrap">
+              <h4 class="detail-headline">متابعة الطلب والتواصل</h4>
+              <p class="detail-paragraph">
+                متابعة الطلب: يتم التواصل مع العميل ببيانات التوصيل اللازمة، وقد تتواصل شركة الشحن مع العميل لتنسيق موعد التسليم. في حال وجود أي مشكلة أو تأخير في استلام الطلب، يرجى التواصل معنا عبر:
+                <a [href]="'mailto:' + emailAddress" class="email-link" dir="ltr">{{ emailAddress }}</a>
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Section 2 Outro Banner -->
+        <div class="policy-outro-banner">
+          <div class="outro-icon-circle">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+          </div>
+          <p class="outro-text">{{ 'SHIPPING_POLICY.SECTION2.OUTRO' | translate }}</p>
+        </div>
+      </section>
+
+      <!-- ── 3. Quick Action Cards (Track / Return Policy / Contact) ── -->
+      <section class="policy-quick-links" aria-label="روابط سريعة">
+        <div class="quick-link-card">
+          <div class="ql-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+            </svg>
+          </div>
+          <div class="ql-info">
+            <h4>تتبع حالة شحنتك الآن</h4>
+            <p>يمكنك متابعة خط سير الطلب لحظة بلحظة</p>
+          </div>
+          <a routerLink="/track" class="ql-action-btn">
+            <span>تتبع الطلب</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <polyline points="15 18 9 12 15 6"/>
+            </svg>
+          </a>
+        </div>
+
+        <div class="quick-link-card">
+          <div class="ql-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="1 4 1 10 7 10"/>
+              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+            </svg>
+          </div>
+          <div class="ql-info">
+            <h4>سياسة الإرجاع والاستبدال</h4>
+            <p>تعرف على شروط وضوابط إرجاع المنتجات</p>
+          </div>
+          <a routerLink="/return-policy" class="ql-action-btn">
+            <span>عرض السياسة</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <polyline points="15 18 9 12 15 6"/>
+            </svg>
+          </a>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>

@@ -362,7 +362,7 @@
     "MADE_IN_EGYPT": "Made in Egypt",
     "PRIVACY_POLICY": "Privacy Policy",
     "TERMS_OF_SERVICE": "Terms of Service",
-    "RETURN_POLICY": "Refund Policy",
+    "RETURN_POLICY": "Return & Refund Policy",
     "CONTACT_US": "Contact Us",
     "FAQ": "FAQ",
     "SHIPPING_DELIVERY": "Shipping & Delivery",
@@ -397,5 +397,54 @@
       "OFFERS_TITLE": "Bundles & Offers",
       "OFFERS_DESC": "Save more with value bundles and exclusive discounts"
     }
+  },
+  "SHIPPING_POLICY": {
+    "PAGE_TITLE": "Shipping & Delivery Policy | Vitatrex",
+    "BADGE": "Policies & Terms",
+    "TITLE": "Shipping & Delivery Policy",
+    "SUBTITLE": "Everything you need to know about order delivery across all Egyptian governorates",
+    "LAST_UPDATED": "Last updated: 2026",
+    "SECTION1": {
+      "HEADING": "Delivery Policy",
+      "INTRO": "At Vitatrex, we strive to provide an easy and reliable shopping experience, ensuring your orders are delivered quickly and safely across Egypt.",
+      "SUB1_TITLE": "Order Processing Time",
+      "SUB1_TEXT": "Orders are processed and prepared for shipping within 2–3 business days from order confirmation. Orders placed during weekends or official holidays are processed on the following business day.",
+      "SUB2_TITLE": "Delivery Duration",
+      "SUB2_TEXT": "Delivery time varies based on customer location and courier company. Orders are delivered to the address registered during checkout.",
+      "SUB3_TITLE": "Shipping Fees",
+      "SUB3_TEXT": "Shipping fees are calculated according to delivery location and are clearly displayed during checkout prior to final order confirmation.",
+      "SUB4_TITLE": "Delayed or Missing Orders",
+      "SUB4_TEXT": "If your order is delayed beyond the expected timeframe or you encounter any delivery issue, please contact us via email at: vitatrexshop@gmail.com and we will follow up with the shipping company to assist you promptly."
+    },
+    "SECTION2": {
+      "HEADING": "Shipping & Delivery Policy",
+      "INTRO": "At Vitatrex, we ensure your orders are delivered quickly and safely while maintaining optimal product quality and safety until they reach your doorstep.",
+      "DETAILS": [
+        "Cairo & Giza: Orders are delivered within 24 hours of order confirmation.",
+        "Other Governorates: Delivery takes between 24 to 72 hours, depending on customer location and the courier company.",
+        "In certain remote areas or exceptional cases, delivery may take additional time.",
+        "Order Packaging: All Vitatrex orders are prepared and carefully packaged before dispatch, ensuring the package is securely sealed and protected during transit until delivered in pristine condition.",
+        "Order Tracking: Customers receive all relevant delivery updates, and the courier may contact the customer to coordinate delivery timing. For any issues or delays, please contact us at: vitatrexshop@gmail.com"
+      ],
+      "OUTRO": "We are always delighted to serve you and committed to delivering a safe, fast, and trusted shopping experience with Vitatrex."
+    },
+    "BREADCRUMB_HOME": "Home",
+    "BREADCRUMB_CURRENT": "Shipping & Delivery Policy"
+  },
+  "RETURN_POLICY": {
+    "PAGE_TITLE": "Return & Refund Policy | Vitatrex",
+    "BADGE": "Quality & Safety Guarantee",
+    "TITLE": "Return & Refund Policy",
+    "SUBTITLE": "Standards and procedures for returns and exchanges ensuring your safety and highest product quality",
+    "LAST_UPDATED": "Last updated: 2026",
+    "POINT1": "For your safety and product quality, we are committed to providing intact and order-compliant products upon delivery.",
+    "POINT2": "In case of receiving a damaged or non-matching product, please contact us within 48 hours of order delivery with clear photos of the product and packaging so we can review the request and take appropriate action.",
+    "POINT3_ALERT": "Returns or exchanges are not accepted for products that have been opened or used, in order to maintain quality and safety standards.",
+    "POINT4": "Upon approval of return or exchange, coordination will be made with the customer regarding package pickup and processing based on order status.",
+    "POINT5": "For inquiries or return & refund requests, please contact us via:",
+    "EMAIL": "vitatrexshop@gmail.com",
+    "FOOTER_BADGE": "Vitatrex — Your Health is Our Priority.",
+    "BREADCRUMB_HOME": "Home",
+    "BREADCRUMB_CURRENT": "Return & Refund Policy"
   }
 }
