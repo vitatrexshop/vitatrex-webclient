@@ -1,0 +1,26 @@
+{
+  "name": "فيتاتريكس — فيتامينات صحية طبيعية",
+  "short_name": "فيتاتريكس",
+  "description": "تشكيلة فيتاتريكس من الفيتامينات الصحية الطبيعية على شكل حلوى جيلاتينية للعائلة المصرية",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#fcfaff",
+  "theme_color": "#5e439b",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    {
+      "src": "assets/logo-leaf.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/logo-leaf.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

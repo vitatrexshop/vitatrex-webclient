@@ -46,6 +46,7 @@ export class OrderSuccessComponent implements OnInit {
   orderNumber = '';
   searchQuery = '';
   copiedLink = false;
+  copiedOrderNumber = false;
 
   get storedToken(): string | null {
     const stored = this.trackingService.getFromStorage();
@@ -61,6 +62,13 @@ export class OrderSuccessComponent implements OnInit {
       return `${origin}/track?id=${this.order?.orderNumber}&token=${this.storedToken}`;
     }
     return `${origin}/track?id=${this.order?.orderNumber ?? ''}`;
+  }
+
+  get trackOrderPageUrl(): string {
+    if (this.storedToken) {
+      return `/track?id=${this.order?.orderNumber}&token=${this.storedToken}`;
+    }
+    return `/track?id=${this.order?.orderNumber ?? ''}`;
   }
 
   ngOnInit(): void {
@@ -97,12 +105,27 @@ export class OrderSuccessComponent implements OnInit {
     if (!this.trackingUrl) return;
     navigator.clipboard.writeText(this.trackingUrl).then(() => {
       this.copiedLink = true;
-      this.toastService.show(this.translate.instant('SUCCESS_PAGE.MAGIC_LINK_COPIED'), 'success');
+      const msg = this.languageService.currentLang === 'ar' ? 'تم نسخ رابط التتبع بنجاح' : 'Tracking link copied!';
+      this.toastService.show(msg, 'success');
       this.cdr.markForCheck();
       setTimeout(() => {
         this.copiedLink = false;
         this.cdr.markForCheck();
       }, 3000);
+    });
+  }
+
+  copyOrderNumber(): void {
+    if (!this.order?.orderNumber) return;
+    navigator.clipboard.writeText(this.order.orderNumber).then(() => {
+      this.copiedOrderNumber = true;
+      const msg = this.languageService.currentLang === 'ar' ? 'تم نسخ رقم الطلب بنجاح' : 'Order number copied!';
+      this.toastService.show(msg, 'success');
+      this.cdr.markForCheck();
+      setTimeout(() => {
+        this.copiedOrderNumber = false;
+        this.cdr.markForCheck();
+      }, 2500);
     });
   }
 
@@ -118,13 +141,12 @@ export class OrderSuccessComponent implements OnInit {
       case 'processing': return 2;
       case 'shipped': return 3;
       case 'delivered': return 4;
-      default: return 0;
+      default: return 1;
     }
   }
 
   isStepComplete(stepIndex: number, status?: string): boolean {
     const current = this.getStatusStep(status);
-    if (current === 0) return false;
     return current >= stepIndex;
   }
 
@@ -133,53 +155,77 @@ export class OrderSuccessComponent implements OnInit {
   }
 
   getStatusTitle(status?: string): string {
+    const isAr = this.languageService.currentLang === 'ar';
     switch (status?.toLowerCase()) {
       case 'pending':
-        return this.translate.instant('SUCCESS_PAGE.STATUS_TITLES.PENDING');
+        return isAr ? 'شكراً لتسوقك معنا! تم تأكيد طلبك بنجاح' : 'Thank you for your purchase! Your order is confirmed.';
       case 'processing':
-        return this.translate.instant('SUCCESS_PAGE.STATUS_TITLES.PROCESSING');
+        return isAr ? 'طلبك قيد التجهيز والتعبئة بالمستودع' : 'Your order is being processed in our warehouse.';
       case 'shipped':
-        return this.translate.instant('SUCCESS_PAGE.STATUS_TITLES.SHIPPED');
+        return isAr ? 'طلبك تم شحنه وهو الآن في الطريق إليك' : 'Your order has been shipped and is on the way!';
       case 'delivered':
-        return this.translate.instant('SUCCESS_PAGE.STATUS_TITLES.DELIVERED');
+        return isAr ? 'تم تسليم الطلب بنجاح' : 'Your order has been delivered successfully!';
       case 'cancelled':
-        return this.translate.instant('SUCCESS_PAGE.STATUS_TITLES.CANCELLED');
+        return isAr ? 'تم إلغاء هذا الطلب' : 'This order has been cancelled.';
       default:
-        return this.translate.instant('SUCCESS_PAGE.STATUS_TITLES.PENDING');
+        return isAr ? 'شكراً لتسوقك معنا! تم تأكيد طلبك بنجاح' : 'Thank you for your purchase! Your order is confirmed.';
     }
   }
 
   getStatusDescription(status?: string): string {
+    const isAr = this.languageService.currentLang === 'ar';
     switch (status?.toLowerCase()) {
       case 'pending':
-        return this.translate.instant('SUCCESS_PAGE.STATUS_DESCRIPTIONS.PENDING');
+        return isAr
+          ? 'تم تسجيل طلبك بنجاح وسيقوم فريقنا بمراجعته وتجهيزه للشحن بأسرع وقت.'
+          : 'Your order was placed successfully. Our team will review and prepare it for dispatch shortly.';
       case 'processing':
-        return this.translate.instant('SUCCESS_PAGE.STATUS_DESCRIPTIONS.PROCESSING');
+        return isAr
+          ? 'يتم الآن فحص وتغليف منتجاتك بعناية في مستودعات فيتاتريكس لضمان أعلى جودة.'
+          : 'Your products are being inspected and packed in our warehouse with highest quality care.';
       case 'shipped':
-        return this.translate.instant('SUCCESS_PAGE.STATUS_DESCRIPTIONS.SHIPPED');
+        return isAr
+          ? 'شحنتك خرجت مع مندوب الشحن وسيقوم بالاتصال بك هاتفياً لتسليم الطلب.'
+          : 'Your package is on the way with our delivery partner and they will contact you soon.';
       case 'delivered':
-        return this.translate.instant('SUCCESS_PAGE.STATUS_DESCRIPTIONS.DELIVERED');
+        return isAr
+          ? 'تم تسليم الشحنة بنجاح واستلام المبلغ. نتمنى لك دوام الصحة والعافية!'
+          : 'Your order has been delivered. Wishing you good health and vitality with Vitatrex!';
       case 'cancelled':
-        return this.translate.instant('SUCCESS_PAGE.STATUS_DESCRIPTIONS.CANCELLED');
+        return isAr
+          ? 'تم إلغاء هذا الطلب. إذا كان لديك أي استفسار يسعدنا تواصلك معنا مباشرة.'
+          : 'This order was cancelled. Please contact our support if you need any assistance.';
       default:
-        return this.translate.instant('SUCCESS_PAGE.STATUS_DESCRIPTIONS.PENDING');
+        return isAr
+          ? 'تم تسجيل طلبك بنجاح وسيقوم فريقنا بمراجعته وتجهيزه للشحن بأسرع وقت.'
+          : 'Your order was placed successfully.';
     }
   }
 
   getStatusLabel(status?: string): string {
-    if (!status) return this.translate.instant('TRACKING.STATUS.PENDING');
-    return this.translate.instant('TRACKING.STATUS.' + status.toUpperCase()) || status;
+    if (!status) return this.languageService.currentLang === 'ar' ? 'تم تأكيد الطلب' : 'Order Placed';
+    const isAr = this.languageService.currentLang === 'ar';
+    switch (status.toLowerCase()) {
+      case 'pending': return isAr ? 'تم التأكيد' : 'Confirmed';
+      case 'processing': return isAr ? 'جاري التجهيز' : 'Processing';
+      case 'shipped': return isAr ? 'تم الشحن' : 'Shipped';
+      case 'delivered': return isAr ? 'تم التسليم' : 'Delivered';
+      case 'cancelled': return isAr ? 'ملغي' : 'Cancelled';
+      default: return status;
+    }
   }
 
   getPaymentMethodLabel(method?: string): string {
-    if (method === 'cod') return this.translate.instant('CHECKOUT.COD');
-    if (method === 'card') return this.translate.instant('CHECKOUT.CARD');
-    return method ?? this.translate.instant('CHECKOUT.COD');
+    const isAr = this.languageService.currentLang === 'ar';
+    if (method === 'cod') return isAr ? 'الدفع نقداً عند الاستلام (COD)' : 'Cash On Delivery (COD)';
+    if (method === 'card') return isAr ? 'بطاقة بنكية (فيزا / ماستركارد)' : 'Credit / Debit Card';
+    return method ?? (isAr ? 'الدفع عند الاستلام' : 'Cash on Delivery');
   }
 
   getPaymentStatusLabel(status?: string): string {
-    if (status === 'paid') return this.translate.instant('SUCCESS_PAGE.PAYMENT_STATUS_PAID');
-    return this.translate.instant('SUCCESS_PAGE.PAYMENT_STATUS_UNPAID');
+    const isAr = this.languageService.currentLang === 'ar';
+    if (status === 'paid') return isAr ? 'مدفوع إلكترونياً' : 'Paid';
+    return isAr ? 'يُدفع عند الاستلام' : 'Cash upon Delivery';
   }
 
   getProductName(item: OrderItem): string {
@@ -199,7 +245,7 @@ export class OrderSuccessComponent implements OnInit {
   }
 
   getEstimatedDelivery(createdAt?: string): string {
-    if (!createdAt) return this.translate.instant('TRACKING.DELIVERY_TIME_FRAME');
+    if (!createdAt) return this.languageService.currentLang === 'ar' ? 'خلال 2 - 4 أيام عمل' : 'Within 2-4 business days';
     const date = new Date(createdAt);
     const minDate = new Date(date);
     minDate.setDate(date.getDate() + 2);
@@ -216,14 +262,14 @@ export class OrderSuccessComponent implements OnInit {
     try {
       return `${minDate.toLocaleDateString(locale, options)} - ${maxDate.toLocaleDateString(locale, options)}`;
     } catch {
-      return this.translate.instant('TRACKING.DELIVERY_TIME_FRAME');
+      return this.languageService.currentLang === 'ar' ? 'خلال 2 - 4 أيام عمل' : 'Within 2-4 business days';
     }
   }
 
   getWhatsAppLink(orderNumber: string): string {
     const isAr = this.languageService.currentLang === 'ar';
     const msg = isAr
-      ? `مرحباً فيتاتريكس، أود الاستفسار عن حالة طلبي رقم: ${orderNumber}`
+      ? `مرحباً فيتاتريكس، أود الاستفسار عن حالة طلبي رقم: #${orderNumber}`
       : `Hello Vitatrex, I would like to inquire about my order #${orderNumber}`;
     return `https://wa.me/201000000000?text=${encodeURIComponent(msg)}`;
   }
@@ -241,3 +287,4 @@ export class OrderSuccessComponent implements OnInit {
     return index;
   }
 }
+

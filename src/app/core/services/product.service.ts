@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { Product } from '../models/product.model';
 
@@ -53,10 +53,41 @@ export class ProductService {
     );
   }
 
-  /** Fetch a single product by its URL slug */
+  /** Fetch a single product by its URL slug or ID with catalog fallback */
   getProductBySlug(slug: string): Observable<Product> {
-    return this.api.get<Product>(`${PRODUCTS_API}/${slug}`).pipe(
-      map((res: any) => (res?.data ?? res) as Product)
+    const cleanSlug = (slug || '').trim();
+    if (!cleanSlug) {
+      return this.getProducts().pipe(
+        map((list) => {
+          if (list.length > 0) return list[0];
+          throw new Error('No products available');
+        })
+      );
+    }
+    return this.api.get<Product>(`${PRODUCTS_API}/${encodeURIComponent(cleanSlug)}`).pipe(
+      map((res: any) => {
+        const prod = (res?.data ?? res?.product ?? res) as Product;
+        if (prod && (prod._id || prod.name)) return prod;
+        throw new Error('Product not found in direct endpoint');
+      }),
+      catchError(() => {
+        // Dual fallback: Search through getProducts() list
+        return this.getProducts().pipe(
+          map((list) => {
+            const found = list.find(
+              (p) =>
+                p.slug === cleanSlug ||
+                p._id === cleanSlug ||
+                decodeURIComponent(p.slug || '') === decodeURIComponent(cleanSlug) ||
+                p.slug?.toLowerCase() === cleanSlug.toLowerCase()
+            );
+            if (!found) {
+              throw new Error(`Product not found for slug: ${cleanSlug}`);
+            }
+            return found;
+          })
+        );
+      })
     );
   }
 

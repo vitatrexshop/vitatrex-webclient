@@ -1,37 +1,11 @@
-<main class="success-page container">
+<main class="success-page" [dir]="languageService.currentLang === 'ar' ? 'rtl' : 'ltr'">
 
-  <!-- ── 1. ORDER TRACKING SEARCH BAR ────────────────────────── -->
-  <section class="tracking-search-bar">
-    <div class="search-inner">
-      <svg class="search-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <circle cx="11" cy="11" r="7.5"/>
-        <path d="M21 21l-4.35-4.35"/>
-      </svg>
-      <input
-        type="text"
-        class="search-input"
-        [placeholder]="'SUCCESS_PAGE.TRACK_SEARCH_PLACEHOLDER' | translate"
-        #orderInput
-        [value]="searchQuery"
-        (keyup.enter)="searchOrder(orderInput.value)"
-      />
-      <button
-        type="button"
-        class="search-btn"
-        (click)="searchOrder(orderInput.value)"
-      >
-        {{ 'NAV.TRACK_ORDER' | translate }}
-      </button>
-    </div>
-  </section>
-
-  <!-- ── 2. LOADING SKELETON STATE ───────────────────────────── -->
+  <!-- ── 1. LOADING SKELETON STATE ───────────────────────────── -->
   <div class="loading-state" *ngIf="isLoading">
     <div class="skeleton-hero">
       <div class="sk-circle"></div>
       <div class="sk-title"></div>
       <div class="sk-subtitle"></div>
-      <div class="sk-pill"></div>
     </div>
     <div class="skeleton-grid">
       <div class="sk-card"></div>
@@ -39,331 +13,267 @@
     </div>
   </div>
 
-  <!-- ── 3. ORDER FOUND & TRACKING VIEW ──────────────────────── -->
-  <ng-container *ngIf="!isLoading && order">
+  <!-- ── 2. ORDER CONFIRMATION & RECEIPT ─────────────────────── -->
+  <div class="success-content" *ngIf="!isLoading && order">
 
-    <!-- HERO BANNER -->
-    <section class="hero-card" [attr.data-status]="order.orderStatus">
-      <div class="success-icon-wrap" aria-hidden="true">
-        <div class="success-icon-ring"></div>
-        <div class="success-icon">
-          <svg *ngIf="order.orderStatus === 'pending'" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-            <polyline points="14 2 14 8 20 8"/>
-            <line x1="16" y1="13" x2="8" y2="13"/>
-            <line x1="16" y1="17" x2="8" y2="17"/>
-            <polyline points="10 9 9 9 8 9"/>
-          </svg>
-          <svg *ngIf="order.orderStatus === 'processing'" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
-            <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
-            <line x1="12" y1="22.08" x2="12" y2="12"/>
-          </svg>
-          <svg *ngIf="order.orderStatus === 'shipped'" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="1" y="3" width="15" height="13"/>
-            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
-            <circle cx="5.5" cy="18.5" r="2.5"/>
-            <circle cx="18.5" cy="18.5" r="2.5"/>
-          </svg>
-          <svg *ngIf="order.orderStatus === 'delivered'" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="20 6 9 17 4 12"/>
-          </svg>
-          <svg *ngIf="order.orderStatus === 'cancelled'" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="18" y1="6" x2="6" y2="18"/>
-            <line x1="6" y1="6" x2="18" y2="18"/>
-          </svg>
-        </div>
+    <!-- Hero Confirmation Header -->
+    <header class="success-hero">
+      <div class="success-icon-badge" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
       </div>
 
-      <span class="success-tag" [class.tag-cancelled]="order.orderStatus === 'cancelled'">
-        <span *ngIf="order.orderStatus !== 'cancelled'">{{ 'SUCCESS_PAGE.LIVE_UPDATE_TAG' | translate }}</span>
-        <span *ngIf="order.orderStatus === 'cancelled'">{{ 'TRACKING.CANCELLED_NOTICE' | translate }}</span>
-      </span>
+      <h1 class="hero-title">
+        <ng-container *ngIf="order.customer?.name && order.orderStatus !== 'cancelled'">
+          {{ languageService.currentLang === 'ar' ? ('شكراً لتسوقك معنا، ' + order.customer.name + '!') : ('Thank you for your order, ' + order.customer.name + '!') }}
+        </ng-container>
+        <ng-container *ngIf="!order.customer?.name || order.orderStatus === 'cancelled'">
+          {{ getStatusTitle(order.orderStatus) }}
+        </ng-container>
+      </h1>
 
-      <h1 class="hero-title">{{ getStatusTitle(order.orderStatus) }}</h1>
-      <p class="hero-desc">{{ getStatusDescription(order.orderStatus) }}</p>
+      <p class="hero-desc">
+        {{ getStatusDescription(order.orderStatus) }}
+      </p>
 
-      <!-- Order Number & Status Pill -->
-      <div class="order-badge-row">
-        <div class="order-number-badge">
-          <span class="badge-label">{{ 'TRACKING.ORDER_NUM_PREFIX' | translate }}:</span>
-          <strong class="badge-code">{{ order.orderNumber }}</strong>
-        </div>
+      <!-- Order Number & Status Pills -->
+      <div class="order-pills-row">
+        <button
+          type="button"
+          class="order-num-pill"
+          (click)="copyOrderNumber()"
+          [title]="languageService.currentLang === 'ar' ? 'انقر لنسخ رقم الطلب' : 'Click to copy order number'"
+        >
+          <span class="pill-label">{{ languageService.currentLang === 'ar' ? 'رقم الطلب:' : 'Order ID:' }}</span>
+          <strong class="pill-code">#{{ order.orderNumber }}</strong>
+          <span class="pill-copy-icon" aria-hidden="true">
+            <svg *ngIf="!copiedOrderNumber" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+            <svg *ngIf="copiedOrderNumber" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </span>
+        </button>
 
-        <div class="order-status-badge" [attr.data-status]="order.orderStatus">
+        <span class="order-status-pill" [attr.data-status]="order.orderStatus">
           <span class="status-dot"></span>
-          <span>{{ 'SUCCESS_PAGE.CURRENT_STATUS' | translate }}: {{ getStatusLabel(order.orderStatus) }}</span>
-        </div>
+          <span>{{ getStatusLabel(order.orderStatus) }}</span>
+        </span>
       </div>
+    </header>
 
-      <!-- MAGIC LINK ORDER TRACKING BOX -->
-      <div class="magic-link-banner" *ngIf="order.orderStatus !== 'cancelled'">
-        <div class="magic-link-header">
-          <svg class="magic-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
-            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
-          </svg>
-          <div class="magic-info">
-            <h3 class="magic-title">{{ 'SUCCESS_PAGE.MAGIC_LINK_TITLE' | translate }}</h3>
-            <p class="magic-sub">{{ 'SUCCESS_PAGE.MAGIC_LINK_SUB' | translate }}</p>
-          </div>
-        </div>
-
-        <div class="magic-action-bar">
-          <div class="magic-input-wrap">
-            <input
-              type="text"
-              class="magic-url-input"
-              [value]="trackingUrl"
-              readonly
-              dir="ltr"
-              #trackInput
-              (click)="trackInput.select()"
-            />
-          </div>
-          <button
-            type="button"
-            class="magic-copy-btn"
-            [class.copied]="copiedLink"
-            (click)="copyTrackingLink()"
-          >
-            <span *ngIf="!copiedLink">{{ 'SUCCESS_PAGE.COPY_LINK' | translate }}</span>
-            <span *ngIf="copiedLink">{{ 'SUCCESS_PAGE.LINK_COPIED' | translate }}</span>
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- STEPPER TIMELINE -->
-    <section class="timeline-card" *ngIf="order.orderStatus !== 'cancelled'">
+    <!-- Visual Order Timeline -->
+    <section class="timeline-section" *ngIf="order.orderStatus !== 'cancelled'">
       <div class="timeline-track">
         <div
-          class="timeline-progress-fill"
+          class="timeline-fill"
           [style.width.%]="(getStatusStep(order.orderStatus) - 1) * 33.33"
         ></div>
 
-        <!-- Step 1: Pending -->
-        <div
-          class="timeline-step"
-          [class.is-completed]="isStepComplete(1, order.orderStatus)"
-          [class.is-active]="isStepActive(1, order.orderStatus)"
-        >
-          <div class="step-circle">
-            <span class="step-num" *ngIf="!isStepComplete(1, order.orderStatus)">1</span>
-            <span class="step-check" *ngIf="isStepComplete(1, order.orderStatus)">✓</span>
+        <!-- Step 1 -->
+        <div class="step-node" [class.is-done]="isStepComplete(1, order.orderStatus)" [class.is-current]="isStepActive(1, order.orderStatus)">
+          <div class="node-circle">
+            <span *ngIf="!isStepComplete(1, order.orderStatus)">1</span>
+            <span *ngIf="isStepComplete(1, order.orderStatus)">✓</span>
           </div>
-          <span class="step-label">{{ 'TRACKING.STEP_SUBMITTED' | translate }}</span>
+          <span class="node-title">{{ languageService.currentLang === 'ar' ? 'تم الطلب' : 'Placed' }}</span>
         </div>
 
-        <!-- Step 2: Processing -->
-        <div
-          class="timeline-step"
-          [class.is-completed]="isStepComplete(2, order.orderStatus)"
-          [class.is-active]="isStepActive(2, order.orderStatus)"
-        >
-          <div class="step-circle">
-            <span class="step-num" *ngIf="!isStepComplete(2, order.orderStatus)">2</span>
-            <span class="step-check" *ngIf="isStepComplete(2, order.orderStatus)">✓</span>
+        <!-- Step 2 -->
+        <div class="step-node" [class.is-done]="isStepComplete(2, order.orderStatus)" [class.is-current]="isStepActive(2, order.orderStatus)">
+          <div class="node-circle">
+            <span *ngIf="!isStepComplete(2, order.orderStatus)">2</span>
+            <span *ngIf="isStepComplete(2, order.orderStatus)">✓</span>
           </div>
-          <span class="step-label">{{ 'TRACKING.STEP_PROCESSING' | translate }}</span>
+          <span class="node-title">{{ languageService.currentLang === 'ar' ? 'جاري التجهيز' : 'Processing' }}</span>
         </div>
 
-        <!-- Step 3: Shipped -->
-        <div
-          class="timeline-step"
-          [class.is-completed]="isStepComplete(3, order.orderStatus)"
-          [class.is-active]="isStepActive(3, order.orderStatus)"
-        >
-          <div class="step-circle">
-            <span class="step-num" *ngIf="!isStepComplete(3, order.orderStatus)">3</span>
-            <span class="step-check" *ngIf="isStepComplete(3, order.orderStatus)">✓</span>
+        <!-- Step 3 -->
+        <div class="step-node" [class.is-done]="isStepComplete(3, order.orderStatus)" [class.is-current]="isStepActive(3, order.orderStatus)">
+          <div class="node-circle">
+            <span *ngIf="!isStepComplete(3, order.orderStatus)">3</span>
+            <span *ngIf="isStepComplete(3, order.orderStatus)">✓</span>
           </div>
-          <span class="step-label">{{ 'TRACKING.STEP_SHIPPED' | translate }}</span>
+          <span class="node-title">{{ languageService.currentLang === 'ar' ? 'تم الشحن' : 'Shipped' }}</span>
         </div>
 
-        <!-- Step 4: Delivered -->
-        <div
-          class="timeline-step"
-          [class.is-completed]="isStepComplete(4, order.orderStatus)"
-          [class.is-active]="isStepActive(4, order.orderStatus)"
-        >
-          <div class="step-circle">
-            <span class="step-num" *ngIf="!isStepComplete(4, order.orderStatus)">4</span>
-            <span class="step-check" *ngIf="isStepComplete(4, order.orderStatus)">✓</span>
+        <!-- Step 4 -->
+        <div class="step-node" [class.is-done]="isStepComplete(4, order.orderStatus)" [class.is-current]="isStepActive(4, order.orderStatus)">
+          <div class="node-circle">
+            <span *ngIf="!isStepComplete(4, order.orderStatus)">4</span>
+            <span *ngIf="isStepComplete(4, order.orderStatus)">✓</span>
           </div>
-          <span class="step-label">{{ 'TRACKING.STEP_DELIVERED' | translate }}</span>
+          <span class="node-title">{{ languageService.currentLang === 'ar' ? 'تم التوصيل' : 'Delivered' }}</span>
         </div>
       </div>
     </section>
 
-    <!-- DETAILS GRID -->
-    <div class="order-details-grid">
+    <!-- Details Grid -->
+    <div class="receipt-grid">
 
-      <!-- LEFT / MAIN: Ordered Items -->
-      <div class="details-left">
-        <section class="card items-card">
-          <div class="card-header">
-            <svg class="card-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-              <line x1="3" y1="6" x2="21" y2="6"/>
-              <path d="M16 10a4 4 0 0 1-8 0"/>
-            </svg>
-            <h2 class="card-title">{{ 'TRACKING.ORDER_ITEMS' | translate }} ({{ order.items.length }})</h2>
-          </div>
+      <!-- Left / Main: Order Items Receipt -->
+      <section class="receipt-card items-card">
+        <div class="card-head">
+          <h2 class="card-head-title">
+            {{ languageService.currentLang === 'ar' ? 'ملخص المنتجات' : 'Order Items' }}
+          </h2>
+          <span class="items-count">{{ order.items.length }} {{ languageService.currentLang === 'ar' ? 'منتج' : 'items' }}</span>
+        </div>
 
-          <div class="items-list">
-            <div
-              class="item-row"
-              *ngFor="let item of order.items; trackBy: trackByItemIndex"
-            >
-              <div class="item-img-wrap">
-                <img
-                  [src]="getProductImage(item)"
-                  [alt]="getProductName(item)"
-                  class="item-img"
-                  loading="lazy"
-                />
-              </div>
-              <div class="item-info">
-                <h4 class="item-name">{{ getProductName(item) }}</h4>
-                <div class="item-meta">
-                  <span class="item-variant">{{ item.variantCount }} {{ 'COMMON.PIECES' | translate }}</span>
-                  <span class="item-qty">× {{ item.quantity }}</span>
-                </div>
-              </div>
-              <div class="item-price">
-                <strong>{{ (item.price * item.quantity) | number }} {{ 'COMMON.CURRENCY' | translate }}</strong>
+        <!-- Items List -->
+        <div class="items-list">
+          <div class="item-row" *ngFor="let item of order.items; trackBy: trackByItemIndex">
+            <div class="item-thumb">
+              <img [src]="getProductImage(item)" [alt]="getProductName(item)" loading="lazy" />
+            </div>
+            <div class="item-details">
+              <h3 class="item-name">{{ getProductName(item) }}</h3>
+              <div class="item-meta">
+                <span class="item-variant" *ngIf="item.variantCount">{{ item.variantCount }} {{ languageService.currentLang === 'ar' ? 'قطعة' : 'pieces' }}</span>
+                <span class="item-qty">× {{ item.quantity }}</span>
               </div>
             </div>
-          </div>
-
-          <!-- Total Calculation Breakdown -->
-          <div class="price-breakdown">
-            <div class="breakdown-row">
-              <span>{{ 'CART.SUBTOTAL' | translate }}</span>
-              <span>{{ getSubtotal(order) | number }} {{ 'COMMON.CURRENCY' | translate }}</span>
-            </div>
-            <div class="breakdown-row">
-              <span>{{ 'CHECKOUT.SHIPPING_FEE' | translate }}</span>
-              <span *ngIf="getShippingCost(order) === 0" class="free-ship">{{ 'CHECKOUT.FREE_SHIPPING_BADGE' | translate }}</span>
-              <span *ngIf="getShippingCost(order) > 0">{{ getShippingCost(order) | number }} {{ 'COMMON.CURRENCY' | translate }}</span>
-            </div>
-            <div class="breakdown-row breakdown-row--total">
-              <span>{{ 'CHECKOUT.ORDER_TOTAL' | translate }}</span>
-              <strong class="total-amount">{{ order.totalAmount | number }} {{ 'COMMON.CURRENCY' | translate }}</strong>
+            <div class="item-total-price">
+              {{ (item.price * item.quantity) | number }}
+              <small>{{ languageService.currentLang === 'ar' ? 'ج.م' : 'EGP' }}</small>
             </div>
           </div>
-        </section>
-      </div>
+        </div>
 
-      <!-- RIGHT / SIDE: Shipping & Payment Cards -->
-      <div class="details-right">
-
-        <!-- Shipping Destination Card -->
-        <section class="card shipping-card">
-          <div class="card-header">
-            <svg class="card-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-              <circle cx="12" cy="10" r="3"/>
-            </svg>
-            <h2 class="card-title">{{ 'CHECKOUT.PERSONAL_INFO' | translate }}</h2>
+        <!-- Financial Summary -->
+        <div class="receipt-totals">
+          <div class="total-row">
+            <span>{{ languageService.currentLang === 'ar' ? 'المجموع الفرعي' : 'Subtotal' }}</span>
+            <span>{{ getSubtotal(order) | number }} {{ languageService.currentLang === 'ar' ? 'ج.م' : 'EGP' }}</span>
           </div>
-          <div class="customer-info-list">
-            <div class="info-item">
-              <span class="info-label">{{ 'CHECKOUT.FULL_NAME' | translate }}</span>
+          <div class="total-row">
+            <span>{{ languageService.currentLang === 'ar' ? 'الشحن والتوصيل' : 'Shipping' }}</span>
+            <span *ngIf="getShippingCost(order) === 0" class="free-badge">
+              {{ languageService.currentLang === 'ar' ? 'مجاني' : 'Free' }}
+            </span>
+            <span *ngIf="getShippingCost(order) > 0">
+              {{ getShippingCost(order) | number }} {{ languageService.currentLang === 'ar' ? 'ج.م' : 'EGP' }}
+            </span>
+          </div>
+          <div class="total-row total-row--final">
+            <span class="final-label">{{ languageService.currentLang === 'ar' ? 'المبلغ الإجمالي' : 'Total Amount' }}</span>
+            <span class="final-amount">
+              {{ order.totalAmount | number }}
+              <small>{{ languageService.currentLang === 'ar' ? 'ج.م' : 'EGP' }}</small>
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right / Side: Shipping & Payment Info -->
+      <div class="side-column">
+
+        <!-- Shipping Info Card -->
+        <section class="receipt-card info-card">
+          <div class="card-head">
+            <h2 class="card-head-title">
+              {{ languageService.currentLang === 'ar' ? 'بيانات التوصيل' : 'Delivery Details' }}
+            </h2>
+          </div>
+
+          <div class="info-rows">
+            <div class="info-row">
+              <span class="info-name">{{ languageService.currentLang === 'ar' ? 'المستلم' : 'Recipient' }}</span>
               <strong class="info-val">{{ order.customer.name }}</strong>
             </div>
-            <div class="info-item">
-              <span class="info-label">{{ 'CHECKOUT.PHONE' | translate }}</span>
+            <div class="info-row">
+              <span class="info-name">{{ languageService.currentLang === 'ar' ? 'رقم الهاتف' : 'Phone' }}</span>
               <strong class="info-val" dir="ltr">{{ order.customer.phone }}</strong>
             </div>
-            <div class="info-item">
-              <span class="info-label">{{ 'CHECKOUT.CITY' | translate }}</span>
-              <span class="info-val">{{ order.customer.city }}</span>
+            <div class="info-row" *ngIf="order.customer.governorate || order.customer.city">
+              <span class="info-name">{{ languageService.currentLang === 'ar' ? 'المحافظة' : 'City/Gov' }}</span>
+              <span class="info-val">{{ order.customer.governorate || order.customer.city }}</span>
             </div>
-            <div class="info-item">
-              <span class="info-label">{{ 'CHECKOUT.ADDRESS' | translate }}</span>
+            <div class="info-row">
+              <span class="info-name">{{ languageService.currentLang === 'ar' ? 'العنوان' : 'Address' }}</span>
               <span class="info-val">{{ order.customer.address }}</span>
             </div>
-            <div class="info-item">
-              <span class="info-label">{{ 'TRACKING.ESTIMATED_DELIVERY' | translate }}</span>
-              <span class="info-val delivery-estimate">{{ getEstimatedDelivery(order.createdAt) }}</span>
+            <div class="info-row info-row--highlight">
+              <span class="info-name">{{ languageService.currentLang === 'ar' ? 'الموعد المتوقع' : 'Estimated' }}</span>
+              <span class="info-val delivery-val">{{ getEstimatedDelivery(order.createdAt) }}</span>
             </div>
           </div>
         </section>
 
         <!-- Payment Info Card -->
-        <section class="card payment-card">
-          <div class="card-header">
-            <svg class="card-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
-              <line x1="1" y1="10" x2="23" y2="10"/>
-            </svg>
-            <h2 class="card-title">{{ 'CHECKOUT.PAYMENT_METHOD' | translate }}</h2>
+        <section class="receipt-card info-card">
+          <div class="card-head">
+            <h2 class="card-head-title">
+              {{ languageService.currentLang === 'ar' ? 'طريقة الدفع' : 'Payment Method' }}
+            </h2>
           </div>
-          <div class="customer-info-list">
-            <div class="info-item">
-              <span class="info-label">{{ 'CHECKOUT.PAYMENT_METHOD' | translate }}</span>
+
+          <div class="info-rows">
+            <div class="info-row">
+              <span class="info-name">{{ languageService.currentLang === 'ar' ? 'الوسيلة' : 'Method' }}</span>
               <strong class="info-val">{{ getPaymentMethodLabel(order.paymentMethod) }}</strong>
             </div>
-            <div class="info-item">
-              <span class="info-label">{{ 'SUCCESS_PAGE.PAYMENT_STATUS_LABEL' | translate }}</span>
-              <span class="payment-status-pill" [class.is-paid]="order.paymentStatus === 'paid'">
+            <div class="info-row">
+              <span class="info-name">{{ languageService.currentLang === 'ar' ? 'الحالة' : 'Status' }}</span>
+              <span class="pay-status" [class.is-paid]="order.paymentStatus === 'paid'">
                 {{ getPaymentStatusLabel(order.paymentStatus) }}
               </span>
             </div>
           </div>
         </section>
 
-        <!-- Action / Help Card -->
-        <section class="card support-card">
-          <div class="support-content">
-            <svg class="support-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-            </svg>
-            <div class="support-text">
-              <h4>{{ 'SUCCESS_PAGE.NEED_HELP' | translate }}</h4>
-              <p>{{ 'SUCCESS_PAGE.SUPPORT_SUB' | translate }}</p>
-            </div>
-          </div>
-          <a
-            [href]="getWhatsAppLink(order.orderNumber)"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="whatsapp-btn"
-          >
-            {{ 'SUCCESS_PAGE.WHATSAPP_BTN' | translate }}
-          </a>
-        </section>
-
       </div>
     </div>
 
-    <!-- ── 4. FOOTER ACTION BUTTONS ────────────────────────────── -->
-    <div class="success-actions">
-      <a routerLink="/shop" class="btn btn--primary btn--lg">
-        {{ 'COMMON.CONTINUE_SHOPPING' | translate }}
-      </a>
-      <a routerLink="/" class="btn btn--outline btn--lg">
-        {{ 'COMMON.BACK_HOME' | translate }}
-      </a>
+    <!-- Actions & Support -->
+    <div class="actions-section">
+      <div class="actions-buttons">
+        <a routerLink="/shop" class="btn btn-primary">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+          </svg>
+          <span>{{ languageService.currentLang === 'ar' ? 'متابعة التسوق' : 'Continue Shopping' }}</span>
+        </a>
+
+        <a [routerLink]="['/track']" [queryParams]="{ id: order.orderNumber, token: storedToken }" class="btn btn-outline">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+          <span>{{ languageService.currentLang === 'ar' ? 'تتبع حالة الشحنة' : 'Track Shipment' }}</span>
+        </a>
+      </div>
+
+      <!-- Clean Support Contact -->
+      <p class="support-hint">
+        {{ languageService.currentLang === 'ar' ? 'هل تود الاستفسار أو تعديل طلبك؟' : 'Need help or want to modify your order?' }}
+        <a [href]="getWhatsAppLink(order.orderNumber)" target="_blank" rel="noopener noreferrer" class="whatsapp-link">
+          {{ languageService.currentLang === 'ar' ? 'تواصل معنا على واتساب' : 'Chat with us on WhatsApp' }}
+        </a>
+      </p>
     </div>
 
-  </ng-container>
+  </div>
 
-  <!-- ── 5. ORDER NOT FOUND / EMPTY STATE ─────────────────────── -->
-  <div class="not-found-card" *ngIf="!isLoading && !order">
+  <!-- ── 3. ORDER NOT FOUND / EMPTY STATE ─────────────────────── -->
+  <div class="not-found-state" *ngIf="!isLoading && !order">
     <div class="not-found-icon">
-      <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.8">
         <circle cx="11" cy="11" r="8"/>
         <line x1="21" y1="21" x2="16.65" y2="16.65"/>
       </svg>
     </div>
-    <h2>{{ 'SUCCESS_PAGE.NOT_FOUND_TITLE' | translate }}</h2>
-    <p>{{ 'SUCCESS_PAGE.NOT_FOUND_SUB' | translate }}</p>
+    <h2>{{ languageService.currentLang === 'ar' ? 'لم يتم العثور على الطلب' : 'Order Not Found' }}</h2>
+    <p>
+      {{ languageService.currentLang === 'ar' ? 'تعذر العثور على الطلب بالرقم المحدد. يرجى التأكد من الرقم والمحاولة مجدداً.' : 'Could not find details for the specified order. Please check and try again.' }}
+    </p>
     <div class="not-found-actions">
-      <a routerLink="/" class="btn btn--primary">{{ 'COMMON.BACK_HOME' | translate }}</a>
-      <a routerLink="/shop" class="btn btn--outline">{{ 'NAV.SHOP' | translate }}</a>
+      <a routerLink="/" class="btn btn-primary">{{ languageService.currentLang === 'ar' ? 'العودة للرئيسية' : 'Back to Home' }}</a>
+      <a routerLink="/shop" class="btn btn-outline">{{ languageService.currentLang === 'ar' ? 'تصفح المتجر' : 'Browse Shop' }}</a>
     </div>
   </div>
 

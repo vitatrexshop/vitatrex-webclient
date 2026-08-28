@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="leafGradTop" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#86efac" />
+      <stop offset="50%" stop-color="#22c55e" />
+      <stop offset="100%" stop-color="#15803d" />
+    </linearGradient>
+    <linearGradient id="leafGradBot" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22c55e" />
+      <stop offset="100%" stop-color="#166534" />
+    </linearGradient>
+  </defs>
+
+  <!-- Clean Organic Leaf Shape -->
+  <path
+    d="M112 18 C114 42 108 72 82 98 C56 124 22 126 16 124 C14 116 18 84 44 58 C70 32 98 16 112 18 Z"
+    fill="url(#leafGradTop)"
+  />
+  <path
+    d="M16 124 C34 94 62 62 108 24 C86 54 58 86 28 114 C22 120 18 122 16 124 Z"
+    fill="url(#leafGradBot)"
+  />
+</svg>

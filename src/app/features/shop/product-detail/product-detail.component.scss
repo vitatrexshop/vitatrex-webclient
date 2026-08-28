@@ -1,13 +1,35 @@
 // ══════════════════════════════════════════════════════════════
-// Product Detail Page — 360 Nutrition Minimalist & Vibrant Aesthetic
-// Palette: Solar Gold/Amber (#f59e0b / #d97706), Slate Dark (#111827), Neutral Light (#fafafa)
+// Product Detail Page — Vitatrix Sleep Well Purple Brand Design System
+// Core Palette: Sleep Well Vibrant Purple (#5e439b), Deep Midnight Purple (#20174b),
+// Soft Lavender Canvas (#fcfaff, #f6f2fc), Subtle Borders (#e7dff5)
 // ══════════════════════════════════════════════════════════════
+
+$primary:        #5e439b;
+$primary-deep:   #20174b;
+$primary-hover:  #7051b8;
+$primary-dark-hover: #2c2068;
+
+$purple-gradient: linear-gradient(135deg, #5e439b 0%, #20174b 100%);
+$purple-soft:     #f3ecfb;
+$purple-border:   #e7dff5;
+
+$text-dark:      #20174b;
+$text-body:      #40366d;
+$text-muted:     #635892;
+$text-light:     #8c82b5;
+
+$bg-app:         #fcfaff;
+$bg-card:        #ffffff;
+$bg-soft:        #f6f2fc;
+
+$crimson:        #e81b38;
+$crimson-bg:     #fdf2f4;
 
 .detail-page {
   padding-top: var(--space-6, 1.5rem);
   padding-bottom: var(--space-16, 4rem);
-  color: #111827;
-  font-family: 'Readex Pro', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: $text-dark;
+  font-family: 'Readex Pro', 'Noto Kufi Arabic', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 // ── Top Breadcrumb / Back Link ──────────────────────────────
@@ -21,7 +43,7 @@
     text-decoration: none;
     font-size: 0.88rem;
     font-weight: 700;
-    color: #6b7280;
+    color: $text-muted;
     transition: color 0.2s ease, transform 0.2s ease;
 
     .arrow {
@@ -30,10 +52,14 @@
     }
 
     &:hover {
-      color: #f59e0b;
+      color: $primary;
 
       .arrow {
         transform: translateX(-3px);
+
+        [dir="ltr"] & {
+          transform: translateX(3px);
+        }
       }
     }
   }
@@ -72,7 +98,7 @@
   }
 }
 
-// Vertical Thumbnails Strip (matching 360 Nutrition screenshot)
+// Vertical Thumbnails Strip
 .vertical-thumbnails {
   display: flex;
   flex-direction: row;
@@ -87,11 +113,11 @@
   }
 
   .thumb-btn {
-    width: 60px;
-    height: 60px;
-    border-radius: 12px;
-    border: 2px solid #e5e7eb;
-    background: #ffffff;
+    width: 62px;
+    height: 62px;
+    border-radius: 14px;
+    border: 2px solid $purple-border;
+    background: $bg-card;
     cursor: pointer;
     overflow: hidden;
     padding: 4px;
@@ -109,13 +135,14 @@
     }
 
     &.is-active {
-      border-color: #8b5cf6; // Purple active border matching screenshot
-      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+      border-color: $primary;
+      background: $purple-soft;
+      box-shadow: 0 4px 14px rgba(94, 67, 155, 0.25);
       transform: scale(1.04);
     }
 
     &:hover:not(.is-active) {
-      border-color: #d1d5db;
+      border-color: $primary-hover;
       transform: translateY(-2px);
     }
   }
@@ -125,10 +152,10 @@
 .main-image-card {
   flex: 1;
   position: relative;
-  background: #ffffff;
-  border-radius: 24px;
-  border: 1px solid #f3f4f6;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+  background: $bg-card;
+  border-radius: 28px;
+  border: 1px solid $purple-border;
+  box-shadow: 0 10px 30px rgba(32, 23, 75, 0.05);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -143,16 +170,17 @@
 
   .showcase-badge {
     position: absolute;
-    top: 16px;
-    inset-inline-start: 16px;
-    background: #f59e0b;
+    top: 18px;
+    inset-inline-start: 18px;
+    background: $purple-gradient;
     color: #ffffff;
     font-size: 0.78rem;
     font-weight: 800;
-    padding: 4px 14px;
+    padding: 5px 16px;
     border-radius: 9999px;
-    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
+    box-shadow: 0 4px 14px rgba(94, 67, 155, 0.35);
     z-index: 5;
+    letter-spacing: 0.02em;
   }
 
   .main-image-stage {
@@ -167,7 +195,7 @@
     max-width: 100%;
     max-height: 440px;
     object-fit: contain;
-    filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.07));
+    filter: drop-shadow(0 16px 28px rgba(32, 23, 75, 0.1));
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 
     &:hover {
@@ -177,7 +205,7 @@
 }
 
 // ══════════════════════════════════════════════════════════════
-// ── RIGHT COLUMN: Product Info & 360 Conversion Flow
+// ── RIGHT COLUMN: Product Info & Conversion Flow
 // ══════════════════════════════════════════════════════════════
 
 .info-column {
@@ -189,20 +217,16 @@
 
 // Bold Uppercase Product Title
 .product-title-360 {
-  font-size: 2rem;
+  font-size: clamp(1.8rem, 3.2vw, 2.3rem);
   font-weight: 900;
-  text-transform: uppercase;
-  color: #111827;
+  color: $text-dark;
   letter-spacing: -0.01em;
-  line-height: 1.15;
+  line-height: 1.2;
   margin: 0 0 16px 0;
-
-  @media (min-width: 768px) {
-    font-size: 2.4rem;
-  }
+  font-family: 'Readex Pro', sans-serif;
 }
 
-// Health & Category Benefit Pills Row (Matching 360 Nutrition)
+// Health & Category Benefit Pills Row
 .health-pills-row {
   display: flex;
   flex-wrap: wrap;
@@ -218,60 +242,56 @@
     border-radius: 9999px;
     font-size: 0.8rem;
     font-weight: 700;
-    border: 1.5px solid #e5e7eb;
-    background: #ffffff;
-    color: #374151;
-    transition: transform 0.15s ease;
+    border: 1px solid $purple-border;
+    background: $purple-soft;
+    color: $primary;
+    transition: transform 0.15s ease, background 0.15s ease;
 
     &:hover {
       transform: translateY(-1px);
+      background: lighten($purple-soft, 2%);
     }
 
-    .pill-emoji {
-      font-size: 0.95rem;
-      line-height: 1;
-    }
-
-    // Color Variations
+    // Color Variations strictly harmonized with purple theme
     &.pill--green {
-      border-color: #86efac;
-      color: #166534;
+      border-color: #bbf7d0;
+      color: #15803d;
       background: #f0fdf4;
     }
 
     &.pill--blue {
-      border-color: #93c5fd;
-      color: #1e40af;
+      border-color: #bfdbfe;
+      color: #1d4ed8;
       background: #eff6ff;
     }
 
     &.pill--orange {
-      border-color: #fdba74;
-      color: #9a3412;
+      border-color: #fed7aa;
+      color: #c2410c;
       background: #fff7ed;
     }
 
     &.pill--purple {
-      border-color: #d8b4fe;
-      color: #6b21a8;
-      background: #faf5ff;
+      border-color: $purple-border;
+      color: $primary;
+      background: $purple-soft;
     }
 
     &.pill--pink {
-      border-color: #f9a8d4;
-      color: #9d174d;
+      border-color: #fbcfe8;
+      color: #be185d;
       background: #fdf2f8;
     }
 
     &.pill--amber {
-      border-color: #fde047;
-      color: #854d0e;
-      background: #fefce8;
+      border-color: #fde68a;
+      color: #b45309;
+      background: #fffbeb;
     }
 
     &.pill--teal {
-      border-color: #5eead4;
-      color: #115e59;
+      border-color: #99f6e4;
+      color: #0f766e;
       background: #f0fdfa;
     }
   }
@@ -285,33 +305,37 @@
   margin-bottom: 24px;
 
   .price-value {
-    font-size: 1.85rem;
+    font-size: 2rem;
     font-weight: 900;
-    color: #111827;
+    color: $primary-deep;
     letter-spacing: -0.01em;
+    font-family: 'Outfit', sans-serif;
   }
 
   .price-slashed {
-    font-size: 1.15rem;
-    color: #9ca3af;
+    font-size: 1.2rem;
+    color: $text-light;
     text-decoration: line-through;
+    font-family: 'Outfit', sans-serif;
   }
 
   .price-discount-tag {
-    background: #fee2e2;
-    color: #b91c1c;
+    background: $crimson-bg;
+    color: $crimson;
+    border: 1px solid rgba(232, 27, 56, 0.25);
     font-size: 0.8rem;
     font-weight: 800;
-    padding: 2px 8px;
-    border-radius: 6px;
+    padding: 3px 10px;
+    border-radius: 9999px;
+    font-family: 'Outfit', sans-serif;
   }
 }
 
 // Accordion Section: DESCRIPTION
 .accordion-section {
   width: 100%;
-  border-top: 1px solid #e5e7eb;
-  border-bottom: 1px solid #e5e7eb;
+  border-top: 1px solid $purple-border;
+  border-bottom: 1px solid $purple-border;
   padding-block: 16px;
   margin-bottom: 24px;
 
@@ -333,21 +357,21 @@
     }
 
     .accordion-icon {
-      font-size: 1.1rem;
+      color: $primary;
     }
 
     .accordion-title {
       font-size: 0.95rem;
       font-weight: 900;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.04em;
       text-transform: uppercase;
-      color: #111827;
+      color: $text-dark;
     }
 
     .accordion-toggle-symbol {
       font-size: 1.3rem;
       font-weight: 700;
-      color: #6b7280;
+      color: $primary;
       line-height: 1;
     }
   }
@@ -359,17 +383,18 @@
     gap: 16px;
 
     .description-headline {
-      font-size: 1.25rem;
+      font-size: 1.15rem;
       font-weight: 900;
       text-transform: uppercase;
-      color: #111827;
+      color: $primary;
       margin: 0;
       line-height: 1.3;
+      letter-spacing: 0.02em;
     }
 
     .description-text {
       font-size: 0.92rem;
-      color: #4b5563;
+      color: $text-body;
       line-height: 1.7;
       margin: 0;
     }
@@ -384,13 +409,13 @@
         font-size: 0.95rem;
         font-weight: 900;
         text-transform: uppercase;
-        color: #111827;
+        color: $text-dark;
         margin: 0;
       }
 
       .how-it-works-text {
         font-size: 0.9rem;
-        color: #4b5563;
+        color: $text-body;
         line-height: 1.65;
         margin: 0;
       }
@@ -410,10 +435,11 @@
         gap: 8px;
         font-size: 0.9rem;
         font-weight: 600;
-        color: #374151;
+        color: $text-body;
 
         .bullet-dot {
           font-size: 0.85rem;
+          color: $primary;
         }
       }
     }
@@ -423,13 +449,13 @@
 // Size / Variant Picker
 .variants-picker {
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 
   .picker-label {
     display: block;
     font-size: 0.85rem;
     font-weight: 800;
-    color: #111827;
+    color: $text-dark;
     margin-bottom: 10px;
   }
 
@@ -440,35 +466,40 @@
   }
 
   .picker-btn {
-    padding: 8px 18px;
+    padding: 8px 20px;
     border-radius: 9999px;
-    border: 1.5px solid #e5e7eb;
-    background: #ffffff;
+    border: 1.5px solid $purple-border;
+    background: $bg-card;
     cursor: pointer;
     font-size: 0.9rem;
     font-weight: 700;
-    color: #374151;
+    color: $text-body;
+    font-family: 'Readex Pro', sans-serif;
     display: inline-flex;
     align-items: center;
     gap: 6px;
     transition: all 0.2s ease;
 
     &.is-active {
-      border-color: #f59e0b;
-      background: #fffbeb;
-      color: #b45309;
+      border-color: $primary;
+      background: $purple-soft;
+      color: $primary-deep;
+      box-shadow: 0 2px 10px rgba(94, 67, 155, 0.18);
     }
 
     &:hover:not(.is-active) {
-      border-color: #d1d5db;
+      border-color: $primary-hover;
+      background: lighten($purple-soft, 3%);
     }
 
     .picker-btn-discount {
       font-size: 0.72rem;
-      background: #fee2e2;
-      color: #b91c1c;
+      background: $crimson-bg;
+      color: $crimson;
+      border: 1px solid rgba(232, 27, 56, 0.2);
       padding: 1px 6px;
       border-radius: 9999px;
+      font-weight: 800;
     }
   }
 }
@@ -503,10 +534,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
-  border: 1.5px solid #e5e7eb;
+  border: 1.5px solid $purple-border;
   border-radius: 9999px;
   height: 52px;
-  background: #ffffff;
+  background: $bg-card;
   padding-inline: 8px;
   min-width: 120px;
 
@@ -517,7 +548,7 @@
     background: none;
     font-size: 1.1rem;
     font-weight: 800;
-    color: #6b7280;
+    color: $text-muted;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -525,27 +556,28 @@
     transition: color 0.15s ease;
 
     &:hover {
-      color: #f59e0b;
+      color: $primary;
     }
   }
 
   .qty-number {
     font-size: 1.05rem;
     font-weight: 800;
-    color: #111827;
+    color: $text-dark;
     min-width: 32px;
     text-align: center;
+    font-family: 'Outfit', sans-serif;
   }
 }
 
-// 360 Nutrition Style Buttons (Solar Gold/Amber CTA)
+// Vitatrix Sleep Well Purple Brand Buttons
 .btn-360 {
   height: 52px;
   border-radius: 9999px;
   font-size: 0.95rem;
-  font-weight: 900;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  font-family: 'Readex Pro', sans-serif;
   cursor: pointer;
   border: none;
   display: inline-flex;
@@ -558,12 +590,12 @@
     transform: scale(0.98);
   }
 
-  // ADD TO CART: Vibrant Solar Orange/Gold
+  // ADD TO CART: Brand Purple Gradient
   &-add {
     flex: 1;
-    background: #f59e0b;
+    background: $purple-gradient;
     color: #ffffff;
-    box-shadow: 0 4px 16px rgba(245, 158, 11, 0.35);
+    box-shadow: 0 4px 18px rgba(94, 67, 155, 0.38);
 
     .cart-svg-icon {
       width: 18px;
@@ -571,23 +603,23 @@
     }
 
     &:hover {
-      background: #d97706;
+      background: linear-gradient(135deg, #7051b8 0%, #2c2068 100%);
       transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(245, 158, 11, 0.45);
+      box-shadow: 0 8px 24px rgba(94, 67, 155, 0.48);
     }
   }
 
-  // BUY IT NOW: Full Width Matching Solar Orange/Gold
+  // BUY IT NOW: Deep Midnight Purple
   &-buynow {
     width: 100%;
-    background: #f59e0b;
+    background: $primary-deep;
     color: #ffffff;
-    box-shadow: 0 4px 16px rgba(245, 158, 11, 0.35);
+    box-shadow: 0 4px 18px rgba(32, 23, 75, 0.3);
 
     &:hover {
-      background: #d97706;
+      background: #2c2068;
       transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(245, 158, 11, 0.45);
+      box-shadow: 0 8px 24px rgba(32, 23, 75, 0.4);
     }
   }
 }
@@ -599,18 +631,19 @@
   gap: 20px;
   flex-wrap: wrap;
   width: 100%;
-  padding-top: 16px;
-  border-top: 1px solid #f3f4f6;
+  padding-top: 18px;
+  border-top: 1px solid $purple-border;
 
   .guarantee-item {
     display: flex;
     align-items: center;
     gap: 6px;
-    font-size: 0.8rem;
+    font-size: 0.82rem;
     font-weight: 700;
-    color: #6b7280;
+    color: $text-muted;
 
     .g-icon {
+      color: $primary;
       font-size: 1rem;
     }
   }
@@ -623,7 +656,7 @@
 .suggestions-section {
   margin-top: 72px;
   padding-top: 48px;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid $purple-border;
 
   .suggestions-header {
     text-align: center;
@@ -633,13 +666,14 @@
   .suggestions-title {
     font-size: 1.8rem;
     font-weight: 900;
-    color: #111827;
+    color: $text-dark;
     margin: 0 0 8px 0;
+    font-family: 'Readex Pro', sans-serif;
   }
 
   .suggestions-subtitle {
     font-size: 0.95rem;
-    color: #6b7280;
+    color: $text-muted;
     margin: 0;
   }
 
@@ -656,17 +690,18 @@
 }
 
 .suggest-card {
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 20px;
+  background: $bg-card;
+  border: 1px solid $purple-border;
+  border-radius: 22px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 
   &:hover {
     transform: translateY(-6px);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    border-color: $primary;
+    box-shadow: 0 12px 30px rgba(94, 67, 155, 0.12);
   }
 
   &__link {
@@ -678,7 +713,7 @@
   }
 
   &__img-wrap {
-    background: #fafafa;
+    background: $bg-soft;
     padding: 20px;
     aspect-ratio: 1 / 1;
     display: flex;
@@ -690,6 +725,7 @@
       max-height: 100%;
       object-fit: contain;
       transition: transform 0.3s ease;
+      filter: drop-shadow(0 6px 14px rgba(32, 23, 75, 0.08));
     }
   }
 
@@ -708,34 +744,39 @@
   &__name {
     font-size: 0.95rem;
     font-weight: 800;
-    color: #111827;
+    color: $text-dark;
     margin: 0;
     line-height: 1.35;
+    font-family: 'Readex Pro', sans-serif;
   }
 
   &__price {
     font-size: 1.05rem;
     font-weight: 900;
-    color: #111827;
+    color: $primary-deep;
     margin-top: auto;
     padding-top: 6px;
+    font-family: 'Outfit', sans-serif;
   }
 
   &__btn {
     margin: 0 16px 16px 16px;
     padding: 10px 16px;
     border-radius: 9999px;
-    background: #f59e0b;
+    background: $purple-gradient;
     color: #ffffff;
     border: none;
     font-weight: 800;
     font-size: 0.85rem;
+    font-family: 'Readex Pro', sans-serif;
     cursor: pointer;
-    transition: background 0.2s ease, transform 0.2s ease;
+    box-shadow: 0 3px 12px rgba(94, 67, 155, 0.28);
+    transition: all 0.2s ease;
 
     &:hover {
-      background: #d97706;
+      background: linear-gradient(135deg, #7051b8 0%, #2c2068 100%);
       transform: translateY(-1px);
+      box-shadow: 0 5px 16px rgba(94, 67, 155, 0.4);
     }
   }
 }
@@ -750,7 +791,7 @@
   .sk-back {
     width: 120px;
     height: 20px;
-    background: #f3f4f6;
+    background: #f3ecfb;
     border-radius: 6px;
     margin-bottom: 24px;
   }
@@ -768,8 +809,8 @@
 
   .sk-gallery {
     aspect-ratio: 1 / 1;
-    background: #f3f4f6;
-    border-radius: 24px;
+    background: #f3ecfb;
+    border-radius: 28px;
     animation: shimmer 1.5s infinite;
   }
 
@@ -781,7 +822,7 @@
 
   .sk-line {
     height: 24px;
-    background: #f3f4f6;
+    background: #f3ecfb;
     border-radius: 6px;
     animation: shimmer 1.5s infinite;
 
@@ -792,9 +833,74 @@
 
   .sk-blocks {
     height: 120px;
-    background: #f3f4f6;
-    border-radius: 16px;
+    background: #f3ecfb;
+    border-radius: 18px;
     animation: shimmer 1.5s infinite;
+  }
+}
+
+// ── Not Found / Error State ─────────────────────────────────
+.not-found-wrapper {
+  padding: 60px 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+
+  .not-found-card {
+    background: $bg-card;
+    border: 1px solid $purple-border;
+    border-radius: 24px;
+    padding: 48px 32px;
+    text-align: center;
+    max-width: 480px;
+    width: 100%;
+    box-shadow: 0 10px 30px rgba(32, 23, 75, 0.05);
+
+    .not-found-icon {
+      color: $text-light;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: center;
+    }
+
+    h2 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: $text-dark;
+      margin: 0 0 8px;
+      font-family: 'Readex Pro', sans-serif;
+    }
+
+    p {
+      font-size: 0.92rem;
+      color: $text-muted;
+      margin: 0 0 24px;
+      line-height: 1.55;
+    }
+
+    .btn-back-shop {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 26px;
+      border-radius: 9999px;
+      background: $purple-gradient;
+      color: #ffffff;
+      font-size: 0.9rem;
+      font-weight: 700;
+      font-family: 'Readex Pro', sans-serif;
+      text-decoration: none;
+      box-shadow: 0 4px 16px rgba(94, 67, 155, 0.35);
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: linear-gradient(135deg, #7051b8 0%, #2c2068 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(94, 67, 155, 0.45);
+      }
+    }
   }
 }
 
@@ -803,4 +909,3 @@
   50% { opacity: 1; }
   100% { opacity: 0.5; }
 }
-

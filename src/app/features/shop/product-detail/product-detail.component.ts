@@ -24,7 +24,11 @@ export interface HealthPill {
 export class ProductDetailComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
+  product: Product | null = null;
   product$!: Observable<Product | null>;
+  isLoading = true;
+  isNotFound = false;
+
   selectedVariant: Variant | null = null;
   quantity = 1;
   selectedImage: string | null = null;
@@ -44,32 +48,59 @@ export class ProductDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Reactively fetch product whenever route slug param changes
+    // Reactively fetch product whenever route slug param changes (handles direct reload + in-app routing)
     this.product$ = this.route.paramMap.pipe(
-      map(params => params.get('slug') ?? ''),
+      map(params => params.get('slug') || this.route.snapshot.paramMap.get('slug') || ''),
       switchMap((slug) => {
-        if (!slug) return of(null);
+        const cleanSlug = (slug || '').trim();
+        if (!cleanSlug) {
+          this.isLoading = false;
+          this.isNotFound = true;
+          this.product = null;
+          this.cdr.markForCheck();
+          return of(null);
+        }
+
+        this.isLoading = true;
+        this.isNotFound = false;
         this.selectedImage = null; // reset thumbnail selection
-        return this.productService.getProductBySlug(slug).pipe(
+        this.cdr.markForCheck();
+
+        return this.productService.getProductBySlug(cleanSlug).pipe(
           tap((prod) => {
+            this.isLoading = false;
+            this.isNotFound = !prod;
+            this.product = prod || null;
+
             if (prod && prod.variants?.length) {
               this.selectedVariant = prod.variants[0];
               this.quantity = 1;
+            } else {
+              this.selectedVariant = null;
             }
+
             if (prod) {
               this.selectedImage = prod.image || (prod.images && prod.images[0]) || null;
             }
+
             // Load suggested products (all except current)
             this.loadSuggestions(prod?._id);
+            this.cdr.markForCheck();
           }),
-          catchError(() => {
-            this.toastService.show('عذراً، لم يتم العثور على المنتج المطلوب ⚠️', 'error');
-            this.router.navigate(['/shop']);
+          catchError((err) => {
+            console.warn('Product not found or failed to load:', err);
+            this.isLoading = false;
+            this.isNotFound = true;
+            this.product = null;
+            this.cdr.markForCheck();
             return of(null);
           })
         );
       })
     );
+
+    // Subscribe to update component state synchronously as well
+    this.product$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
   }
 
   /** Fetch all products, exclude the current one, take up to 4 as suggestions */
@@ -78,8 +109,8 @@ export class ProductDetailComponent implements OnInit {
       catchError(() => of([])),
       takeUntilDestroyed(this.destroyRef)
     ).subscribe((products) => {
-      this.suggestedProducts = products
-        .filter(p => p._id !== currentId && p.isActive !== false)
+      this.suggestedProducts = (products || [])
+        .filter(p => p && p._id !== currentId && p.isActive !== false)
         .slice(0, 4);
       this.cdr.markForCheck();
     });
@@ -97,17 +128,19 @@ export class ProductDetailComponent implements OnInit {
     this.selectedImage = imgUrl;
   }
 
-  getImageUrl(product: Product): string {
+  getImageUrl(product?: Product | null): string {
+    if (!product) return 'assets/images/hero-fallback.webp';
     return this.selectedImage || product.image || (product.images && product.images[0]) || 'assets/images/hero-fallback.webp';
   }
 
   /** Generate thumbnails array ensuring at least 4 thumbnails exist for the vertical strip */
-  getThumbnails(product: Product): string[] {
+  getThumbnails(product?: Product | null): string[] {
+    if (!product) return ['assets/images/hero-fallback.webp'];
     const list: string[] = [];
     if (product.image) list.push(product.image);
-    if (product.images?.length) {
+    if (Array.isArray(product.images) && product.images.length) {
       product.images.forEach(img => {
-        if (!list.includes(img)) list.push(img);
+        if (img && !list.includes(img)) list.push(img);
       });
     }
     // If fewer than 4 images, repeat/pad gracefully
@@ -120,7 +153,8 @@ export class ProductDetailComponent implements OnInit {
   }
 
   /** Generate colorful category & health pills matching the 360 Nutrition style */
-  getPills(product: Product): HealthPill[] {
+  getPills(product?: Product | null): HealthPill[] {
+    if (!product) return [];
     const pills: HealthPill[] = [];
     const catName = this.getCategoryName(product).toLowerCase();
 
@@ -148,7 +182,8 @@ export class ProductDetailComponent implements OnInit {
   }
 
   /** Headline for description banner */
-  getHeadline(product: Product): string {
+  getHeadline(product?: Product | null): string {
+    if (!product) return 'YOUR DAILY DOSE OF HEALTH & VITALITY';
     const name = product.name?.toLowerCase() || '';
     if (name.includes('d3') || name.includes('sun') || name.includes('شمس')) {
       return 'YOUR DAILY DOSE OF SUNSHINE';
@@ -165,7 +200,7 @@ export class ProductDetailComponent implements OnInit {
     return 'YOUR DAILY DOSE OF HEALTH & VITALITY';
   }
 
-  getCategoryName(product: Product): string {
+  getCategoryName(product?: Product | null): string {
     if (!product?.category) return 'الفيتامينات والمكملات';
     if (typeof product.category === 'object' && product.category.name) {
       return product.category.name;
@@ -188,20 +223,21 @@ export class ProductDetailComponent implements OnInit {
     }
   }
 
-  addToCart(product: Product): void {
-    if (!this.selectedVariant) return;
+  addToCart(product?: Product | null): void {
+    if (!product || !this.selectedVariant) return;
     this.cartService.addToCart(product, this.selectedVariant, this.quantity);
     this.toastService.show(`تمت إضافة ${product.name} إلى السلة`, 'success');
     this.cartDrawerService.open();
   }
 
-  buyNow(product: Product): void {
-    if (!this.selectedVariant) return;
+  buyNow(product?: Product | null): void {
+    if (!product || !this.selectedVariant) return;
     this.cartService.addToCart(product, this.selectedVariant, this.quantity);
     this.router.navigate(['/checkout']);
   }
 
   addSuggestedToCart(product: Product): void {
+    if (!product) return;
     const variant = product.variants?.[0];
     if (!variant) return;
     this.cartService.addToCart(product, variant, 1);
@@ -209,13 +245,15 @@ export class ProductDetailComponent implements OnInit {
     this.cartDrawerService.open();
   }
 
-  getMinPrice(product: Product): number {
-    if (!product.variants?.length) return 0;
-    return Math.min(...product.variants.map(v => v.price));
+  getMinPrice(product?: Product | null): number {
+    if (!product?.variants?.length) return 0;
+    const prices = product.variants.map(v => v.price).filter(p => typeof p === 'number' && !isNaN(p));
+    return prices.length ? Math.min(...prices) : 0;
   }
 
-  getOriginalPrice(product: Product): number | null {
-    const variant = product.variants?.[0];
+  getOriginalPrice(product?: Product | null): number | null {
+    if (!product?.variants?.length) return null;
+    const variant = product.variants[0];
     if (variant?.originalPrice && variant.originalPrice > variant.price) {
       return variant.originalPrice;
     }
@@ -230,4 +268,3 @@ export class ProductDetailComponent implements OnInit {
     return p._id;
   }
 }
-
