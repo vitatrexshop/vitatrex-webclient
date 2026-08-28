@@ -4,12 +4,12 @@ import { map } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { Order, OrderInput, CreateOrderData } from '../models/order.model';
 
-const ORDERS_API = '/api/v1/orders';
+const ORDERS_API = '/orders';
 
 /**
  * Handles all order-related API calls.
  *
- * Architecture note: This service is intentionally thin — it delegates
+ * Architecture note: This service is intentionally thin - it delegates
  * payment strategy execution to the backend. Future gateway integrations
  * (Paymob, Tap) are handled server-side with zero changes needed here.
  */

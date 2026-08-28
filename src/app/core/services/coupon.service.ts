@@ -1,8 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { ApiService } from './api.service';
 import {
   ApplyCouponRequest,
   ApplyCouponResponse,
@@ -10,74 +9,55 @@ import {
   CreateCouponRequest,
   UpdateCouponRequest,
 } from '../models/coupon.model';
+import { ApiResponse } from '../models/api-response.model';
+
+const COUPONS_API = '/coupons';
+const ADMIN_COUPONS_API = '/admin/coupons';
 
 @Injectable({ providedIn: 'root' })
 export class CouponService {
-  private readonly http = inject(HttpClient);
-  private readonly base = `${environment.apiUrl}`;
+  private readonly api = inject(ApiService);
 
   // ── Public: Apply coupon to cart ─────────────────────────────────────────
   applyCoupon(payload: ApplyCouponRequest): Observable<ApplyCouponResponse> {
-    return this.http
-      .post<{ success: boolean } & ApplyCouponResponse>(
-        `${this.base}/coupons/apply`,
-        payload
-      )
-      .pipe(map((res) => res as ApplyCouponResponse));
+    return this.api
+      .post<ApplyCouponResponse>(`${COUPONS_API}/apply`, payload)
+      .pipe(map((res: any) => (res?.data ?? res) as ApplyCouponResponse));
   }
 
   // ── Admin: List all coupons ──────────────────────────────────────────────
-  getAllCoupons(token: string): Observable<Coupon[]> {
-    return this.http
-      .get<{ success: boolean; data: Coupon[] }>(
-        `${this.base}/admin/coupons`,
-        { headers: this.authHeaders(token) }
-      )
-      .pipe(map((res) => res.data));
+  getAllCoupons(token?: string): Observable<Coupon[]> {
+    return this.api
+      .get<Coupon[]>(ADMIN_COUPONS_API)
+      .pipe(map((res: any) => {
+        const raw = res?.data ?? res;
+        return Array.isArray(raw) ? raw : (raw?.coupons ?? []);
+      }));
   }
 
   // ── Admin: Create coupon ─────────────────────────────────────────────────
-  createCoupon(payload: CreateCouponRequest, token: string): Observable<Coupon> {
-    return this.http
-      .post<{ success: boolean; data: Coupon }>(
-        `${this.base}/admin/coupons`,
-        payload,
-        { headers: this.authHeaders(token) }
-      )
-      .pipe(map((res) => res.data));
+  createCoupon(payload: CreateCouponRequest, token?: string): Observable<Coupon> {
+    return this.api
+      .post<Coupon>(ADMIN_COUPONS_API, payload)
+      .pipe(map((res: any) => (res?.data ?? res) as Coupon));
   }
 
   // ── Admin: Update coupon ─────────────────────────────────────────────────
-  updateCoupon(id: string, payload: UpdateCouponRequest, token: string): Observable<Coupon> {
-    return this.http
-      .put<{ success: boolean; data: Coupon }>(
-        `${this.base}/admin/coupons/${id}`,
-        payload,
-        { headers: this.authHeaders(token) }
-      )
-      .pipe(map((res) => res.data));
+  updateCoupon(id: string, payload: UpdateCouponRequest, token?: string): Observable<Coupon> {
+    return this.api
+      .put<Coupon>(`${ADMIN_COUPONS_API}/${id}`, payload)
+      .pipe(map((res: any) => (res?.data ?? res) as Coupon));
   }
 
   // ── Admin: Delete coupon ─────────────────────────────────────────────────
-  deleteCoupon(id: string, token: string): Observable<void> {
-    return this.http
-      .delete<void>(`${this.base}/admin/coupons/${id}`, {
-        headers: this.authHeaders(token),
-      });
+  deleteCoupon(id: string, token?: string): Observable<ApiResponse<null>> {
+    return this.api.delete<null>(`${ADMIN_COUPONS_API}/${id}`);
   }
 
   // ── Admin: Toggle active status ──────────────────────────────────────────
-  toggleCoupon(id: string, token: string): Observable<Coupon> {
-    return this.http
-      .patch<{ success: boolean; data: Coupon }>(
-        `${this.base}/admin/coupons/${id}/toggle`,
-        {},
-        { headers: this.authHeaders(token) }
-      )
-      .pipe(map((res) => res.data));
-  }
-
-  private authHeaders(token: string): HttpHeaders {
-    return new HttpHeaders({ Authorization: `Bearer ${token}` });
+  toggleCoupon(id: string, token?: string): Observable<Coupon> {
+    return this.api
+      .patch<Coupon>(`${ADMIN_COUPONS_API}/${id}/toggle`, {})
+      .pipe(map((res: any) => (res?.data ?? res) as Coupon));
   }
 }

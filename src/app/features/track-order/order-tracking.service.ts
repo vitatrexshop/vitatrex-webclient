@@ -15,7 +15,7 @@ import { TrackingData } from '../../core/models/order.model';
 export class OrderTrackingService {
 
   /** Path used by ApiService — prefixed with environment.apiUrl automatically */
-  private readonly trackPath = '/api/v1/orders/track';
+  private readonly trackPath = '/orders/track';
 
   /** localStorage keys — 'vt_' prefix avoids collisions with other apps */
   private readonly LS_ORDER_NUMBER   = 'vt_tracking_orderNumber';

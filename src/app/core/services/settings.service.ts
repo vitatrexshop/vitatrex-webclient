@@ -4,8 +4,8 @@ import { map } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { HeroSettings, PromoVideoSettings } from '../models/settings.model';
 
-const HERO_SETTINGS_API        = '/api/v1/settings/hero';
-const PROMO_VIDEO_SETTINGS_API = '/api/v1/settings/promo-video';
+const HERO_SETTINGS_API        = '/settings/hero';
+const PROMO_VIDEO_SETTINGS_API = '/settings/promo-video';
 
 @Injectable({ providedIn: 'root' })
 export class SettingsService {

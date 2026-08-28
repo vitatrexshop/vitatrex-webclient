@@ -14,9 +14,7 @@ const LOCALHOST_ORIGINS = [
 
 @Injectable({ providedIn: 'root' })
 export class StoryService {
-  private readonly apiBase = environment.apiUrl
-    ? `${environment.apiUrl}/api/v1/stories`
-    : '/api/v1/stories';
+  private readonly apiBase = `${environment.apiUrl}/stories`;
 
   constructor(private http: HttpClient) {}
 

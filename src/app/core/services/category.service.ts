@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { Category } from '../models/category.model';
 
-const CATEGORIES_API = '/api/v1/categories';
+const CATEGORIES_API = '/categories';
 
 /**
  * Category data service for storefront.

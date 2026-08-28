@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { QuizAnswers, QuizRecommendation } from '../models/quiz.model';
 
-const QUIZ_API = '/api/v1/quiz';
+const QUIZ_API = '/quiz';
 
 /**
  * Submits user health survey answers and retrieves a product recommendation.

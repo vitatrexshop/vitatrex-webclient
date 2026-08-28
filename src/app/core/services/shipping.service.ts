@@ -4,7 +4,7 @@ import { map, shareReplay } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { GovernorateOption } from '../models/order.model';
 
-const SHIPPING_API = '/api/v1/shipping';
+const SHIPPING_API = '/shipping';
 
 /**
  * Service to fetch Egyptian governorates shipping fees and delivery timeline matrix.

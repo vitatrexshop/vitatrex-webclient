@@ -240,11 +240,12 @@
                   <circle cx="7" cy="7" r="1.5" fill="currentColor"/>
                 </svg>
                 <input
+                  #couponRef
                   id="coupon-code-input"
                   type="text"
                   class="coupon-input"
-                  [(ngModel)]="couponCode"
-                  [ngModelOptions]="{standalone: true}"
+                  [value]="couponCode"
+                  (input)="couponCode = couponRef.value"
                   placeholder="أدخل كود الخصم"
                   dir="ltr"
                   [disabled]="isApplyingCoupon"

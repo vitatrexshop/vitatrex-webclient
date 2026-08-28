@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { Product } from '../models/product.model';
 
-const PRODUCTS_API = '/api/v1/products';
+const PRODUCTS_API = '/products';
 
 export interface SearchResult {
   docs: Product[];

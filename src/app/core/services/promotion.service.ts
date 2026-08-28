@@ -1,4 +1,4 @@
-﻿import { Injectable, inject } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, forkJoin, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { ApiService } from './api.service';
@@ -8,7 +8,7 @@ import { UnifiedPromotion, PromotionCombinedResponse } from '../models/promotion
 import { Offer } from '../models/offer.model';
 import { Bundle } from '../models/bundle.model';
 
-const PROMOTIONS_COMBINED_API = '/api/v1/promotions/combined';
+const PROMOTIONS_COMBINED_API = '/promotions/combined';
 
 @Injectable({ providedIn: 'root' })
 export class PromotionService {

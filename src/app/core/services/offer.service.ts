@@ -5,7 +5,7 @@ import { ApiService } from './api.service';
 import { Offer, OfferPayload } from '../models/offer.model';
 import { ApiResponse } from '../models/api-response.model';
 
-const OFFERS_API = '/api/v1/offers';
+const OFFERS_API = '/offers';
 
 /**
  * Manages bundle / promotional offer data for the storefront.

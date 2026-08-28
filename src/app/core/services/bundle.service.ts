@@ -1,11 +1,11 @@
-﻿import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { Bundle, BundlePayload } from '../models/bundle.model';
 import { ApiResponse } from '../models/api-response.model';
 
-const BUNDLES_API = '/api/v1/bundles';
+const BUNDLES_API = '/bundles';
 
 @Injectable({ providedIn: 'root' })
 export class BundleService {

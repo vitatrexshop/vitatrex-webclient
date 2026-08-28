@@ -142,9 +142,9 @@ export class CheckoutComponent implements OnInit {
     this.cdr.markForCheck();
 
     const cartItemsPayload = this.cartItems.map((item) => ({
-      price: item.selectedVariant.price,
+      price: item.selectedVariant?.price ?? item.bundleMeta?.bundlePrice ?? (item.itemTotal ? item.itemTotal / (item.quantity || 1) : 0),
       quantity: item.quantity,
-      name: item.product.name,
+      name: item.product?.name ?? item.bundleMeta?.bundleTitle ?? 'Product',
     }));
 
     this.couponService.applyCoupon({ code, cartItems: cartItemsPayload }).subscribe({
@@ -158,7 +158,16 @@ export class CheckoutComponent implements OnInit {
       error: (err) => {
         this.appliedCoupon = null;
         this.isApplyingCoupon = false;
-        this.couponError = err?.error?.message || 'كود الخصم غير صالح.';
+        const serverMsg = err?.error?.message;
+        if (serverMsg && typeof serverMsg === 'string' && !serverMsg.toLowerCase().includes('cors') && !serverMsg.toLowerCase().includes('internal server')) {
+          this.couponError = serverMsg;
+        } else if (err?.status === 404) {
+          this.couponError = 'كود الخصم غير صحيح أو منتهي الصلاحية.';
+        } else if (err?.status === 400) {
+          this.couponError = serverMsg || 'لا يمكن تطبيق هذا الكوبون على المنتجات الحالية.';
+        } else {
+          this.couponError = 'تعذّر تطبيق كود الخصم، يرجى المحاولة مرة أخرى.';
+        }
         this.cdr.markForCheck();
       },
     });

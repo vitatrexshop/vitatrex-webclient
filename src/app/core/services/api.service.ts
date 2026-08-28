@@ -16,28 +16,41 @@ export class ApiService {
 
   constructor(private readonly http: HttpClient) {}
 
+  private resolveUrl(path: string): string {
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+      return path;
+    }
+    const base = (this.baseUrl || '').replace(/\/+$/, '');
+    let cleanPath = path.startsWith('/') ? path : `/${path}`;
+    // Prevent accidental /api/v1/api/v1 duplication
+    if (base.endsWith('/api/v1') && cleanPath.startsWith('/api/v1/')) {
+      cleanPath = cleanPath.substring(7);
+    }
+    return `${base}${cleanPath}`;
+  }
+
   get<T>(path: string, params?: HttpParams): Observable<ApiResponse<T>> {
-    return this.http.get<ApiResponse<T>>(`${this.baseUrl}${path}`, { params });
+    return this.http.get<ApiResponse<T>>(this.resolveUrl(path), { params });
   }
 
   post<T>(path: string, body: unknown): Observable<ApiResponse<T>> {
-    return this.http.post<ApiResponse<T>>(`${this.baseUrl}${path}`, body);
+    return this.http.post<ApiResponse<T>>(this.resolveUrl(path), body);
   }
 
   put<T>(path: string, body: unknown): Observable<ApiResponse<T>> {
-    return this.http.put<ApiResponse<T>>(`${this.baseUrl}${path}`, body, {
+    return this.http.put<ApiResponse<T>>(this.resolveUrl(path), body, {
       withCredentials: true,
     });
   }
 
   patch<T>(path: string, body: unknown): Observable<ApiResponse<T>> {
-    return this.http.patch<ApiResponse<T>>(`${this.baseUrl}${path}`, body, {
+    return this.http.patch<ApiResponse<T>>(this.resolveUrl(path), body, {
       withCredentials: true,
     });
   }
 
   delete<T>(path: string): Observable<ApiResponse<T>> {
-    return this.http.delete<ApiResponse<T>>(`${this.baseUrl}${path}`, {
+    return this.http.delete<ApiResponse<T>>(this.resolveUrl(path), {
       withCredentials: true,
     });
   }
