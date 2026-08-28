@@ -30,16 +30,21 @@
 
         <!-- Badge -->
         <div class="bc-card-badges" *ngIf="bundle.badgeText || bundle.discountPercentage > 0">
-          <span class="bc-badge bc-badge--discount" *ngIf="bundle.discountPercentage > 0">
+          <span class="bundle-micro-pill bundle-micro-pill--tag">
+            <span class="micro-dot"></span>
+            <span>باقة مخصصة</span>
+          </span>
+          <span class="bundle-micro-pill bundle-micro-pill--discount" *ngIf="bundle.discountPercentage > 0">
             وفر {{ bundle.discountPercentage }}%
           </span>
-          <span class="bc-badge bc-badge--custom" *ngIf="bundle.badgeText">
+          <span class="bundle-micro-pill bundle-micro-pill--custom" *ngIf="bundle.badgeText">
             {{ bundle.badgeText }}
           </span>
         </div>
 
         <!-- Title -->
         <div class="bc-card-header">
+          <div class="bc-card-subtext">YOUR BUNDLE • BUY 2 GET 1 FREE</div>
           <h3 class="bc-card-title">{{ bundle.title }}</h3>
           <p class="bc-card-desc" *ngIf="bundle.description">{{ bundle.description }}</p>
           <!-- Pool size hint -->
@@ -49,127 +54,167 @@
           </p>
         </div>
 
-        <!-- == 3-Slot Row ====================================================== -->
+        <!-- == 3-Slot Row (Glassmorphic) ================================= -->
         <div class="bc-slots" dir="rtl">
 
           <ng-container *ngFor="let slotIdx of [0, 1, 2]">
 
-            <!-- Divider (between slots) -->
-            <span class="bc-slot-plus" *ngIf="slotIdx > 0" aria-hidden="true">+</span>
+            <!-- Glowing Divider (between slots) -->
+            <div class="bc-slot-plus" *ngIf="slotIdx > 0" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </div>
 
-            <!-- Slot: Empty / Interactive -->
+            <!-- Slot: Empty / Glassmorphic Selector -->
             <div
-              class="bc-slot bc-slot--interactive"
+              class="bc-slot bc-slot--glass-empty"
               *ngIf="!getSlotProduct(bundle._id, slotIdx)"
             >
               <button
-                class="bc-slot-pick-btn"
+                class="bc-slot-pick-card"
                 type="button"
                 (click)="openModalForSlot(bundle._id, slotIdx)"
                 [attr.aria-label]="slotAria[slotIdx] + ' لباقة ' + bundle.title"
                 [attr.id]="'bundle-slot' + slotIdx + '-pick-' + bundle._id"
               >
-                <span class="bc-slot-number" aria-hidden="true">{{ slotIdx + 1 }}</span>
-                <span class="bc-slot-pick-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" width="28" height="28" fill="none"
-                    stroke="currentColor" stroke-width="2.2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"/>
-                    <line x1="12" y1="8" x2="12" y2="16"/>
-                    <line x1="8" y1="12" x2="16" y2="12"/>
-                  </svg>
-                </span>
-                <span class="bc-slot-pick-label">{{ slotLabels[slotIdx] }}</span>
+                <div class="slot-ambient-glow" aria-hidden="true"></div>
+                <div class="slot-glass-body">
+                  <div class="slot-step-indicator">
+                    <span class="step-label">{{ slotLabels[slotIdx] }}</span>
+                    <span class="step-num">0{{ slotIdx + 1 }}</span>
+                  </div>
+
+                  <div class="slot-empty-icon-wrap">
+                    <div class="slot-icon-circle">
+                      <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+                        stroke="currentColor" stroke-width="2.2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"/>
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                      </svg>
+                    </div>
+                  </div>
+
+                  <div class="slot-empty-prompt">
+                    <span class="prompt-main">اختر المنتج</span>
+                    <span class="prompt-sub">انقر للإضافة</span>
+                  </div>
+                </div>
               </button>
             </div>
 
-            <!-- Slot: Filled / Chosen Product -->
+            <!-- Slot: Filled / 3D Render Preview -->
             <div
-              class="bc-slot bc-slot--filled"
+              class="bc-slot bc-slot--glass-filled"
               [class.bc-slot--check-anim]="isSlotCheckAnimating(bundle._id, slotIdx)"
               *ngIf="getSlotProduct(bundle._id, slotIdx) as p"
             >
               <div
-                class="bc-slot-img-wrap"
+                class="bc-slot-filled-card"
                 (click)="openModalForSlot(bundle._id, slotIdx)"
                 role="button"
                 [attr.aria-label]="'تغيير ' + slotLabels[slotIdx]"
                 tabindex="0"
                 (keydown.enter)="openModalForSlot(bundle._id, slotIdx)"
               >
-                <img
-                  class="bc-slot-img"
-                  [src]="formatMediaUrl(p.image)"
-                  [alt]="p.name"
-                  loading="lazy"
-                />
-                <!-- Checkmark overlay -->
-                <div class="bc-slot-check" [class.visible]="isSlotCheckAnimating(bundle._id, slotIdx)" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" width="36" height="36" fill="none"
-                    stroke="#fff" stroke-width="2.5"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="20 6 9 17 4 12"/>
-                  </svg>
-                </div>
-                <!-- Change hint -->
-                <div class="bc-slot-change-hint" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
-                    <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/>
-                  </svg>
-                  تغيير
+                <div class="slot-ambient-glow slot-ambient-glow--active" aria-hidden="true"></div>
+                <div class="slot-glass-body">
+                  <div class="slot-step-indicator slot-step-indicator--filled">
+                    <span class="step-label">{{ slotLabels[slotIdx] }}</span>
+                    <span class="step-check-icon">
+                      <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"/>
+                      </svg>
+                    </span>
+                  </div>
+
+                  <div class="slot-3d-img-stage">
+                    <img
+                      class="slot-3d-img"
+                      [src]="formatMediaUrl(p.image)"
+                      [alt]="p.name"
+                      loading="lazy"
+                    />
+                    <!-- Checkmark overlay -->
+                    <div class="bc-slot-check" [class.visible]="isSlotCheckAnimating(bundle._id, slotIdx)" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" width="26" height="26" fill="none"
+                        stroke="#fff" stroke-width="3"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"/>
+                      </svg>
+                    </div>
+                  </div>
+
+                  <div class="slot-product-info">
+                    <h4 class="slot-product-name">{{ p.name }}</h4>
+                    <div class="slot-change-pill" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/>
+                      </svg>
+                      <span>تغيير</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <span class="bc-slot-number bc-slot-number--filled" aria-hidden="true">{{ slotIdx + 1 }}</span>
-              <p class="bc-slot-name">{{ p.name }}</p>
             </div>
 
           </ng-container>
 
         </div><!-- /.bc-slots -->
 
-        <!-- == Pricing & CTA ================================================== -->
-        <div class="bc-card-footer">
-          <div class="bc-pricing">
-            <span class="bc-price-current">
-              {{ bundle.bundlePrice | number }}<small> ج.م</small>
-            </span>
-            <span class="bc-price-original" *ngIf="bundle.originalPrice > bundle.bundlePrice">
-              {{ bundle.originalPrice | number }} ج.م
-            </span>
-            <span class="bc-price-save" *ngIf="bundle.originalPrice > bundle.bundlePrice">
+        <!-- == Unified Floating Capsule (Glassmorphism Pill) =========== -->
+        <div class="bundle-action-capsule">
+          
+          <!-- Left Side: Price Breakdown -->
+          <div class="capsule-price-block">
+            <div class="capsule-price-row">
+              <span class="capsule-price-strikethrough" *ngIf="bundle.originalPrice > bundle.bundlePrice">
+                {{ bundle.originalPrice | number }} ج.م
+              </span>
+              <span class="capsule-price-final">
+                {{ bundle.bundlePrice | number }}
+                <small class="capsule-price-currency">ج.م</small>
+              </span>
+            </div>
+            <span class="capsule-savings-pill" *ngIf="bundle.originalPrice > bundle.bundlePrice">
               وفر {{ (bundle.originalPrice - bundle.bundlePrice) | number }} ج.م
             </span>
           </div>
 
-          <button
-            class="bc-cta-btn"
-            type="button"
-            [class.bc-cta-btn--active]="allSlotsSelected(bundle._id)"
-            [class.bc-cta-btn--loading]="isAddingBundle(bundle._id)"
-            [disabled]="!allSlotsSelected(bundle._id) || isAddingBundle(bundle._id)"
-            (click)="addBundleToCart(bundle, $event)"
-            [attr.id]="'bundle-add-cart-' + bundle._id"
-            [attr.aria-label]="'أضف الباقة للسلة: ' + bundle.title"
-          >
-            <svg
-              *ngIf="!isAddingBundle(bundle._id)"
-              viewBox="0 0 24 24" width="18" height="18" fill="none"
-              stroke="currentColor" stroke-width="2.2"
-              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-              <line x1="3" y1="6" x2="21" y2="6"/>
-              <path d="M16 10a4 4 0 0 1-8 0"/>
-            </svg>
-            <span *ngIf="!allSlotsSelected(bundle._id) && !isAddingBundle(bundle._id)">
-              اختر المنتجات الثلاثة أولاً
-            </span>
-            <span *ngIf="allSlotsSelected(bundle._id) && !isAddingBundle(bundle._id)">
-              أضف الباقة للسلة
-            </span>
-            <span *ngIf="isAddingBundle(bundle._id)">
-              تمت الإضافة
-            </span>
-          </button>
+          <!-- Right Side: CTA Button -->
+          <div class="capsule-action-block">
+            <button
+              class="capsule-cta-btn"
+              type="button"
+              [class.is-ready]="allSlotsSelected(bundle._id)"
+              [class.is-loading]="isAddingBundle(bundle._id)"
+              [disabled]="!allSlotsSelected(bundle._id) || isAddingBundle(bundle._id)"
+              (click)="addBundleToCart(bundle, $event)"
+              [attr.id]="'bundle-add-cart-' + bundle._id"
+              [attr.aria-label]="'أضف الباقة للسلة: ' + bundle.title"
+            >
+              <svg
+                *ngIf="!isAddingBundle(bundle._id)"
+                viewBox="0 0 24 24" width="18" height="18" fill="none"
+                stroke="currentColor" stroke-width="2.2"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <path d="M16 10a4 4 0 0 1-8 0"/>
+              </svg>
+              <span *ngIf="!allSlotsSelected(bundle._id) && !isAddingBundle(bundle._id)">
+                اختر 3 منتجات لتفعيل الباقة
+              </span>
+              <span *ngIf="allSlotsSelected(bundle._id) && !isAddingBundle(bundle._id)">
+                أضف الباقة للسلة
+              </span>
+              <span *ngIf="isAddingBundle(bundle._id)">
+                تمت الإضافة بنجاح
+              </span>
+            </button>
+          </div>
         </div>
 
         <!-- == Product Selection Modal ======================================== -->
