@@ -1,0 +1,188 @@
+<main class="not-found-page" role="main">
+  <!-- Background Glow & Ambient Elements -->
+  <div class="ambient-glow ambient-glow--top" aria-hidden="true"></div>
+  <div class="ambient-glow ambient-glow--bottom" aria-hidden="true"></div>
+  
+  <!-- Floating Vitamin Decorative Particles -->
+  <div class="floating-particle particle-1" aria-hidden="true">
+    <span class="particle-emoji">🍬</span>
+  </div>
+  <div class="floating-particle particle-2" aria-hidden="true">
+    <span class="particle-emoji">🌿</span>
+  </div>
+  <div class="floating-particle particle-3" aria-hidden="true">
+    <span class="particle-emoji">✨</span>
+  </div>
+  <div class="floating-particle particle-4" aria-hidden="true">
+    <span class="particle-emoji">💤</span>
+  </div>
+
+  <div class="not-found-container">
+    <!-- Hero Section -->
+    <section class="not-found-hero">
+      <!-- 404 Visual Display -->
+      <div class="error-number-wrapper">
+        <div class="error-glow" aria-hidden="true"></div>
+        <div class="error-number">
+          <span class="digit">4</span>
+          <div class="zero-gummy">
+            <span class="gummy-core">
+              <svg viewBox="0 0 100 100" class="gummy-svg" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="gummyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#9c7bd3" />
+                    <stop offset="50%" stop-color="#5e439b" />
+                    <stop offset="100%" stop-color="#20174b" />
+                  </linearGradient>
+                  <linearGradient id="leafGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#4ade80" />
+                    <stop offset="100%" stop-color="#16a34a" />
+                  </linearGradient>
+                </defs>
+                <!-- Vitamin Gummy Drop / Bottle Shape -->
+                <path d="M50 15 C30 15 20 35 20 60 C20 80 34 92 50 92 C66 92 80 80 80 60 C80 35 70 15 50 15 Z" fill="url(#gummyGrad)" />
+                <!-- Glossy Highlight -->
+                <path d="M36 32 C30 42 28 56 32 68 C34 56 38 42 46 36 C42 33 39 32 36 32 Z" fill="white" fill-opacity="0.3" />
+                <!-- Leaf on Top -->
+                <path d="M50 18 C48 6 60 2 64 8 C66 14 58 18 50 18 Z" fill="url(#leafGrad)" />
+              </svg>
+            </span>
+          </div>
+          <span class="digit">4</span>
+        </div>
+      </div>
+
+      <!-- Badge & Heading -->
+      <div class="error-badge">
+        <span class="badge-dot"></span>
+        <span class="badge-text">{{ 'NOT_FOUND.BADGE' | translate }}</span>
+      </div>
+
+      <h1 class="error-title">
+        {{ 'NOT_FOUND.TITLE' | translate }}
+      </h1>
+
+      <p class="error-description">
+        {{ 'NOT_FOUND.DESCRIPTION' | translate }}
+      </p>
+
+      <!-- Search Box directly in 404 -->
+      <div class="error-search-box">
+        <form (ngSubmit)="onSearch()" class="search-form" role="search">
+          <div class="search-input-wrap">
+            <svg class="search-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input
+              type="text"
+              class="search-input"
+              [(ngModel)]="searchQuery"
+              name="searchQuery"
+              [placeholder]="'NOT_FOUND.SEARCH_PLACEHOLDER' | translate"
+              autocomplete="off"
+            />
+            <button type="submit" class="search-submit-btn" [attr.aria-label]="'COMMON.SEARCH' | translate">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7" *ngIf="false" />
+                <!-- Direction aware search arrow -->
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Main Action Buttons -->
+      <div class="action-buttons">
+        <button
+          type="button"
+          class="btn btn--primary"
+          (click)="navigate('/')"
+          id="not-found-home-btn"
+        >
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+          </svg>
+          <span>{{ 'NOT_FOUND.BACK_HOME' | translate }}</span>
+        </button>
+
+        <button
+          type="button"
+          class="btn btn--secondary"
+          (click)="navigate('/shop')"
+          id="not-found-shop-btn"
+        >
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+          </svg>
+          <span>{{ 'NOT_FOUND.BROWSE_SHOP' | translate }}</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Quick Navigation Hub Cards -->
+    <section class="quick-destinations" aria-labelledby="destinations-title">
+      <div class="section-header">
+        <h2 id="destinations-title" class="destinations-title">
+          {{ 'NOT_FOUND.POPULAR_DESTINATIONS' | translate }}
+        </h2>
+        <div class="title-underline"></div>
+      </div>
+
+      <div class="cards-grid">
+        <div
+          *ngFor="let card of quickCards"
+          class="quick-card"
+          [ngClass]="card.colorClass"
+          (click)="navigate(card.route)"
+          role="button"
+          tabindex="0"
+          (keyup.enter)="navigate(card.route)"
+        >
+          <div class="card-icon-wrap">
+            <!-- Shopping Bag -->
+            <svg *ngIf="card.icon === 'shopping-bag'" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+
+            <!-- Sparkles / Quiz -->
+            <svg *ngIf="card.icon === 'sparkles'" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+            </svg>
+
+            <!-- Truck / Track -->
+            <svg *ngIf="card.icon === 'truck'" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="1" y="3" width="15" height="13"></rect>
+              <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+              <circle cx="5.5" cy="18.5" r="2.5"></circle>
+              <circle cx="18.5" cy="18.5" r="2.5"></circle>
+            </svg>
+
+            <!-- Tag / Offers -->
+            <svg *ngIf="card.icon === 'tag'" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+              <line x1="7" y1="7" x2="7.01" y2="7"></line>
+            </svg>
+          </div>
+
+          <div class="card-content">
+            <h3 class="card-title">{{ card.titleKey | translate }}</h3>
+            <p class="card-desc">{{ card.descKey | translate }}</p>
+          </div>
+
+          <div class="card-arrow">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>

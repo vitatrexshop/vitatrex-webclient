@@ -377,5 +377,25 @@
     "OUT_OF_STOCK": "Out of Stock",
     "IN_STOCK": "In Stock",
     "QUICK_ADD": "Quick Add"
+  },
+  "NOT_FOUND": {
+    "PAGE_TITLE": "404 - Page Not Found | VitaTrex",
+    "BADGE": "Error 404",
+    "TITLE": "Oops! The page you're looking for doesn't exist",
+    "DESCRIPTION": "The link you followed might be broken or the page may have been removed. Don't worry, you can easily find your favorite natural vitamin gummies below.",
+    "SEARCH_PLACEHOLDER": "Search for vitamins (sleep, immunity, energy...)",
+    "BACK_HOME": "Back to Home",
+    "BROWSE_SHOP": "Browse Shop",
+    "POPULAR_DESTINATIONS": "Popular Destinations",
+    "CARDS": {
+      "SHOP_TITLE": "Browse Products",
+      "SHOP_DESC": "Explore our full line of delicious natural vitamin gummies",
+      "QUIZ_TITLE": "Vitamin Quiz",
+      "QUIZ_DESC": "Get personalized health recommendations in just one minute",
+      "TRACK_TITLE": "Track Your Order",
+      "TRACK_DESC": "Check real-time delivery status for your current order",
+      "OFFERS_TITLE": "Bundles & Offers",
+      "OFFERS_DESC": "Save more with value bundles and exclusive discounts"
+    }
   }
 }

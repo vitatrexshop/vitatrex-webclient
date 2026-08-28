@@ -45,8 +45,21 @@ const routes: Routes = [
         (m) => m.TrackOrderModule
       ),
   },
-  // Catch-all: redirect unknown routes to home
-  { path: '**', redirectTo: '' },
+  {
+    path: '404',
+    loadChildren: () =>
+      import('./features/not-found/not-found.module').then(
+        (m) => m.NotFoundModule
+      ),
+  },
+  // Catch-all: render 404 Not Found page for unknown routes
+  {
+    path: '**',
+    loadChildren: () =>
+      import('./features/not-found/not-found.module').then(
+        (m) => m.NotFoundModule
+      ),
+  },
 ];
 
 @NgModule({
