@@ -90,9 +90,14 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
     if (this.feedbackTimeout) {
       clearTimeout(this.feedbackTimeout);
     }
-    const modalEl = document.querySelector('.story-reel-modal');
-    if (modalEl && modalEl.parentElement === document.body) {
-      document.body.removeChild(modalEl);
+    // Guard: closeModal() may have already removed this element before destroy runs
+    try {
+      const modalEl = document.querySelector('.story-reel-modal');
+      if (modalEl?.parentElement === document.body) {
+        document.body.removeChild(modalEl);
+      }
+    } catch {
+      // Element already detached - safe to ignore
     }
     this.ctx?.revert();
     if (this.isBrowser) {
@@ -269,12 +274,18 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
   }
 
   closeModal(): void {
-    if (this.reelVideoEl?.nativeElement) {
-      this.reelVideoEl.nativeElement.pause();
+    try {
+      this.reelVideoEl?.nativeElement?.pause();
+    } catch {
+      // Video element may already be detached
     }
-    const modalEl = document.querySelector('.story-reel-modal');
-    if (modalEl && modalEl.parentElement === document.body) {
-      document.body.removeChild(modalEl);
+    try {
+      const modalEl = document.querySelector('.story-reel-modal');
+      if (modalEl?.parentElement === document.body) {
+        document.body.removeChild(modalEl);
+      }
+    } catch {
+      // Element already detached - safe to ignore
     }
     this.isModalOpen = false;
     this.videoProgress = 0;

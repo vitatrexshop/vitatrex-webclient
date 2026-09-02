@@ -40,16 +40,25 @@
     <meta name="twitter:description" content="فيتامينات طبيعية على شكل حلوى جيلاتينية لكل أفراد العائلة." />
     <meta name="twitter:image" content="assets/logo.png" />
 
+    <!-- Image CDN Preconnect & DNS-Prefetch for instantaneous handshake -->
+    <link rel="preconnect" href="https://res.cloudinary.com" crossorigin />
+    <link rel="dns-prefetch" href="https://res.cloudinary.com" />
+    <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
+    <link rel="dns-prefetch" href="https://images.unsplash.com" />
+
+    <!-- LCP Preload: Hero banner image discovered immediately before scripts parse -->
+    <link
+      rel="preload"
+      as="image"
+      href="https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&w=1920&q=85"
+      fetchpriority="high"
+    />
+
     <!-- Google Fonts — Arabic-optimised typefaces -->
     <!-- preconnect: CDN handshake happens in parallel with HTML parse -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- font-display=swap keeps text visible during font load (eliminates FOIT CLS) -->
-    <link
-      rel="preload"
-      as="style"
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Noto+Kufi+Arabic:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Readex+Pro:wght@400;500;600;700;800;900&display=swap"
-    />
+    <!-- Google Fonts stylesheet - font-display=swap keeps text visible during font load -->
     <link
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Noto+Kufi+Arabic:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Readex+Pro:wght@400;500;600;700;800;900&display=swap"
       rel="stylesheet"
@@ -108,9 +117,9 @@
         min-height: 60vh;
       }
 
-      /* Hero banner: reserve 16:7 aspect ratio before Cloudinary image resolves */
+      /* Hero banner: reserve exact 1920/823 aspect ratio before Cloudinary image resolves */
       .hero-banner-frame {
-        aspect-ratio: 16 / 7;
+        aspect-ratio: 1920 / 823;
         width: 100%;
         contain: layout;
       }
