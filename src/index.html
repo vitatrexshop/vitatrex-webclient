@@ -41,12 +41,86 @@
     <meta name="twitter:image" content="assets/logo.png" />
 
     <!-- Google Fonts — Arabic-optimised typefaces -->
+    <!-- preconnect: CDN handshake happens in parallel with HTML parse -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- font-display=swap keeps text visible during font load (eliminates FOIT CLS) -->
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Noto+Kufi+Arabic:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Readex+Pro:wght@400;500;600;700;800;900&display=swap"
+    />
     <link
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Noto+Kufi+Arabic:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Readex+Pro:wght@400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     />
+
+    <!-- Critical CLS Prevention — inline styles loaded before Angular boots.
+         These reservations match the rendered heights of the announcement bar
+         (38px) + header (~70px) so the layout does not jump when they appear.
+         Angular will override these once it hydrates. -->
+    <style id="cls-critical">
+      /* ── Font metric overrides: makes system fallbacks match web-font metrics ── */
+      @font-face {
+        font-family: 'Noto Kufi Arabic Fallback';
+        src: local('Arial');
+        size-adjust: 98%;
+        ascent-override: 90%;
+        descent-override: 20%;
+        line-gap-override: 0%;
+      }
+      @font-face {
+        font-family: 'IBM Plex Sans Arabic Fallback';
+        src: local('Arial');
+        size-adjust: 100%;
+        ascent-override: 87%;
+        descent-override: 21%;
+        line-gap-override: 0%;
+      }
+
+      /* ── App layout skeleton — pre-reserve chrome height before JS boots ── */
+      html, body { margin: 0; padding: 0; }
+
+      /* Announcement bar: exact 38px height (matches component CSS) */
+      app-announcement-bar {
+        display: block;
+        height: 38px;
+        min-height: 38px;
+        overflow: hidden;
+        contain: strict;
+      }
+
+      /* Header: pre-reserve ~70px so page content doesn't shift down */
+      app-header {
+        display: block;
+        min-height: 70px;
+        contain: layout style;
+      }
+
+      /* Main area: fills remaining viewport height so footer stays anchored */
+      .app-layout {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+      .app-layout__main {
+        flex: 1;
+        min-height: 60vh;
+      }
+
+      /* Hero banner: reserve 16:7 aspect ratio before Cloudinary image resolves */
+      .hero-banner-frame {
+        aspect-ratio: 16 / 7;
+        width: 100%;
+        contain: layout;
+      }
+
+      /* Prevent image layout shift globally — never let images push siblings */
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+    </style>
 
     <!-- Theme color for mobile browsers -->
     <meta name="theme-color" content="#5e439b" />

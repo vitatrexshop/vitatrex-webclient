@@ -11,6 +11,7 @@ import {
   PLATFORM_ID,
   inject,
   DestroyRef,
+  NgZone,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { of } from 'rxjs';
@@ -49,6 +50,7 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly storyService = inject(StoryService);
   private readonly router = inject(Router);
+  private readonly ngZone = inject(NgZone);
 
   private ctx?: gsap.Context;
   private isBrowser: boolean;
@@ -132,10 +134,12 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
           this.cdr.detectChanges();
 
           if (this.isBrowser && this.stories.length > 0) {
-            setTimeout(() => {
-              this.initScrollAnimation();
-              ScrollTrigger.refresh();
-            }, 80);
+            this.ngZone.runOutsideAngular(() => {
+              requestAnimationFrame(() => {
+                this.initScrollAnimation();
+                ScrollTrigger.refresh();
+              });
+            });
           }
         },
         error: () => {

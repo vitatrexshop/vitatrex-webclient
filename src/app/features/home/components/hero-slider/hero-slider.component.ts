@@ -6,6 +6,7 @@ import {
   ElementRef,
   Inject,
   inject,
+  NgZone,
   OnInit,
   OnDestroy,
   PLATFORM_ID,
@@ -36,6 +37,7 @@ export class HeroSliderComponent implements OnInit, OnDestroy {
   private readonly destroyRef = inject(DestroyRef);
   private readonly cdr       = inject(ChangeDetectorRef);
   private readonly settingsService = inject(SettingsService);
+  private readonly ngZone    = inject(NgZone);
 
   private ctx?: gsap.Context;
   private isBrowser: boolean;
@@ -81,10 +83,12 @@ export class HeroSliderComponent implements OnInit, OnDestroy {
           this.isLoading    = false;
           this.cdr.detectChanges();
           if (this.isBrowser) {
-            setTimeout(() => {
-              this.initScrollTriggerAnimations();
-              ScrollTrigger.refresh();
-            }, 60);
+            this.ngZone.runOutsideAngular(() => {
+              requestAnimationFrame(() => {
+                this.initScrollTriggerAnimations();
+                ScrollTrigger.refresh();
+              });
+            });
           }
         },
         error: () => {

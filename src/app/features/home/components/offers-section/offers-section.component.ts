@@ -7,6 +7,7 @@ import {
   ElementRef,
   Inject,
   inject,
+  NgZone,
   OnDestroy,
   PLATFORM_ID,
   ViewChild,
@@ -47,6 +48,7 @@ export class OffersSectionComponent implements AfterViewInit, OnDestroy {
   private readonly promotionService = inject(PromotionService);
   private readonly cartService = inject(CartService);
   private readonly cartDrawer = inject(CartDrawerService);
+  private readonly ngZone = inject(NgZone);
 
   private ctx?: gsap.Context;
   private swiper?: Swiper;
@@ -270,16 +272,20 @@ export class OffersSectionComponent implements AfterViewInit, OnDestroy {
         this.cdr.detectChanges();
 
         if (this.isBrowser && this.promotions.length > 0) {
-          setTimeout(() => {
-            this.initSwiper();
-            this.initScrollTrigger();
-            ScrollTrigger.refresh();
-          }, 60);
+          this.ngZone.runOutsideAngular(() => {
+            requestAnimationFrame(() => {
+              this.initSwiper();
+              this.initScrollTrigger();
+              ScrollTrigger.refresh();
+            });
+          });
         } else if (this.isBrowser) {
-          setTimeout(() => {
-            this.initScrollTrigger();
-            ScrollTrigger.refresh();
-          }, 60);
+          this.ngZone.runOutsideAngular(() => {
+            requestAnimationFrame(() => {
+              this.initScrollTrigger();
+              ScrollTrigger.refresh();
+            });
+          });
         }
       });
   }

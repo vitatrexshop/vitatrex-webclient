@@ -46,7 +46,7 @@
 
   <!-- ══ BLOCK B: EDGE-TO-EDGE BANNER IMAGE ══════════════════════ -->
   <div class="hero-banner-bleed">
-    <div class="hero-banner-frame">
+    <div class="hero-banner-frame" #heroBannerFrame>
       <img
         [src]="heroImageUrl"
         [alt]="brandName + ' - ' + slogan"
@@ -56,6 +56,7 @@
         loading="eager"
         fetchpriority="high"
         decoding="async"
+        (load)="heroBannerFrame.classList.add('is-loaded')"
       />
     </div>
   </div>

@@ -142,11 +142,35 @@
   border-radius: 0 !important;
   border: none !important;
   box-shadow: none !important;
-  background: transparent;
   overflow: hidden;
   will-change: transform, opacity;
-  // CLS fix: pre-reserve banner height so no layout shift when image loads
+
+  // ── CLS fix: hard-reserve space before Cloudinary image resolves ──
+  // aspect-ratio ensures the frame never collapses.
+  // The shimmer gradient acts as a placeholder so there's no blank flash.
   aspect-ratio: 16 / 7;
+  contain: layout;
+  background: linear-gradient(
+    135deg,
+    #20174b 0%,
+    #2e1f62 25%,
+    #3a2878 50%,
+    #2e1f62 75%,
+    #20174b 100%
+  );
+  background-size: 200% 200%;
+  animation: hero-shimmer 2.5s ease-in-out infinite;
+
+  // Responsive min-heights ensure it never collapses below a readable size
+  @media (max-width: 1200px) { aspect-ratio: 16 / 7; min-height: 300px; }
+  @media (max-width: 768px)  { aspect-ratio: 16 / 8; min-height: 220px; }
+  @media (max-width: 480px)  { aspect-ratio: 4 / 3;  min-height: 200px; }
+
+  // Stop shimmer once the image is in the DOM (parent gets .is-loaded via TS)
+  &.is-loaded {
+    animation: none;
+    background: transparent;
+  }
 
   .hero-banner-img {
     width: 100%;
@@ -159,10 +183,17 @@
     max-width: none !important;
     transform-origin: center center;
     will-change: transform;
-    // CLS fix: match parent aspect-ratio
+    // Match parent so intrinsic size is always known by the browser
     aspect-ratio: 16 / 7;
   }
 }
+
+@keyframes hero-shimmer {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
 
 // ══════════════════════════════════════════════════════════════
 // BLOCK C — EDITORIAL BRAND MANIFESTO STRIP

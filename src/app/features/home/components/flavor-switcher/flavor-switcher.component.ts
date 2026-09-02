@@ -8,6 +8,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Inject,
+  NgZone,
   PLATFORM_ID
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
@@ -36,6 +37,9 @@ export class FlavorSwitcherComponent implements OnInit, AfterViewInit, OnDestroy
   activeVariant: Variant | null = null;
   
   private floatTween: gsap.core.Tween | null = null;
+  private cachedJarRect: DOMRect | null = null;
+  private tiltRafId: number | null = null;
+  private cleanupTiltListeners?: () => void;
 
   constructor(
     private readonly productService: ProductService,
@@ -44,6 +48,7 @@ export class FlavorSwitcherComponent implements OnInit, AfterViewInit, OnDestroy
     private readonly toastService: ToastService,
     private readonly flyToCartService: FlyToCartService,
     private readonly cdr: ChangeDetectorRef,
+    private readonly ngZone: NgZone,
     @Inject(PLATFORM_ID) private readonly platformId: object
   ) {}
 
@@ -66,11 +71,16 @@ export class FlavorSwitcherComponent implements OnInit, AfterViewInit, OnDestroy
   ngAfterViewInit(): void {
     if (isPlatformBrowser(this.platformId)) {
       this.initFloatAnimation();
+      this.setupTiltEffect();
     }
   }
 
   ngOnDestroy(): void {
     this.killAnimations();
+    this.cleanupTiltListeners?.();
+    if (this.tiltRafId !== null) {
+      cancelAnimationFrame(this.tiltRafId);
+    }
   }
 
   setActive(prod: Product): void {
@@ -78,58 +88,102 @@ export class FlavorSwitcherComponent implements OnInit, AfterViewInit, OnDestroy
     if (prod.variants?.length) {
       this.activeVariant = prod.variants[0];
     }
+    this.cachedJarRect = null;
     this.cdr.markForCheck();
 
-    // Re-trigger visual jar floating scale transition
+    // Re-trigger visual jar floating scale transition outside Angular zone
     if (isPlatformBrowser(this.platformId) && this.jarEl) {
-      gsap.fromTo(this.jarEl.nativeElement,
-        { scale: 0.88, opacity: 0.7 },
-        { scale: 1, opacity: 1, duration: 0.45, ease: 'back.out(1.4)' }
-      );
+      this.ngZone.runOutsideAngular(() => {
+        gsap.fromTo(this.jarEl.nativeElement,
+          { scale: 0.88, opacity: 0.7 },
+          { scale: 1, opacity: 1, duration: 0.45, ease: 'back.out(1.4)' }
+        );
+      });
     }
   }
 
   private initFloatAnimation(): void {
     if (!isPlatformBrowser(this.platformId) || !this.jarEl) return;
     
-    // Subtle luxury floating yoyo loop
-    this.floatTween = gsap.to(this.jarEl.nativeElement, {
-      y: -10,
-      repeat: -1,
-      yoyo: true,
-      duration: 2.4,
-      ease: 'sine.inOut',
+    // Subtle luxury floating yoyo loop run outside Angular
+    this.ngZone.runOutsideAngular(() => {
+      this.floatTween = gsap.to(this.jarEl.nativeElement, {
+        y: -10,
+        repeat: -1,
+        yoyo: true,
+        duration: 2.4,
+        ease: 'sine.inOut',
+      });
     });
   }
 
   /**
-   * Hover 3D Perspective Tilt Effect
+   * High-Performance 3D Perspective Tilt Effect
+   * - Runs entirely outside Angular zone (zero change detection cycles)
+   * - Batches DOM read (cached on pointerenter)
+   * - Batches DOM writes inside requestAnimationFrame
+   * - Eliminates layout thrashing and forced reflows
    */
-  onMouseMove(event: MouseEvent): void {
-    if (!isPlatformBrowser(this.platformId) || !this.jarEl) return;
-
+  private setupTiltEffect(): void {
+    if (!isPlatformBrowser(this.platformId) || !this.jarEl?.nativeElement) return;
     const jar = this.jarEl.nativeElement;
-    const rect = jar.getBoundingClientRect();
-    const x = event.clientX - rect.left - rect.width / 2;
-    const y = event.clientY - rect.top - rect.height / 2;
 
-    const rotateY = (x / (rect.width / 2)) * 12;
-    const rotateX = -(y / (rect.height / 2)) * 12;
+    this.ngZone.runOutsideAngular(() => {
+      const onEnter = () => {
+        // Read phase: cached once on interaction start
+        this.cachedJarRect = jar.getBoundingClientRect();
+      };
 
-    gsap.to(jar, {
-      transform: `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.04, 1.04, 1.04)`,
-      duration: 0.3,
-      ease: 'power1.out',
-    });
-  }
+      const onMove = (event: PointerEvent) => {
+        if (!this.cachedJarRect) {
+          this.cachedJarRect = jar.getBoundingClientRect();
+        }
+        const rect = this.cachedJarRect;
+        const x = event.clientX - rect.left - rect.width / 2;
+        const y = event.clientY - rect.top - rect.height / 2;
 
-  onMouseLeave(): void {
-    if (!isPlatformBrowser(this.platformId) || !this.jarEl) return;
+        const rotateY = (x / (rect.width / 2)) * 12;
+        const rotateX = -(y / (rect.height / 2)) * 12;
 
-    gsap.to(this.jarEl.nativeElement, {
-      transform: 'perspective(800px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)',
-      duration: 0.4,
-      ease: 'power2.out',
+        if (this.tiltRafId !== null) {
+          cancelAnimationFrame(this.tiltRafId);
+        }
+
+        // Write phase: scheduled in next paint frame
+        this.tiltRafId = requestAnimationFrame(() => {
+          gsap.to(jar, {
+            transform: `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.04, 1.04, 1.04)`,
+            duration: 0.3,
+            ease: 'power1.out',
+            overwrite: 'auto',
+          });
+          this.tiltRafId = null;
+        });
+      };
+
+      const onLeave = () => {
+        this.cachedJarRect = null;
+        if (this.tiltRafId !== null) {
+          cancelAnimationFrame(this.tiltRafId);
+          this.tiltRafId = null;
+        }
+        gsap.to(jar, {
+          transform: 'perspective(800px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)',
+          duration: 0.4,
+          ease: 'power2.out',
+          overwrite: 'auto',
+        });
+      };
+
+      jar.addEventListener('pointerenter', onEnter, { passive: true });
+      jar.addEventListener('pointermove', onMove, { passive: true });
+      jar.addEventListener('pointerleave', onLeave, { passive: true });
+
+      this.cleanupTiltListeners = () => {
+        jar.removeEventListener('pointerenter', onEnter);
+        jar.removeEventListener('pointermove', onMove);
+        jar.removeEventListener('pointerleave', onLeave);
+      };
     });
   }
 

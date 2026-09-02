@@ -5,11 +5,14 @@ import {
   ElementRef,
   HostListener,
   inject,
+  NgZone,
   OnDestroy,
   OnInit,
+  PLATFORM_ID,
   signal,
   ViewChild,
 } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, Subject, of } from 'rxjs';
@@ -60,7 +63,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   @ViewChild('searchInputField') searchInputField?: ElementRef<HTMLInputElement>;
 
+  private readonly ngZone            = inject(NgZone);
+  private readonly platformId        = inject(PLATFORM_ID);
+  private scrollTicking = false;
+  private scrollListener?: () => void;
+
   ngOnInit(): void {
+    this.setupOptimizedScrollListener();
+
     // 300ms debounce on keystrokes -> distinctUntilChanged -> switchMap to MongoDB search
     this.searchControl.valueChanges.pipe(
       debounceTime(300),
@@ -97,11 +107,28 @@ export class HeaderComponent implements OnInit, OnDestroy {
     });
   }
 
-  @HostListener('window:scroll', [])
-  onWindowScroll(): void {
-    if (typeof window !== 'undefined') {
-      this.isScrolled.set(window.scrollY > 24);
-    }
+  private setupOptimizedScrollListener(): void {
+    if (!isPlatformBrowser(this.platformId) || typeof window === 'undefined') return;
+
+    this.ngZone.runOutsideAngular(() => {
+      const handleScroll = (): void => {
+        if (this.scrollTicking) return;
+        this.scrollTicking = true;
+
+        window.requestAnimationFrame(() => {
+          const isNowScrolled = window.scrollY > 24;
+          if (this.isScrolled() !== isNowScrolled) {
+            this.ngZone.run(() => {
+              this.isScrolled.set(isNowScrolled);
+            });
+          }
+          this.scrollTicking = false;
+        });
+      };
+
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      this.scrollListener = () => window.removeEventListener('scroll', handleScroll);
+    });
   }
 
   @HostListener('document:click', ['$event'])
@@ -200,6 +227,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.scrollListener?.();
     this.destroy$.next();
     this.destroy$.complete();
   }

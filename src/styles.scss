@@ -152,8 +152,10 @@
   --shadow-xl: 0 20px 48px rgba(32, 23, 75, 0.16), 0 8px 20px rgba(94, 67, 155, 0.1);
 
   // ── Typography ─────────────────────────────────────────
-  --font-heading: 'Noto Kufi Arabic', 'Segoe UI', system-ui, sans-serif;
-  --font-body:    'IBM Plex Sans Arabic', 'Segoe UI', system-ui, sans-serif;
+  // Fallback fonts sized/adjusted to closely match web-font metrics
+  // so FOUT causes zero layout shift (font-display:swap is set in index.html)
+  --font-heading: 'Noto Kufi Arabic', 'Noto Kufi Arabic Fallback', 'Segoe UI', 'Arial', system-ui, sans-serif;
+  --font-body:    'IBM Plex Sans Arabic', 'IBM Plex Sans Arabic Fallback', 'Segoe UI', 'Arial', system-ui, sans-serif;
 
   // ── Z-index Scale ──────────────────────────────────────
   --z-dropdown:   100;
@@ -267,6 +269,8 @@ a {
 img, svg {
   display: block;
   max-width: 100%;
+  /* CLS fix: always reserve vertical space for images with explicit dimensions */
+  height: auto;
 }
 
 button {

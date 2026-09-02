@@ -7,6 +7,7 @@ import {
   ElementRef,
   Inject,
   inject,
+  NgZone,
   OnDestroy,
   OnInit,
   PLATFORM_ID,
@@ -52,6 +53,7 @@ export class ProductsSectionComponent implements OnInit, AfterViewInit, OnDestro
   private readonly translate      = inject(TranslateService);
   private readonly cdr            = inject(ChangeDetectorRef);
   private readonly destroyRef     = inject(DestroyRef);
+  private readonly ngZone         = inject(NgZone);
 
   private swiper?: Swiper;
   private readonly isBrowser: boolean;
@@ -120,7 +122,7 @@ export class ProductsSectionComponent implements OnInit, AfterViewInit, OnDestro
 
   ngAfterViewInit(): void {
     if (this.isBrowser && this.shelfProducts.length > 0) {
-      setTimeout(() => this.initSwiper(), 60);
+      setTimeout(() => this.ngZone.runOutsideAngular(() => this.initSwiper()), 60);
     }
   }
 
@@ -145,7 +147,7 @@ export class ProductsSectionComponent implements OnInit, AfterViewInit, OnDestro
           this.isLoading = false;
           this.cdr.markForCheck();
           if (this.isBrowser) {
-            setTimeout(() => this.initSwiper(), 60);
+            setTimeout(() => this.ngZone.runOutsideAngular(() => this.initSwiper()), 60);
           }
         },
         error: () => {
@@ -153,7 +155,7 @@ export class ProductsSectionComponent implements OnInit, AfterViewInit, OnDestro
           this.isLoading = false;
           this.cdr.markForCheck();
           if (this.isBrowser) {
-            setTimeout(() => this.initSwiper(), 60);
+            setTimeout(() => this.ngZone.runOutsideAngular(() => this.initSwiper()), 60);
           }
         },
       });

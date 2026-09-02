@@ -6,6 +6,7 @@ import {
   ElementRef,
   Inject,
   inject,
+  NgZone,
   OnInit,
   OnDestroy,
   PLATFORM_ID,
@@ -38,6 +39,7 @@ export class PromoVideoComponent implements OnInit, OnDestroy {
   private readonly destroyRef = inject(DestroyRef);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly settings = inject(SettingsService);
+  private readonly ngZone = inject(NgZone);
 
   private ctx?: gsap.Context;
   private isBrowser: boolean;
@@ -86,10 +88,12 @@ export class PromoVideoComponent implements OnInit, OnDestroy {
           this.cdr.detectChanges();
 
           if (this.isBrowser) {
-            setTimeout(() => {
-              this.initScrollAnimation();
-              ScrollTrigger.refresh();
-            }, 60);
+            this.ngZone.runOutsideAngular(() => {
+              requestAnimationFrame(() => {
+                this.initScrollAnimation();
+                ScrollTrigger.refresh();
+              });
+            });
           }
         },
         error: () => {
