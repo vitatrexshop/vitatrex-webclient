@@ -55,11 +55,10 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
 
   isLoading = true;
   stories: Story[] = [];
+  readonly skeletonItems = [1, 2, 3, 4, 5];
 
-  /** Track poster URLs that have already errored so we don't infinite-loop */
+  /** Track poster URLs that have errored so we don't infinite loop and can show fallback */
   private brokenPosters = new Set<string>();
-  /** Counter for cycling through fallback posters on 404 */
-  private fallbackPosterIndex = 0;
 
   // Modal Reel State
   isModalOpen = false;
@@ -68,61 +67,13 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
   isMuted = true;
   fitMode: 'contain' | 'cover' = 'contain';
   videoProgress = 0;
+  hasVideoError = false;
   showPlayPauseFeedback: 'play' | 'pause' | null = null;
   private feedbackTimeout?: any;
 
   // Touch navigation
   private touchStartX = 0;
   private touchStartY = 0;
-
-  // Fallback demo stories if API has no active items yet
-  readonly fallbackStories: Story[] = [
-    {
-      _id: 'demo-1',
-      title: 'طاقة ونشاط طوال اليوم',
-      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
-      posterUrl: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=600&q=80',
-      productLink: '/products',
-      isActive: true,
-      order: 1,
-    },
-    {
-      _id: 'demo-2',
-      title: 'نوم عميق ومريح كل ليلة',
-      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
-      posterUrl: 'https://images.unsplash.com/photo-1550989460-0adf9ea622e2?auto=format&fit=crop&w=600&q=80',
-      productLink: '/products',
-      isActive: true,
-      order: 2,
-    },
-    {
-      _id: 'demo-3',
-      title: 'مناعة قوية ونشاط دائم',
-      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
-      posterUrl: 'https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&w=600&q=80',
-      productLink: '/products',
-      isActive: true,
-      order: 3,
-    },
-    {
-      _id: 'demo-4',
-      title: 'بشرة نضرة وشعر صحي',
-      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyBlazes.mp4',
-      posterUrl: 'https://images.unsplash.com/photo-1512290900672-1f02e6005b76?auto=format&fit=crop&w=600&q=80',
-      productLink: '/products',
-      isActive: true,
-      order: 4,
-    },
-    {
-      _id: 'demo-5',
-      title: 'فيتامينات طبيعية للأطفال',
-      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4',
-      posterUrl: 'https://images.unsplash.com/photo-1556911073-38141963c9e0?auto=format&fit=crop&w=600&q=80',
-      productLink: '/products',
-      isActive: true,
-      order: 5,
-    },
-  ];
 
   constructor(@Inject(PLATFORM_ID) platformId: object) {
     this.isBrowser = isPlatformBrowser(platformId);
@@ -156,42 +107,31 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
       .getStories()
       .pipe(
         catchError((err) => {
-          console.warn('[VideoStories] API error, using fallback stories:', err);
+          console.warn('[VideoStories] API fetch error:', err);
           return of(null);
         }),
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe({
         next: (res) => {
-          if (res && res.success && Array.isArray(res.data) && res.data.length > 0) {
-            // isActive may come as undefined from older DB docs — treat undefined as active
-            const active = res.data.filter((s) => s.isActive !== false && s.isActive !== null);
-
-            if (active.length > 0) {
-              // Always show ALL DB stories first; pad with fallbacks up to minCards
-              const MIN_CARDS = 5;
-              if (active.length < MIN_CARDS) {
-                const pad = this.fallbackStories
-                  .filter((f) => !active.find((a) => a._id === f._id))
-                  .slice(0, MIN_CARDS - active.length);
-                this.stories = [...active, ...pad];
-              } else {
-                this.stories = active;
-              }
-            } else {
-              this.stories = this.fallbackStories;
-            }
+          if (res && res.success && Array.isArray(res.data)) {
+            // Filter only active items and sort by order
+            this.stories = res.data
+              .filter((s) => s.isActive !== false && s.isActive !== null)
+              .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+          } else if (Array.isArray(res)) {
+            this.stories = (res as Story[])
+              .filter((s) => s.isActive !== false && s.isActive !== null)
+              .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
           } else {
-            this.stories = this.fallbackStories;
+            this.stories = [];
           }
 
           this.isLoading = false;
-          // Use markForCheck (not detectChanges) – compatible with OnPush in production
           this.cdr.markForCheck();
-          // Also call detectChanges to guarantee the view refreshes on first render
           this.cdr.detectChanges();
 
-          if (this.isBrowser) {
+          if (this.isBrowser && this.stories.length > 0) {
             setTimeout(() => {
               this.initScrollAnimation();
               ScrollTrigger.refresh();
@@ -199,17 +139,10 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
           }
         },
         error: () => {
-          this.stories = this.fallbackStories;
+          this.stories = [];
           this.isLoading = false;
           this.cdr.markForCheck();
           this.cdr.detectChanges();
-
-          if (this.isBrowser) {
-            setTimeout(() => {
-              this.initScrollAnimation();
-              ScrollTrigger.refresh();
-            }, 80);
-          }
         },
       });
   }
@@ -218,33 +151,49 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
     return this.stories[this.activeStoryIndex] || null;
   }
 
+  trackByStoryId(index: number, story: Story): string {
+    return story._id || String(index);
+  }
+
   formatMediaUrl(url?: string): string {
     if (!url) return '';
     const raw = url.trim();
-    if (raw.startsWith('http://') || raw.startsWith('https://') || raw.startsWith('blob:')) {
-      return raw;
+    if (
+      raw.startsWith('http://') ||
+      raw.startsWith('https://') ||
+      raw.startsWith('blob:') ||
+      raw.startsWith('data:') ||
+      raw.startsWith('assets/')
+    ) {
+      // Resize Unsplash thumbnails to match the 295px card container
+      return this.optimizeUnsplashUrl(raw);
     }
     if (raw.startsWith('/uploads')) return `${environment.mediaBaseUrl}${raw}`;
     if (raw.startsWith('uploads')) return `${environment.mediaBaseUrl}/${raw}`;
-    return raw;
+    return `${environment.mediaBaseUrl}/${raw}`;
   }
 
-  formatVideoUrl(url?: string): string {
-    const fallback = this.fallbackStories[this.activeStoryIndex % this.fallbackStories.length].videoUrl;
-    if (!url) return fallback;
-    const raw = url.trim();
-    if (!raw) return fallback;
-    const lower = raw.toLowerCase();
-    if (
-      lower.endsWith('.jpg') ||
-      lower.endsWith('.jpeg') ||
-      lower.endsWith('.png') ||
-      lower.endsWith('.webp') ||
-      lower.endsWith('.avif')
-    ) {
-      return fallback;
+  /**
+   * Rewrites any Unsplash image URL so the w= query param matches the
+   * 295px card container, preventing oversized downloads.
+   */
+  private optimizeUnsplashUrl(url: string, width = 300): string {
+    if (!url || !url.includes('images.unsplash.com')) return url;
+    if (/[?&]w=/.test(url)) {
+      return url.replace(/([?&]w=)\d+/, `$1${width}`);
     }
-    if (raw.startsWith('http://') || raw.startsWith('https://') || raw.startsWith('blob:')) {
+    return url + (url.includes('?') ? `&w=${width}` : `?w=${width}`);
+  }
+
+
+  formatVideoUrl(url?: string): string {
+    if (!url) return '';
+    const raw = url.trim();
+    if (
+      raw.startsWith('http://') ||
+      raw.startsWith('https://') ||
+      raw.startsWith('blob:')
+    ) {
       return raw;
     }
     if (raw.startsWith('/uploads')) return `${environment.mediaBaseUrl}${raw}`;
@@ -252,30 +201,27 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
     return `${environment.mediaBaseUrl}/${raw}`;
   }
 
-  onPosterError(event: Event): void {
+  onPosterError(event: Event, posterUrl?: string): void {
+    if (posterUrl) {
+      this.brokenPosters.add(posterUrl);
+    }
     const img = event.target as HTMLImageElement;
-    if (!img) return;
+    if (img && img.src) {
+      this.brokenPosters.add(img.src);
+    }
+    this.cdr.markForCheck();
+  }
 
-    // Prevent infinite error loops: if this src already failed once, give up
-    const failedSrc = img.src;
-    if (this.brokenPosters.has(failedSrc)) return;
-    this.brokenPosters.add(failedSrc);
-
-    // Cycle through fallback posters so each broken card shows a different one
-    const fallback = this.fallbackStories[this.fallbackPosterIndex % this.fallbackStories.length];
-    this.fallbackPosterIndex++;
-    img.src = fallback.posterUrl;
+  isBrokenPoster(posterUrl?: string): boolean {
+    if (!posterUrl) return true;
+    return this.brokenPosters.has(posterUrl) || this.brokenPosters.has(this.formatMediaUrl(posterUrl));
   }
 
   onVideoError(event: Event): void {
-    console.warn('Story video error, switching to reliable sample video stream:', event);
-    const vid = this.reelVideoEl?.nativeElement;
-    const fallback = this.fallbackStories[this.activeStoryIndex % this.fallbackStories.length].videoUrl;
-    if (vid && vid.src !== fallback) {
-      vid.src = fallback;
-      vid.load();
-      this.playActiveVideo();
-    }
+    console.warn('[VideoStories] Video playback error:', event);
+    this.hasVideoError = true;
+    this.isPlaying = false;
+    this.cdr.markForCheck();
   }
 
   // ── Stories Bar Scroll Navigation ──────────────────────────
@@ -303,6 +249,7 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
     this.videoProgress = 0;
     this.isPlaying = true;
     this.isMuted = true;
+    this.hasVideoError = false;
     this.cdr.markForCheck();
 
     if (this.isBrowser) {
@@ -327,6 +274,7 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
     }
     this.isModalOpen = false;
     this.videoProgress = 0;
+    this.hasVideoError = false;
     this.cdr.markForCheck();
 
     if (this.isBrowser) {
@@ -340,6 +288,7 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
       this.activeStoryIndex++;
       this.videoProgress = 0;
       this.isPlaying = true;
+      this.hasVideoError = false;
       this.cdr.markForCheck();
       setTimeout(() => {
         if (this.reelVideoEl?.nativeElement) {
@@ -359,6 +308,7 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
       this.activeStoryIndex--;
       this.videoProgress = 0;
       this.isPlaying = true;
+      this.hasVideoError = false;
       this.cdr.markForCheck();
       setTimeout(() => {
         if (this.reelVideoEl?.nativeElement) {
@@ -372,6 +322,7 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
 
   togglePlay(event?: Event): void {
     if (event) event.stopPropagation();
+    if (this.hasVideoError) return;
     if (!this.reelVideoEl?.nativeElement) return;
     const vid = this.reelVideoEl.nativeElement;
 
@@ -386,7 +337,8 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
           console.warn('Unmuted play blocked, retrying muted:', e);
           vid.muted = true;
           this.isMuted = true;
-          vid.play()
+          vid
+            .play()
             .then(() => {
               this.isPlaying = true;
               this.triggerFeedback('play');
@@ -414,6 +366,7 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
 
   onVideoPlay(): void {
     this.isPlaying = true;
+    this.hasVideoError = false;
     this.cdr.markForCheck();
   }
 
@@ -436,11 +389,12 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
   }
 
   onVideoLoaded(): void {
+    this.hasVideoError = false;
     this.playActiveVideo();
   }
 
   private playActiveVideo(): void {
-    if (!this.isBrowser) return;
+    if (!this.isBrowser || this.hasVideoError) return;
 
     setTimeout(() => {
       if (!this.reelVideoEl?.nativeElement) return;
@@ -452,14 +406,17 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
       if (p !== undefined) {
         p.then(() => {
           this.isPlaying = true;
+          this.hasVideoError = false;
           this.cdr.markForCheck();
         }).catch((err) => {
           console.warn('Initial autoplay restricted, applying muted autoplay:', err);
           vid.muted = true;
           this.isMuted = true;
-          vid.play()
+          vid
+            .play()
             .then(() => {
               this.isPlaying = true;
+              this.hasVideoError = false;
               this.cdr.markForCheck();
             })
             .catch((e) => {

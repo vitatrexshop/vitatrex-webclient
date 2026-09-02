@@ -40,11 +40,14 @@ export class CartDrawerComponent {
   }
 
   increment(item: CartItem): void {
-    this.cartService.updateQuantity(
-      item.product._id,
-      item.selectedVariant.count,
-      item.quantity + 1
-    );
+    const max = item.selectedVariant.stock !== -1 ? item.selectedVariant.stock : 999;
+    if (item.quantity < max) {
+      this.cartService.updateQuantity(
+        item.product._id,
+        item.selectedVariant.count,
+        item.quantity + 1
+      );
+    }
   }
 
   decrement(item: CartItem): void {

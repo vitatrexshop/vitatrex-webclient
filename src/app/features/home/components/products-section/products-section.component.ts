@@ -1,17 +1,23 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   DestroyRef,
   ElementRef,
+  Inject,
   inject,
   OnDestroy,
   OnInit,
+  PLATFORM_ID,
   ViewChild,
 } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import Swiper from 'swiper';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import { ProductService } from '../../../../core/services/product.service';
 import { CartService } from '../../../../core/services/cart.service';
 import { ToastService } from '../../../../core/services/toast.service';
@@ -30,18 +36,15 @@ export interface HappyShelfItem {
   rawProduct?: Product;
 }
 
-// ── Autoplay Configuration ────────────────────────────────────
-const AUTOPLAY_DELAY_MS = 3000; // 3 s per step (matches Swiper spec)
-const AUTOPLAY_STEP_PX  = 280;  // px scrolled per autoplay tick
-
 @Component({
   selector: 'app-products-section',
   templateUrl: './products-section.component.html',
   styleUrls: ['./products-section.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProductsSectionComponent implements OnInit, OnDestroy {
-  @ViewChild('shelfTrack', { static: false }) shelfTrack?: ElementRef<HTMLDivElement>;
+export class ProductsSectionComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('sectionEl', { static: false }) sectionEl?: ElementRef<HTMLElement>;
+  @ViewChild('swiperEl', { static: false }) swiperEl?: ElementRef<HTMLElement>;
 
   private readonly productService = inject(ProductService);
   private readonly cartService    = inject(CartService);
@@ -50,80 +53,85 @@ export class ProductsSectionComponent implements OnInit, OnDestroy {
   private readonly cdr            = inject(ChangeDetectorRef);
   private readonly destroyRef     = inject(DestroyRef);
 
+  private swiper?: Swiper;
+  private readonly isBrowser: boolean;
+
   isLoading = true;
-  scrollProgress = 0;
-  canScrollPrev = false;
-  canScrollNext = true;
 
-  // Autoplay internal state
-  private autoplayTimer: ReturnType<typeof setInterval> | null = null;
-  private isHovered = false;      // tracks section-level hover
-  private isCardHovered = false;  // tracks individual card hover
-
-  // ── Default shelf products (exact reference mockup) ─────────
+  // ── Default shelf products (curated reference items) ─────────
   readonly defaultShelfProducts: HappyShelfItem[] = [
     {
       _id: 'shelf-maternal-01',
       name: 'Maternal Multi',
       slug: 'maternal-multi',
       price: 430.00,
-      image: 'assets/bottles/maternal-multi.png',
+      image: 'assets/bottles/maternal-multi.webp',
       inStock: false,
       category: 'maternal',
     },
     {
-      _id: 'shelf-mens-02',
-      name: "Men's Multi",
-      slug: 'mens-multi',
-      price: 410.00,
-      image: 'assets/bottles/mens-multi.png',
+      _id: 'shelf-sleep-02',
+      name: 'Sleep',
+      slug: 'sleep',
+      price: 430.00,
+      image: 'assets/bottles/sleep.webp',
       inStock: true,
-      category: 'energy',
+      category: 'sleep',
     },
     {
-      _id: 'shelf-womens-03',
-      name: "Women's Multi",
-      slug: 'womens-multi',
-      price: 410.00,
-      image: 'assets/bottles/womens-multi.png',
-      inStock: true,
-      category: 'women',
-    },
-    {
-      _id: 'shelf-mens50-04',
+      _id: 'shelf-mens50-03',
       name: "Men's 50+ Multi",
       slug: 'mens-50-multi',
       price: 410.00,
-      image: 'assets/bottles/mens-50-multi.png',
+      image: 'assets/bottles/mens-50-multi.webp',
       inStock: true,
       category: 'immunity',
     },
     {
-      _id: 'shelf-sleep-05',
-      name: 'Sleep',
-      slug: 'sleep',
-      price: 430.00,
-      image: 'assets/bottles/sleep.png',
+      _id: 'shelf-womens-04',
+      name: "Women's Multi",
+      slug: 'womens-multi',
+      price: 410.00,
+      image: 'assets/bottles/womens-multi.webp',
       inStock: true,
-      category: 'sleep',
+      category: 'women',
+    },
+    {
+      _id: 'shelf-mens-05',
+      name: "Men's Multi",
+      slug: 'mens-multi',
+      price: 410.00,
+      image: 'assets/bottles/mens-multi.webp',
+      inStock: true,
+      category: 'energy',
     },
   ];
 
   shelfProducts: HappyShelfItem[] = [];
+
+  constructor(@Inject(PLATFORM_ID) platformId: object) {
+    this.isBrowser = isPlatformBrowser(platformId);
+  }
 
   // ── Lifecycle ────────────────────────────────────────────────
   ngOnInit(): void {
     this.fetchProducts();
   }
 
+  ngAfterViewInit(): void {
+    if (this.isBrowser && this.shelfProducts.length > 0) {
+      setTimeout(() => this.initSwiper(), 60);
+    }
+  }
+
   ngOnDestroy(): void {
-    this.stopAutoplay();
+    this.swiper?.destroy(true, true);
   }
 
   // ── Data Loading ─────────────────────────────────────────────
   fetchProducts(): void {
     this.isLoading = true;
-    this.cdr.detectChanges();
+    this.cdr.markForCheck();
 
     this.productService
       .getProducts()
@@ -135,25 +143,23 @@ export class ProductsSectionComponent implements OnInit, OnDestroy {
         next: (backendProds) => {
           this.buildShelfProducts(backendProds);
           this.isLoading = false;
-          this.cdr.detectChanges();
-          setTimeout(() => {
-            this.updateScrollState();
-            this.startAutoplay(); // Begin autoplay once data is ready
-          }, 80);
+          this.cdr.markForCheck();
+          if (this.isBrowser) {
+            setTimeout(() => this.initSwiper(), 60);
+          }
         },
         error: () => {
-          this.shelfProducts = [...this.defaultShelfProducts];
+          this.buildShelfProducts([]);
           this.isLoading = false;
-          this.cdr.detectChanges();
-          setTimeout(() => this.startAutoplay(), 80);
+          this.cdr.markForCheck();
+          if (this.isBrowser) {
+            setTimeout(() => this.initSwiper(), 60);
+          }
         },
       });
   }
 
   private buildShelfProducts(backendProds: Product[]): void {
-    // Always start with the 5 curated shelf products — never append unmatched backend items
-    // whose raw images (marketing banners etc.) would break the visual design.
-    // We only update price/stock for a curated item if the backend has a matching slug/name.
     const items: HappyShelfItem[] = [...this.defaultShelfProducts];
 
     if (backendProds?.length) {
@@ -162,7 +168,6 @@ export class ProductsSectionComponent implements OnInit, OnDestroy {
           (i) => i.slug === bp.slug || i.name.toLowerCase() === bp.name.toLowerCase()
         );
         if (existingIdx !== -1) {
-          // Update price and availability from live backend data
           items[existingIdx].rawProduct = bp;
           if (bp.variants?.[0]?.price) {
             items[existingIdx].price = bp.variants[0].price;
@@ -174,113 +179,69 @@ export class ProductsSectionComponent implements OnInit, OnDestroy {
               bp.variants[0].stock === -1);
           items[existingIdx].inStock = isAvailable;
         }
-        // Unmatched backend products are intentionally ignored:
-        // the Happy Shelf shows only the 5 curated premium products.
       });
     }
 
     this.shelfProducts = items;
   }
 
-  // ── Autoplay Engine ─────────────────────────────────────────
-  /** Start the continuous auto-scroll ticker. */
-  private startAutoplay(): void {
-    if (this.autoplayTimer !== null) return; // already running
-    this.autoplayTimer = setInterval(() => this.autoplayTick(), AUTOPLAY_DELAY_MS);
+  // ── Swiper Initialization ────────────────────────────────────
+  private initSwiper(): void {
+    const el = this.swiperEl?.nativeElement;
+    if (!el || !this.isBrowser) return;
+    const section = this.sectionEl?.nativeElement;
+
+    this.swiper?.destroy(true, true);
+
+    this.swiper = new Swiper(el, {
+      modules: [Navigation, Pagination, Autoplay],
+      loop: this.shelfProducts.length >= 3,
+      slidesPerView: 5,
+      spaceBetween: 24,
+      speed: 600,
+      grabCursor: true,
+      watchSlidesProgress: true,
+      autoplay: {
+        delay: 2500,
+        disableOnInteraction: false,
+        pauseOnMouseEnter: true,
+      },
+      navigation: {
+        nextEl: section?.querySelectorAll<HTMLElement>('.shelf-nav-btn--next') as any ?? '.shelf-nav-btn--next',
+        prevEl: section?.querySelectorAll<HTMLElement>('.shelf-nav-btn--prev') as any ?? '.shelf-nav-btn--prev',
+      },
+      pagination: {
+        el: section?.querySelector<HTMLElement>('.shelf-dots') ?? '.shelf-dots',
+        clickable: true,
+        bulletClass: 'shelf-dot',
+        bulletActiveClass: 'is-active',
+      },
+      breakpoints: {
+        0: {
+          slidesPerView: 1.5,
+          spaceBetween: 12,
+        },
+        480: {
+          slidesPerView: 2,
+          spaceBetween: 14,
+        },
+        768: {
+          slidesPerView: 3,
+          spaceBetween: 18,
+        },
+        992: {
+          slidesPerView: 4,
+          spaceBetween: 20,
+        },
+        1200: {
+          slidesPerView: 5,
+          spaceBetween: 24,
+        },
+      },
+    });
   }
 
-  /** Stop the auto-scroll ticker. */
-  private stopAutoplay(): void {
-    if (this.autoplayTimer !== null) {
-      clearInterval(this.autoplayTimer);
-      this.autoplayTimer = null;
-    }
-  }
-
-  /** Called every AUTOPLAY_DELAY_MS when not paused. */
-  private autoplayTick(): void {
-    if (!this.shelfTrack) return;
-    const el = this.shelfTrack.nativeElement;
-    const maxScroll = el.scrollWidth - el.clientWidth;
-    const current   = el.scrollLeft;
-
-    if (maxScroll <= 0) return;
-
-    if (current >= maxScroll - 4) {
-      // Reached end → loop back to start
-      el.scrollTo({ left: 0, behavior: 'smooth' });
-    } else {
-      el.scrollBy({ left: AUTOPLAY_STEP_PX, behavior: 'smooth' });
-    }
-  }
-
-  // ── Section-level Hover (Pause on Enter / Resume on Leave) ──
-  onSectionMouseEnter(): void {
-    this.isHovered = true;
-    this.stopAutoplay();
-  }
-
-  onSectionMouseLeave(): void {
-    this.isHovered = false;
-    if (!this.isCardHovered) {
-      this.startAutoplay();
-    }
-  }
-
-  // ── Card-level Hover (Extra granular pause per card) ─────────
-  onCardMouseEnter(): void {
-    this.isCardHovered = true;
-    this.stopAutoplay();
-  }
-
-  onCardMouseLeave(): void {
-    this.isCardHovered = false;
-    if (!this.isHovered) {
-      this.startAutoplay();
-    }
-  }
-
-  // ── Carousel Manual Scroll Controls ─────────────────────────
-  scrollPrev(): void {
-    if (!this.shelfTrack) return;
-    this.stopAutoplay();
-    const el = this.shelfTrack.nativeElement;
-    el.scrollBy({ left: -(el.clientWidth * 0.75), behavior: 'smooth' });
-    // Resume after a brief pause when user navigates manually
-    setTimeout(() => { if (!this.isHovered && !this.isCardHovered) this.startAutoplay(); }, 2500);
-  }
-
-  scrollNext(): void {
-    if (!this.shelfTrack) return;
-    this.stopAutoplay();
-    const el = this.shelfTrack.nativeElement;
-    el.scrollBy({ left: el.clientWidth * 0.75, behavior: 'smooth' });
-    setTimeout(() => { if (!this.isHovered && !this.isCardHovered) this.startAutoplay(); }, 2500);
-  }
-
-  onScroll(): void {
-    this.updateScrollState();
-  }
-
-  private updateScrollState(): void {
-    if (!this.shelfTrack) return;
-    const el = this.shelfTrack.nativeElement;
-    const maxScroll = el.scrollWidth - el.clientWidth;
-
-    if (maxScroll <= 0) {
-      this.scrollProgress = 0;
-      this.canScrollPrev  = false;
-      this.canScrollNext  = false;
-    } else {
-      const current        = Math.max(0, el.scrollLeft);
-      this.scrollProgress  = Math.min(100, Math.round((current / maxScroll) * 100));
-      this.canScrollPrev   = current > 10;
-      this.canScrollNext   = current < maxScroll - 10;
-    }
-    this.cdr.detectChanges();
-  }
-
-  // ── Notify Me (Out-of-Stock) ─────────────────────────────────
+  // ── Add to Cart & Notify Handlers ────────────────────────────
   onNotifyMe(item: HappyShelfItem, event: Event): void {
     event.stopPropagation();
     event.preventDefault();
@@ -291,7 +252,6 @@ export class ProductsSectionComponent implements OnInit, OnDestroy {
     this.toastService.success(msg);
   }
 
-  // ── Add to Cart (In-Stock) ───────────────────────────────────
   onAddToCart(item: HappyShelfItem, event: Event): void {
     event.stopPropagation();
     event.preventDefault();
@@ -342,3 +302,4 @@ export class ProductsSectionComponent implements OnInit, OnDestroy {
     return item._id;
   }
 }
+

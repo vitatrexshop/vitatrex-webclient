@@ -1,9 +1,9 @@
 <!-- ══════════════════════════════════════════════════════════════
-     VITATRIX VIDEO STORIES / REELS — Section 4
+     VITATRIX VIDEO STORIES / REELS — Dynamic Section
      Instagram-Style Interactive Video Stories Row & Reel Player
      ══════════════════════════════════════════════════════════════ -->
 
-<section #storiesSection class="video-stories-section" aria-label="قصص وتجارب فيتاتريكس">
+<section #storiesSection *ngIf="isLoading || stories.length > 0" class="video-stories-section" aria-label="قصص وتجارب فيتاتريكس">
   <div class="vt-container">
 
     <!-- ── Section Header ─────────────────────────────────────── -->
@@ -25,7 +25,7 @@
     <!-- ── SKELETON LOADER STATE ──────────────────────────────── -->
     <div *ngIf="isLoading" class="stories-track-wrapper" aria-busy="true">
       <div class="stories-track">
-        <div *ngFor="let sk of [1, 2, 3, 4, 5]" class="story-reel-card story-card--skeleton">
+        <div *ngFor="let sk of skeletonItems" class="story-reel-card story-card--skeleton">
           <div class="story-card-skeleton sk-shimmer"></div>
         </div>
       </div>
@@ -48,7 +48,7 @@
       <!-- Scrollable Track of Instagram / 360 Reel Showcase Cards -->
       <div #storiesTrack class="stories-track" role="list">
         <article
-          *ngFor="let story of stories; let i = index"
+          *ngFor="let story of stories; let i = index; trackBy: trackByStoryId"
           class="story-reel-card"
           role="listitem"
           tabindex="0"
@@ -59,12 +59,29 @@
           <!-- Full-Bleed Clean Showcase Media -->
           <div class="story-card-media">
             <img
+              *ngIf="story.posterUrl && !isBrokenPoster(story.posterUrl)"
               [src]="formatMediaUrl(story.posterUrl)"
               [alt]="story.title"
               class="story-card-img"
+              width="295"
+              height="443"
               loading="lazy"
-              (error)="onPosterError($event)"
+              (error)="onPosterError($event, story.posterUrl)"
             />
+
+            <!-- Clean gradient fallback poster if no posterUrl or if error occurs -->
+            <div *ngIf="!story.posterUrl || isBrokenPoster(story.posterUrl)" class="story-fallback-poster">
+              <div class="fallback-poster-icon">
+                <svg viewBox="0 0 24 24" width="36" height="36" fill="currentColor">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Card Title Overlay -->
+          <div class="story-card-title-overlay">
+            <span class="story-card-title-text">{{ story.title }}</span>
           </div>
 
           <!-- Subtle Frosted Glass Play Indicator -->
@@ -145,7 +162,7 @@
       <!-- Top Story Progress Segments -->
       <div class="story-progress-segments" aria-hidden="true">
         <div
-          *ngFor="let s of stories; let idx = index"
+          *ngFor="let s of stories; let idx = index; trackBy: trackByStoryId"
           class="progress-segment-track"
         >
           <div
@@ -159,13 +176,21 @@
       <div class="reel-top-header">
         <div class="story-author-info">
           <img
+            *ngIf="currentStory.posterUrl && !isBrokenPoster(currentStory.posterUrl)"
             [src]="formatMediaUrl(currentStory.posterUrl)"
             [alt]="currentStory.title"
             class="story-author-avatar"
-            (error)="onPosterError($event)"
+            loading="lazy"
+            decoding="async"
+            (error)="onPosterError($event, currentStory.posterUrl)"
           />
+          <div *ngIf="!currentStory.posterUrl || isBrokenPoster(currentStory.posterUrl)" class="story-author-avatar-fallback">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
+            </svg>
+          </div>
           <div class="story-author-meta">
-            <span class="story-author-name">Vitatrex</span>
+            <span class="story-author-name">{{ 'STORIES_SECTION.OFFICIAL' | translate }}</span>
             <span class="story-author-tag">{{ currentStory.title }}</span>
           </div>
         </div>
@@ -234,18 +259,21 @@
       <!-- ── HTML5 Vertical Reel Video & Ambient Layer ───────────── -->
       <div class="reel-video-layer" (click)="togglePlay($event)">
         <!-- Ambient blurred backdrop for letterboxed videos -->
-        <div class="reel-ambient-layer" aria-hidden="true">
+        <div class="reel-ambient-layer" aria-hidden="true" *ngIf="currentStory.posterUrl && !isBrokenPoster(currentStory.posterUrl)">
           <img
             [src]="formatMediaUrl(currentStory.posterUrl)"
             [alt]="''"
             class="ambient-backdrop-img"
-            (error)="onPosterError($event)"
+            loading="lazy"
+            decoding="async"
+            (error)="onPosterError($event, currentStory.posterUrl)"
           />
           <div class="ambient-overlay-shade"></div>
         </div>
 
         <video
           #reelVideo
+          *ngIf="currentStory.videoUrl && !hasVideoError"
           class="reel-video-element"
           [ngClass]="'fit-' + fitMode"
           [src]="formatVideoUrl(currentStory.videoUrl)"
@@ -264,13 +292,23 @@
           (error)="onVideoError($event)"
         ></video>
 
+        <!-- Video Error Notice -->
+        <div *ngIf="hasVideoError" class="reel-video-error-state">
+          <div class="video-error-icon">
+            <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+            </svg>
+          </div>
+          <p class="video-error-text">{{ 'STORIES_SECTION.VIDEO_ERROR' | translate }}</p>
+        </div>
+
         <!-- Tap Zones for Previous / Next -->
         <div class="reel-tap-zone zone-prev" (click)="prevStory($event)"></div>
         <div class="reel-tap-zone zone-next" (click)="nextStory($event)"></div>
 
         <!-- Large Glowing Center Play Button (Shown when paused) -->
         <button
-          *ngIf="!isPlaying"
+          *ngIf="!isPlaying && !hasVideoError"
           class="reel-center-play-btn"
           type="button"
           (click)="togglePlay($event)"
@@ -293,14 +331,14 @@
       </div>
 
       <!-- ── Floating Bottom Product CTA Card ─────────────────── -->
-      <div class="reel-bottom-overlay">
+      <div class="reel-bottom-overlay" *ngIf="currentStory.title || currentStory.productLink">
         <div class="reel-product-cta-card">
           <div class="product-cta-text">
             <span class="product-cta-label">{{ currentStory.title }}</span>
-            <span class="product-cta-sub">فيتامينات طبيعية 100% بدون سكر مضاف</span>
           </div>
 
           <button
+            *ngIf="currentStory.productLink"
             class="product-cta-btn"
             type="button"
             (click)="navigateToProduct(currentStory.productLink, $event)"

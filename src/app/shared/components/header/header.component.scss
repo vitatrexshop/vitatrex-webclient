@@ -84,6 +84,8 @@
     max-width: 165px;
     object-fit: contain;
     display: block;
+    // CLS fix: matches HTML width/height attrs (165×46) to reserve layout space
+    aspect-ratio: 165 / 46;
 
     @media (min-width: 576px) {
       height: 46px;

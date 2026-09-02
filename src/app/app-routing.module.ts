@@ -25,6 +25,13 @@ const routes: Routes = [
       ),
   },
   {
+    path: 'payment',
+    loadChildren: () =>
+      import('./features/payment-result/payment-result.module').then(
+        (m) => m.PaymentResultModule
+      ),
+  },
+  {
     path: 'order-success',
     loadChildren: () =>
       import('./features/order-success/order-success.module').then(

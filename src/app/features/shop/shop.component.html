@@ -19,7 +19,7 @@
         [class.is-active]="selectedCategory$.value === tab.id || selectedCategory$.value === tab.slug"
         (click)="setCategory(tab.id)"
       >
-        <img *ngIf="tab.icon?.startsWith('http')" [src]="tab.icon" alt="" class="chip-icon" />
+        <img *ngIf="tab.icon?.startsWith('http')" [src]="tab.icon" alt="" class="chip-icon" loading="lazy" decoding="async" />
         <span>{{ tab.name }}</span>
       </button>
     </div>

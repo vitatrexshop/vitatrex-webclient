@@ -98,6 +98,9 @@
             <p class="cart-item__variant" *ngIf="!item.isBundle">
               {{ item.selectedVariant.count }} {{ 'COMMON.PIECES' | translate }}
             </p>
+            <span class="cart-item__low-stock" *ngIf="!item.isBundle && item.selectedVariant.stock !== -1 && item.selectedVariant.stock > 0 && item.selectedVariant.stock <= 5">
+              باقي {{ item.selectedVariant.stock }} قطع فقط!
+            </span>
 
             <!-- Bundle Included Items Breakdown -->
             <div class="cart-item__bundle-box" *ngIf="item.isBundle && item.bundleMeta">
@@ -120,6 +123,8 @@
                 <button
                   class="qty-ctrl__btn"
                   (click)="increment(item)"
+                  [disabled]="item.selectedVariant.stock !== -1 && item.quantity >= item.selectedVariant.stock"
+                  [class.qty-ctrl__btn--disabled]="item.selectedVariant.stock !== -1 && item.quantity >= item.selectedVariant.stock"
                   [attr.aria-label]="'+'"
                   type="button"
                 >+</button>

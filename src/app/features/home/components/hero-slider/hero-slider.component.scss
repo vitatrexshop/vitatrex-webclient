@@ -59,6 +59,8 @@
       height: auto;
       max-height: 72px;
       object-fit: contain;
+      // CLS fix: matches HTML width/height (280×75) to pre-reserve layout space
+      aspect-ratio: 280 / 75;
       filter: drop-shadow(0 4px 18px rgba(0, 0, 0, 0.4));
       transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
       image-rendering: -webkit-optimize-contrast;
@@ -143,10 +145,12 @@
   background: transparent;
   overflow: hidden;
   will-change: transform, opacity;
+  // CLS fix: pre-reserve banner height so no layout shift when image loads
+  aspect-ratio: 16 / 7;
 
   .hero-banner-img {
     width: 100%;
-    height: auto;
+    height: 100%;
     display: block;
     object-fit: cover;
     margin: 0 !important;
@@ -155,6 +159,8 @@
     max-width: none !important;
     transform-origin: center center;
     will-change: transform;
+    // CLS fix: match parent aspect-ratio
+    aspect-ratio: 16 / 7;
   }
 }
 

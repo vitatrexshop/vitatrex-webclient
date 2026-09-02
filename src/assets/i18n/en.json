@@ -113,7 +113,8 @@
     "PAUSE": "Pause",
     "FIT_CONTAIN": "Fit Video",
     "FIT_COVER": "Fill Screen",
-    "TOGGLE_FIT": "Toggle Video Fit"
+    "TOGGLE_FIT": "Toggle Video Fit",
+    "VIDEO_ERROR": "Unable to play video at the moment"
   },
   "FEATURED_BANNER": {
     "TAGLINE": "Featured Product of the Month",
@@ -348,27 +349,19 @@
   },
   "FOOTER": {
     "TAGLINE": "100% natural vitamin gummies to support your daily wellness",
-    "PRODUCTS_TITLE": "Products",
-    "HELP_TITLE": "Help",
-    "NEWSLETTER_TITLE": "Subscribe to our newsletter",
-    "NEWSLETTER_SUBTITLE": "Exclusive offers and new product news directly to your inbox.",
-    "NEWSLETTER_PLACEHOLDER": "Your email address....",
-    "SUBSCRIBE_BTN": "Subscribe",
-    "PAYMENT_METHODS_TITLE": "Accepted Payment Methods",
-    "VISA_MASTERCARD": "Visa / MasterCard",
-    "COD": "Cash on Delivery",
-    "VODAFONE_CASH": "Vodafone Cash",
-    "SECURE_TRANSACTIONS": "All transactions are secured",
-    "MADE_IN_EGYPT": "Made in Egypt",
+    "QUICK_LINKS": "Quick Links",
+    "FOLLOW_US": "Follow Us",
+    "TERMS_CONDITIONS": "Terms & Conditions",
+    "SHIPPING_POLICY": "Shipping & Delivery Policy",
     "PRIVACY_POLICY": "Privacy Policy",
-    "TERMS_OF_SERVICE": "Terms of Service",
-    "RETURN_POLICY": "Return & Refund Policy",
-    "CONTACT_US": "Contact Us",
+    "RETURN_POLICY": "Refund & Return Policy",
+    "CONTACT_SUPPORT": "Contact Customer Support & Complaints Policy",
+    "SEARCH": "Search",
     "FAQ": "FAQ",
+    "TRACK_ORDER": "Track My Order",
+    "CONTACT_US": "Contact Us",
     "SHIPPING_DELIVERY": "Shipping & Delivery",
-    "SUBSCRIBE_SUCCESS": "Thank you for subscribing! You'll receive the latest offers and exclusive discounts",
-    "INVALID_EMAIL": "Please enter a valid email address",
-    "RIGHTS": "© {{year}} Vitatrex — All Rights Reserved"
+    "RIGHTS": "© {{year}} Vitatrex. All rights reserved."
   },
   "HAPPY_SHELF": {
     "TITLE": "THE HAPPY SHELF",

@@ -213,8 +213,29 @@ export class ProductDetailComponent implements OnInit {
     return String(product.category) || 'الفيتامينات والمكملات';
   }
 
+  /** Max purchasable qty: -1 = unlimited, otherwise capped at variant stock */
+  get maxStock(): number {
+    if (!this.selectedVariant || this.selectedVariant.stock === -1) return 999;
+    return this.selectedVariant.stock;
+  }
+
+  /** True when selected variant is completely out of stock */
+  get isOutOfStock(): boolean {
+    if (!this.selectedVariant) return false;
+    return this.selectedVariant.stock !== -1 && this.selectedVariant.stock <= 0;
+  }
+
+  /** True when 1-5 units remain (show low-stock warning badge) */
+  get isLowStock(): boolean {
+    if (!this.selectedVariant) return false;
+    const s = this.selectedVariant.stock;
+    return s !== -1 && s > 0 && s <= 5;
+  }
+
   increment(): void {
-    this.quantity++;
+    if (this.quantity < this.maxStock) {
+      this.quantity++;
+    }
   }
 
   decrement(): void {
@@ -224,15 +245,17 @@ export class ProductDetailComponent implements OnInit {
   }
 
   addToCart(product?: Product | null): void {
-    if (!product || !this.selectedVariant) return;
-    this.cartService.addToCart(product, this.selectedVariant, this.quantity);
+    if (!product || !this.selectedVariant || this.isOutOfStock) return;
+    const safeQty = Math.min(this.quantity, this.maxStock);
+    this.cartService.addToCart(product, this.selectedVariant, safeQty);
     this.toastService.show(`تمت إضافة ${product.name} إلى السلة`, 'success');
     this.cartDrawerService.open();
   }
 
   buyNow(product?: Product | null): void {
-    if (!product || !this.selectedVariant) return;
-    this.cartService.addToCart(product, this.selectedVariant, this.quantity);
+    if (!product || !this.selectedVariant || this.isOutOfStock) return;
+    const safeQty = Math.min(this.quantity, this.maxStock);
+    this.cartService.addToCart(product, this.selectedVariant, safeQty);
     this.router.navigate(['/checkout']);
   }
 

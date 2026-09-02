@@ -356,3 +356,25 @@
     font-size: 0.9rem; font-weight: 700; color: var(--color-text-primary);
   }
 }
+
+// ── Low Stock Alert in Cart Drawer ──────────────────────────────────────────
+.cart-item__low-stock {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #b45309;
+  background: #fef3c7;
+  border: 1px solid #fbbf24;
+  border-radius: 6px;
+  padding: 2px 8px;
+  margin-top: 4px;
+}
+
+.qty-ctrl__btn {
+  &--disabled,
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}

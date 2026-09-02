@@ -1217,21 +1217,27 @@
   gap: 8px;
   z-index: 10;
 
+  // Composited animation: use transform instead of width to avoid layout reflow.
+  // The bullet is always 28px wide; inactive bullets appear 10px via scaleX(0.357).
   ::ng-deep .swiper-pagination-bullet {
-    width: 10px;
+    width: 28px;
     height: 10px;
     background: rgba(255, 255, 255, 0.35);
     opacity: 1;
     border-radius: 9999px;
-    transition: width 0.25s ease, background-color 0.25s ease;
+    transform: scaleX(0.357);
+    transform-origin: center;
+    // Only animate transform+background — both are compositor-thread properties
+    transition: transform 0.25s ease, background-color 0.25s ease;
     cursor: pointer;
+    will-change: transform;
   }
 
   ::ng-deep .swiper-pagination-bullet-active {
-    width: 28px;
     background: #a855f7;
     border-radius: 9999px;
     box-shadow: 0 0 10px rgba(168, 85, 247, 0.7);
+    transform: scaleX(1);
   }
 }
 

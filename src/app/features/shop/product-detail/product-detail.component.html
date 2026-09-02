@@ -84,6 +84,31 @@
           </span>
         </div>
 
+        <!-- ── Low-Stock / Out-of-Stock Warning Badge ───────────────── -->
+        <div class="stock-status-badge stock-status-badge--low"
+             *ngIf="isLowStock && !isOutOfStock"
+             role="alert" aria-live="polite">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          <span>باقي {{ selectedVariant?.stock }} قطع فقط في المخزون!</span>
+        </div>
+
+        <div class="stock-status-badge stock-status-badge--out"
+             *ngIf="isOutOfStock"
+             role="alert" aria-live="polite">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="15" y1="9" x2="9" y2="15"/>
+            <line x1="9" y1="9" x2="15" y2="15"/>
+          </svg>
+          <span>نفذ المخزون مؤقتاً</span>
+        </div>
+
         <!-- Accordion: DESCRIPTION -->
         <div class="accordion-section">
           <button
@@ -159,6 +184,7 @@
                 type="button"
                 class="qty-btn"
                 (click)="decrement()"
+                [disabled]="isOutOfStock"
                 aria-label="Decrease quantity"
               >
                 —
@@ -168,6 +194,8 @@
                 type="button"
                 class="qty-btn"
                 (click)="increment()"
+                [disabled]="quantity >= maxStock || isOutOfStock"
+                [class.qty-btn--disabled]="quantity >= maxStock || isOutOfStock"
                 aria-label="Increase quantity"
               >
                 +
@@ -179,6 +207,8 @@
               type="button"
               class="btn-360 btn-360-add"
               (click)="addToCart(product)"
+              [disabled]="isOutOfStock"
+              [class.btn-360--disabled]="isOutOfStock"
             >
               <svg class="cart-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
@@ -194,6 +224,8 @@
             type="button"
             class="btn-360 btn-360-buynow"
             (click)="buyNow(product)"
+            [disabled]="isOutOfStock"
+            [class.btn-360--disabled]="isOutOfStock"
           >
             <span>{{ 'PRODUCT.BUY_IT_NOW' | translate }}</span>
           </button>

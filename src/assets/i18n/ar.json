@@ -113,7 +113,8 @@
     "PAUSE": "إيقاف مؤقت",
     "FIT_CONTAIN": "ملاءمة الفيديو",
     "FIT_COVER": "ملء الإطار",
-    "TOGGLE_FIT": "تغيير طريقة العرض"
+    "TOGGLE_FIT": "تغيير طريقة العرض",
+    "VIDEO_ERROR": "تعذر تشغيل مقطع الفيديو حالياً"
   },
   "FEATURED_BANNER": {
     "TAGLINE": "المنتج المميز لهذا الشهر",
@@ -348,27 +349,19 @@
   },
   "FOOTER": {
     "TAGLINE": "فيتامينات طبيعية 100% لدعم صحة ونشاط العائلة يومياً",
-    "PRODUCTS_TITLE": "المنتجات",
-    "HELP_TITLE": "مساعدة",
-    "NEWSLETTER_TITLE": "النشرة البريدية",
-    "NEWSLETTER_SUBTITLE": "عروض حصرية وأخبار المنتجات الجديدة مباشرة لبريدك.",
-    "NEWSLETTER_PLACEHOLDER": "بريدك الإلكتروني....",
-    "SUBSCRIBE_BTN": "اشترك",
-    "PAYMENT_METHODS_TITLE": "طرق الدفع المقبولة",
-    "VISA_MASTERCARD": "Visa / MasterCard",
-    "COD": "عند الاستلام",
-    "VODAFONE_CASH": "Vodafone Cash",
-    "SECURE_TRANSACTIONS": "جميع المعاملات مؤمنة",
-    "MADE_IN_EGYPT": "صُنع في مصر",
+    "QUICK_LINKS": "روابط سريعة",
+    "FOLLOW_US": "تابعنا",
+    "TERMS_CONDITIONS": "الشروط والأحكام",
+    "SHIPPING_POLICY": "سياسة الشحن والتوصيل",
     "PRIVACY_POLICY": "سياسة الخصوصية",
-    "TERMS_OF_SERVICE": "شروط الاستخدام",
     "RETURN_POLICY": "سياسة الإرجاع والاستبدال",
-    "CONTACT_US": "تواصل معنا",
+    "CONTACT_SUPPORT": "خدمة العملاء والشكاوى",
+    "SEARCH": "بحث",
     "FAQ": "الأسئلة الشائعة",
+    "TRACK_ORDER": "تتبع طلبي",
+    "CONTACT_US": "تواصل معنا",
     "SHIPPING_DELIVERY": "الشحن والتوصيل",
-    "SUBSCRIBE_SUCCESS": "شكراً لاشتراكك! ستصلك أحدث العروض والخصومات الحصرية",
-    "INVALID_EMAIL": "يرجى إدخال بريد إلكتروني صحيح",
-    "RIGHTS": "© {{year}} فيتاتريكس Vitatrex — جميع الحقوق محفوظة"
+    "RIGHTS": "© {{year}} فيتاتريكس Vitatrex. جميع الحقوق محفوظة."
   },
   "HAPPY_SHELF": {
     "TITLE": "THE HAPPY SHELF",

@@ -15,6 +15,7 @@ import { BadgeComponent } from './components/badge/badge.component';
 import { ToastComponent } from './components/toast/toast.component';
 import { MarqueeBarComponent } from './components/marquee-bar/marquee-bar.component';
 import { MobileBottomNavComponent } from './components/mobile-bottom-nav/mobile-bottom-nav.component';
+import { FloatingWhatsappComponent } from './components/floating-whatsapp/floating-whatsapp.component';
 import { HighlightPipe } from './pipes/highlight.pipe';
 
 const SHARED_COMPONENTS = [
@@ -29,6 +30,7 @@ const SHARED_COMPONENTS = [
   ToastComponent,
   MarqueeBarComponent,
   MobileBottomNavComponent,
+  FloatingWhatsappComponent,
   HighlightPipe,
 ];
 

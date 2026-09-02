@@ -1,6 +1,10 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
-import { ToastService } from '../../../core/services/toast.service';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+} from '@angular/core';
+import { Observable } from 'rxjs';
+import { LanguageService, LanguageCode } from '../../../core/services/language.service';
 
 @Component({
   selector: 'app-footer',
@@ -9,25 +13,18 @@ import { ToastService } from '../../../core/services/toast.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FooterComponent {
-  private readonly toastService = inject(ToastService);
+  private readonly languageService = inject(LanguageService);
 
   readonly currentYear = new Date().getFullYear();
-  readonly emailControl = new FormControl('', [Validators.required, Validators.email]);
-  isSubscribed = false;
+  readonly currentLang$: Observable<LanguageCode> = this.languageService.currentLang$;
 
-  subscribeNewsletter(): void {
-    if (this.emailControl.invalid) {
-      this.emailControl.markAsTouched();
-      this.toastService.error('يرجى إدخال بريد إلكتروني صحيح');
-      return;
-    }
+  isQuickLinksOpen = false;
 
-    this.isSubscribed = true;
-    this.toastService.success('شكراً لاشتراكك! ستصلك أحدث العروض والخصومات الحصرية');
-    this.emailControl.reset();
+  toggleQuickLinks(): void {
+    this.isQuickLinksOpen = !this.isQuickLinksOpen;
   }
 
-  openHelpModal(): void {
-    window.open('https://wa.me/201000000000?text=مرحباً%20فيتاتريكس%20لدي%20استفسار', '_blank');
+  toggleLanguage(): void {
+    this.languageService.toggleLanguage();
   }
 }

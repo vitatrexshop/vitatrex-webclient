@@ -36,6 +36,20 @@
         -{{ selectedVariant.discountPercentage }}%
       </span>
     </div>
+
+    <!-- Low-Stock Warning Badge -->
+    <div class="product-card-360__badges product-card-360__badges--low-stock"
+         *ngIf="selectedVariant && selectedVariant.stock !== -1 && selectedVariant.stock > 0 && selectedVariant.stock <= 5">
+      <span class="card-badge badge--low-stock">
+        باقي {{ selectedVariant.stock }} فقط!
+      </span>
+    </div>
+
+    <!-- Out-of-Stock Overlay -->
+    <div class="product-card-360__out-of-stock"
+         *ngIf="selectedVariant && selectedVariant.stock !== -1 && selectedVariant.stock <= 0">
+      <span>نفذ المخزون</span>
+    </div>
   </a>
 
   <!-- ── Product Details (Centered 360 Nutrition Style) ──────── -->
@@ -74,6 +88,8 @@
       type="button"
       class="product-card-360__cta"
       (click)="addToCart($event)"
+      [disabled]="selectedVariant && selectedVariant.stock !== -1 && selectedVariant.stock <= 0"
+      [class.product-card-360__cta--disabled]="selectedVariant && selectedVariant.stock !== -1 && selectedVariant.stock <= 0"
       [attr.aria-label]="'PRODUCT.ADD_TO_CART' | translate"
     >
       <svg class="cart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">

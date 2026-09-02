@@ -1,0 +1,197 @@
+// ══════════════════════════════════════════════════════════════
+// VITATRIX LUXURY FLOATING WHATSAPP SUPPORT BUTTON SCSS
+// Anchored bottom-right with Vitatrex Purple & Emerald theme,
+// responsive sizing, smooth micro-animations, and 'الدعم الفني' tooltip
+// ══════════════════════════════════════════════════════════════
+
+@keyframes waPulseHalo {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.25);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+}
+
+@keyframes waFloatEntrance {
+  0% {
+    opacity: 0;
+    transform: scale(0.6) translateY(24px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.floating-whatsapp-wrapper {
+  position: fixed;
+  z-index: 9999;
+  // Placed strictly on the physical bottom-right across all language directions
+  right: 16px !important;
+  left: auto !important;
+  bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+  display: inline-flex;
+  align-items: center;
+  pointer-events: auto;
+  user-select: none;
+  animation: waFloatEntrance 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+  @media (min-width: 992px) {
+    bottom: 28px;
+    right: 28px !important;
+    left: auto !important;
+  }
+
+  // ── Tooltip Label ('الدعم الفني') ──────────────────────────
+  .whatsapp-tooltip {
+    position: absolute;
+    top: 50%;
+    right: calc(100% + 10px);
+    left: auto;
+    transform: translateY(-50%) translateX(6px);
+    background: #20174b; // Brand Deep Midnight Purple
+    color: #ffffff;
+    padding: 6px 12px;
+    border-radius: 9999px;
+    border: 1px solid rgba(16, 185, 129, 0.4); // Emerald border
+    box-shadow:
+      0 8px 24px rgba(32, 23, 75, 0.4),
+      0 2px 8px rgba(0, 0, 0, 0.2);
+    font-family: var(--font-heading, 'Readex Pro', sans-serif);
+    font-size: 0.78rem;
+    font-weight: 700;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                visibility 0.22s ease;
+
+    .tooltip-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 6px #10b981;
+    }
+
+    // Small arrow pointing towards the button
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 100%;
+      transform: translateY(-50%);
+      border-width: 5px;
+      border-style: solid;
+      border-color: transparent transparent transparent #20174b;
+    }
+  }
+
+  // Show tooltip on hover
+  &:hover,
+  &:focus-within {
+    .whatsapp-tooltip {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(-50%) translateX(0);
+    }
+  }
+
+  // ── Circular WhatsApp Button ────────────────────────────────
+  .floating-whatsapp-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
+    border-radius: 50%;
+    // Luxury Vitatrex Midnight Purple to Vibrant Purple gradient
+    background: linear-gradient(135deg, #5e439b 0%, #20174b 100%);
+    border: 1.5px solid rgba(16, 185, 129, 0.6); // Emerald trim
+    color: #ffffff;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow:
+      0 8px 24px rgba(32, 23, 75, 0.45),
+      0 0 14px rgba(16, 185, 129, 0.25);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.25s ease,
+                background 0.25s ease,
+                border-color 0.25s ease;
+    -webkit-tap-highlight-color: transparent;
+
+    @media (min-width: 992px) {
+      width: 54px;
+      height: 54px;
+      min-width: 54px;
+      min-height: 54px;
+    }
+
+    &:hover {
+      background: linear-gradient(135deg, #7152b7 0%, #2b1f63 100%);
+      border-color: #10b981;
+      transform: scale(1.08) translateY(-2px);
+      box-shadow:
+        0 12px 30px rgba(32, 23, 75, 0.55),
+        0 0 20px rgba(16, 185, 129, 0.4);
+    }
+
+    &:active {
+      transform: scale(0.95) translateY(0);
+      box-shadow:
+        0 4px 12px rgba(32, 23, 75, 0.35);
+    }
+
+    &:focus-visible {
+      outline: 2.5px solid #10b981;
+      outline-offset: 2.5px;
+    }
+
+    // ── Soft Glowing Emerald Pulse Halo ────────────────────────
+    .whatsapp-pulse-ring {
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      background: rgba(16, 185, 129, 0.4);
+      opacity: 0;
+      pointer-events: none;
+      animation: waPulseHalo 2.5s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
+    }
+
+    // ── WhatsApp Icon ────────────────────────────────────────
+    .whatsapp-svg-icon {
+      width: 26px;
+      height: 26px;
+      position: relative;
+      z-index: 2;
+      color: #ffffff;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+      transition: transform 0.2s ease, color 0.2s ease;
+
+      @media (min-width: 992px) {
+        width: 28px;
+        height: 28px;
+      }
+    }
+
+    &:hover .whatsapp-svg-icon {
+      transform: scale(1.05);
+      color: #10b981; // Glows emerald on hover
+    }
+  }
+}

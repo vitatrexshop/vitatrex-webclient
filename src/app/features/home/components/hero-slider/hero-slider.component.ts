@@ -94,7 +94,23 @@ export class HeroSliderComponent implements OnInit, OnDestroy {
       });
   }
 
-  get heroImageUrl(): string { return this.heroSettings?.heroImageUrl?.trim() || this.defaultHeroImage; }
+  /**
+   * Injects Cloudinary auto-format/quality/width transformation flags into any
+   * Cloudinary URL so the CDN delivers the optimal asset for a 1340-px viewport.
+   * Non-Cloudinary URLs are returned untouched.
+   */
+  private optimizeCloudinaryUrl(url: string, width = 1340): string {
+    if (!url || !url.includes('res.cloudinary.com')) return url;
+    const flags = `f_auto,q_auto,w_${width}`;
+    // Avoid double-injecting if flags are already present
+    if (url.includes('f_auto')) return url;
+    return url.replace('/image/upload/', `/image/upload/${flags}/`);
+  }
+
+  get heroImageUrl(): string {
+    const raw = this.heroSettings?.heroImageUrl?.trim() || this.defaultHeroImage;
+    return this.optimizeCloudinaryUrl(raw);
+  }
   get brandName():    string { return this.heroSettings?.brandName?.trim()    || this.defaultBrandName; }
   get slogan():       string { return this.heroSettings?.slogan?.trim()       || this.defaultSlogan;    }
 

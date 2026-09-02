@@ -21,7 +21,7 @@ export class StoryService {
   /** Public – GET active story items */
   getStories(): Observable<StoryListResponse> {
     return this.http
-      .get<StoryListResponse>(this.apiBase)
+      .get<StoryListResponse | Story[]>(this.apiBase)
       .pipe(map((res) => this.sanitizeResponse(res)));
   }
 
@@ -30,16 +30,30 @@ export class StoryService {
    *  1. productLink: strip localhost origin → relative path (prevents Mixed Content)
    *  2. videoUrl / posterUrl: convert http:// → https:// (prevents Mixed Content on prod HTTPS)
    */
-  private sanitizeResponse(res: StoryListResponse): StoryListResponse {
-    if (!res?.data) return res;
+  private sanitizeResponse(res: any): StoryListResponse {
+    if (!res) {
+      return { success: false, data: [] };
+    }
+    if (Array.isArray(res)) {
+      return {
+        success: true,
+        data: res.map((story) => this.sanitizeStory(story)),
+      };
+    }
+    const dataList = Array.isArray(res.data) ? res.data : [];
     return {
-      ...res,
-      data: res.data.map((story) => ({
-        ...story,
-        productLink: this.sanitizeProductLink(story.productLink),
-        videoUrl:    this.enforceHttps(story.videoUrl),
-        posterUrl:   this.enforceHttps(story.posterUrl),
-      })),
+      success: res.success ?? true,
+      data: dataList.map((story: Story) => this.sanitizeStory(story)),
+    };
+  }
+
+  private sanitizeStory(story: Story): Story {
+    return {
+      ...story,
+      productLink: this.sanitizeProductLink(story.productLink),
+      videoUrl:    this.enforceHttps(story.videoUrl),
+      // Resize Unsplash poster thumbnails to match the 295px card container
+      posterUrl:   this.optimizeUnsplashUrl(this.enforceHttps(story.posterUrl)),
     };
   }
 
@@ -71,5 +85,19 @@ export class StoryService {
       return 'https://' + trimmed.slice('http://'.length);
     }
     return trimmed;
+  }
+
+  /**
+   * Resizes Unsplash image URLs to match the exact card container width (295px).
+   * Replaces any existing `w=` query param with `w=300` to avoid downloading
+   * oversized assets for a 295×443 thumbnail slot.
+   */
+  private optimizeUnsplashUrl(url: string, width = 300): string {
+    if (!url || !url.includes('images.unsplash.com')) return url;
+    // Replace existing w= param, or append if absent
+    if (/[?&]w=/.test(url)) {
+      return url.replace(/([?&]w=)\d+/, `$1${width}`);
+    }
+    return url + (url.includes('?') ? `&w=${width}` : `?w=${width}`);
   }
 }

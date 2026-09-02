@@ -88,7 +88,6 @@ export class PromoVideoComponent implements OnInit, OnDestroy {
           if (this.isBrowser) {
             setTimeout(() => {
               this.initScrollAnimation();
-              this.tryAutoplay();
               ScrollTrigger.refresh();
             }, 60);
           }
@@ -111,11 +110,22 @@ export class PromoVideoComponent implements OnInit, OnDestroy {
     return raw;
   }
 
+  /**
+   * Injects Cloudinary auto-format/quality/width transformation flags into any
+   * Cloudinary URL. Non-Cloudinary URLs are returned untouched.
+   */
+  private optimizeCloudinaryUrl(url: string, width = 1340): string {
+    if (!url || !url.includes('res.cloudinary.com')) return url;
+    const flags = `f_auto,q_auto,w_${width}`;
+    if (url.includes('f_auto')) return url;
+    return url.replace('/image/upload/', `/image/upload/${flags}/`);
+  }
+
   get posterUrl(): string {
     const raw = this.promoVideo?.posterImageUrl?.trim();
     if (!raw) return this.defaultPoster;
     if (raw.startsWith('http://') || raw.startsWith('https://')) {
-      return raw;
+      return this.optimizeCloudinaryUrl(raw);
     }
     if (raw.startsWith('/uploads')) return `${environment.mediaBaseUrl}${raw}`;
     if (raw.startsWith('uploads')) return `${environment.mediaBaseUrl}/${raw}`;

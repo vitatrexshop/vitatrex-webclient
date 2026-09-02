@@ -11,6 +11,7 @@ import { take } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 import { CartService } from '../../core/services/cart.service';
 import { OrderService } from '../../core/services/order.service';
+import { PaymentService } from '../../core/services/payment.service';
 import { ShippingService } from '../../core/services/shipping.service';
 import { ToastService } from '../../core/services/toast.service';
 import { CouponService } from '../../core/services/coupon.service';
@@ -30,6 +31,7 @@ export class CheckoutComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly cartService = inject(CartService);
   private readonly orderService = inject(OrderService);
+  private readonly paymentService = inject(PaymentService);
   private readonly shippingService = inject(ShippingService);
   private readonly toastService = inject(ToastService);
   private readonly couponService = inject(CouponService);
@@ -181,8 +183,8 @@ export class CheckoutComponent implements OnInit {
   }
 
   selectPayment(method: PaymentMethod): void {
-    if (method === 'card') return;
     this.form.patchValue({ paymentMethod: method });
+    this.cdr.markForCheck();
   }
 
   getFieldError(field: string): string | null {
@@ -264,7 +266,28 @@ export class CheckoutComponent implements OnInit {
           // Ignore
         }
 
-        this.router.navigate(['/order-success', orderData.orderNumber]);
+        if (paymentMethod === 'card') {
+          this.paymentService.initiateKashierCheckout({
+            orderId: orderData._id,
+            orderNumber: orderData.orderNumber,
+          }).subscribe({
+            next: (kashierPayload) => {
+              console.log("[Checkout Component] Kashier payload received. merchantId:", kashierPayload.merchantId || kashierPayload.mid);
+              const redirectUrl = this.paymentService.buildKashierRedirectUrl(kashierPayload);
+              console.log("[Checkout Component] Redirecting to Kashier URL:", redirectUrl);
+              window.location.href = redirectUrl;
+            },
+            error: (err) => {
+              this.isSubmitting = false;
+              this.cdr.markForCheck();
+              const msg = err?.error?.message || 'تم تسجيل طلبك بنجاح، وجارٍ نقلك لتفاصيل الطلب.';
+              this.toastService.show(msg, 'warning');
+              this.router.navigate(['/order-success', orderData.orderNumber]);
+            }
+          });
+        } else {
+          this.router.navigate(['/order-success', orderData.orderNumber]);
+        }
       },
       error: (err) => {
         this.isSubmitting = false;

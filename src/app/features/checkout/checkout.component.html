@@ -127,12 +127,13 @@
             <div class="payment-card__check" *ngIf="selectedPaymentMethod === 'cod'">✓</div>
           </button>
 
-          <!-- Card Payment (Disabled — Coming Soon) -->
+          <!-- Card Payment (Active — Kashier) -->
           <button
             type="button"
-            class="payment-card payment-card--disabled"
-            disabled
-            aria-disabled="true"
+            class="payment-card"
+            [class.payment-card--active]="selectedPaymentMethod === 'card'"
+            (click)="selectPayment('card')"
+            aria-pressed="true"
             id="payment-card"
           >
             <div class="payment-card__icon">
@@ -142,10 +143,10 @@
               </svg>
             </div>
             <div class="payment-card__info">
-              <span class="payment-card__name">{{ 'CHECKOUT.CARD' | translate }}</span>
-              <span class="payment-card__desc">{{ 'CHECKOUT.CARD_DISABLED' | translate }}</span>
+              <span class="payment-card__name">بطاقة بنكية / فيزا أو ماستركارد</span>
+              <span class="payment-card__desc">دفع إلكتروني آمن ومباشر عبر بوابة كاشير</span>
             </div>
-            <span class="payment-card__soon-badge">قريباً</span>
+            <div class="payment-card__check" *ngIf="selectedPaymentMethod === 'card'">✓</div>
           </button>
         </div>
       </section>
@@ -340,7 +341,7 @@
           </svg>
           <div>
             <div class="payment-badge-label">{{ 'CHECKOUT.PAYMENT_METHOD' | translate }}</div>
-            <div class="payment-badge-value">{{ 'CHECKOUT.COD' | translate }}</div>
+            <div class="payment-badge-value">{{ selectedPaymentMethod === 'card' ? 'بطاقة بنكية (كاشير)' : ('CHECKOUT.COD' | translate) }}</div>
           </div>
         </div>
       </div>

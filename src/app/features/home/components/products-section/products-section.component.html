@@ -1,18 +1,17 @@
 <!-- ══════════════════════════════════════════════════════════════
      THE HAPPY SHELF PRODUCT SLIDER SECTION
-     Brand Deep Purple Palette | Transparent Cards | 5 Simultaneous
-     Autoplay with Pause-on-Hover | Hover Capsule Add-to-Cart Button
+     Brand Deep Purple Palette | Transparent Cards
+     Swiper 11 Multi-Slide Responsive Slider with Infinite Autoplay
      ══════════════════════════════════════════════════════════════ -->
 
 <section
+  #sectionEl
   class="happy-shelf-section"
   aria-labelledby="happy-shelf-heading"
-  (mouseenter)="onSectionMouseEnter()"
-  (mouseleave)="onSectionMouseLeave()"
 >
   <div class="happy-shelf-container">
 
-    <!-- ── Section Title (Exact Centered White Bold Uppercase) ── -->
+    <!-- ── Section Title (Exact Centered Bold Deep Purple Uppercase) ── -->
     <header class="happy-shelf-header">
       <h2 id="happy-shelf-heading" class="happy-shelf-title">
         {{ 'HAPPY_SHELF.TITLE' | translate }}
@@ -22,12 +21,10 @@
     <!-- ── Carousel Viewport Wrapper ────────────────────────── -->
     <div class="happy-shelf-carousel-wrapper">
 
-      <!-- Prev Navigation Arrow -->
+      <!-- Desktop Prev Navigation Arrow -->
       <button
         type="button"
         class="shelf-nav-btn shelf-nav-btn--prev"
-        [class.is-disabled]="!canScrollPrev"
-        (click)="scrollPrev()"
         [attr.aria-label]="'COMMON.PREV' | translate"
       >
         <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -35,102 +32,98 @@
         </svg>
       </button>
 
-      <!-- Horizontal Scrollable Shelf Track (5 cards on desktop) -->
-      <div
-        #shelfTrack
-        class="happy-shelf-track"
-        (scroll)="onScroll()"
-        role="region"
-        aria-label="Happy Shelf Carousel"
-        tabindex="0"
-      >
-        <article
-          *ngFor="let item of shelfProducts; trackBy: trackByShelfId"
-          class="shelf-product-card"
-          [class.is-out-of-stock]="!item.inStock"
-          (mouseenter)="onCardMouseEnter()"
-          (mouseleave)="onCardMouseLeave()"
-        >
-          <!-- ── Bottle Image Stage with Hover CTA overlay ──── -->
-          <div class="shelf-card__media-wrap">
-            <a
-              [routerLink]="['/shop', item.slug]"
-              class="shelf-card__media"
-              [attr.aria-label]="item.name"
+      <!-- Swiper Slider Container -->
+      <div #swiperEl class="swiper happy-shelf-swiper">
+        <div class="swiper-wrapper">
+          <div
+            *ngFor="let item of shelfProducts; trackBy: trackByShelfId"
+            class="swiper-slide shelf-slide"
+          >
+            <article
+              class="shelf-product-card"
+              [class.is-out-of-stock]="!item.inStock"
             >
-              <div class="shelf-card__img-frame">
-                <img
-                  [src]="item.image"
-                  [alt]="item.name"
-                  class="shelf-card__bottle-img"
-                  loading="lazy"
-                  decoding="async"
-                />
+              <!-- ── Bottle Image Stage with Hover CTA overlay ──── -->
+              <div class="shelf-card__media-wrap">
+                <a
+                  [routerLink]="['/shop', item.slug]"
+                  class="shelf-card__media"
+                  [attr.aria-label]="item.name"
+                >
+                  <div class="shelf-card__img-frame">
+                    <img
+                      [ngSrc]="item.image"
+                      [alt]="item.name"
+                      class="shelf-card__bottle-img"
+                      width="200"
+                      height="240"
+                      loading="lazy"
+                    />
+                  </div>
+                </a>
+
+                <!-- ── Hover Capsule: ADD TO CART (In-stock items) ── -->
+                <button
+                  *ngIf="item.inStock"
+                  type="button"
+                  class="shelf-card__add-btn"
+                  (click)="onAddToCart(item, $event)"
+                  [attr.aria-label]="('HAPPY_SHELF.QUICK_ADD' | translate) + ' ' + item.name"
+                >
+                  <svg class="shelf-card__add-icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                    <line x1="3" y1="6" x2="21" y2="6"/>
+                    <path d="M16 10a4 4 0 0 1-8 0"/>
+                  </svg>
+                  <span>{{ 'HAPPY_SHELF.QUICK_ADD' | translate }}</span>
+                </button>
+
+                <!-- ── Hover Capsule: NOTIFY ME (Out-of-stock items) ── -->
+                <button
+                  *ngIf="!item.inStock"
+                  type="button"
+                  class="shelf-card__add-btn shelf-card__add-btn--notify"
+                  (click)="onNotifyMe(item, $event)"
+                  [attr.aria-label]="('HAPPY_SHELF.NOTIFY_ME' | translate) + ' ' + item.name"
+                >
+                  <svg class="shelf-card__add-icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                  </svg>
+                  <span>{{ 'HAPPY_SHELF.NOTIFY_ME' | translate }}</span>
+                </button>
               </div>
-            </a>
 
-            <!-- ── Hover Capsule: ADD TO CART (In-stock items) ── -->
-            <button
-              *ngIf="item.inStock"
-              type="button"
-              class="shelf-card__add-btn"
-              (click)="onAddToCart(item, $event)"
-              [attr.aria-label]="('HAPPY_SHELF.QUICK_ADD' | translate) + ' ' + item.name"
-            >
-              <svg class="shelf-card__add-icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-                <line x1="3" y1="6" x2="21" y2="6"/>
-                <path d="M16 10a4 4 0 0 1-8 0"/>
-              </svg>
-              <span>{{ 'HAPPY_SHELF.QUICK_ADD' | translate }}</span>
-            </button>
+              <!-- Product Details (White Bold Centered Text) -->
+              <div class="shelf-card__content">
+                <h3 class="shelf-card__name">
+                  <a [routerLink]="['/shop', item.slug]">{{ item.name }}</a>
+                </h3>
 
-            <!-- ── Hover Capsule: NOTIFY ME (Out-of-stock items) ── -->
-            <button
-              *ngIf="!item.inStock"
-              type="button"
-              class="shelf-card__add-btn shelf-card__add-btn--notify"
-              (click)="onNotifyMe(item, $event)"
-              [attr.aria-label]="('HAPPY_SHELF.NOTIFY_ME' | translate) + ' ' + item.name"
-            >
-              <svg class="shelf-card__add-icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-                <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-              </svg>
-              <span>{{ 'HAPPY_SHELF.NOTIFY_ME' | translate }}</span>
-            </button>
+                <div class="shelf-card__price-row">
+                  <span class="shelf-card__price">LE {{ item.price | number:'1.2-2' }}</span>
+                </div>
+
+                <!-- Out of Stock: Static Pill 'Notify me' below price -->
+                <button
+                  *ngIf="!item.inStock"
+                  type="button"
+                  class="shelf-card__notify-btn"
+                  (click)="onNotifyMe(item, $event)"
+                  [attr.aria-label]="'HAPPY_SHELF.NOTIFY_ME' | translate"
+                >
+                  <span>{{ 'HAPPY_SHELF.NOTIFY_ME' | translate }}</span>
+                </button>
+              </div>
+            </article>
           </div>
-
-          <!-- Product Details (White Bold Centered Text) -->
-          <div class="shelf-card__content">
-            <h3 class="shelf-card__name">
-              <a [routerLink]="['/shop', item.slug]">{{ item.name }}</a>
-            </h3>
-
-            <div class="shelf-card__price-row">
-              <span class="shelf-card__price">LE {{ item.price | number:'1.2-2' }}</span>
-            </div>
-
-            <!-- Out of Stock: Static Pill 'Notify me' below price -->
-            <button
-              *ngIf="!item.inStock"
-              type="button"
-              class="shelf-card__notify-btn"
-              (click)="onNotifyMe(item, $event)"
-              [attr.aria-label]="'HAPPY_SHELF.NOTIFY_ME' | translate"
-            >
-              <span>{{ 'HAPPY_SHELF.NOTIFY_ME' | translate }}</span>
-            </button>
-          </div>
-        </article>
+        </div>
       </div>
 
-      <!-- Next Navigation Arrow -->
+      <!-- Desktop Next Navigation Arrow -->
       <button
         type="button"
         class="shelf-nav-btn shelf-nav-btn--next"
-        [class.is-disabled]="!canScrollNext"
-        (click)="scrollNext()"
         [attr.aria-label]="'COMMON.NEXT' | translate"
       >
         <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -138,15 +131,10 @@
         </svg>
       </button>
 
-      <!-- Right Edge Indicator Bar (Exact Match to Reference Mockup) -->
-      <div class="shelf-right-indicator" aria-hidden="true">
-        <div
-          class="shelf-indicator-pill"
-          [style.top]="scrollProgress + '%'"
-        ></div>
-      </div>
-
     </div>
+
+    <!-- ── Product Indicator Dots (Swiper Pagination) ──────── -->
+    <div class="shelf-dots" role="tablist" aria-label="Product navigation"></div>
 
   </div>
 </section>

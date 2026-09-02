@@ -75,7 +75,7 @@ export class OffersSectionComponent implements AfterViewInit, OnDestroy {
     benefits: ['تعزيز المناعة', 'مضاد أكسدة طبيعي', 'طاقة يومية'],
     isBestSeller: true,
     isFeatured: true,
-    image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=300&q=80',
     isActive: true,
     variants: [{ _id: 'v1', count: 60, price: 290, originalPrice: 350, discountPercentage: 17, stock: 50 }],
     createdAt: '2026-01-01T00:00:00.000Z',
@@ -91,7 +91,7 @@ export class OffersSectionComponent implements AfterViewInit, OnDestroy {
     benefits: ['زيادة الهيموجلوبين', 'محاربة الإرهاق', 'نشاط مستمر'],
     isBestSeller: true,
     isFeatured: true,
-    image: 'https://images.unsplash.com/photo-1550989460-0adf9ea622e2?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1550989460-0adf9ea622e2?auto=format&fit=crop&w=300&q=80',
     isActive: true,
     variants: [{ _id: 'v2', count: 60, price: 310, originalPrice: 380, discountPercentage: 18, stock: 40 }],
     createdAt: '2026-01-01T00:00:00.000Z',
@@ -107,7 +107,7 @@ export class OffersSectionComponent implements AfterViewInit, OnDestroy {
     benefits: ['نوم عميق وهادئ', 'استرخاء طبيعي', 'استيقاظ بنشاط'],
     isBestSeller: true,
     isFeatured: true,
-    image: 'https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&w=300&q=80',
     isActive: true,
     variants: [{ _id: 'v3', count: 60, price: 280, originalPrice: 340, discountPercentage: 17, stock: 60 }],
     createdAt: '2026-01-01T00:00:00.000Z',
@@ -123,7 +123,7 @@ export class OffersSectionComponent implements AfterViewInit, OnDestroy {
     benefits: ['نضارة البشرة', 'تقوية الشعر', 'صحة الأظافر'],
     isBestSeller: false,
     isFeatured: true,
-    image: 'https://images.unsplash.com/photo-1512290900672-1f02e6005b76?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1512290900672-1f02e6005b76?auto=format&fit=crop&w=300&q=80',
     isActive: true,
     variants: [{ _id: 'v4', count: 60, price: 320, originalPrice: 390, discountPercentage: 18, stock: 35 }],
     createdAt: '2026-01-01T00:00:00.000Z',
@@ -139,7 +139,7 @@ export class OffersSectionComponent implements AfterViewInit, OnDestroy {
     benefits: ['دعم النمو', 'زيادة التركيز', 'تقوية المناعة'],
     isBestSeller: false,
     isFeatured: true,
-    image: 'https://images.unsplash.com/photo-1577401239170-897942555fb3?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1577401239170-897942555fb3?auto=format&fit=crop&w=300&q=80',
     isActive: true,
     variants: [{ _id: 'v5', count: 60, price: 270, originalPrice: 330, discountPercentage: 18, stock: 45 }],
     createdAt: '2026-01-01T00:00:00.000Z',
@@ -583,6 +583,18 @@ export class OffersSectionComponent implements AfterViewInit, OnDestroy {
     return 'sleep';
   }
 
+  /**
+   * Injects Cloudinary auto-format/quality/width transformation flags into any
+   * Cloudinary URL so the CDN delivers the optimal asset for a 1160-px viewport.
+   * Non-Cloudinary URLs are returned untouched.
+   */
+  private optimizeCloudinaryUrl(url: string, width = 1160): string {
+    if (!url || !url.includes('res.cloudinary.com')) return url;
+    const flags = `f_auto,q_auto,w_${width}`;
+    if (url.includes('f_auto')) return url;
+    return url.replace('/image/upload/', `/image/upload/${flags}/`);
+  }
+
   formatMediaUrl(url?: string): string {
     if (!url) return '';
     const raw = url.trim();
@@ -592,7 +604,7 @@ export class OffersSectionComponent implements AfterViewInit, OnDestroy {
       raw.startsWith('blob:') ||
       raw.startsWith('assets/')
     ) {
-      return raw;
+      return this.optimizeCloudinaryUrl(raw, 1160);
     }
     if (raw.startsWith('/uploads')) return `${environment.mediaBaseUrl}${raw}`;
     if (raw.startsWith('uploads')) return `${environment.mediaBaseUrl}/${raw}`;

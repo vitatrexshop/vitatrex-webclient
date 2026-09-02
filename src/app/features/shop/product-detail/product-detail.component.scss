@@ -909,3 +909,69 @@ $crimson-bg:     #fdf2f4;
   50% { opacity: 1; }
   100% { opacity: 0.5; }
 }
+
+// ── Stock Status Badge ───────────────────────────────────────────────────────
+.stock-status-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  letter-spacing: 0.01em;
+  animation: stock-pulse 2.5s ease-in-out infinite;
+
+  svg {
+    flex-shrink: 0;
+  }
+
+  &--low {
+    background: linear-gradient(135deg, #fff8ed 0%, #fef3c7 100%);
+    color: #b45309;
+    border: 1.5px solid #fbbf24;
+
+    svg {
+      stroke: #d97706;
+    }
+  }
+
+  &--out {
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+    color: #b91c1c;
+    border: 1.5px solid #f87171;
+
+    svg {
+      stroke: #dc2626;
+    }
+  }
+}
+
+@keyframes stock-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.85; }
+}
+
+// ── Quantity Button Disabled State ───────────────────────────────────────────
+.qty-btn {
+  &--disabled,
+  &:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+// ── CTA Buttons Disabled State ───────────────────────────────────────────────
+.btn-360 {
+  &--disabled,
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+    background: #9ca3af !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+}

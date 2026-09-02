@@ -57,6 +57,10 @@ export class CartService {
    * Add a standard product+variant to the cart.
    */
   addToCart(product: Product, variant: Variant, quantity = 1): void {
+    const maxStock = variant.stock !== -1 ? variant.stock : 999;
+    if (maxStock <= 0) return; // Out of stock guard
+    const safeQty = Math.max(1, Math.min(quantity, maxStock));
+
     const current = this._items$.value;
     const existingIndex = current.findIndex(
       (i) => !i.isBundle && i.product._id === product._id && i.selectedVariant.count === variant.count
@@ -66,15 +70,15 @@ export class CartService {
     if (existingIndex > -1) {
       updated = current.map((item, idx) => {
         if (idx !== existingIndex) return item;
-        const newQty = item.quantity + quantity;
+        const newQty = Math.min(item.quantity + safeQty, maxStock);
         return { ...item, quantity: newQty, itemTotal: variant.price * newQty };
       });
     } else {
       const newItem: CartItem = {
         product,
         selectedVariant: variant,
-        quantity,
-        itemTotal: variant.price * quantity,
+        quantity: safeQty,
+        itemTotal: variant.price * safeQty,
         isBundle: false,
       };
       updated = [...current, newItem];
@@ -190,7 +194,9 @@ export class CartService {
       if (item.product._id !== productId || item.selectedVariant.count !== variantCount) {
         return item;
       }
-      return { ...item, quantity: qty, itemTotal: item.selectedVariant.price * qty };
+      const maxStock = item.selectedVariant.stock !== -1 ? item.selectedVariant.stock : 999;
+      const safeQty = Math.min(qty, maxStock);
+      return { ...item, quantity: safeQty, itemTotal: item.selectedVariant.price * safeQty };
     });
     this.publish(updated);
   }

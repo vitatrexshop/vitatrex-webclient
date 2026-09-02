@@ -1,0 +1,86 @@
+﻿<main class="payment-result-page container">
+  <!-- ════════════════ SUCCESS STATE ════════════════ -->
+  <section class="result-card result-card--success" *ngIf="resultType === 'success'">
+    <div class="result-icon-ring success">
+      <svg class="result-svg" viewBox="0 0 52 52" fill="none">
+        <circle class="circle-bg" cx="26" cy="26" r="25" />
+        <polyline class="checkmark" points="14,27 22,35 38,17" />
+      </svg>
+    </div>
+
+    <h1 class="result-title">تمت عملية الدفع بنجاح! 🎉</h1>
+    <p class="result-subtitle">
+      شكراً لثقتك في ڤيتاتريكس. تم تأكيد استلام دفعتك بنجاح وجارٍ تحضير وتجهيز شحنتك بعناية فائقة.
+    </p>
+
+    <div class="details-box" *ngIf="orderNumber || transactionId">
+      <div class="details-row" *ngIf="orderNumber">
+        <span class="details-label">رقم الطلب:</span>
+        <span class="details-value badge-highlight">{{ orderNumber }}</span>
+      </div>
+      <div class="details-row" *ngIf="transactionId">
+        <span class="details-label">رقم المعاملة (كاشير):</span>
+        <span class="details-value mono">{{ transactionId }}</span>
+      </div>
+      <div class="details-row">
+        <span class="details-label">حالة السداد:</span>
+        <span class="status-pill status-pill--paid">✓ تم السداد إلكترونياً</span>
+      </div>
+    </div>
+
+    <div class="result-actions">
+      <button type="button" class="btn-primary" (click)="trackOrder()" id="track-order-btn">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        متابعة وتتبع حالة الشحنة
+      </button>
+      <button type="button" class="btn-secondary" (click)="goToShop()" id="back-to-shop-btn">
+        متابعة التسوق
+      </button>
+    </div>
+  </section>
+
+  <!-- ════════════════ FAILED STATE ════════════════ -->
+  <section class="result-card result-card--failed" *ngIf="resultType === 'failed'">
+    <div class="result-icon-ring failed">
+      <svg class="result-svg" viewBox="0 0 52 52" fill="none">
+        <circle class="circle-bg-fail" cx="26" cy="26" r="25" />
+        <line class="cross" x1="16" y1="16" x2="36" y2="36" />
+        <line class="cross" x1="36" y1="16" x2="16" y2="36" />
+      </svg>
+    </div>
+
+    <h1 class="result-title result-title--failed">تعذرت عملية الدفع الإلكتروني</h1>
+    <p class="result-subtitle">
+      لم تكتمل عملية الدفع عبر البطاقة البنكية. لم يتم خصم أي مبالغ من حسابك.
+    </p>
+
+    <div class="details-box" *ngIf="orderNumber || transactionId">
+      <div class="details-row" *ngIf="orderNumber">
+        <span class="details-label">رقم مرجع الطلب:</span>
+        <span class="details-value badge-highlight">{{ orderNumber }}</span>
+      </div>
+      <div class="details-row" *ngIf="transactionId">
+        <span class="details-label">رقم المحاولة:</span>
+        <span class="details-value mono">{{ transactionId }}</span>
+      </div>
+      <div class="details-row">
+        <span class="details-label">حالة المحاولة:</span>
+        <span class="status-pill status-pill--failed">فشل التحصيل</span>
+      </div>
+    </div>
+
+    <p class="notice-text">
+      يمكنك إعادة محاولة الدفع أو اختيار الدفع عند الاستلام (COD) من صفحة الدفع.
+    </p>
+
+    <div class="result-actions">
+      <button type="button" class="btn-primary" (click)="retryCheckout()" id="retry-checkout-btn">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+        إعادة المحاولة / تعديل طريقة الدفع
+      </button>
+      <button type="button" class="btn-secondary" (click)="goToShop()">
+        العودة للمتجر
+      </button>
+    </div>
+  </section>
+</main>

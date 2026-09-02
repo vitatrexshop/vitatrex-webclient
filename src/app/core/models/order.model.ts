@@ -107,6 +107,7 @@ export type OrderListResponse = ApiResponse<Order[]>;
  * lightweight object that contains the one-time trackingUrl.
  */
 export interface CreateOrderData {
+  _id?:          string;
   orderNumber:   string;
   orderStatus:   OrderStatus;
   paymentMethod: PaymentMethod;
