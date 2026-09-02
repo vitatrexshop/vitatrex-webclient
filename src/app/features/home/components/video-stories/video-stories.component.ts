@@ -92,10 +92,8 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
     }
     // Guard: closeModal() may have already removed this element before destroy runs
     try {
-      const modalEl = document.querySelector('.story-reel-modal');
-      if (modalEl?.parentElement === document.body) {
-        document.body.removeChild(modalEl);
-      }
+      const modalEl = document.querySelector('.story-reel-modal') as HTMLElement | null;
+      modalEl?.remove?.();
     } catch {
       // Element already detached - safe to ignore
     }
@@ -230,6 +228,13 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
     console.warn('[VideoStories] Video playback error:', event);
     this.hasVideoError = true;
     this.isPlaying = false;
+    try {
+      const videoEl = event?.target as HTMLVideoElement | undefined;
+      videoEl?.pause?.();
+    } catch {}
+    try {
+      this.reelVideoEl?.nativeElement?.pause?.();
+    } catch {}
     this.cdr.markForCheck();
   }
 
@@ -266,7 +271,7 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         if (this.reelVideoEl?.nativeElement) {
           const vid = this.reelVideoEl.nativeElement;
-          vid.load();
+          vid?.load?.();
         }
         this.playActiveVideo();
       }, 100);
@@ -280,10 +285,8 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
       // Video element may already be detached
     }
     try {
-      const modalEl = document.querySelector('.story-reel-modal');
-      if (modalEl?.parentElement === document.body) {
-        document.body.removeChild(modalEl);
-      }
+      const modalEl = document.querySelector('.story-reel-modal') as HTMLElement | null;
+      modalEl?.remove?.();
     } catch {
       // Element already detached - safe to ignore
     }
@@ -308,7 +311,7 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         if (this.reelVideoEl?.nativeElement) {
           const vid = this.reelVideoEl.nativeElement;
-          vid.load();
+          vid?.load?.();
         }
         this.playActiveVideo();
       }, 50);
@@ -328,7 +331,7 @@ export class VideoStoriesComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         if (this.reelVideoEl?.nativeElement) {
           const vid = this.reelVideoEl.nativeElement;
-          vid.load();
+          vid?.load?.();
         }
         this.playActiveVideo();
       }, 50);

@@ -148,7 +148,7 @@
   // ── CLS fix: hard-reserve space before Cloudinary image resolves ──
   // aspect-ratio ensures the frame never collapses.
   // The shimmer gradient acts as a placeholder so there's no blank flash.
-  aspect-ratio: 16 / 7;
+  aspect-ratio: 1920 / 823;
   contain: layout;
   background: linear-gradient(
     135deg,
@@ -162,9 +162,9 @@
   animation: hero-shimmer 2.5s ease-in-out infinite;
 
   // Responsive min-heights ensure it never collapses below a readable size
-  @media (max-width: 1200px) { aspect-ratio: 16 / 7; min-height: 300px; }
-  @media (max-width: 768px)  { aspect-ratio: 16 / 8; min-height: 220px; }
-  @media (max-width: 480px)  { aspect-ratio: 4 / 3;  min-height: 200px; }
+  @media (max-width: 1200px) { aspect-ratio: 1920 / 823; min-height: 300px; }
+  @media (max-width: 768px)  { aspect-ratio: 1920 / 823; min-height: 220px; }
+  @media (max-width: 480px)  { aspect-ratio: 1920 / 823; min-height: 200px; }
 
   // Stop shimmer once the image is in the DOM (parent gets .is-loaded via TS)
   &.is-loaded {
@@ -184,7 +184,7 @@
     transform-origin: center center;
     will-change: transform;
     // Match parent so intrinsic size is always known by the browser
-    aspect-ratio: 16 / 7;
+    aspect-ratio: 1920 / 823;
   }
 }
 

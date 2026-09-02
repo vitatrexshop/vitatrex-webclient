@@ -7,6 +7,8 @@
         [src]="primaryImage"
         [alt]="product.name"
         class="product-card-360__img product-card-360__img--primary"
+        width="280"
+        height="280"
         [attr.loading]="priority ? 'eager' : 'lazy'"
         [attr.fetchpriority]="priority ? 'high' : 'auto'"
       />
@@ -16,6 +18,8 @@
         [src]="secondaryImage"
         [alt]="product.name"
         class="product-card-360__img product-card-360__img--secondary"
+        width="280"
+        height="280"
         loading="lazy"
       />
     </div>

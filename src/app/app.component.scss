@@ -5,6 +5,20 @@
   // even before lazy-loaded route content hydrates
   min-height: 100vh;
 
+  // Header sections explicit layout reservation to eliminate CLS
+  app-announcement-bar {
+    display: block;
+    height: 38px;
+    min-height: 38px;
+    contain: strict;
+  }
+
+  app-header {
+    display: block;
+    min-height: 70px;
+    contain: layout style;
+  }
+
   &__main {
     flex: 1;
     // Prevents foot from floating up during image/data hydration on any route
@@ -19,4 +33,5 @@
     }
   }
 }
+
 

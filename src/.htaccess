@@ -1,5 +1,5 @@
 # ============================================================
-#  Vitatrexshop — Apache Security Headers (.htaccess)
+#  Vitatrexshop â€” Apache Security Headers (.htaccess)
 #  Target: Mozilla Observatory A+ score
 #  Host:   vitatrexshop.com (Hostinger shared hosting)
 # ============================================================
@@ -12,18 +12,18 @@
   Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
 
   # 2. Content Security Policy (CSP)
-  Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https://res.cloudinary.com https://images.unsplash.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://api.vitatrexshop.com; media-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https://res.cloudinary.com https://images.unsplash.com https://api.vitatrexshop.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://api.vitatrexshop.com; media-src 'self' data: blob: https://api.vitatrexshop.com; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
 
-  # 3. X-Content-Type-Options — prevents MIME-type sniffing
+  # 3. X-Content-Type-Options â€” prevents MIME-type sniffing
   Header always set X-Content-Type-Options "nosniff"
 
-  # 4. X-Frame-Options — legacy clickjacking protection
+  # 4. X-Frame-Options â€” legacy clickjacking protection
   Header always set X-Frame-Options "DENY"
 
   # 5. Referrer-Policy
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
 
-  # 6. Permissions-Policy — disable powerful features not used by the app
+  # 6. Permissions-Policy â€” disable powerful features not used by the app
   Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()"
 
   # 7. Cross-Origin-Opener-Policy
@@ -52,7 +52,7 @@
   RewriteCond %{HTTP_HOST} ^www\.vitatrexshop\.com$ [NC]
   RewriteRule ^ https://vitatrexshop.com%{REQUEST_URI} [L,R=301]
 
-  # Angular SPA — serve index.html for all routes that are not real files/dirs
+  # Angular SPA â€” serve index.html for all routes that are not real files/dirs
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteRule ^ /index.html [L]
