@@ -1,0 +1,75 @@
+# ============================================================
+#  Vitatrexshop — Apache Security Headers (.htaccess)
+#  Target: Mozilla Observatory A+ score
+#  Host:   vitatrexshop.com (Hostinger shared hosting)
+# ============================================================
+
+# -- Enable mod_headers & mod_rewrite ------------------------
+<IfModule mod_headers.c>
+
+  # 1. HTTP Strict Transport Security (HSTS)
+  #    max-age = 1 year | includeSubDomains | preload-list eligible
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+
+  # 2. Content Security Policy (CSP)
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https://res.cloudinary.com https://images.unsplash.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://api.vitatrexshop.com; media-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
+
+  # 3. X-Content-Type-Options — prevents MIME-type sniffing
+  Header always set X-Content-Type-Options "nosniff"
+
+  # 4. X-Frame-Options — legacy clickjacking protection
+  Header always set X-Frame-Options "DENY"
+
+  # 5. Referrer-Policy
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+  # 6. Permissions-Policy — disable powerful features not used by the app
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()"
+
+  # 7. Cross-Origin-Opener-Policy
+  Header always set Cross-Origin-Opener-Policy "same-origin"
+
+  # 8. Cross-Origin-Resource-Policy
+  Header always set Cross-Origin-Resource-Policy "same-origin"
+
+  # 9. X-DNS-Prefetch-Control
+  Header always set X-DNS-Prefetch-Control "off"
+
+  # 10. Remove Server fingerprint headers
+  Header always unset X-Powered-By
+
+</IfModule>
+
+# -- HTTPS Redirect -------------------------------------------
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Force HTTPS
+  RewriteCond %{HTTPS} off
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # Force www to non-www canonical domain
+  RewriteCond %{HTTP_HOST} ^www\.vitatrexshop\.com$ [NC]
+  RewriteRule ^ https://vitatrexshop.com%{REQUEST_URI} [L,R=301]
+
+  # Angular SPA — serve index.html for all routes that are not real files/dirs
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^ /index.html [L]
+
+</IfModule>
+
+# -- Cache-Control for static assets -------------------------
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/html                 "access plus 0 seconds"
+  ExpiresByType application/javascript    "access plus 1 year"
+  ExpiresByType text/css                  "access plus 1 year"
+  ExpiresByType image/png                 "access plus 6 months"
+  ExpiresByType image/jpeg                "access plus 6 months"
+  ExpiresByType image/webp                "access plus 6 months"
+  ExpiresByType image/svg+xml             "access plus 6 months"
+  ExpiresByType image/x-icon              "access plus 1 year"
+  ExpiresByType application/json          "access plus 0 seconds"
+  ExpiresByType font/woff2                "access plus 1 year"
+</IfModule>
