@@ -17,6 +17,7 @@ import { MarqueeBarComponent } from './components/marquee-bar/marquee-bar.compon
 import { MobileBottomNavComponent } from './components/mobile-bottom-nav/mobile-bottom-nav.component';
 import { FloatingWhatsappComponent } from './components/floating-whatsapp/floating-whatsapp.component';
 import { HighlightPipe } from './pipes/highlight.pipe';
+import { CookieConsentComponent } from './components/cookie-consent/cookie-consent.component';
 
 const SHARED_COMPONENTS = [
   HeaderComponent,
@@ -32,6 +33,7 @@ const SHARED_COMPONENTS = [
   MobileBottomNavComponent,
   FloatingWhatsappComponent,
   HighlightPipe,
+  CookieConsentComponent,
 ];
 
 /**

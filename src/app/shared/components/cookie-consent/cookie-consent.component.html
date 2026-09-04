@@ -1,0 +1,39 @@
+<div
+  class="cookie-bar"
+  [class.cookie-bar--visible]="isVisible"
+  role="dialog"
+  aria-live="polite"
+  aria-label="إشعار ملفات تعريف الارتباط"
+  id="cookie-consent-banner"
+>
+  <!-- Cookie Icon -->
+  <div class="cookie-bar__icon" aria-hidden="true">🍪</div>
+
+  <!-- Text content -->
+  <div class="cookie-bar__body">
+    <p class="cookie-bar__text">
+      نستخدم ملفات تعريف الارتباط لتحسين تجربتك وتحليل أداء الموقع.
+      <a
+        routerLink="/privacy-policy"
+        class="cookie-bar__link"
+        (click)="false"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="اقرأ سياسة الخصوصية"
+      >سياسة الخصوصية</a>
+    </p>
+  </div>
+
+  <!-- Actions -->
+  <div class="cookie-bar__actions">
+    <button
+      class="cookie-bar__accept-btn"
+      (click)="accept()"
+      type="button"
+      id="cookie-accept-btn"
+      aria-label="قبول ملفات تعريف الارتباط"
+    >
+      قبول
+    </button>
+  </div>
+</div>

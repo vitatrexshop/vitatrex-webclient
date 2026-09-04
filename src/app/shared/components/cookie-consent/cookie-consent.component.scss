@@ -1,0 +1,145 @@
+// ── Cookie Consent Bar ───────────────────────────────────────────────────────
+// Fixed bottom bar with glassmorphism dark theme.
+// Slides up from below the viewport when isVisible becomes true,
+// slides away on accept via the CSS transition on transform.
+// ─────────────────────────────────────────────────────────────────────────────
+
+.cookie-bar {
+  // Positioning — fixed bottom, full width, high z-index (above everything)
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999999;
+
+  // Layout
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 14px 20px;
+
+  // Dark glassmorphism theme
+  background: rgba(20, 14, 50, 0.96);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-top: 1px solid rgba(94, 67, 155, 0.35);
+  box-shadow: 0 -4px 32px rgba(0, 0, 0, 0.4);
+
+  // RTL-native
+  direction: rtl;
+
+  // ── Entry / Exit animation ─────────────────────────────────────────────────
+  // Banner starts below the viewport and is hidden.
+  // Adding .cookie-bar--visible slides it into view.
+  transform: translateY(110%);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    transform 0.48s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.38s ease,
+    visibility 0s linear 0.48s;
+
+  &--visible {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+    transition:
+      transform 0.48s cubic-bezier(0.16, 1, 0.3, 1),
+      opacity 0.38s ease,
+      visibility 0s linear 0s;
+  }
+
+  // ── Cookie emoji icon ──────────────────────────────────────────────────────
+  &__icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    line-height: 1;
+    filter: drop-shadow(0 0 6px rgba(255, 200, 80, 0.5));
+  }
+
+  // ── Body text ──────────────────────────────────────────────────────────────
+  &__body {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  &__text {
+    margin: 0;
+    font-size: 0.88rem;
+    line-height: 1.55;
+    color: rgba(255, 255, 255, 0.82);
+    font-family: var(--font-body);
+  }
+
+  &__link {
+    color: #c4a8ff;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.15s;
+    margin-inline-start: 4px;
+
+    &:hover {
+      color: #e2d4ff;
+    }
+  }
+
+  // ── Action buttons ─────────────────────────────────────────────────────────
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+
+  &__accept-btn {
+    // Hardcoded — production-safe, no reliance on global .btn classes
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 9px 26px;
+    background: linear-gradient(135deg, #5e439b 0%, #20174b 100%);
+    color: #ffffff;
+    font-size: 0.88rem;
+    font-weight: 700;
+    font-family: var(--font-heading), 'Noto Kufi Arabic', sans-serif;
+    border: none;
+    border-radius: 22px;
+    cursor: pointer;
+    white-space: nowrap;
+    box-shadow: 0 3px 12px rgba(94, 67, 155, 0.5);
+    transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+
+    &:hover {
+      background: linear-gradient(135deg, #7152b7 0%, #2b1f63 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(94, 67, 155, 0.6);
+    }
+
+    &:active {
+      transform: scale(0.97);
+    }
+  }
+
+  // ── Mobile: stack vertically on small screens ──────────────────────────────
+  @media (max-width: 520px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 16px 18px;
+
+    &__actions {
+      width: 100%;
+    }
+
+    &__accept-btn {
+      width: 100%;
+      justify-content: center;
+      padding: 11px 20px;
+    }
+  }
+
+  // ── Respect safe-area inset (iPhone notch / home indicator) ──────────────
+  padding-bottom: max(14px, env(safe-area-inset-bottom));
+}

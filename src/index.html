@@ -58,6 +58,20 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
+
+      // ── GA4 Consent Mode v2 — default to DENIED ──────────────────────────
+      // All GA4 hits are held until the user accepts in the cookie banner.
+      // CookieConsentComponent calls gtag('consent', 'update', { ... granted })
+      // on accept, at which point held hits are released.
+      var _consent = localStorage.getItem('cookieConsent');
+      gtag('consent', 'default', {
+        analytics_storage: _consent === 'accepted' ? 'granted' : 'denied',
+        ad_storage: _consent === 'accepted' ? 'granted' : 'denied',
+        ad_user_data: _consent === 'accepted' ? 'granted' : 'denied',
+        ad_personalization: _consent === 'accepted' ? 'granted' : 'denied',
+        wait_for_update: 2000
+      });
+
       gtag('config', 'G-H064CBHPQ9', {
         send_page_view: false,
         cookie_flags: 'SameSite=None;Secure'
