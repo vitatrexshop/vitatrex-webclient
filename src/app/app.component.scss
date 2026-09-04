@@ -16,7 +16,8 @@
   app-header {
     display: block;
     min-height: 70px;
-    contain: layout style;
+    position: relative;
+    z-index: 1000;
   }
 
   &__main {
@@ -25,7 +26,8 @@
     min-height: 60vh;
     // Smooth scroll-to-top on route change
     scroll-behavior: smooth;
-    // Contain layout changes within <main> so they don't shift chrome above/below
+    position: relative;
+    z-index: 1;
     contain: layout style;
 
     @media (max-width: 991px) {

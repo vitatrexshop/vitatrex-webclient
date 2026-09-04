@@ -11,6 +11,7 @@ import {
   OnDestroy,
   PLATFORM_ID,
   ViewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -38,6 +39,7 @@ const SLOT_LABELS = ['اختر منتجك الأول', 'اختر منتجك ال
   templateUrl: './offers-section.component.html',
   styleUrls: ['./offers-section.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class OffersSectionComponent implements AfterViewInit, OnDestroy {
   @ViewChild('offersSection', { static: false }) sectionEl?: ElementRef<HTMLElement>;
@@ -307,6 +309,11 @@ export class OffersSectionComponent implements AfterViewInit, OnDestroy {
       centeredSlides: true,
       speed: 600,
       grabCursor: true,
+      observer: true,
+      observeParents: true,
+      observeSlideChildren: true,
+      resizeObserver: true,
+      updateOnWindowResize: true,
       autoplay: {
         delay: 5500,
         disableOnInteraction: false,
@@ -322,6 +329,11 @@ export class OffersSectionComponent implements AfterViewInit, OnDestroy {
         prevEl: section?.querySelector<HTMLElement>('.offers-nav--prev') ?? undefined,
       },
     });
+
+    this.swiper.update();
+    setTimeout(() => {
+      this.swiper?.update();
+    }, 100);
   }
 
   // ─── GSAP ─────────────────────────────────────────────────────────────────

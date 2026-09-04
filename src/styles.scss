@@ -687,3 +687,55 @@ body > .story-reel-modal,
   max-height: 100dvh !important;
   z-index: 9999999 !important;
 }
+
+// ── Global Search Input Clean-up ──────────────────────────────
+// Suppress native WebKit search cancel button so only our custom clear button renders
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+  display: none !important;
+}
+
+// ── Search Dropdown & Overlay Global Stacking ─────────────────
+.search-dropdown,
+.search-results,
+.search-suggestions-dropdown {
+  position: absolute !important;
+  z-index: 99999 !important;
+}
+
+// ── Global Swiper Core Layout Guarantee (Production Fix) ──────
+// Prevents slide items from losing flex/width and collapsing tightly side-by-side
+.swiper {
+  position: relative;
+  overflow: hidden;
+  list-style: none;
+  padding: 0;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.swiper-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  display: flex !important;
+  transition-property: transform;
+  box-sizing: border-box;
+}
+
+.swiper-slide {
+  flex-shrink: 0 !important;
+  height: 100%;
+  position: relative;
+  transition-property: transform;
+  display: block;
+  box-sizing: border-box;
+}
+

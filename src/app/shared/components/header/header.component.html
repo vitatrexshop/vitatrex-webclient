@@ -108,6 +108,7 @@
             #searchInputField
             class="search-input-field"
             type="search"
+            dir="auto"
             [placeholder]="'NAV.SEARCH_PLACEHOLDER' | translate"
             [formControl]="searchControl"
             [attr.aria-hidden]="!isSearchOpen"
@@ -122,9 +123,9 @@
             </svg>
           </span>
 
-          <!-- Clear / Reset Button -->
+          <!-- Clear / Reset Button - Rendered only when searchValue has content -->
           <button
-            *ngIf="searchControl.value"
+            *ngIf="!isSearchLoading && searchValue.length > 0"
             type="button"
             class="search-clear-btn"
             (click)="clearSearch()"
@@ -157,7 +158,7 @@
 
         <!-- ── Desktop Instant Search Overlay Dropdown Menu ───────── -->
         <div
-          class="search-suggestions-dropdown"
+          class="search-suggestions-dropdown search-dropdown search-results"
           *ngIf="isSearchOpen && showDropdown"
           role="listbox"
           aria-label="Search suggestions"
@@ -328,12 +329,13 @@
           <input
             class="mobile-sheet-input"
             type="search"
+            dir="auto"
             [placeholder]="'NAV.SEARCH_PLACEHOLDER' | translate"
             [formControl]="searchControl"
             autocomplete="off"
           />
           <button
-            *ngIf="searchControl.value"
+            *ngIf="!isSearchLoading && searchValue.length > 0"
             type="button"
             class="mobile-search-clear"
             (click)="clearSearch()"

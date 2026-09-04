@@ -12,6 +12,7 @@ import {
   OnInit,
   PLATFORM_ID,
   ViewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -42,6 +43,7 @@ export interface HappyShelfItem {
   templateUrl: './products-section.component.html',
   styleUrls: ['./products-section.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class ProductsSectionComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('sectionEl', { static: false }) sectionEl?: ElementRef<HTMLElement>;
@@ -121,8 +123,20 @@ export class ProductsSectionComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   ngAfterViewInit(): void {
-    if (this.isBrowser && this.shelfProducts.length > 0) {
-      setTimeout(() => this.ngZone.runOutsideAngular(() => this.initSwiper()), 60);
+    if (this.isBrowser) {
+      if (typeof window !== 'undefined') {
+        window.addEventListener('load', () => {
+          this.ngZone.runOutsideAngular(() => {
+            this.swiper?.update();
+          });
+        }, { once: true });
+      }
+      if (this.shelfProducts.length > 0) {
+        setTimeout(() => this.ngZone.runOutsideAngular(() => {
+          this.initSwiper();
+          this.swiper?.update();
+        }), 60);
+      }
     }
   }
 
@@ -147,7 +161,13 @@ export class ProductsSectionComponent implements OnInit, AfterViewInit, OnDestro
           this.isLoading = false;
           this.cdr.markForCheck();
           if (this.isBrowser) {
-            setTimeout(() => this.ngZone.runOutsideAngular(() => this.initSwiper()), 60);
+            setTimeout(() => this.ngZone.runOutsideAngular(() => {
+              this.initSwiper();
+              this.swiper?.update();
+            }), 60);
+            setTimeout(() => this.ngZone.runOutsideAngular(() => {
+              this.swiper?.update();
+            }), 350);
           }
         },
         error: () => {
@@ -155,7 +175,13 @@ export class ProductsSectionComponent implements OnInit, AfterViewInit, OnDestro
           this.isLoading = false;
           this.cdr.markForCheck();
           if (this.isBrowser) {
-            setTimeout(() => this.ngZone.runOutsideAngular(() => this.initSwiper()), 60);
+            setTimeout(() => this.ngZone.runOutsideAngular(() => {
+              this.initSwiper();
+              this.swiper?.update();
+            }), 60);
+            setTimeout(() => this.ngZone.runOutsideAngular(() => {
+              this.swiper?.update();
+            }), 350);
           }
         },
       });
@@ -203,6 +229,11 @@ export class ProductsSectionComponent implements OnInit, AfterViewInit, OnDestro
       speed: 600,
       grabCursor: true,
       watchSlidesProgress: true,
+      observer: true,
+      observeParents: true,
+      observeSlideChildren: true,
+      resizeObserver: true,
+      updateOnWindowResize: true,
       autoplay: {
         delay: 2500,
         disableOnInteraction: false,
@@ -241,6 +272,12 @@ export class ProductsSectionComponent implements OnInit, AfterViewInit, OnDestro
         },
       },
     });
+
+    // Ensure Swiper calculates dimensions properly immediately and after render
+    this.swiper.update();
+    setTimeout(() => {
+      this.swiper?.update();
+    }, 100);
   }
 
   // ── Add to Cart & Notify Handlers ────────────────────────────

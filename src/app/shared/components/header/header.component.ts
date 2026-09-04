@@ -54,6 +54,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isSearchOpen = false;
   readonly searchControl = new FormControl('', { nonNullable: true });
 
+  get searchValue(): string {
+    return this.searchControl.value || '';
+  }
+
   // ── Live Search State ──────────────────────────────────────────────────────
   searchResults: Product[]  = [];
   totalSearchResults        = 0;
