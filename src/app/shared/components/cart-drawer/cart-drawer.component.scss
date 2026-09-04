@@ -91,6 +91,36 @@
 
     h3 { font-size: 1.15rem; font-weight: 800; }
     p  { font-size: 0.9rem; color: var(--color-text-muted); }
+
+    // ── "ابدأ التسوق" (Start Shopping) Button
+    // Hardcoded to survive Angular production CSS optimization & tree-shaking
+    // Do NOT rely solely on global .btn / .btn--primary — define explicitly here
+    a.btn,
+    a.btn--primary,
+    .cart-drawer-start-shopping-btn {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      background: linear-gradient(135deg, #5e439b 0%, #20174b 100%) !important;
+      color: #ffffff !important;
+      padding: 12px 32px !important;
+      border-radius: 25px !important;
+      border: none !important;
+      font-weight: 700 !important;
+      font-size: 0.95rem !important;
+      font-family: inherit !important;
+      text-decoration: none !important;
+      cursor: pointer !important;
+      box-shadow: 0 4px 15px rgba(59, 43, 115, 0.3) !important;
+      transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease !important;
+      white-space: nowrap !important;
+
+      &:hover {
+        background: linear-gradient(135deg, #7152b7 0%, #2b1f63 100%) !important;
+        transform: translateY(-2px) scale(1.02) !important;
+        box-shadow: 0 8px 24px rgba(59, 43, 115, 0.45) !important;
+      }
+    }
   }
 
   // ── Free shipping bar
@@ -125,6 +155,37 @@
     gap: var(--space-3);
     flex-shrink: 0;
     background: var(--color-surface);
+
+    // ── Checkout CTA Button (btn--primary / btn--full)
+    // Hardcoded to survive Angular production CSS optimization & tree-shaking
+    a.btn,
+    a.btn--primary,
+    .cart-drawer-checkout-btn {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 100% !important;
+      background: linear-gradient(135deg, #5e439b 0%, #20174b 100%) !important;
+      color: #ffffff !important;
+      padding: 14px 32px !important;
+      border-radius: 25px !important;
+      border: none !important;
+      font-weight: 700 !important;
+      font-size: 1rem !important;
+      font-family: inherit !important;
+      text-decoration: none !important;
+      cursor: pointer !important;
+      box-shadow: 0 4px 15px rgba(59, 43, 115, 0.3) !important;
+      transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease !important;
+      white-space: nowrap !important;
+      text-align: center !important;
+
+      &:hover {
+        background: linear-gradient(135deg, #7152b7 0%, #2b1f63 100%) !important;
+        transform: translateY(-2px) scale(1.02) !important;
+        box-shadow: 0 8px 24px rgba(59, 43, 115, 0.45) !important;
+      }
+    }
   }
 
   &__subtotal {

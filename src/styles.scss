@@ -739,3 +739,67 @@ input[type="search"]::-webkit-search-results-decoration {
   box-sizing: border-box;
 }
 
+// ── Cart Drawer Button Production Fix (Global Scope) ─────────────────────────
+// These rules are in the GLOBAL stylesheet so they are never scoped, tree-shaken,
+// or stripped by Angular's production CSS optimizer.
+// Fixes the cart drawer "ابدأ التسوق" (Start Shopping) and Checkout buttons
+// losing their background/padding/border-radius/box-shadow in production.
+// ─────────────────────────────────────────────────────────────────────────────
+
+.cart-drawer__empty a.btn,
+.cart-drawer__empty a.btn--primary {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: linear-gradient(135deg, #5e439b 0%, #20174b 100%) !important;
+  background-color: #3b2b73 !important;
+  color: #ffffff !important;
+  padding: 12px 32px !important;
+  border-radius: 25px !important;
+  border: none !important;
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+  font-family: var(--font-heading), 'Noto Kufi Arabic', sans-serif !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 15px rgba(59, 43, 115, 0.3) !important;
+  transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease !important;
+  white-space: nowrap !important;
+
+  &:hover {
+    background: linear-gradient(135deg, #7152b7 0%, #2b1f63 100%) !important;
+    transform: translateY(-2px) scale(1.02) !important;
+    box-shadow: 0 8px 24px rgba(59, 43, 115, 0.45) !important;
+    color: #ffffff !important;
+  }
+}
+
+.cart-drawer__footer a.btn,
+.cart-drawer__footer a.btn--primary {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  background: linear-gradient(135deg, #5e439b 0%, #20174b 100%) !important;
+  background-color: #3b2b73 !important;
+  color: #ffffff !important;
+  padding: 14px 32px !important;
+  border-radius: 25px !important;
+  border: none !important;
+  font-weight: 700 !important;
+  font-size: 1rem !important;
+  font-family: var(--font-heading), 'Noto Kufi Arabic', sans-serif !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 15px rgba(59, 43, 115, 0.3) !important;
+  transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease !important;
+  white-space: nowrap !important;
+  text-align: center !important;
+
+  &:hover {
+    background: linear-gradient(135deg, #7152b7 0%, #2b1f63 100%) !important;
+    transform: translateY(-2px) scale(1.02) !important;
+    box-shadow: 0 8px 24px rgba(59, 43, 115, 0.45) !important;
+    color: #ffffff !important;
+  }
+}
