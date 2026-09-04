@@ -32,7 +32,8 @@ export class ProductDetailComponent implements OnInit {
   selectedVariant: Variant | null = null;
   quantity = 1;
   selectedImage: string | null = null;
-  isDescriptionOpen = true;
+  isDescriptionOpen = false;
+  isAdding = false;
 
   /** Other products to suggest — populated after main product loads */
   suggestedProducts: Product[] = [];
@@ -74,6 +75,16 @@ export class ProductDetailComponent implements OnInit {
 
             if (prod && prod.variants?.length) {
               this.selectedVariant = prod.variants[0];
+              this.quantity = 1;
+            } else if (prod) {
+              // Safe fallback for products with price at root
+              this.selectedVariant = {
+                count: 60,
+                price: (prod as any).price || 0,
+                originalPrice: (prod as any).originalPrice || null,
+                discountPercentage: (prod as any).discountPercentage || 0,
+                stock: (prod as any).stock ?? -1,
+              };
               this.quantity = 1;
             } else {
               this.selectedVariant = null;
@@ -118,14 +129,18 @@ export class ProductDetailComponent implements OnInit {
 
   toggleDescription(): void {
     this.isDescriptionOpen = !this.isDescriptionOpen;
+    this.cdr.markForCheck();
   }
 
   selectVariant(variant: Variant): void {
     this.selectedVariant = variant;
+    this.quantity = 1;
+    this.cdr.markForCheck();
   }
 
   selectImage(imgUrl: string): void {
     this.selectedImage = imgUrl;
+    this.cdr.markForCheck();
   }
 
   getImageUrl(product?: Product | null): string {
@@ -133,9 +148,9 @@ export class ProductDetailComponent implements OnInit {
     return this.selectedImage || product.image || (product.images && product.images[0]) || 'assets/images/hero-fallback.webp';
   }
 
-  /** Generate thumbnails array ensuring at least 4 thumbnails exist for the vertical strip */
+  /** Generate clean thumbnails array with ONLY unique images (never force duplicate) */
   getThumbnails(product?: Product | null): string[] {
-    if (!product) return ['assets/images/hero-fallback.webp'];
+    if (!product) return [];
     const list: string[] = [];
     if (product.image) list.push(product.image);
     if (Array.isArray(product.images) && product.images.length) {
@@ -143,13 +158,7 @@ export class ProductDetailComponent implements OnInit {
         if (img && !list.includes(img)) list.push(img);
       });
     }
-    // If fewer than 4 images, repeat/pad gracefully
-    if (list.length === 0) list.push('assets/images/hero-fallback.webp');
-    const result = [...list];
-    while (result.length < 4 && list.length > 0) {
-      result.push(list[result.length % list.length]);
-    }
-    return result.slice(0, 4);
+    return list;
   }
 
   /** Generate colorful category & health pills matching the 360 Nutrition style */
@@ -158,7 +167,6 @@ export class ProductDetailComponent implements OnInit {
     const pills: HealthPill[] = [];
     const catName = this.getCategoryName(product).toLowerCase();
 
-    // Defaults & dynamic mapping
     if (catName.includes('مناعة') || catName.includes('immun')) {
       pills.push({ label: 'المناعة والوقاية', emoji: '', colorClass: 'pill--blue' });
       pills.push({ label: 'العناية اليومية', emoji: '', colorClass: 'pill--green' });
@@ -173,11 +181,7 @@ export class ProductDetailComponent implements OnInit {
       pills.push({ label: 'دعم المناعة', emoji: '', colorClass: 'pill--blue' });
     }
 
-    // Add general health tags
-    pills.push({ label: 'حيوية ونشاط', emoji: '', colorClass: 'pill--amber' });
-    pills.push({ label: 'صحة الرجال', emoji: '', colorClass: 'pill--teal' });
-    pills.push({ label: 'صحة السيدات', emoji: '', colorClass: 'pill--pink' });
-
+    pills.push({ label: 'طبيعي 100%', emoji: '', colorClass: 'pill--teal' });
     return pills;
   }
 
@@ -216,7 +220,7 @@ export class ProductDetailComponent implements OnInit {
   /** Max purchasable qty: -1 = unlimited, otherwise capped at variant stock */
   get maxStock(): number {
     if (!this.selectedVariant || this.selectedVariant.stock === -1) return 999;
-    return this.selectedVariant.stock;
+    return Math.max(0, this.selectedVariant.stock);
   }
 
   /** True when selected variant is completely out of stock */
@@ -235,21 +239,31 @@ export class ProductDetailComponent implements OnInit {
   increment(): void {
     if (this.quantity < this.maxStock) {
       this.quantity++;
+      this.cdr.markForCheck();
     }
   }
 
   decrement(): void {
     if (this.quantity > 1) {
       this.quantity--;
+      this.cdr.markForCheck();
     }
   }
 
   addToCart(product?: Product | null): void {
     if (!product || !this.selectedVariant || this.isOutOfStock) return;
+    this.isAdding = true;
+    this.cdr.markForCheck();
+
     const safeQty = Math.min(this.quantity, this.maxStock);
     this.cartService.addToCart(product, this.selectedVariant, safeQty);
     this.toastService.show(`تمت إضافة ${product.name} إلى السلة`, 'success');
     this.cartDrawerService.open();
+
+    setTimeout(() => {
+      this.isAdding = false;
+      this.cdr.markForCheck();
+    }, 600);
   }
 
   buyNow(product?: Product | null): void {
@@ -262,10 +276,14 @@ export class ProductDetailComponent implements OnInit {
   addSuggestedToCart(product: Product): void {
     if (!product) return;
     const variant = product.variants?.[0];
-    if (!variant) return;
+    if (!variant || (variant.stock !== -1 && variant.stock <= 0)) {
+      this.toastService.show('هذا المنتج غير متوفر حالياً بالمخزون', 'warning');
+      return;
+    }
     this.cartService.addToCart(product, variant, 1);
     this.toastService.show(`تمت إضافة ${product.name} إلى السلة`, 'success');
     this.cartDrawerService.open();
+    this.cdr.markForCheck();
   }
 
   getMinPrice(product?: Product | null): number {
