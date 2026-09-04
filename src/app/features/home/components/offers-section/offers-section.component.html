@@ -96,23 +96,7 @@
             <!-- Dynamic Subtle Glow -->
             <div class="offer-spotlight-glow" aria-hidden="true"></div>
 
-            <!-- Top Discount Pill Badge -->
-            <div class="offer-top-badges">
-              <span
-                class="offer-badge-pill discount-pill"
-                *ngIf="item.discountPercentage > 0"
-              >
-                وفر {{ item.discountPercentage }}%
-              </span>
-              <span
-                class="offer-badge-pill custom-pill"
-                *ngIf="item.badgeText"
-              >
-                {{ item.badgeText }}
-              </span>
-            </div>
-
-            <!-- Stage Display (Image) -->
+            <!-- ── Top Banner Image Stage & Pill Badge ── -->
             <div class="offer-banner-stage">
               <img
                 *ngIf="item.image"
@@ -124,54 +108,72 @@
                 loading="lazy"
                 decoding="async"
               />
-              <div class="offer-banner-overlay" aria-hidden="true"></div>
+              <!-- Pill Badge at Top-Right over Image -->
+              <div class="offer-top-image-badge">
+                {{ item.badgeText || 'وفر أكثر' }}
+              </div>
             </div>
 
-            <!-- Simple, Modern & Responsive Bottom Action Card -->
-            <div class="offer-bottom-card" dir="rtl">
-              <div class="offer-card-content">
-                <div class="offer-card-meta">
-                  <h3 class="offer-card-title">{{ item.title }}</h3>
-                  <p class="offer-card-desc" *ngIf="item.description">{{ item.description }}</p>
+            <!-- ── Dedicated Dark Content Body Under Image ── -->
+            <div class="offer-content-body" dir="rtl">
+              <!-- Secondary Dark Pill Badge Above Title -->
+              <div class="offer-secondary-badge">
+                {{ item.badgeText || 'وفر أكثر' }}
+              </div>
+
+              <!-- Title -->
+              <h3 class="offer-card-title">{{ item.title }}</h3>
+
+              <!-- Price & Save Icon Row -->
+              <div class="offer-price-save-row">
+                <!-- Left Side: Primary Price + Strikethrough Original Price -->
+                <div class="offer-price-group">
+                  <span class="offer-price-primary">
+                    {{ item.discountedPrice | number }} {{ 'COMMON.CURRENCY' | translate }}
+                  </span>
+                  <del
+                    class="offer-price-original"
+                    *ngIf="item.originalPrice > item.discountedPrice"
+                  >
+                    {{ item.originalPrice | number }} {{ 'COMMON.CURRENCY' | translate }}
+                  </del>
                 </div>
 
-                <div class="offer-card-action-row">
-                  <div class="offer-card-prices">
-                    <div class="offer-price-main">
-                      <span class="offer-price-amount">{{ item.discountedPrice | number }}</span>
-                      <span class="offer-price-cur">{{ 'COMMON.CURRENCY' | translate }}</span>
-                    </div>
-                    <div class="offer-price-sub" *ngIf="item.originalPrice > item.discountedPrice">
-                      <span class="offer-price-del">{{ item.originalPrice | number }} {{ 'COMMON.CURRENCY' | translate }}</span>
-                      <span class="offer-save-badge">وفر {{ (item.originalPrice - item.discountedPrice) | number }} {{ 'COMMON.CURRENCY' | translate }}</span>
-                    </div>
+                <!-- Right Side: Circular Outline Icon Box & Label 'أوفر Save' -->
+                <div class="offer-save-icon-box">
+                  <div class="offer-circle-icon">
+                    <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+                      <path d="M7.5 4a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7zm0 5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm9 6a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7zm0 5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zM18.7 4.3a1 1 0 0 0-1.4 0l-12 12a1 1 0 1 0 1.4 1.4l12-12a1 1 0 0 0 0-1.4z"/>
+                    </svg>
                   </div>
-
-                  <button
-                    class="offer-cta-btn"
-                    type="button"
-                    [class.is-loading]="isAdding(item.id || item._id || '')"
-                    [disabled]="isAdding(item.id || item._id || '')"
-                    (click)="handleAddToCart(item, $event)"
-                    [attr.aria-label]="'OFFERS_SECTION.ADD_TO_CART' | translate"
-                  >
-                    <ng-container *ngIf="!isAdding(item.id || item._id || '')">
-                      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-                        <line x1="3" y1="6" x2="21" y2="6"/>
-                        <path d="M16 10a4 4 0 0 1-8 0"/>
-                      </svg>
-                      <span>{{ 'OFFERS_SECTION.ADD_TO_CART' | translate }}</span>
-                    </ng-container>
-                    <ng-container *ngIf="isAdding(item.id || item._id || '')">
-                      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <polyline points="20 6 9 17 4 12"/>
-                      </svg>
-                      <span>{{ 'OFFERS_SECTION.ADDED' | translate }}</span>
-                    </ng-container>
-                  </button>
+                  <span class="offer-save-label">أوفر Save</span>
                 </div>
               </div>
+
+              <!-- Full-Width Dark Purple Outline CTA Button -->
+              <button
+                class="offer-cta-button"
+                type="button"
+                [class.is-loading]="isAdding(item.id || item._id || '')"
+                [disabled]="isAdding(item.id || item._id || '')"
+                (click)="handleAddToCart(item, $event)"
+                [attr.aria-label]="'OFFERS_SECTION.ADD_TO_CART' | translate"
+              >
+                <ng-container *ngIf="!isAdding(item.id || item._id || '')">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                    <line x1="3" y1="6" x2="21" y2="6"/>
+                    <path d="M16 10a4 4 0 0 1-8 0"/>
+                  </svg>
+                  <span>{{ 'OFFERS_SECTION.ADD_TO_CART' | translate }}</span>
+                </ng-container>
+                <ng-container *ngIf="isAdding(item.id || item._id || '')">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                  <span>{{ 'OFFERS_SECTION.ADDED' | translate }}</span>
+                </ng-container>
+              </button>
             </div>
           </div>
 

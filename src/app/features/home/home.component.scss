@@ -66,6 +66,12 @@
   width: 100%;
   background: radial-gradient(circle at 50% 20%, #2a1d63 0%, #20174b 75%, #18113c 100%);
   overflow: hidden;
+
+  @media (max-width: 767px) {
+    min-height: calc(100vh - 120px);
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 // ── Video Stories Wrapper ─────────────────────────────────────

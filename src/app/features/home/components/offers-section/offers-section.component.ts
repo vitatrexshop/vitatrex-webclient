@@ -171,16 +171,16 @@ export class OffersSectionComponent implements AfterViewInit, OnDestroy {
       id: 'offer-demo-immune',
       _id: 'offer-demo-immune',
       type: 'offer',
-      title: 'عرض درع المناعة والنشاط الفائق',
+      title: 'Vitatrex Immune Gummies Bundle',
       slug: 'immunity-shield-offer',
       description: 'تركيبة الزنك وفيتامين C مع خلاصة الفواكه الطبيعية لتعزيز مقاومة الجسم ودعم المناعة',
       image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=1200&q=85',
-      badgeText: 'وفر 25%',
+      badgeText: 'وفر أكثر',
       items: [{ product: this.mockProductImmune, quantity: 2 }],
-      originalPrice: 780,
-      discountedPrice: 585,
-      offerPrice: 585,
-      discountPercentage: 25,
+      originalPrice: 900,
+      discountedPrice: 600,
+      offerPrice: 600,
+      discountPercentage: 33,
       isActive: true,
     },
     {
@@ -305,8 +305,8 @@ export class OffersSectionComponent implements AfterViewInit, OnDestroy {
       modules: [Navigation, Pagination, Autoplay],
       loop: this.promotions.length > 1,
       slidesPerView: 1,
-      spaceBetween: 24,
-      centeredSlides: true,
+      spaceBetween: 16,
+      centeredSlides: false,
       speed: 600,
       grabCursor: true,
       observer: true,
@@ -327,6 +327,20 @@ export class OffersSectionComponent implements AfterViewInit, OnDestroy {
       navigation: {
         nextEl: section?.querySelector<HTMLElement>('.offers-nav--next') ?? undefined,
         prevEl: section?.querySelector<HTMLElement>('.offers-nav--prev') ?? undefined,
+      },
+      breakpoints: {
+        // Mobile: 1 full-width slide
+        0: {
+          slidesPerView: 1,
+          spaceBetween: 12,
+          centeredSlides: false,
+        },
+        // Tablet+: 1 slide, centered
+        768: {
+          slidesPerView: 1,
+          spaceBetween: 24,
+          centeredSlides: true,
+        },
       },
     });
 
