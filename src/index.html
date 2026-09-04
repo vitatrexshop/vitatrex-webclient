@@ -46,6 +46,24 @@
     <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
     <link rel="dns-prefetch" href="https://images.unsplash.com" />
 
+    <!-- Google Analytics 4 — GA4 (G-H064CBHPQ9) -->
+    <!-- preconnect: GA CDN handshake starts immediately during HTML parse -->
+    <link rel="preconnect" href="https://www.googletagmanager.com" />
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+    <link rel="preconnect" href="https://www.google-analytics.com" />
+    <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+    <!-- gtag.js loaded async — never blocks page render -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-H064CBHPQ9"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-H064CBHPQ9', {
+        send_page_view: false,
+        cookie_flags: 'SameSite=None;Secure'
+      });
+    </script>
+
     <!-- LCP Preload: Hero banner image discovered immediately before scripts parse -->
     <link
       rel="preload"

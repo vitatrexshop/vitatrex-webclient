@@ -1,8 +1,9 @@
-﻿import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, distinctUntilChanged } from 'rxjs/operators';
 import { CartItem, BundleCartMeta } from '../models/cart.model';
 import { Product, Variant } from '../models/product.model';
+import { AnalyticsService } from './analytics.service';
 
 const CART_STORAGE_KEY = 'vitatrix_cart';
 
@@ -16,6 +17,8 @@ export class CartService {
   private readonly _items$ = new BehaviorSubject<CartItem[]>(
     this.loadFromStorage()
   );
+
+  constructor(private readonly analytics: AnalyticsService) {}
 
   /** Raw list of cart items */
   readonly cartItems$: Observable<CartItem[]> = this._items$.asObservable();
@@ -85,6 +88,14 @@ export class CartService {
     }
 
     this.publish(updated);
+
+    // GA4: fire add_to_cart for the item that was just added/incremented
+    const trackItem = updated.find(
+      (i) => !i.isBundle && i.product._id === product._id && i.selectedVariant.count === variant.count
+    );
+    if (trackItem) {
+      this.analytics.trackAddToCart({ ...trackItem, quantity: safeQty });
+    }
   }
 
   /**
@@ -175,10 +186,18 @@ export class CartService {
    * Remove a specific product or bundle from the cart.
    */
   removeFromCart(productId: string, variantCount: number): void {
+    const removing = this._items$.value.find(
+      (i) => i.product._id === productId && i.selectedVariant.count === variantCount
+    );
     const updated = this._items$.value.filter(
       (i) => !(i.product._id === productId && i.selectedVariant.count === variantCount)
     );
     this.publish(updated);
+
+    // GA4: fire remove_from_cart for the item that was removed
+    if (removing) {
+      this.analytics.trackRemoveFromCart(removing);
+    }
   }
 
   /**

@@ -5,4 +5,6 @@ export const environment = {
   // Media/upload assets served directly from the backend — bypass the proxy
   // to avoid 404 when the proxy is not active or not forwarding /uploads correctly
   mediaBaseUrl: 'http://localhost:5000',
+  // Google Analytics 4 Measurement ID
+  googleAnalyticsId: 'G-H064CBHPQ9',
 };

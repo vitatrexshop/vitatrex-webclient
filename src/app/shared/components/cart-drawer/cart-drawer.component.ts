@@ -4,6 +4,7 @@ import { CartService } from '../../../core/services/cart.service';
 import { CartDrawerService } from '../../../core/services/cart-drawer.service';
 import { CartItem } from '../../../core/models/cart.model';
 import { environment } from '../../../../environments/environment';
+import { AnalyticsService } from '../../../core/services/analytics.service';
 
 /**
  * Slide-over shopping cart drawer.
@@ -27,7 +28,8 @@ export class CartDrawerComponent {
 
   constructor(
     private readonly cartService: CartService,
-    private readonly cartDrawerService: CartDrawerService
+    private readonly cartDrawerService: CartDrawerService,
+    private readonly analytics: AnalyticsService,
   ) {
     this.isOpen$ = this.cartDrawerService.isOpen$;
     this.cartItems$ = this.cartService.cartItems$;
@@ -37,6 +39,17 @@ export class CartDrawerComponent {
 
   close(): void {
     this.cartDrawerService.close();
+  }
+
+  /**
+   * Called when user clicks the Checkout CTA.
+   * Fires GA4 begin_checkout before closing the drawer and navigating.
+   */
+  onCheckout(): void {
+    const items = this.cartService.snapshot;
+    const total = items.reduce((sum, i) => sum + i.itemTotal, 0);
+    this.analytics.trackBeginCheckout(items, total);
+    this.close();
   }
 
   increment(item: CartItem): void {
