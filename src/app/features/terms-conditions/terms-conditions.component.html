@@ -1,0 +1,278 @@
+<div class="policy-page terms-conditions-page">
+  <!-- ── 1. Hero Header Banner ────────────────────────────────── -->
+  <header class="policy-hero">
+    <div class="policy-hero__bg" aria-hidden="true">
+      <div class="glow glow-1"></div>
+      <div class="glow glow-2"></div>
+      <div class="hero-pattern"></div>
+    </div>
+
+    <div class="container policy-hero__content">
+      <!-- Breadcrumb Navigation -->
+      <nav class="policy-breadcrumb" aria-label="Breadcrumb">
+        <a routerLink="/" class="breadcrumb-link">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9.5L12 3l9 6.5V20a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 20V9.5z"/>
+          </svg>
+          <span>{{ 'TERMS_CONDITIONS.BREADCRUMB_HOME' | translate }}</span>
+        </a>
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        <span class="breadcrumb-current">{{ 'TERMS_CONDITIONS.BREADCRUMB_CURRENT' | translate }}</span>
+      </nav>
+
+      <!-- Badge Pill -->
+      <div class="policy-pill">
+        <span class="pill-dot"></span>
+        <span class="pill-text">{{ 'TERMS_CONDITIONS.BADGE' | translate }}</span>
+      </div>
+
+      <!-- Main Headline -->
+      <h1 class="policy-title">{{ 'TERMS_CONDITIONS.TITLE' | translate }}</h1>
+      <p class="policy-subtitle">{{ 'TERMS_CONDITIONS.SUBTITLE' | translate }}</p>
+
+      <!-- Trust Stats Bar -->
+      <div class="hero-stats-row">
+        <div class="hero-stat-item">
+          <div class="stat-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+              <polyline points="10 9 9 9 8 9"/>
+            </svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">{{ 'TERMS_CONDITIONS.STAT1_VAL' | translate }}</span>
+            <span class="stat-label">{{ 'TERMS_CONDITIONS.STAT1_LABEL' | translate }}</span>
+          </div>
+        </div>
+
+        <div class="hero-stat-item">
+          <div class="stat-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">{{ 'TERMS_CONDITIONS.STAT2_VAL' | translate }}</span>
+            <span class="stat-label">{{ 'TERMS_CONDITIONS.STAT2_LABEL' | translate }}</span>
+          </div>
+        </div>
+
+        <div class="hero-stat-item">
+          <div class="stat-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">{{ 'TERMS_CONDITIONS.STAT3_VAL' | translate }}</span>
+            <span class="stat-label">{{ 'TERMS_CONDITIONS.STAT3_LABEL' | translate }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── 2. Policy Main Body ───────────────────────────────────── -->
+  <main class="policy-main">
+    <div class="container policy-body-container">
+
+      <!-- Intro Callout Box -->
+      <div class="intro-callout-box">
+        <div class="quote-icon" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+          </svg>
+        </div>
+        <p class="intro-text">{{ 'TERMS_CONDITIONS.INTRO' | translate }}</p>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════════════
+           TERMS SECTIONS LIST
+           ═══════════════════════════════════════════════════════════ -->
+      <div class="terms-sections-list">
+
+        <!-- 1. مقدمة وقبول الشروط -->
+        <article class="policy-card term-item-card">
+          <div class="card-icon-wrap icon-purple">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+            </svg>
+          </div>
+          <div class="card-content">
+            <h2 class="card-title">{{ 'TERMS_CONDITIONS.SECTION1.TITLE' | translate }}</h2>
+            <p class="card-text">{{ 'TERMS_CONDITIONS.SECTION1.TEXT' | translate }}</p>
+          </div>
+        </article>
+
+        <!-- 2. استخدام المتجر وحساب المستخدم -->
+        <article class="policy-card term-item-card">
+          <div class="card-icon-wrap icon-indigo">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          </div>
+          <div class="card-content">
+            <h2 class="card-title">{{ 'TERMS_CONDITIONS.SECTION2.TITLE' | translate }}</h2>
+            <p class="card-text">{{ 'TERMS_CONDITIONS.SECTION2.TEXT' | translate }}</p>
+          </div>
+        </article>
+
+        <!-- 3. المنتجات والمعلومات الصحية -->
+        <article class="policy-card term-item-card term-item-card--highlight">
+          <div class="card-icon-wrap icon-amber">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+          </div>
+          <div class="card-content">
+            <h2 class="card-title">{{ 'TERMS_CONDITIONS.SECTION3.TITLE' | translate }}</h2>
+            <p class="card-text">{{ 'TERMS_CONDITIONS.SECTION3.TEXT' | translate }}</p>
+          </div>
+        </article>
+
+        <!-- 4. الأسعار وسياسة الدفع -->
+        <article class="policy-card term-item-card">
+          <div class="card-icon-wrap icon-green">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="5" width="20" height="14" rx="2"/>
+              <line x1="2" y1="10" x2="22" y2="10"/>
+            </svg>
+          </div>
+          <div class="card-content">
+            <h2 class="card-title">{{ 'TERMS_CONDITIONS.SECTION4.TITLE' | translate }}</h2>
+            <p class="card-text">{{ 'TERMS_CONDITIONS.SECTION4.TEXT' | translate }}</p>
+          </div>
+        </article>
+
+        <!-- 5. معالجة الطلبات والشحن -->
+        <article class="policy-card term-item-card">
+          <div class="card-icon-wrap icon-purple">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="1" y="3" width="15" height="13"/>
+              <polygon points="16 8 20 8 23 11 23 16 16 16 8"/>
+              <circle cx="5.5" cy="18.5" r="2.5"/>
+              <circle cx="18.5" cy="18.5" r="2.5"/>
+            </svg>
+          </div>
+          <div class="card-content">
+            <h2 class="card-title">{{ 'TERMS_CONDITIONS.SECTION5.TITLE' | translate }}</h2>
+            <p class="card-text">{{ 'TERMS_CONDITIONS.SECTION5.TEXT' | translate }}</p>
+          </div>
+        </article>
+
+        <!-- 6. سياسة الإرجاع والاستبدال -->
+        <article class="policy-card term-item-card">
+          <div class="card-icon-wrap icon-indigo">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="1 4 1 10 7 10"/>
+              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+            </svg>
+          </div>
+          <div class="card-content">
+            <h2 class="card-title">{{ 'TERMS_CONDITIONS.SECTION6.TITLE' | translate }}</h2>
+            <p class="card-text">{{ 'TERMS_CONDITIONS.SECTION6.TEXT' | translate }}</p>
+          </div>
+        </article>
+
+        <!-- 7. حقوق الملكية الفكرية -->
+        <article class="policy-card term-item-card">
+          <div class="card-icon-wrap icon-purple">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M14.83 14.83a4 4 0 1 1 0-5.66"/>
+            </svg>
+          </div>
+          <div class="card-content">
+            <h2 class="card-title">{{ 'TERMS_CONDITIONS.SECTION7.TITLE' | translate }}</h2>
+            <p class="card-text">{{ 'TERMS_CONDITIONS.SECTION7.TEXT' | translate }}</p>
+          </div>
+        </article>
+
+        <!-- 8. حدود المسؤولية -->
+        <article class="policy-card term-item-card">
+          <div class="card-icon-wrap icon-indigo">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <div class="card-content">
+            <h2 class="card-title">{{ 'TERMS_CONDITIONS.SECTION8.TITLE' | translate }}</h2>
+            <p class="card-text">{{ 'TERMS_CONDITIONS.SECTION8.TEXT' | translate }}</p>
+          </div>
+        </article>
+
+        <!-- 9. تعديل الشروط والأحكام -->
+        <article class="policy-card term-item-card">
+          <div class="card-icon-wrap icon-green">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+          </div>
+          <div class="card-content">
+            <h2 class="card-title">{{ 'TERMS_CONDITIONS.SECTION9.TITLE' | translate }}</h2>
+            <p class="card-text">{{ 'TERMS_CONDITIONS.SECTION9.TEXT' | translate }}</p>
+          </div>
+        </article>
+
+        <!-- 10. القانون الواجب التطبيق والتواصل -->
+        <article class="policy-card term-item-card">
+          <div class="card-icon-wrap icon-purple">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="2" y1="12" x2="22" y2="12"/>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            </svg>
+          </div>
+          <div class="card-content">
+            <h2 class="card-title">{{ 'TERMS_CONDITIONS.SECTION10.TITLE' | translate }}</h2>
+            <p class="card-text">
+              {{ 'TERMS_CONDITIONS.SECTION10.TEXT' | translate }}
+              <a [href]="'mailto:' + emailAddress" class="term-email-inline">{{ emailAddress }}</a>
+            </p>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- ── 3. Quick Links & Contact Callout ──────────────────────── -->
+      <div class="policy-contact-box">
+        <div class="contact-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+        </div>
+        <div class="contact-info">
+          <h3 class="contact-title">فريق خدمة العملاء في خدمتكم</h3>
+          <p class="contact-desc">يسعدنا دائماً استقبال استفساراتكم ومساعدتكم في أي وقت عبر البريد الإلكتروني:</p>
+          <a [href]="'mailto:' + emailAddress" class="contact-email-link">
+            {{ emailAddress }}
+          </a>
+        </div>
+        <div class="quick-nav-actions">
+          <a routerLink="/privacy-policy" class="quick-nav-btn">
+            <span>{{ 'FOOTER.PRIVACY_POLICY' | translate }}</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+          </a>
+          <a routerLink="/shipping-policy" class="quick-nav-btn">
+            <span>{{ 'FOOTER.SHIPPING_POLICY' | translate }}</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>

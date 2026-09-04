@@ -67,6 +67,35 @@ const routes: Routes = [
       ),
   },
   {
+    path: 'privacy-policy',
+    loadChildren: () =>
+      import('./features/privacy-policy/privacy-policy.module').then(
+        (m) => m.PrivacyPolicyModule
+      ),
+  },
+  {
+    path: 'terms-and-conditions',
+    loadChildren: () =>
+      import('./features/terms-conditions/terms-conditions.module').then(
+        (m) => m.TermsConditionsModule
+      ),
+  },
+  {
+    path: 'privacy',
+    redirectTo: 'privacy-policy',
+    pathMatch: 'full',
+  },
+  {
+    path: 'terms',
+    redirectTo: 'terms-and-conditions',
+    pathMatch: 'full',
+  },
+  {
+    path: 'terms-conditions',
+    redirectTo: 'terms-and-conditions',
+    pathMatch: 'full',
+  },
+  {
     path: 'shipping',
     redirectTo: 'shipping-policy',
     pathMatch: 'full',

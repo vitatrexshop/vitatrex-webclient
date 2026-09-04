@@ -439,5 +439,116 @@
     "FOOTER_BADGE": "Vitatrex — Your Health is Our Priority.",
     "BREADCRUMB_HOME": "Home",
     "BREADCRUMB_CURRENT": "Return & Refund Policy"
+  },
+  "PRIVACY_POLICY": {
+    "PAGE_TITLE": "Privacy Policy | Vitatrex",
+    "BADGE": "Data Protection & Privacy",
+    "TITLE": "Privacy Policy",
+    "SUBTITLE": "We are committed to safeguarding your privacy and personal data when shopping at Vitatrex",
+    "LAST_UPDATED": "Last updated: 2026",
+    "BREADCRUMB_HOME": "Home",
+    "BREADCRUMB_CURRENT": "Privacy Policy",
+    "STAT1_VAL": "100% Encrypted",
+    "STAT1_LABEL": "Advanced encryption and data security",
+    "STAT2_VAL": "Total Privacy",
+    "STAT2_LABEL": "We never sell or rent your data",
+    "STAT3_VAL": "Full Control",
+    "STAT3_LABEL": "Flexible cookie preferences management",
+    "INTRO": "At Vitatrex, protecting our customers' privacy and data security is our utmost priority. This policy outlines how we collect, use, and protect your personal information when you visit and shop with us.",
+    "SECTION1": {
+      "TITLE": "1. Information Collection",
+      "TEXT": "We collect information you provide directly to us when creating an account, completing a purchase, or contacting customer support. We also automatically collect certain data via cookies and analytics tools (such as Google Analytics and Microsoft Clarity) to optimize your browsing experience and enhance our services.",
+      "DIRECT_LABEL": "Direct Data:",
+      "DIRECT_TEXT": "Name, delivery address, phone number, email address, and order specifics.",
+      "AUTO_LABEL": "Automated Data:",
+      "AUTO_TEXT": "Cookies, user interaction heatmaps, device and browser specifications via certified analytics tools."
+    },
+    "SECTION2": {
+      "TITLE": "2. Use of Data",
+      "INTRO": "We utilize the collected information for the following specific purposes:",
+      "ITEM1": "Processing orders, shipping products, and providing live order tracking updates.",
+      "ITEM2": "Improving store performance and personalizing your experience based on browsing behavior.",
+      "ITEM3": "Monitoring technical health, security, and user flows through session logs and heatmaps."
+    },
+    "SECTION3": {
+      "TITLE": "3. Cookies & Tracking Technologies",
+      "TEXT": "We utilize cookies to remember your preferences and shopping cart items, and to gather statistical insights on store usage. You can manage or disable cookie preferences anytime through the store consent banner or your browser settings.",
+      "BADGE_CONSENT": "Consent Management:",
+      "CONSENT_INFO": "You can modify your cookie preferences at any time using the cookie banner at the bottom of the page."
+    },
+    "SECTION4": {
+      "TITLE": "4. Data Sharing with Third Parties",
+      "TEXT": "We never sell or rent your personal data to any third party. We only share strictly necessary information with trusted partners required to fulfill our service (such as shipping couriers, secure payment gateways, and certified analytics tools).",
+      "TRUST_CARRIERS": "Authorized delivery couriers to ship orders across all governorates.",
+      "TRUST_PAYMENT": "Licensed, PCI-DSS certified electronic payment gateways.",
+      "TRUST_ANALYTICS": "Certified analytics tools (Google Analytics & Microsoft Clarity) for user experience optimization."
+    },
+    "SECTION5": {
+      "TITLE": "5. Data Protection & Security",
+      "TEXT": "We apply rigorous industry-standard security and encryption protocols to protect your personal and financial details against unauthorized access.",
+      "SECURITY_NOTE": "All communication and transactions are fully encrypted via SSL/TLS protocols to ensure maximum security during browsing and checkout."
+    },
+    "CONTACT": {
+      "TITLE": "Have questions about your privacy?",
+      "TEXT": "Our support team is always delighted to address any privacy or data inquiries via email:",
+      "EMAIL": "vitatrexshop@gmail.com"
+    }
+  },
+  "TERMS_CONDITIONS": {
+    "PAGE_TITLE": "Terms & Conditions | Vitatrex",
+    "BADGE": "User Agreement",
+    "TITLE": "Terms & Conditions",
+    "SUBTITLE": "Rules and terms governing the use of Vitatrex online store and purchase orders",
+    "LAST_UPDATED": "Last updated: 2026",
+    "BREADCRUMB_HOME": "Home",
+    "BREADCRUMB_CURRENT": "Terms & Conditions",
+    "STAT1_VAL": "Full Transparency",
+    "STAT1_LABEL": "Clear and verified terms",
+    "STAT2_VAL": "Secure Shopping",
+    "STAT2_LABEL": "Complete consumer protection",
+    "STAT3_VAL": "Certified Quality",
+    "STAT3_LABEL": "Premium dietary supplements",
+    "INTRO": "Welcome to Vitatrex. By accessing, browsing, or placing an order on our website, you acknowledge and agree to be bound by all terms, conditions, and policies set forth on this page. Please read these terms carefully before utilizing our services.",
+    "SECTION1": {
+      "TITLE": "1. Introduction & Acceptance of Terms",
+      "TEXT": "These Terms & Conditions constitute a legally binding agreement between the customer and Vitatrex. Your use of this website or placing any order signifies your complete and unconditional acceptance of these terms."
+    },
+    "SECTION2": {
+      "TITLE": "2. Website Use & User Accounts",
+      "TEXT": "Users agree to provide accurate, up-to-date details (name, delivery address, phone number) to ensure correct order fulfillment. Customers are responsible for maintaining confidentiality of account credentials and all activities occurring under their account."
+    },
+    "SECTION3": {
+      "TITLE": "3. Products & Health Disclaimer",
+      "TEXT": "All displayed products are premium dietary supplements and vitamins manufactured according to certified quality standards. All health information and tips provided on the store are for general educational purposes only and do not substitute professional medical consultation or diagnosis."
+    },
+    "SECTION4": {
+      "TITLE": "4. Pricing & Payment Terms",
+      "TEXT": "All prices are listed in Egyptian Pounds (EGP) and include all applicable taxes unless stated otherwise. We reserve the right to revise prices or correct unintended typographical errors at any time. We support multiple secure payment methods including Cash on Delivery and encrypted online payment gateways."
+    },
+    "SECTION5": {
+      "TITLE": "5. Order Processing & Shipping",
+      "TEXT": "Orders are processed and verified by our fulfillment team. All delivery timelines, governorate coverage, and fees are governed by our official Shipping & Delivery Policy."
+    },
+    "SECTION6": {
+      "TITLE": "6. Return & Replacement Policy",
+      "TEXT": "Returns and replacements are subject to the terms detailed in our official Return Policy. To maintain rigorous health and safety standards, opened or used supplement packages cannot be returned or replaced."
+    },
+    "SECTION7": {
+      "TITLE": "7. Intellectual Property Rights",
+      "TEXT": "All trademarks, logos, texts, product imagery, graphics, and codebase on this website are the exclusive property of Vitatrex and protected under intellectual property legislation. Unauthorized reproduction or use is strictly prohibited."
+    },
+    "SECTION8": {
+      "TITLE": "8. Limitation of Liability",
+      "TEXT": "Vitatrex strives to ensure continuous service and data accuracy. We bear no liability for any adverse effects or damage arising from misuse of products contrary to package instructions."
+    },
+    "SECTION9": {
+      "TITLE": "9. Amendments to Terms",
+      "TEXT": "Vitatrex reserves the right to update or amend these terms at any time without prior notice. Amendments take immediate effect upon publishing, and continued use of the platform constitutes acceptance of revisions."
+    },
+    "SECTION10": {
+      "TITLE": "10. Governing Law & Contact",
+      "TEXT": "These Terms are governed by and construed in accordance with the laws of the Arab Republic of Egypt. For any inquiries or feedback regarding our terms, please contact us at:",
+      "EMAIL": "vitatrexshop@gmail.com"
+    }
   }
 }
