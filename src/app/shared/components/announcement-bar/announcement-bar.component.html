@@ -1,8 +1,10 @@
 <div class="announcement-bar" role="banner">
-  <div class="announcement-bar__track" aria-live="off" aria-atomic="false">
+  <div class="announcement-bar__track" aria-live="off" aria-atomic="false" *ngIf="(shippingSettings$ | async) as settings">
     <!-- Original set -->
-    <span>{{ 'MARQUEE.FREE_SHIPPING' | translate }}</span>
-    <span class="sep" aria-hidden="true">•</span>
+    <ng-container *ngIf="settings.isFreeShippingEnabled">
+      <span>{{ 'MARQUEE.FREE_SHIPPING_DYNAMIC' | translate: { amount: settings.freeShippingThreshold } }}</span>
+      <span class="sep" aria-hidden="true">•</span>
+    </ng-container>
     <span>{{ 'ANNOUNCEMENT.PROMO_1' | translate }}</span>
     <span class="sep" aria-hidden="true">•</span>
     <span>{{ 'ANNOUNCEMENT.PROMO_2' | translate }}</span>
@@ -10,8 +12,10 @@
     <span>{{ 'ANNOUNCEMENT.PROMO_3' | translate }}</span>
     <span class="sep" aria-hidden="true">•</span>
     <!-- Duplicate for seamless loop -->
-    <span aria-hidden="true">{{ 'MARQUEE.FREE_SHIPPING' | translate }}</span>
-    <span class="sep" aria-hidden="true">•</span>
+    <ng-container *ngIf="settings.isFreeShippingEnabled">
+      <span aria-hidden="true">{{ 'MARQUEE.FREE_SHIPPING_DYNAMIC' | translate: { amount: settings.freeShippingThreshold } }}</span>
+      <span class="sep" aria-hidden="true">•</span>
+    </ng-container>
     <span aria-hidden="true">{{ 'ANNOUNCEMENT.PROMO_1' | translate }}</span>
     <span class="sep" aria-hidden="true">•</span>
     <span aria-hidden="true">{{ 'ANNOUNCEMENT.PROMO_2' | translate }}</span>
@@ -20,3 +24,4 @@
     <span class="sep" aria-hidden="true">•</span>
   </div>
 </div>
+

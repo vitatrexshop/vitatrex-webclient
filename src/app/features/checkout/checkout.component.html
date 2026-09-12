@@ -1,4 +1,4 @@
-<main class="checkout-page container">
+﻿<main class="checkout-page container">
 
   <!-- ── Page Header ─────────────────────────────────────────── -->
   <div class="checkout-header">
@@ -291,8 +291,8 @@
             <span class="totals-row__prompt" *ngIf="!selectedGovernorateOption">{{ 'CHECKOUT.SELECT_GOV_FOR_SHIPPING' | translate }}</span>
           </div>
 
-          <div class="totals-row totals-row--free-note" *ngIf="shippingCost > 0 && cartTotal < SHIPPING_THRESHOLD">
-            <span>{{ 'CART.FREE_SHIPPING_REMAINING' | translate: { amount: (SHIPPING_THRESHOLD - cartTotal | number) } }}</span>
+          <div class="totals-row totals-row--free-note" *ngIf="isFreeShippingEnabled && shippingCost > 0 && cartTotal < shippingThreshold">
+            <span>{{ 'CART.FREE_SHIPPING_REMAINING' | translate: { amount: (shippingThreshold - cartTotal | number) } }}</span>
           </div>
 
           <!-- ── Coupon Discount Row ───────────────────────────── -->
@@ -349,3 +349,4 @@
 
   </div>
 </main>
+

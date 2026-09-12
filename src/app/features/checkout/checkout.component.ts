@@ -1,4 +1,4 @@
-import {
+﻿import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -15,6 +15,7 @@ import { PaymentService } from '../../core/services/payment.service';
 import { ShippingService } from '../../core/services/shipping.service';
 import { ToastService } from '../../core/services/toast.service';
 import { CouponService } from '../../core/services/coupon.service';
+import { SettingsService } from '../../core/services/settings.service';
 import { CartItem } from '../../core/models/cart.model';
 import { OrderInput, PaymentMethod, CreateOrderData, GovernorateOption } from '../../core/models/order.model';
 import { ApplyCouponResponse } from '../../core/models/coupon.model';
@@ -35,6 +36,7 @@ export class CheckoutComponent implements OnInit {
   private readonly shippingService = inject(ShippingService);
   private readonly toastService = inject(ToastService);
   private readonly couponService = inject(CouponService);
+  private readonly settingsService = inject(SettingsService);
   private readonly router = inject(Router);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly trackingService = inject(OrderTrackingService);
@@ -54,7 +56,12 @@ export class CheckoutComponent implements OnInit {
   couponError: string | null = null;
   isApplyingCoupon = false;
 
-  readonly SHIPPING_THRESHOLD = 500;
+  shippingThreshold = 500;
+  isFreeShippingEnabled = true;
+
+  get SHIPPING_THRESHOLD(): number {
+    return this.shippingThreshold;
+  }
 
   get selectedGovernorateOption(): GovernorateOption | null {
     const govName = this.form?.get('governorate')?.value;
@@ -100,6 +107,22 @@ export class CheckoutComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.settingsService
+      .getShippingSettings()
+      .pipe(take(1))
+      .subscribe({
+        next: (settings) => {
+          if (settings) {
+            this.shippingThreshold =
+              typeof settings.freeShippingThreshold === 'number'
+                ? settings.freeShippingThreshold
+                : 500;
+            this.isFreeShippingEnabled = settings.isFreeShippingEnabled !== false;
+            this.cdr.markForCheck();
+          }
+        },
+      });
+
     this.form = this.fb.group({
       name:           ['', [Validators.required, Validators.minLength(3)]],
       phone:          ['', [Validators.required, Validators.pattern(/^(01)[0-9]{9}$/)]],
@@ -311,3 +334,5 @@ export class CheckoutComponent implements OnInit {
     return raw;
   }
 }
+
+

@@ -99,22 +99,31 @@ export class HeroSliderComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Injects Cloudinary auto-format/quality/width transformation flags into any
-   * Cloudinary URL so the CDN delivers the optimal asset for a 1340-px viewport.
-   * Non-Cloudinary URLs are returned untouched.
+   * Injects Cloudinary auto-format and high-fidelity quality flags into any
+   * Cloudinary URL so the CDN delivers crisp, non-degraded WebP/PNG assets
+   * tailored to high-density Retina viewports.
    */
-  private optimizeCloudinaryUrl(url: string, width = 1340): string {
+  private optimizeCloudinaryUrl(url: string, width = 1920): string {
     if (!url || !url.includes('res.cloudinary.com')) return url;
-    const flags = `f_auto,q_auto,w_${width}`;
+    const flags = `f_auto,q_auto:best,w_${width}`;
     // Avoid double-injecting if flags are already present
-    if (url.includes('f_auto')) return url;
+    if (url.includes('f_auto') || url.includes('q_')) return url;
     return url.replace('/image/upload/', `/image/upload/${flags}/`);
   }
 
   get heroImageUrl(): string {
     const raw = this.heroSettings?.heroImageUrl?.trim() || this.defaultHeroImage;
-    return this.optimizeCloudinaryUrl(raw);
+    return this.optimizeCloudinaryUrl(raw, 3840);
   }
+
+  get heroMobileImageUrl(): string {
+    const raw =
+      this.heroSettings?.heroMobileImageUrl?.trim() ||
+      this.heroSettings?.heroImageUrl?.trim() ||
+      this.defaultHeroImage;
+    return this.optimizeCloudinaryUrl(raw, 1600);
+  }
+
   get brandName():    string { return this.heroSettings?.brandName?.trim()    || this.defaultBrandName; }
   get slogan():       string { return this.heroSettings?.slogan?.trim()       || this.defaultSlogan;    }
 

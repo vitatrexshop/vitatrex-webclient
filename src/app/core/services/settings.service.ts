@@ -1,14 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, shareReplay } from 'rxjs/operators';
 import { ApiService } from './api.service';
-import { HeroSettings, PromoVideoSettings } from '../models/settings.model';
+import { HeroSettings, PromoVideoSettings, ShippingSettings } from '../models/settings.model';
 
 const HERO_SETTINGS_API        = '/settings/hero';
 const PROMO_VIDEO_SETTINGS_API = '/settings/promo-video';
+const SHIPPING_SETTINGS_API    = '/settings/shipping';
 
 @Injectable({ providedIn: 'root' })
 export class SettingsService {
+  private shippingSettings$?: Observable<ShippingSettings>;
+
   constructor(private readonly api: ApiService) {}
 
   /** Fetch dynamic hero banner settings from GET /api/v1/settings/hero */
@@ -24,5 +27,23 @@ export class SettingsService {
       map((res: any) => (res?.data ?? res) as PromoVideoSettings)
     );
   }
+
+  /** Fetch dynamic shipping settings (free shipping threshold) from GET /api/v1/settings/shipping */
+  getShippingSettings(): Observable<ShippingSettings> {
+    if (!this.shippingSettings$) {
+      this.shippingSettings$ = this.api.get<ShippingSettings>(SHIPPING_SETTINGS_API).pipe(
+        map((res: any) => {
+          const raw = res?.data ?? res;
+          return {
+            freeShippingThreshold: typeof raw?.freeShippingThreshold === 'number' ? raw.freeShippingThreshold : 500,
+            isFreeShippingEnabled: raw?.isFreeShippingEnabled !== false,
+          } as ShippingSettings;
+        }),
+        shareReplay(1)
+      );
+    }
+    return this.shippingSettings$;
+  }
 }
+
 

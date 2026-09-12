@@ -61,6 +61,7 @@
     "SUGAR_FREE": "No Added Sugar",
     "HALAL": "Halal Certified",
     "FREE_SHIPPING": "Free Shipping on Orders Over 500 EGP",
+    "FREE_SHIPPING_DYNAMIC": "Free Shipping on Orders Over {{amount}} EGP",
     "MADE_IN_EGYPT": "Proudly Made in Egypt"
   },
   "HERO": {

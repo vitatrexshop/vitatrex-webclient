@@ -307,12 +307,13 @@ export class OffersSectionComponent implements AfterViewInit, OnDestroy {
       slidesPerView: 1,
       spaceBetween: 16,
       centeredSlides: false,
-      speed: 600,
+      speed: 500,
       grabCursor: true,
-      observer: true,
-      observeParents: true,
-      observeSlideChildren: true,
-      resizeObserver: true,
+      threshold: 5,
+      resistanceRatio: 0.85,
+      passiveListeners: true, // Throttles & uses passive listeners to prevent main-thread blocking during drag/swipe
+      touchEventsTarget: 'wrapper',
+      watchSlidesProgress: true, // Only tracks progress on visible & adjacent slides
       updateOnWindowResize: true,
       autoplay: {
         delay: 5500,
@@ -335,9 +336,15 @@ export class OffersSectionComponent implements AfterViewInit, OnDestroy {
           spaceBetween: 12,
           centeredSlides: false,
         },
-        // Tablet+: 1 slide, centered
+        // Tablet: 1 slide, centered
         768: {
           slidesPerView: 1,
+          spaceBetween: 20,
+          centeredSlides: true,
+        },
+        // Desktop: (>= 1024px) properly sized (1.2 or 1 centered) without letterboxing
+        1024: {
+          slidesPerView: this.promotions.length > 1 ? 1.2 : 1,
           spaceBetween: 24,
           centeredSlides: true,
         },
@@ -620,10 +627,10 @@ export class OffersSectionComponent implements AfterViewInit, OnDestroy {
    * Cloudinary URL so the CDN delivers the optimal asset for a 1160-px viewport.
    * Non-Cloudinary URLs are returned untouched.
    */
-  private optimizeCloudinaryUrl(url: string, width = 1160): string {
+  private optimizeCloudinaryUrl(url: string, width = 1920): string {
     if (!url || !url.includes('res.cloudinary.com')) return url;
-    const flags = `f_auto,q_auto,w_${width}`;
-    if (url.includes('f_auto')) return url;
+    const flags = `f_auto,q_auto:best,w_${width}`;
+    if (url.includes('f_auto') || url.includes('q_')) return url;
     return url.replace('/image/upload/', `/image/upload/${flags}/`);
   }
 

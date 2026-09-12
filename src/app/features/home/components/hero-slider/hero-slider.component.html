@@ -47,17 +47,19 @@
   <!-- ══ BLOCK B: EDGE-TO-EDGE BANNER IMAGE ══════════════════════ -->
   <div class="hero-banner-bleed">
     <div class="hero-banner-frame" #heroBannerFrame>
-      <img
-        [src]="heroImageUrl"
-        [alt]="brandName + ' - ' + slogan"
-        class="hero-banner-img"
-        width="1920"
-        height="823"
-        loading="eager"
-        fetchpriority="high"
-        decoding="async"
-        (load)="heroBannerFrame.classList.add('is-loaded')"
-      />
+      <picture class="hero-banner-picture">
+        <source media="(max-width: 767px)" [srcset]="heroMobileImageUrl" />
+        <source media="(min-width: 768px)" [srcset]="heroImageUrl" />
+        <img
+          [src]="heroImageUrl"
+          [alt]="brandName + ' - ' + slogan"
+          class="hero-banner-img"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+          (load)="heroBannerFrame.classList.add('is-loaded')"
+        />
+      </picture>
     </div>
   </div>
 

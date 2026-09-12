@@ -55,21 +55,40 @@
     <ng-container *ngIf="items.length > 0">
 
       <!-- Free Shipping Progress -->
-      <div class="cart-drawer__shipping" *ngIf="cartTotal$ | async as total">
-        <ng-container *ngIf="total < FREE_SHIPPING_THRESHOLD">
-          <p class="shipping-text">
-            {{ 'CART.FREE_SHIPPING_REMAINING' | translate: { amount: (getRemaining(total) | number) } }}
-          </p>
+      <div class="cart-drawer__shipping" *ngIf="isFreeShippingEnabled && (cartTotal$ | async) as total">
+        <!-- Confetti Particle Container -->
+        <div class="confetti-area" #confettiArea aria-hidden="true"></div>
+
+        <ng-container *ngIf="total < currentThreshold">
+          <div class="shipping-header-row">
+            <span class="shipping-icon-tag">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="1" y="3" width="15" height="13"></rect>
+                <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                <circle cx="18.5" cy="18.5" r="2.5"></circle>
+              </svg>
+            </span>
+            <p class="shipping-text">
+              {{ 'CART.FREE_SHIPPING_REMAINING' | translate: { amount: (getRemaining(total, currentThreshold) | number) } }}
+            </p>
+          </div>
           <div class="shipping-track">
             <div
               class="shipping-fill"
-              [style.width.%]="getShippingProgress(total)"
+              [style.width.%]="getShippingProgress(total, currentThreshold)"
             ></div>
           </div>
         </ng-container>
-        <p class="shipping-achieved" *ngIf="total >= FREE_SHIPPING_THRESHOLD">
-          {{ 'CART.FREE_SHIPPING_QUALIFIED' | translate }}
-        </p>
+
+        <!-- Achieved celebration banner -->
+        <div class="shipping-achieved animate-celebrate" *ngIf="total >= currentThreshold">
+          <span class="shipping-achieved__icon">🎉</span>
+          <div class="shipping-achieved__texts">
+            <span class="shipping-achieved__title">{{ 'CART.FREE_SHIPPING_QUALIFIED' | translate }}</span>
+            <span class="shipping-achieved__subtitle">تم إعفاء طلبك من مصاريف الشحن!</span>
+          </div>
+        </div>
       </div>
 
       <!-- Items List -->

@@ -84,7 +84,7 @@
 
         <!-- SLIDE: Unified Promotion Card (Offer OR Interactive Bundle) -->
         <article
-          *ngFor="let item of promotions; trackBy: trackById"
+          *ngFor="let item of promotions; trackBy: trackById; let i = index"
           class="swiper-slide offer-slide"
           [attr.data-theme]="getOfferTheme(item)"
           [attr.id]="'promo-slide-' + (item.id || item._id)"
@@ -105,7 +105,8 @@
                 class="offers-banner-img"
                 width="1160"
                 height="497"
-                loading="lazy"
+                [loading]="i === 0 ? 'eager' : 'lazy'"
+                [attr.fetchpriority]="i === 0 ? 'high' : 'auto'"
                 decoding="async"
               />
               <!-- Pill Badge at Top-Right over Image -->

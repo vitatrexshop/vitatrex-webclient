@@ -131,12 +131,13 @@
   padding: 0 !important;
   border-radius: 0 !important;
   overflow: hidden;
+  display: block;
 }
 
 .hero-banner-frame {
   position: relative;
   width: 100%;
-  max-width: none !important;
+  max-width: 100% !important;
   margin: 0 !important;
   padding: 0 !important;
   border-radius: 0 !important;
@@ -144,27 +145,14 @@
   box-shadow: none !important;
   overflow: hidden;
   will-change: transform, opacity;
+  background: #0f0728;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  // ── CLS fix: hard-reserve space before Cloudinary image resolves ──
-  // aspect-ratio ensures the frame never collapses.
-  // The shimmer gradient acts as a placeholder so there's no blank flash.
-  aspect-ratio: 1920 / 823;
-  contain: layout;
-  background: linear-gradient(
-    135deg,
-    #20174b 0%,
-    #2e1f62 25%,
-    #3a2878 50%,
-    #2e1f62 75%,
-    #20174b 100%
-  );
+  // Shimmer gradient acts as a subtle placeholder while loading
   background-size: 200% 200%;
   animation: hero-shimmer 2.5s ease-in-out infinite;
-
-  // Responsive min-heights ensure it never collapses below a readable size
-  @media (max-width: 1200px) { aspect-ratio: 1920 / 823; min-height: 300px; }
-  @media (max-width: 768px)  { aspect-ratio: 1920 / 823; min-height: 220px; }
-  @media (max-width: 480px)  { aspect-ratio: 1920 / 823; min-height: 200px; }
 
   // Stop shimmer once the image is in the DOM (parent gets .is-loaded via TS)
   &.is-loaded {
@@ -172,19 +160,29 @@
     background: transparent;
   }
 
-  .hero-banner-img {
+  .hero-banner-picture {
     width: 100%;
-    height: 100%;
     display: block;
+  }
+
+  .hero-banner-img {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    display: block;
+    aspect-ratio: 4 / 3;
     object-fit: cover;
+    object-position: center;
     margin: 0 !important;
     padding: 0 !important;
     border-radius: 0 !important;
-    max-width: none !important;
     transform-origin: center center;
     will-change: transform;
-    // Match parent so intrinsic size is always known by the browser
-    aspect-ratio: 1920 / 823;
+    image-rendering: -webkit-optimize-contrast;
+
+    @media (min-width: 768px) {
+      aspect-ratio: 16 / 9;
+    }
   }
 }
 
@@ -387,8 +385,12 @@
 
   .sk-image-box {
     width: 100%;
-    aspect-ratio: 16 / 7;
-    min-height: 320px;
+    aspect-ratio: 4 / 3;
+    height: auto;
     border-radius: 0;
+
+    @media (min-width: 768px) {
+      aspect-ratio: 16 / 9;
+    }
   }
 }

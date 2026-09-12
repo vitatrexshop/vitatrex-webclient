@@ -9,7 +9,10 @@ import {
   Inject
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { Observable } from 'rxjs';
 import { gsap } from 'gsap';
+import { SettingsService } from '../../../core/services/settings.service';
+import { ShippingSettings } from '../../../core/models/settings.model';
 
 /**
  * Continuous high-performance marquee ticker using GSAP.
@@ -24,8 +27,14 @@ import { gsap } from 'gsap';
 export class MarqueeBarComponent implements AfterViewInit, OnDestroy {
   @ViewChild('track', { static: true }) track!: ElementRef<HTMLDivElement>;
   private tween: gsap.core.Tween | null = null;
+  readonly shippingSettings$: Observable<ShippingSettings>;
 
-  constructor(@Inject(PLATFORM_ID) private readonly platformId: object) {}
+  constructor(
+    @Inject(PLATFORM_ID) private readonly platformId: object,
+    private readonly settingsService: SettingsService,
+  ) {
+    this.shippingSettings$ = this.settingsService.getShippingSettings();
+  }
 
   ngAfterViewInit(): void {
     if (isPlatformBrowser(this.platformId)) {

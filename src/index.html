@@ -149,11 +149,11 @@
         min-height: 60vh;
       }
 
-      /* Hero banner: reserve exact 1920/823 aspect ratio before Cloudinary image resolves */
+      /* Hero banner: fluid container with full width */
       .hero-banner-frame {
-        aspect-ratio: 1920 / 823;
         width: 100%;
-        contain: layout;
+        max-width: 100%;
+        height: auto;
       }
 
       /* Prevent image layout shift globally — never let images push siblings */

@@ -61,6 +61,7 @@
     "SUGAR_FREE": "بدون سكر مضاف",
     "HALAL": "حلال ومعتمد",
     "FREE_SHIPPING": "شحن مجاني للطلبات فوق 500 ج.م",
+    "FREE_SHIPPING_DYNAMIC": "شحن مجاني للطلبات فوق {{amount}} ج.م",
     "MADE_IN_EGYPT": "صنع بكل فخر في مصر"
   },
   "HERO": {
