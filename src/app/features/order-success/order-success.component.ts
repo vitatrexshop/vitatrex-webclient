@@ -1,4 +1,4 @@
-import {
+﻿import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -23,6 +23,7 @@ import {
   PAYMENT_STATUS_LABELS,
 } from '../../core/models/order.model';
 import { Product } from '../../core/models/product.model';
+import { generateWhatsAppLink } from '../../core/utils/whatsapp.util';
 
 @Component({
   selector: 'app-order-success',
@@ -266,12 +267,44 @@ export class OrderSuccessComponent implements OnInit {
     }
   }
 
+    /** Agent 2 — Opens a pre-filled WhatsApp order confirmation message with full order breakdown in a new tab. */
+  confirmOrderViaWhatsApp(order: Order | null): void {
+    if (!order) return;
+
+    // Format line items (name and quantity)
+    const items = (order.items || []).map((item) => ({
+      name: this.getProductName(item),
+      quantity: item.quantity || 1,
+    }));
+
+    // Composite full delivery address
+    const fullAddress = [
+      order.customer?.address,
+      order.customer?.governorate || order.customer?.city,
+    ]
+      .filter(Boolean)
+      .join(' - ');
+
+    const url = generateWhatsAppLink({
+      orderId: order.orderNumber,
+      customerName: order.customer?.name || '',
+      phone: order.customer?.phone || '',
+      address: fullAddress,
+      items,
+      totalAmount: order.totalAmount,
+      paymentMethod: this.getPaymentMethodLabel(order.paymentMethod),
+    });
+
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }
+
+  /** Backwards compatibility helper for simple order inquiries. */
   getWhatsAppLink(orderNumber: string): string {
-    const isAr = this.languageService.currentLang === 'ar';
-    const msg = isAr
-      ? `مرحباً فيتاتريكس، أود الاستفسار عن حالة طلبي رقم: #${orderNumber}`
-      : `Hello Vitatrex, I would like to inquire about my order #${orderNumber}`;
-    return `https://wa.me/201000000000?text=${encodeURIComponent(msg)}`;
+    return generateWhatsAppLink(
+      orderNumber,
+      this.order?.totalAmount || 0,
+      this.order?.customer?.name || ''
+    );
   }
 
   getSubtotal(order: Order): number {

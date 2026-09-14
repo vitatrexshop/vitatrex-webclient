@@ -586,17 +586,35 @@ body {
   display: block;
 }
 
-.hero-banner-img {
+.hero-banner-img,
+.hero-img {
   width: 100% !important;
   max-width: 100% !important;
   height: auto !important;
   display: block !important;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 4 / 5;
   object-fit: cover !important;
   image-rendering: -webkit-optimize-contrast;
 
   @media (min-width: 768px) {
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 16 / 6;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+}
+
+.hero-img {
+  aspect-ratio: 4 / 5;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+
+  @media (min-width: 768px) {
+    aspect-ratio: 16 / 6;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
   }
 }
 
