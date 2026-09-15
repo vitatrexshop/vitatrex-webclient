@@ -81,8 +81,8 @@
     "FEAT_NO_SUGAR": "No Added Sugar",
     "FEAT_SHIPPING": "Delivery Across Egypt",
     "FEAT_MEDICALLY_APPROVED": "Medically Certified",
-    "MANIFESTO_TITLE": "We are the choices we make.",
-    "MANIFESTO_DESC": "This is wellness, reimagined. No complicated routines. No unnecessary rules. Just smart nutrition made simple — because the best habits are the ones you actually keep."
+    "MANIFESTO_TITLE": "Health Starts with Your Choice.",
+    "MANIFESTO_DESC": "Your small choices today build better habits for tomorrow. Gummies give you an easy, delicious way to support their daily needs... with a taste they love and a choice you trust."
   },
   "FEATURES": {
     "NATURAL_TITLE": "100% Natural Ingredients",
@@ -95,8 +95,8 @@
     "SHIPPING_DESC": "Direct doorstep shipping with cash on delivery available."
   },
   "PROMO_VIDEO": {
-    "STATEMENT_TITLE": "What you've truly been searching for.",
-    "STATEMENT_DESC": "It's never just about what you take — it's about how it makes you feel every single day. Every healthy routine leads somewhere, and each Vitatrex product is thoughtfully designed to help you feel your absolute best."
+    "STATEMENT_TITLE": "A healthy start for a better future.",
+    "STATEMENT_DESC": "Because their health is the most precious... make the smarter choice. Vitatrex offers a comprehensive range of vitamins and minerals in delicious, easy-to-take Gummies, designed to support your children's immunity and help them grow and focus better."
   },
   "STORIES_SECTION": {
     "TAG": "Live Stories & Reels",
@@ -193,7 +193,12 @@
     "FAST_SHIPPING_SUB": "Within 24-48 Hours",
     "COD_SUB": "Pay upon Inspection",
     "QUALITY_GUARANTEED": "Quality Guaranteed",
-    "QUALITY_SUB": "100% Satisfaction"
+    "QUALITY_SUB": "100% Satisfaction",
+    "AGE_SUITABILITY": "Age Suitability",
+    "DOSAGE": "Dosage & Usage Instructions",
+    "WARNINGS": "Important Warnings",
+    "ACTIVE_INGREDIENTS": "Active Ingredients",
+    "KEY_BENEFITS": "Key Health Benefits"
   },
   "SHOP": {
     "PAGE_TITLE": "Our Products",

@@ -23,6 +23,22 @@ export interface Variant {
  * A Vitatrix product (health gummy bottle).
  * Matches the full Product document returned by /api/v1/products.
  */
+
+export interface ActiveIngredient {
+  name: string;
+  amountOrDescription?: string;
+}
+
+export interface ProductBadge {
+  title: { ar: string; en: string };
+  iconUrl: string;
+}
+
+export interface KeyBenefit {
+  title: string;
+  description?: string;
+}
+
 export interface Product {
   _id: string;
   name: string;
@@ -36,6 +52,12 @@ export interface Product {
   variants: Variant[];
   isActive: boolean;
   category?: Category | string;
+  ageSuitability?: string;
+  dosageInstructions?: string;
+  warnings?: string;
+  activeIngredients?: ActiveIngredient[];
+  keyBenefits?: KeyBenefit[];
+  badges?: ProductBadge[];
   createdAt: string;
   updatedAt: string;
 }

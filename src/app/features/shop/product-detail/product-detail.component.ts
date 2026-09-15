@@ -1,3 +1,4 @@
+import { TranslateService } from '@ngx-translate/core';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
@@ -45,8 +46,15 @@ export class ProductDetailComponent implements OnInit {
     private readonly cartService: CartService,
     private readonly cartDrawerService: CartDrawerService,
     private readonly toastService: ToastService,
-    private readonly cdr: ChangeDetectorRef
+    private readonly cdr: ChangeDetectorRef,
+    public readonly translate: TranslateService
   ) {}
+
+    getBadgeTitle(badge: any): string {
+    if (!badge || !badge.title) return '';
+    const lang = this.translate?.currentLang || 'ar';
+    return (lang === 'en' && badge.title.en) ? badge.title.en : (badge.title.ar || badge.title.en || '');
+  }
 
   ngOnInit(): void {
     // Reactively fetch product whenever route slug param changes (handles direct reload + in-app routing)
