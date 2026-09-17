@@ -101,7 +101,7 @@
       display: inline-flex !important;
       align-items: center !important;
       justify-content: center !important;
-      background: linear-gradient(135deg, #5e439b 0%, #20174b 100%) !important;
+      background: linear-gradient(135deg, #E86A24 0%, #D55917 100%) !important;
       color: #ffffff !important;
       padding: 12px 32px !important;
       border-radius: 25px !important;
@@ -111,14 +111,14 @@
       font-family: inherit !important;
       text-decoration: none !important;
       cursor: pointer !important;
-      box-shadow: 0 4px 15px rgba(59, 43, 115, 0.3) !important;
+      box-shadow: 0 4px 15px rgba(232, 106, 36, 0.3) !important;
       transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease !important;
       white-space: nowrap !important;
 
       &:hover {
-        background: linear-gradient(135deg, #7152b7 0%, #2b1f63 100%) !important;
+        background: linear-gradient(135deg, #f07a34 0%, #e06020 100%) !important;
         transform: translateY(-2px) scale(1.02) !important;
-        box-shadow: 0 8px 24px rgba(59, 43, 115, 0.45) !important;
+        box-shadow: 0 8px 24px rgba(232, 106, 36, 0.45) !important;
       }
     }
   }
@@ -126,8 +126,8 @@
   // ── Free shipping bar
   &__shipping {
     padding: var(--space-3) var(--space-5);
-    background: #ede4f8;
-    border-bottom: 1px solid #d8c8ee;
+    background: #f7fbe9;
+    border-bottom: 1px solid #d6eba0;
     flex-shrink: 0;
   }
 
@@ -165,7 +165,7 @@
       align-items: center !important;
       justify-content: center !important;
       width: 100% !important;
-      background: linear-gradient(135deg, #5e439b 0%, #20174b 100%) !important;
+      background: linear-gradient(135deg, #E86A24 0%, #D55917 100%) !important;
       color: #ffffff !important;
       padding: 14px 32px !important;
       border-radius: 25px !important;
@@ -175,15 +175,15 @@
       font-family: inherit !important;
       text-decoration: none !important;
       cursor: pointer !important;
-      box-shadow: 0 4px 15px rgba(59, 43, 115, 0.3) !important;
+      box-shadow: 0 4px 15px rgba(232, 106, 36, 0.3) !important;
       transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease !important;
       white-space: nowrap !important;
       text-align: center !important;
 
       &:hover {
-        background: linear-gradient(135deg, #7152b7 0%, #2b1f63 100%) !important;
+        background: linear-gradient(135deg, #f07a34 0%, #e06020 100%) !important;
         transform: translateY(-2px) scale(1.02) !important;
-        box-shadow: 0 8px 24px rgba(59, 43, 115, 0.45) !important;
+        box-shadow: 0 8px 24px rgba(232, 106, 36, 0.45) !important;
       }
     }
   }
@@ -194,7 +194,7 @@
     align-items: center;
     font-size: 0.95rem;
     color: var(--color-text-secondary);
-    strong { font-size: 1.2rem; color: #0f172a; font-weight: 900; }
+    strong { font-size: 1.2rem; color: #1A1A1A; font-weight: 900; }
   }
 
   &__note {
@@ -205,13 +205,13 @@
 
   &__continue {
     background: none; border: none;
-    color: #5e439b;
+    color: #E86A24;
     font-weight: 700; font-size: 0.9rem;
     font-family: inherit;
     cursor: pointer; text-align: center;
     padding: var(--space-1);
     transition: color 0.15s;
-    &:hover { color: #20174b; }
+    &:hover { color: #D55917; }
   }
 }
 
@@ -275,27 +275,27 @@
   width: 26px;
   height: 26px;
   border-radius: var(--radius-full);
-  background: rgba(94, 67, 155, 0.12);
-  color: #5e439b;
+  background: rgba(157, 187, 62, 0.18);
+  color: #829D2F;
   flex-shrink: 0;
 }
 
 .shipping-text {
   font-size: 0.835rem;
   font-weight: 600;
-  color: #1e1b4b;
+  color: #1A1A1A;
   margin: 0;
   line-height: 1.35;
 
   strong {
     font-weight: 800;
-    color: #5e439b;
+    color: #E86A24;
   }
 }
 
 .shipping-track {
   height: 7px;
-  background: #ede4f8;
+  background: #f7fbe9;
   border-radius: var(--radius-full);
   overflow: hidden;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.06);
@@ -303,7 +303,7 @@
 
 .shipping-fill {
   height: 100%;
-  background: linear-gradient(90deg, #8b5cf6, #5e439b);
+  background: linear-gradient(90deg, #9DBB3E, #829D2F);
   border-radius: var(--radius-full);
   transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -368,9 +368,9 @@
   transition: all 0.2s ease;
 
   &--bundle {
-    background: #fdfaff;
-    border: 1.5px solid #e9d5ff;
-    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.08);
+    background: #f7fbe9;
+    border: 1.5px solid #d6eba0;
+    box-shadow: 0 4px 12px rgba(157, 187, 62, 0.12);
   }
 
   &__img-wrap {
@@ -394,7 +394,7 @@
       bottom: 2px;
       left: 2px;
       right: 2px;
-      background: linear-gradient(135deg, #7c3aed, #5e439b);
+      background: linear-gradient(135deg, #9DBB3E, #829D2F);
       color: #ffffff;
       font-size: 0.6rem;
       font-weight: 800;
@@ -423,9 +423,9 @@
     align-self: flex-start;
     font-size: 0.68rem;
     font-weight: 800;
-    color: #7c3aed;
-    background: #f3e8ff;
-    border: 1px solid #d8b4fe;
+    color: #6a8025;
+    background: #f7fbe9;
+    border: 1px solid #d6eba0;
     padding: 1px 6px;
     border-radius: 9999px;
   }
@@ -445,8 +445,8 @@
   }
 
   &__bundle-box {
-    background: rgba(243, 232, 255, 0.5);
-    border: 1px dashed #d8b4fe;
+    background: rgba(247, 251, 233, 0.6);
+    border: 1px dashed #d6eba0;
     border-radius: 8px;
     padding: 6px 8px;
     margin-top: 2px;
@@ -454,7 +454,7 @@
     .cart-item__bundle-box-title {
       font-size: 0.72rem;
       font-weight: 800;
-      color: #6b21a8;
+      color: #6a8025;
       display: block;
       margin-bottom: 2px;
     }
@@ -486,7 +486,7 @@
   &__price {
     font-size: 1rem;
     font-weight: 900;
-    color: #5e439b;
+    color: #E86A24;
   }
 
   &__remove {

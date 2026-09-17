@@ -24,9 +24,9 @@
     gap: 6px;
     font-size: 0.8rem;
     font-weight: 800;
-    color: #5e439b;
-    background: #ede4f8;
-    border: 1px solid #d8c8ee;
+    color: #166534;
+    background: #F2FCE8;
+    border: 1px solid #D0F2A1;
     padding: 4px 16px;
     border-radius: 9999px;
   }
@@ -103,17 +103,17 @@
     }
 
     &:hover {
-      border-color: #5e439b;
-      color: #20174b;
-      background: #ede4f8;
+      border-color: #A8E038;
+      color: #1E293B;
+      background: #F2FCE8;
       transform: translateY(-1px);
     }
 
     &.is-active {
-      border-color: #20174b;
-      background: linear-gradient(135deg, #5e439b 0%, #20174b 100%) !important;
+      border-color: #1E293B;
+      background: #1E293B !important;
       color: #ffffff !important;
-      box-shadow: 0 4px 14px rgba(32, 23, 75, 0.3);
+      box-shadow: 0 4px 14px rgba(30, 41, 59, 0.25);
       transform: scale(1.02);
     }
   }
@@ -155,9 +155,9 @@
     transition: all 0.2s ease;
 
     &:focus {
-      border-color: #5e439b;
+      border-color: #A8E038;
       background: #ffffff;
-      box-shadow: 0 0 0 3px rgba(94, 67, 155, 0.18);
+      box-shadow: 0 0 0 3px rgba(168, 224, 56, 0.2);
     }
 
     &::placeholder {
@@ -173,18 +173,22 @@
 
 .grid-360 {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 18px;
+  // Fluid auto-fill: always fills available space, min 260px per card
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
 
-  @media (min-width: 860px) {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 32px;
+  // Tighten on small screens so 2 cards fit comfortably
+  @media (max-width: 600px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
   }
 
   &--bundles {
-    @media (min-width: 860px) {
-      grid-template-columns: repeat(3, 1fr);
-      gap: 32px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+
+    @media (max-width: 600px) {
+      grid-template-columns: repeat(1, 1fr);
     }
   }
 }
@@ -226,17 +230,17 @@
   .no-results-btn {
     padding: 10px 24px;
     border-radius: 9999px;
-    background: linear-gradient(135deg, #5e439b 0%, #20174b 100%);
+    background: linear-gradient(135deg, #E86A24 0%, #D55917 100%);
     color: #ffffff;
     font-weight: 800;
     font-size: 0.88rem;
     border: none;
     cursor: pointer;
-    box-shadow: 0 4px 14px rgba(32, 23, 75, 0.25);
+    box-shadow: 0 4px 14px rgba(232, 106, 36, 0.25);
     transition: all 0.2s ease;
 
     &:hover {
-      background: linear-gradient(135deg, #7152b7 0%, #2b1f63 100%);
+      background: linear-gradient(135deg, #f07a34 0%, #e06020 100%);
       transform: translateY(-1px);
     }
   }
@@ -245,14 +249,28 @@
 // ── 5. Skeleton Shimmer Placeholder ──────────────────────────
 .skeleton-card-360 {
   aspect-ratio: 1 / 1.3;
-  background: #f3f4f6;
-  border-radius: 20px;
-  animation: shimmerShop 1.5s infinite;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  background: #f0f0f0;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.55) 50%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: grid-skeleton-sweep 1.4s ease-in-out infinite;
+  }
 }
 
-@keyframes shimmerShop {
-  0%   { opacity: 0.5; }
-  50%  { opacity: 1; }
-  100% { opacity: 0.5; }
+@keyframes grid-skeleton-sweep {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 

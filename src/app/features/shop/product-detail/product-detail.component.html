@@ -397,11 +397,11 @@
           <button
             type="button"
             class="suggest-card__btn"
-            [disabled]="p.variants?.[0]?.stock === 0"
-            [class.suggest-card__btn--disabled]="p.variants?.[0]?.stock === 0"
+            [disabled]="p.variants[0].stock === 0"
+            [class.suggest-card__btn--disabled]="p.variants[0].stock === 0"
             (click)="addSuggestedToCart(p)"
           >
-            {{ (p.variants?.[0]?.stock === 0 ? 'PRODUCT.OUT_OF_STOCK' : 'PRODUCT.ADD_TO_CART') | translate }}
+            {{ (p.variants[0].stock === 0 ? 'PRODUCT.OUT_OF_STOCK' : 'PRODUCT.ADD_TO_CART') | translate }}
           </button>
         </article>
       </div>

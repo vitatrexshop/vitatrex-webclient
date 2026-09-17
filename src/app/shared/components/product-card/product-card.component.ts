@@ -1,5 +1,6 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   HostListener,
@@ -35,12 +36,15 @@ export class ProductCardComponent implements OnChanges, OnDestroy {
   @ViewChild('secondaryImg', { static: false }) secondaryImgRef?: ElementRef<HTMLImageElement>;
 
   selectedVariant: Variant | null = null;
+  /** Tracks whether the primary product image has finished loading (for blur-up effect) */
+  imgLoaded = false;
 
   constructor(
     private readonly cartService: CartService,
     private readonly cartDrawerService: CartDrawerService,
     private readonly toastService: ToastService,
-    private readonly flyToCartService: FlyToCartService
+    private readonly flyToCartService: FlyToCartService,
+    private readonly cdr: ChangeDetectorRef
   ) {}
 
   get primaryImage(): string {
@@ -58,11 +62,24 @@ export class ProductCardComponent implements OnChanges, OnDestroy {
     return null;
   }
 
+  /** Returns true when the selected variant is out of stock */
+  get isOutOfStock(): boolean {
+    return !!(this.selectedVariant && this.selectedVariant.stock !== -1 && this.selectedVariant.stock <= 0);
+  }
+
   /** Reinitialise selected variant whenever @Input product changes */
   ngOnChanges(changes: SimpleChanges): void {
     if (this.product?.variants?.length) {
       this.selectedVariant = this.product.variants[0];
     }
+    // Reset blur-up state on product change
+    this.imgLoaded = false;
+  }
+
+  /** Called when the primary image fires its (load) event — clears the blur-up skeleton */
+  onImageLoad(): void {
+    this.imgLoaded = true;
+    this.cdr.markForCheck();
   }
 
   @HostListener('mouseenter')

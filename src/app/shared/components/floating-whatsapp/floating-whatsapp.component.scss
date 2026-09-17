@@ -56,13 +56,13 @@
     right: calc(100% + 10px);
     left: auto;
     transform: translateY(-50%) translateX(6px);
-    background: #20174b; // Brand Deep Midnight Purple
+    background: #1A1A1A; // Brand Neutral Dark
     color: #ffffff;
     padding: 6px 12px;
     border-radius: 9999px;
     border: 1px solid rgba(16, 185, 129, 0.4); // Emerald border
     box-shadow:
-      0 8px 24px rgba(32, 23, 75, 0.4),
+      0 8px 24px rgba(0, 0, 0, 0.3),
       0 2px 8px rgba(0, 0, 0, 0.2);
     font-family: var(--font-heading, 'Readex Pro', sans-serif);
     font-size: 0.78rem;
@@ -95,7 +95,7 @@
       transform: translateY(-50%);
       border-width: 5px;
       border-style: solid;
-      border-color: transparent transparent transparent #20174b;
+      border-color: transparent transparent transparent #1A1A1A;
     }
   }
 
@@ -121,13 +121,13 @@
     min-height: 48px;
     border-radius: 50%;
     // Luxury Vitatrex Midnight Purple to Vibrant Purple gradient
-    background: linear-gradient(135deg, #5e439b 0%, #20174b 100%);
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
     border: 1.5px solid rgba(16, 185, 129, 0.6); // Emerald trim
     color: #ffffff;
     text-decoration: none;
     cursor: pointer;
     box-shadow:
-      0 8px 24px rgba(32, 23, 75, 0.45),
+      0 8px 24px rgba(37, 211, 102, 0.35),
       0 0 14px rgba(16, 185, 129, 0.25);
     transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
                 box-shadow 0.25s ease,
@@ -143,18 +143,18 @@
     }
 
     &:hover {
-      background: linear-gradient(135deg, #7152b7 0%, #2b1f63 100%);
+      background: linear-gradient(135deg, #22bf5b 0%, #0e7064 100%);
       border-color: #10b981;
       transform: scale(1.08) translateY(-2px);
       box-shadow:
-        0 12px 30px rgba(32, 23, 75, 0.55),
+        0 12px 30px rgba(37, 211, 102, 0.45),
         0 0 20px rgba(16, 185, 129, 0.4);
     }
 
     &:active {
       transform: scale(0.95) translateY(0);
       box-shadow:
-        0 4px 12px rgba(32, 23, 75, 0.35);
+        0 4px 12px rgba(37, 211, 102, 0.25);
     }
 
     &:focus-visible {

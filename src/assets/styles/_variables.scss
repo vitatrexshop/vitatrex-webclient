@@ -1,0 +1,43 @@
+// ══════════════════════════════════════════════════════════════
+// Vitatrix Design System — SCSS Variables
+// Bright Light Green Palette (#A8E038, #F2FCE8, #E86A24, #1E293B)
+// ══════════════════════════════════════════════════════════════
+
+// ── Core Brand Colors ─────────────────────────────────────────
+$primary-green:        #A8E038;
+$primary-green-dark:   #8EC826;
+$primary-green-light:  #F2FCE8;
+$primary-green-hover:  #b7ed4c;
+
+// ── Green Scale ───────────────────────────────────────────────
+$green-50:             #F2FCE8;
+$green-100:            #E4F8C9;
+$green-200:            #D0F2A1;
+$green-300:            #BCEB70;
+$green-400:            #A8E038;
+$green-500:            #8EC826;
+$green-600:            #72A41C;
+$green-700:            #567E14;
+$green-800:            #3D590C;
+$green-900:            #243606;
+
+// ── CTA & Accent Orange ───────────────────────────────────────
+$accent-orange:        #E86A24;
+$accent-orange-hover:  #D55917;
+$accent-orange-light:  #f9dece;
+$accent-orange-soft:   #fff4ee;
+
+// ── Neutrals & Text ───────────────────────────────────────────
+$neutral-dark:         #1E293B;
+$neutral-mid:          #334155;
+$neutral-muted:        #64748B;
+$neutral-subtle:       #94A3B8;
+$bg-clean:             #FFFFFF;
+$bg-app:               #FFFFFF;
+$border-light:         #E2E8F0;
+
+// ── Gradients ─────────────────────────────────────────────────
+$green-gradient:       linear-gradient(135deg, #A8E038 0%, #8EC826 100%);
+$green-gradient-h:     linear-gradient(90deg, #A8E038 0%, #8EC826 100%);
+$green-gradient-soft:  linear-gradient(135deg, #F2FCE8 0%, #FFFFFF 100%);
+$orange-gradient:      linear-gradient(135deg, #E86A24 0%, #D55917 100%);

@@ -10,107 +10,134 @@
 // ─────────────────────────────────────────────────────────
 // Vitatrix Global Design System
 // Arabic-first, RTL-native, SLEEP WELL Purple Theme
-// Derived strictly from SLEEP WELL row: #5e439b (Left) & #20174b (Right)
+// Primary Green: #9DBB3E | Accent Orange: #E86A24
 // ─────────────────────────────────────────────────────────
 
 // ══════════════════════════════════════════════════════════════
 // 🌙 VITATRIX SLEEP WELL PURPLE DESIGN SYSTEM
 //
-// Primary Purple (Left column):       #5e439b
-// Deep Purple (Right column):          #20174b
-// Tonal Gradient:                      linear-gradient(135deg, #5e439b 0%, #20174b 100%)
-// Soft Backgrounds / Cards:            #f7f4fc, #ede4f8, #faf8ff
-// Text & Dark Elements:                #20174b, #372e61, #4d447a
+// Primary Green (Brand):         #9DBB3E
+// Accent Orange (CTA):           #E86A24
+// Tonal Gradient:                  linear-gradient(135deg, #9DBB3E 0%, #829D2F 100%)
+// Soft Backgrounds / Cards:        #f7fbe9, #edf5c4, #F8FAFC
+// Text & Dark Elements:            #1A1A1A, #3D3D3D, #6B6B6B
 // ══════════════════════════════════════════════════════════════
 
 :root {
-  // ── Sleep Well Core Purple Tokens ─────────────────────
-  --purple-primary:       #5e439b; /* Left column - Sleep Well Vibrant Purple */
-  --purple-deep:          #20174b; /* Right column - Sleep Well Deep Midnight Purple */
-  --purple-hover:         #7051b8;
-  --purple-dark-hover:    #2c2068;
-  
-  // Tonal Gradients
-  --purple-gradient:      linear-gradient(135deg, #5e439b 0%, #20174b 100%);
-  --purple-gradient-h:    linear-gradient(90deg, #5e439b 0%, #20174b 100%);
-  --purple-gradient-soft: linear-gradient(135deg, #ede4f8 0%, #f6f1fc 100%);
+  // ── Bright Light Green Design System Core Tokens ───────
+  --primary-green:        #A8E038; /* Vibrant Light Lime/Mint Green */
+  --primary-green-light:  #F2FCE8; /* Soft clean background fill */
+  --accent-orange:        #E86A24; /* Primary CTA Button */
+  --neutral-dark:         #1E293B; /* Clean dark gray for high readability */
+  --bg-clean:             #FFFFFF;
 
-  // Tints & Soft Layers
-  --purple-50:            #faf7fe;
-  --purple-100:           #f3ecfb;
-  --purple-200:           #e7d9f7;
-  --purple-300:           #d2bbf0;
-  --purple-400:           #9c7bd3;
-  --purple-500:           #5e439b;
-  --purple-600:           #513788;
-  --purple-700:           #422c71;
-  --purple-800:           #311f58;
-  --purple-900:           #20174b;
+  // ── Brand Green Core Tokens ───────────────────────────
+  --primary-color:        #A8E038; /* Main Brand Vibrant Lime Green */
+  --primary-dark:         #8EC826;
+  --primary-hover:        #b7ed4c;
+  --primary-light:        #F2FCE8;
+
+  // Green Tints & Soft Layers
+  --green-50:             #F2FCE8;
+  --green-100:            #E4F8C9;
+  --green-200:            #D0F2A1;
+  --green-300:            #BCEB70;
+  --green-400:            #A8E038;
+  --green-500:            #8EC826;
+  --green-600:            #72A41C;
+  --green-700:            #567E14;
+  --green-800:            #3D590C;
+  --green-900:            #243606;
+
+  // Fresh Light Green Gradients
+  --green-gradient:       linear-gradient(135deg, #A8E038 0%, #8EC826 100%);
+  --green-gradient-h:     linear-gradient(90deg, #A8E038 0%, #8EC826 100%);
+  --green-gradient-soft:  linear-gradient(135deg, #F2FCE8 0%, #FFFFFF 100%);
+  --green-radial-glow:    radial-gradient(circle at 50% 30%, #F2FCE8 0%, #FFFFFF 85%);
+
+  // ── Accent Orange Tokens ──────────────────────────────
+  --accent-orange:        #E86A24; /* Primary CTA & Highlights */
+  --accent-orange-hover:  #D55917;
+  --accent-orange-light:  #f9dece;
+  --accent-orange-50:     #fff4ee;
+  --accent-orange-100:    #ffd9c0;
+  --accent-orange-200:    #ffb98a;
+  --accent-orange-300:    #f58f4e;
+  --accent-orange-400:    #E86A24;
+  --accent-orange-500:    #D55917;
 
   // ── Global UI Primaries ───────────────────────────────
-  --brand-primary:        #5e439b;
-  --brand-primary-dark:   #20174b;
-  --brand-primary-hover:  #7051b8;
-  --brand-accent:         #5e439b;
-  --brand-accent-dark:    #20174b;
-  --brand-cta:            #5e439b;
-  --brand-cta-dark:       #20174b;
+  --brand-primary:        #A8E038;
+  --brand-primary-dark:   #8EC826;
+  --brand-primary-hover:  #b7ed4c;
+  --brand-accent:         #E86A24;
+  --brand-accent-dark:    #D55917;
+  --brand-cta:            #E86A24;
+  --brand-cta-dark:       #D55917;
 
   // ── Legacy brand mappings for full system compatibility ──
-  --primary-900:          #20174b;
-  --primary-800:          #20174b;
-  --primary-700:          #422c71;
-  --primary-600:          #5e439b;
-  --primary-50:           #f3ecfb;
+  --primary-900:          #243606;
+  --primary-800:          #3D590C;
+  --primary-700:          #567E14;
+  --primary-600:          #72A41C;
+  --primary-50:           #F2FCE8;
 
-  --color-brand-900:      #20174b;
-  --color-brand-800:      #20174b;
-  --color-brand-700:      #422c71;
-  --color-brand-600:      #5e439b;
-  --color-brand-500:      #5e439b;
-  --color-brand-400:      #9c7bd3;
-  --color-brand-300:      #d2bbf0;
-  --color-brand-200:      #e7d9f7;
-  --color-brand-100:      #f3ecfb;
-  --color-brand-50:       #faf7fe;
+  --color-brand-900:      #243606;
+  --color-brand-800:      #3D590C;
+  --color-brand-700:      #567E14;
+  --color-brand-600:      #72A41C;
+  --color-brand-500:      #A8E038;
+  --color-brand-400:      #b7ed4c;
+  --color-brand-300:      #D0F2A1;
+  --color-brand-200:      #E4F8C9;
+  --color-brand-100:      #F2FCE8;
+  --color-brand-50:       #F7FDF1;
 
-  // Accent
-  --color-amber-300:      #d2bbf0;
-  --color-amber-500:      #5e439b;
-  --color-amber-600:      #20174b;
+  // Accent / Amber mappings
+  --color-amber-300:      #f9dece;
+  --color-amber-500:      #E86A24;
+  --color-amber-600:      #D55917;
 
   // Semantic
-  --color-success:        #5e439b;
+  --color-success:        #A8E038;
   --color-error:          #e81b38;
-  --color-warning:        #8560ca;
-  --color-info:           #5e439b;
+  --color-warning:        #E86A24;
+  --color-info:           #0ea5e9;
+
+  // ── Neutral Dark Tokens ───────────────────────────────
+  --neutral-dark:         #1E293B; /* Crisp dark slate for high readability */
+  --neutral-mid:          #334155;
+  --neutral-muted:        #64748B;
+  --neutral-subtle:       #94A3B8;
 
   // ── Backgrounds & Canvas ──────────────────────────────
-  --bg-app:               #fcfaff;
+  --bg-app:               #FFFFFF;
+  --bg-white:             #FFFFFF;
   --bg-card:              #ffffff;
-  --bg-secondary:         #f6f2fc;
-  --bg-mint:              #f3ecfb;
-  --bg-light:             #f8f5fd;
+  --bg-secondary:         #F2FCE8;
+  --bg-mint:              #E4F8C9;
+  --bg-light:             #F2FCE8;
+  --bg-orange-soft:       #fff4ee;
 
-  // Typography Colors (Deep Purple #20174b based)
-  --color-text-primary:   #20174b;
-  --color-text-secondary: #40366d;
-  --color-text-muted:     #635892;
+  // Typography Colors
+  --color-text-primary:   #1E293B;
+  --color-text-secondary: #334155;
+  --color-text-muted:     #64748B;
   --color-surface:        #ffffff;
-  --color-background:     #fcfaff;
-  --color-border:         #e7dff5;
-  --color-border-light:   #f2ebfa;
+  --color-background:     #FFFFFF;
+  --color-border:         #E2E8F0;
+  --color-border-light:   #F1F5F9;
 
-  --text-main:            #20174b;
-  --text-heading:         #20174b;
-  --text-body:            #40366d;
-  --text-muted:           #635892;
-  --border-color:         #e7dff5;
-  --border-subtle:        #ded4f0;
+  --text-main:            #1E293B;
+  --text-heading:         #1E293B;
+  --text-body:            #334155;
+  --text-muted:           #64748B;
+  --border-color:         #E2E8F0;
+  --border-subtle:        #CBD5E1;
 
   // Accents
-  --accent-gold:          #5e439b;
-  --accent-berry:         #20174b;
+  --accent-gold:          #E86A24;
+  --accent-berry:         #A8E038;
 
   // Product specific color tags (contextual use only)
   --iron-primary:         #e81b38;
@@ -121,8 +148,8 @@
   --immune-accent:        #22421e;
   --vision-primary:       #92afda;
   --vision-accent:        #253361;
-  --sleep-primary:        #5e439b;
-  --sleep-accent:         #20174b;
+  --sleep-primary:        #9dbb3e;
+  --sleep-accent:         #829D2F;
 
   // ── Spacing Scale (4px base) ──────────────────────────
   --space-1:  4px;
@@ -145,11 +172,11 @@
   --radius-xl:   24px;
   --radius-full: 9999px;
 
-  // ── Shadows (Purple Tinted Luxury Shadows) ─────────────
-  --shadow-sm: 0 1px 3px rgba(32, 23, 75, 0.06), 0 1px 2px rgba(32, 23, 75, 0.04);
-  --shadow-md: 0 4px 14px rgba(32, 23, 75, 0.08), 0 2px 6px rgba(94, 67, 155, 0.05);
-  --shadow-lg: 0 12px 32px rgba(32, 23, 75, 0.12), 0 4px 12px rgba(94, 67, 155, 0.08);
-  --shadow-xl: 0 20px 48px rgba(32, 23, 75, 0.16), 0 8px 20px rgba(94, 67, 155, 0.1);
+  // ── Shadows (Neutral Tinted Shadows) ─────────────
+  --shadow-sm: 0 1px 3px rgba(26, 26, 26, 0.06), 0 1px 2px rgba(26, 26, 26, 0.04);
+  --shadow-md: 0 4px 14px rgba(26, 26, 26, 0.08), 0 2px 6px rgba(157, 187, 62, 0.05);
+  --shadow-lg: 0 12px 32px rgba(26, 26, 26, 0.10), 0 4px 12px rgba(157, 187, 62, 0.07);
+  --shadow-xl: 0 20px 48px rgba(26, 26, 26, 0.14), 0 8px 20px rgba(157, 187, 62, 0.09);
 
   // ── Typography ─────────────────────────────────────────
   // Fallback fonts sized/adjusted to closely match web-font metrics
@@ -218,20 +245,20 @@ body[dir="rtl"] {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #d2bbf0;
+  background: #c8e16a;
   border-radius: 9999px;
   border: 2px solid transparent;
   background-clip: content-box;
 
   &:hover {
-    background: #5e439b;
+    background: #9DBB3E;
     background-clip: content-box;
   }
 }
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: #d2bbf0 transparent;
+  scrollbar-color: #c8e16a transparent;
 }
 
 /* Lightweight Scroll Reveal Utilities */
@@ -302,7 +329,7 @@ select {
 }
 
 // ─────────────────────────────────────────────────────────
-// Global Button System (SLEEP WELL Purple)
+// Global Button System (Green & Orange Brand)
 // ─────────────────────────────────────────────────────────
 
 .btn {
@@ -323,41 +350,41 @@ select {
 
   &:active { transform: scale(0.97); }
 
-  // Primary CTA — Purple Gradient
+  // Primary CTA — Orange (high-visibility)
   &--primary {
-    background: linear-gradient(135deg, #5e439b 0%, #20174b 100%);
+    background: linear-gradient(135deg, #E86A24 0%, #D55917 100%);
     color: #fff;
     border-color: transparent;
-    box-shadow: 0 4px 14px rgba(94, 67, 155, 0.35);
+    box-shadow: 0 4px 14px rgba(232, 106, 36, 0.35);
 
     &:hover {
-      background: linear-gradient(135deg, #7152b7 0%, #2b1f63 100%);
+      background: linear-gradient(135deg, #f07a34 0%, #e06020 100%);
       transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(94, 67, 155, 0.45);
+      box-shadow: 0 8px 20px rgba(232, 106, 36, 0.45);
     }
   }
 
-  // Accent CTA — Deep Purple
+  // Secondary — Green
   &--amber {
-    background: #20174b;
+    background: #9DBB3E;
     color: #fff;
-    border-color: #20174b;
+    border-color: #9DBB3E;
 
     &:hover {
-      background: #311f58;
-      border-color: #311f58;
-      box-shadow: 0 4px 14px rgba(32, 23, 75, 0.35);
+      background: #829D2F;
+      border-color: #829D2F;
+      box-shadow: 0 4px 14px rgba(157, 187, 62, 0.35);
     }
   }
 
-  // Outlined / Ghost — Purple Border
+  // Outlined / Ghost — Green Border
   &--outline {
     background: transparent;
     color: var(--brand-primary);
     border-color: var(--brand-primary);
 
     &:hover {
-      background: var(--purple-100);
+      background: var(--green-100);
       color: var(--brand-primary-dark);
     }
   }
@@ -411,7 +438,7 @@ select {
   &:focus {
     outline: none;
     border-color: var(--brand-primary);
-    box-shadow: 0 0 0 3px rgba(94, 67, 155, 0.18);
+    box-shadow: 0 0 0 3px rgba(157, 187, 62, 0.18);
   }
 
   &.ng-invalid.ng-touched {
@@ -443,8 +470,8 @@ select {
 }
 
 // ═══════════════════════════════════════════════════════════════
-// 🌙 VITATRIX SLEEP WELL PURPLE OVERRIDE SYSTEM
-// Dominant Purple Theme Derived from #5e439b & #20174b
+// 🌿 VITATRIX GREEN & ORANGE OVERRIDE SYSTEM
+// Dominant Green + Orange Brand Theme
 // ═══════════════════════════════════════════════════════════════
 
 html, body {
@@ -457,10 +484,11 @@ body {
   background: var(--bg-app) !important;
 }
 
-// ── Announcement Bar — Sleep Well Tonal Purple Gradient ─────
+// ── Announcement Bar — Brand Vibrant Green ───────────────────
 .announcement-bar {
-  background: linear-gradient(90deg, #5e439b 0%, #20174b 100%) !important;
-  color: #ffffff !important;
+  background: var(--primary-green, #A8E038) !important;
+  color: var(--neutral-dark, #1E293B) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
 }
 
 // ── Logo & Site Identity ────────────────────────────────────
@@ -478,90 +506,87 @@ body {
 
 // ── Category Filter Pills ───────────────────────────────────
 .category-pill.is-active {
-  background: linear-gradient(135deg, #5e439b 0%, #20174b 100%) !important;
-  color: #ffffff !important;
-  border-color: #20174b !important;
-  box-shadow: 0 8px 20px rgba(32, 23, 75, 0.25) !important;
+  background: var(--primary-green, #A8E038) !important;
+  color: var(--neutral-dark, #1E293B) !important;
+  font-weight: 800 !important;
+  border-color: var(--primary-green, #A8E038) !important;
+  box-shadow: 0 4px 14px rgba(168, 224, 56, 0.35) !important;
 }
 
 .category-pill:not(.is-active) {
-  background: #f5f0fc !important;
-  color: #20174b !important;
-  border: 1.5px solid #d8c8ee !important;
+  background: var(--primary-green-light, #F2FCE8) !important;
+  color: var(--neutral-dark, #1E293B) !important;
+  border: 1.5px solid #d8f5b5 !important;
 
   &:hover {
-    background: #ede4f8 !important;
-    border-color: #5e439b !important;
-    color: #20174b !important;
+    background: #E4F8C9 !important;
+    border-color: var(--primary-green, #A8E038) !important;
+    color: var(--neutral-dark, #1E293B) !important;
   }
 }
 
-// ── Primary Buttons & CTAs — Sleep Well Tonal Gradient ───────
+// ── Primary Buttons & CTAs — Orange for high visibility ──────
 .btn--primary,
 .hero-cta,
 .product-card__cta,
 .add-cart-btn,
 .checkout-btn {
-  background: linear-gradient(135deg, #5e439b 0%, #20174b 100%) !important;
+  background: linear-gradient(135deg, #E86A24 0%, #D55917 100%) !important;
   border-color: transparent !important;
   color: #ffffff !important;
   font-weight: 700 !important;
   border-radius: 99px !important;
-  box-shadow: 0 8px 20px rgba(94, 67, 155, 0.3) !important;
+  box-shadow: 0 6px 18px rgba(232, 106, 36, 0.32) !important;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
 
   &:hover {
-    background: linear-gradient(135deg, #7152b7 0%, #2b1f63 100%) !important;
-    transform: translateY(-3px) scale(1.02) !important;
-    box-shadow: 0 12px 28px rgba(32, 23, 75, 0.4) !important;
+    background: linear-gradient(135deg, #f07a34 0%, #e06020 100%) !important;
+    transform: translateY(-2px) scale(1.02) !important;
+    box-shadow: 0 10px 24px rgba(232, 106, 36, 0.42) !important;
   }
 }
 
 .btn--amber {
-  background: #20174b !important;
-  border-color: #20174b !important;
-  color: #ffffff !important;
+  background: var(--primary-green, #A8E038) !important;
+  border-color: var(--primary-green, #A8E038) !important;
+  color: var(--neutral-dark, #1E293B) !important;
   border-radius: 99px !important;
-  font-weight: 700 !important;
-  box-shadow: 0 8px 20px rgba(32, 23, 75, 0.28) !important;
+  font-weight: 800 !important;
+  box-shadow: 0 6px 18px rgba(168, 224, 56, 0.30) !important;
 
   &:hover {
-    background: #311f58 !important;
-    border-color: #311f58 !important;
-    transform: translateY(-3px) scale(1.02) !important;
-    box-shadow: 0 12px 28px rgba(32, 23, 75, 0.4) !important;
+    background: #8EC826 !important;
+    border-color: #8EC826 !important;
+    transform: translateY(-2px) scale(1.02) !important;
+    box-shadow: 0 10px 24px rgba(142, 200, 38, 0.40) !important;
   }
 }
 
 // ── Product Cards & Badges ──────────────────────────────────
 .product-card {
   background: var(--bg-card) !important;
-  border: 1.5px solid var(--border-subtle) !important;
+  border: 1px solid rgba(0, 0, 0, 0.06) !important;
   border-radius: 20px !important;
-  box-shadow: 0 4px 14px rgba(32, 23, 75, 0.05) !important;
+  box-shadow: 0 4px 14px rgba(30, 41, 59, 0.04) !important;
 
   &:hover {
-    transform: translateY(-8px) !important;
-    box-shadow: 0 20px 40px rgba(94, 67, 155, 0.16) !important;
-    border-color: #5e439b !important;
+    transform: translateY(-6px) !important;
+    box-shadow: 0 16px 36px rgba(168, 224, 56, 0.16) !important;
+    border-color: rgba(168, 224, 56, 0.4) !important;
   }
 
   .price-current {
-    color: #20174b !important;
+    color: var(--neutral-dark, #1E293B) !important;
     font-weight: 900 !important;
   }
 
-  // Badges Minimal Luxury Theme
-  .badge--bestseller, .badge-bestseller {
-    background: #f5f3ff !important;
-    color: #6d28d9 !important;
-    border: 1px solid rgba(109, 40, 217, 0.22) !important;
-  }
-
+  // Badges — Light green chips with crisp text
+  .badge--bestseller, .badge-bestseller,
   .badge--featured, .badge-featured {
-    background: #eff6ff !important;
-    color: #1d4ed8 !important;
-    border: 1px solid rgba(29, 78, 216, 0.22) !important;
+    background: #F2FCE8 !important;
+    color: #6B9E11 !important;
+    border: 1px solid rgba(107, 158, 17, 0.25) !important;
+    font-weight: 700 !important;
   }
 
   .badge--discount {
@@ -578,7 +603,7 @@ body {
   width: 100%;
   max-width: 100%;
   height: auto;
-  background: linear-gradient(135deg, #1A0B2E 0%, #321359 50%, #150727 100%);
+  background: var(--primary-green-light, #F2FCE8) !important;
 }
 
 .hero-banner-picture {
@@ -624,7 +649,7 @@ body {
   max-width: 100%;
   height: auto;
   max-height: 380px;
-  background: #0f0728;
+  background: var(--primary-green-light, #F2FCE8);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -640,74 +665,85 @@ body {
 }
 
 .hero-slider {
-  background: linear-gradient(135deg, #1A0B2E 0%, #321359 50%, #150727 100%) !important;
+  background: var(--primary-green-light, #F2FCE8) !important;
 }
 
 .hero-slide__title {
-  color: #20174b !important;
+  color: var(--neutral-dark, #1E293B) !important;
   font-weight: 900 !important;
 }
 
 .hero-slide__badge {
-  background: #ede4f8 !important;
-  color: #20174b !important;
-  border: 1px solid #d8c8ee !important;
+  background: var(--primary-green-light, #F2FCE8) !important;
+  color: #6B9E11 !important;
+  border: 1px solid rgba(107, 158, 17, 0.25) !important;
 }
 
 .hero-slide .price-discount {
-  color: #5e439b !important;
+  color: #6B9E11 !important;
 }
 
 // ── Floating Pills & Badges in Hero ────────────────────────
 .hero-floating-pill {
   background: #ffffff !important;
-  color: #20174b !important;
-  border: 1.5px solid #ded4f0 !important;
-  box-shadow: 0 10px 30px rgba(32, 23, 75, 0.1) !important;
+  color: var(--neutral-dark, #1E293B) !important;
+  border: 1.5px solid #d8f5b5 !important;
+  box-shadow: 0 8px 24px rgba(30, 41, 59, 0.06) !important;
 }
 
-// ── Infinite Marquee Ticker Bar (Tonal Purple Gradient) ──────
+// ── Infinite Marquee Ticker Bar (Green Gradient) ──────────
 .marquee-bar {
-  background: linear-gradient(90deg, #5e439b 0%, #20174b 100%) !important;
+  background: linear-gradient(90deg, #A8E038 0%, #8EC826 100%) !important;
   border: none !important;
 }
 
 .marquee-bar__item {
-  color: #ffffff !important;
-  font-weight: 700 !important;
+  color: var(--neutral-dark, #1E293B) !important;
+  font-weight: 800 !important;
   &::after {
-    color: #d2bbf0 !important;
+    color: #567E14 !important;
   }
 }
 
 // ── Feature Cards, Benefit Tags & Variant Chips ─────────────
 .feature-card__icon {
-  background: #ede4f8 !important;
-  color: #5e439b !important;
+  background: var(--primary-green-light, #F2FCE8) !important;
+  color: #6B9E11 !important;
 }
 
 .benefit-tag {
-  background: #f3ecfb !important;
-  color: #20174b !important;
-  border-color: #d8c8ee !important;
+  background: var(--primary-green-light, #F2FCE8) !important;
+  color: var(--neutral-dark, #1E293B) !important;
+  border-color: #d8f5b5 !important;
 }
 
 .variant-chip.is-active {
-  background: #ede4f8 !important;
-  border-color: #5e439b !important;
-  color: #20174b !important;
+  background: var(--primary-green, #A8E038) !important;
+  border-color: var(--primary-dark, #8EC826) !important;
+  color: var(--neutral-dark, #1E293B) !important;
+  font-weight: 700 !important;
 }
 
 .v-btn.is-active {
-  background: #ede4f8 !important;
-  border-color: #5e439b !important;
-  color: #20174b !important;
+  background: var(--primary-green, #A8E038) !important;
+  border-color: var(--primary-dark, #8EC826) !important;
+  color: var(--neutral-dark, #1E293B) !important;
+  font-weight: 700 !important;
+}
+
+// ── Global Swiper Carousel Indicators (Bright Green Active) ──
+.swiper-pagination-bullet-active {
+  background: var(--primary-green, #A8E038) !important;
+  box-shadow: 0 2px 8px rgba(168, 224, 56, 0.45) !important;
 }
 
 // ── Header & Navigation Bar ─────────────────────────────────
 .site-header {
-  background: #ffffff !important;
-  border-bottom: 1px solid var(--border-subtle) !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03) !important;
 }
 
 // ── LTR (English) Adjustments & Font Stacks ─────────────────
@@ -814,8 +850,8 @@ input[type="search"]::-webkit-search-results-decoration {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  background: linear-gradient(135deg, #5e439b 0%, #20174b 100%) !important;
-  background-color: #3b2b73 !important;
+  background: linear-gradient(135deg, #E86A24 0%, #D55917 100%) !important;
+  background-color: #E86A24 !important;
   color: #ffffff !important;
   padding: 12px 32px !important;
   border-radius: 25px !important;
@@ -825,14 +861,14 @@ input[type="search"]::-webkit-search-results-decoration {
   font-family: var(--font-heading), 'Noto Kufi Arabic', sans-serif !important;
   text-decoration: none !important;
   cursor: pointer !important;
-  box-shadow: 0 4px 15px rgba(59, 43, 115, 0.3) !important;
+  box-shadow: 0 4px 15px rgba(232, 106, 36, 0.35) !important;
   transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease !important;
   white-space: nowrap !important;
 
   &:hover {
-    background: linear-gradient(135deg, #7152b7 0%, #2b1f63 100%) !important;
+    background: linear-gradient(135deg, #f07a34 0%, #e06020 100%) !important;
     transform: translateY(-2px) scale(1.02) !important;
-    box-shadow: 0 8px 24px rgba(59, 43, 115, 0.45) !important;
+    box-shadow: 0 8px 24px rgba(232, 106, 36, 0.50) !important;
     color: #ffffff !important;
   }
 }
@@ -843,8 +879,8 @@ input[type="search"]::-webkit-search-results-decoration {
   align-items: center !important;
   justify-content: center !important;
   width: 100% !important;
-  background: linear-gradient(135deg, #5e439b 0%, #20174b 100%) !important;
-  background-color: #3b2b73 !important;
+  background: linear-gradient(135deg, #E86A24 0%, #D55917 100%) !important;
+  background-color: #E86A24 !important;
   color: #ffffff !important;
   padding: 14px 32px !important;
   border-radius: 25px !important;
@@ -854,15 +890,15 @@ input[type="search"]::-webkit-search-results-decoration {
   font-family: var(--font-heading), 'Noto Kufi Arabic', sans-serif !important;
   text-decoration: none !important;
   cursor: pointer !important;
-  box-shadow: 0 4px 15px rgba(59, 43, 115, 0.3) !important;
+  box-shadow: 0 4px 15px rgba(232, 106, 36, 0.35) !important;
   transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease !important;
   white-space: nowrap !important;
   text-align: center !important;
 
   &:hover {
-    background: linear-gradient(135deg, #7152b7 0%, #2b1f63 100%) !important;
+    background: linear-gradient(135deg, #f07a34 0%, #e06020 100%) !important;
     transform: translateY(-2px) scale(1.02) !important;
-    box-shadow: 0 8px 24px rgba(59, 43, 115, 0.45) !important;
+    box-shadow: 0 8px 24px rgba(232, 106, 36, 0.50) !important;
     color: #ffffff !important;
   }
 }

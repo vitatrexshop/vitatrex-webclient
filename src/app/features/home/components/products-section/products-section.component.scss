@@ -9,7 +9,7 @@
 // ══════════════════════════════════════════════════════════════
 
 .happy-shelf-section {
-  background: linear-gradient(180deg, #f8f5fd 0%, #faf7fe 40%, #f3ecfb 100%);
+  background: linear-gradient(180deg, #FFFFFF 0%, #F2FCE8 50%, #FFFFFF 100%);
   width: 100%;
   padding: clamp(3.5rem, 6vw, 5.5rem) 0 clamp(4rem, 6vw, 5.5rem);
   position: relative;
@@ -37,7 +37,7 @@
   font-size: clamp(1.75rem, 3.5vw, 2.65rem);
   font-weight: 900;
   text-transform: uppercase;
-  color: var(--purple-deep, #20174b);
+  color: var(--neutral-dark, #1E293B);
   letter-spacing: 0.04em;
   margin: 0;
   text-align: center;
@@ -141,7 +141,7 @@
 
   &:focus-visible {
     border-radius: 16px;
-    outline: 2px solid var(--purple-primary, #5e439b);
+    outline: 2px solid var(--primary-color, #9DBB3E);
     outline-offset: 4px;
   }
 }
@@ -166,7 +166,7 @@
     box-shadow 0.2s ease;
 
   // Solid Deep Brand Purple pill shape — crisp white uppercase bold text
-  background: var(--purple-deep, #20174b);
+  background: var(--accent-orange, #E86A24);
   color: #ffffff;
   border: none;
   border-radius: 9999px;
@@ -183,7 +183,7 @@
   justify-content: center;
   gap: 7px;
   cursor: pointer;
-  box-shadow: 0 8px 24px rgba(32, 23, 75, 0.25);
+  box-shadow: 0 8px 24px rgba(232, 106, 36, 0.35);
   box-sizing: border-box;
 
   .shelf-product-card:hover & {
@@ -192,9 +192,9 @@
   }
 
   &:hover {
-    background: var(--purple-primary, #5e439b);
+    background: var(--accent-orange-hover, #D55917);
     color: #ffffff;
-    box-shadow: 0 10px 28px rgba(94, 67, 155, 0.35);
+    box-shadow: 0 10px 28px rgba(232, 106, 36, 0.45);
   }
 
   &:active {
@@ -204,14 +204,14 @@
   // Notify variant: white pill with purple outline
   &--notify {
     background: #ffffff;
-    color: var(--purple-primary, #5e439b);
-    border: 1.5px solid var(--purple-primary, #5e439b);
-    box-shadow: 0 6px 18px rgba(94, 67, 155, 0.12);
+    color: var(--primary-color, #9DBB3E);
+    border: 1.5px solid var(--primary-color, #9DBB3E);
+    box-shadow: 0 6px 18px rgba(157, 187, 62, 0.12);
 
     &:hover {
-      background: var(--purple-primary, #5e439b);
+      background: var(--primary-color, #9DBB3E);
       color: #ffffff;
-      border-color: var(--purple-primary, #5e439b);
+      border-color: var(--primary-color, #9DBB3E);
     }
   }
 
@@ -247,12 +247,12 @@
   width: auto;
   object-fit: contain;
   aspect-ratio: 200 / 240;
-  filter: drop-shadow(0 14px 28px rgba(32, 23, 75, 0.12));
+  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.12));
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), filter 0.35s ease;
 
   .shelf-product-card:hover & {
     transform: translateY(-8px) scale(1.04);
-    filter: drop-shadow(0 20px 36px rgba(32, 23, 75, 0.18));
+    filter: drop-shadow(0 20px 36px rgba(0, 0, 0, 0.18));
   }
 }
 
@@ -276,12 +276,12 @@
   line-height: 1.3;
 
   a {
-    color: var(--purple-deep, #20174b);
+    color: var(--neutral-dark, #1A1A1A);
     text-decoration: none;
     transition: color 0.2s ease;
 
     &:hover {
-      color: var(--purple-primary, #5e439b);
+      color: var(--primary-color, #9DBB3E);
     }
   }
 }
@@ -294,7 +294,7 @@
 }
 
 .shelf-card__price {
-  color: var(--purple-primary, #5e439b);
+  color: #6B9E11;
   font-family: var(--font-heading, 'Plus Jakarta Sans', 'Readex Pro', sans-serif);
   font-size: clamp(0.98rem, 1.15vw, 1.14rem);
   font-weight: 700;
@@ -305,9 +305,9 @@
 // ── 8. Out-of-Stock Pill Button ('Notify me') ─────────────────
 .shelf-card__notify-btn {
   background: #ffffff;
-  border: 1.8px solid var(--purple-primary, #5e439b);
+  border: 1.8px solid var(--primary-color, #9DBB3E);
   border-radius: 9999px;
-  color: var(--purple-primary, #5e439b);
+  color: var(--primary-color, #9DBB3E);
   font-family: var(--font-heading, 'Plus Jakarta Sans', 'Readex Pro', sans-serif);
   font-size: 0.88rem;
   font-weight: 700;
@@ -321,14 +321,14 @@
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   box-sizing: border-box;
   margin-top: 2px;
-  box-shadow: 0 4px 14px rgba(94, 67, 155, 0.08);
+  box-shadow: 0 4px 14px rgba(157, 187, 62, 0.08);
 
   &:hover {
-    background-color: var(--purple-primary, #5e439b);
+    background-color: var(--primary-color, #9DBB3E);
     color: #ffffff;
-    border-color: var(--purple-primary, #5e439b);
+    border-color: var(--primary-color, #9DBB3E);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(94, 67, 155, 0.25);
+    box-shadow: 0 6px 20px rgba(157, 187, 62, 0.25);
   }
 
   &:active {
@@ -346,9 +346,9 @@
   height: 44px;
   border-radius: 50%;
   background: #ffffff;
-  border: 1.5px solid rgba(94, 67, 155, 0.2);
-  color: var(--purple-deep, #20174b);
-  box-shadow: 0 6px 20px rgba(32, 23, 75, 0.12);
+  border: 1.5px solid rgba(157, 187, 62, 0.2);
+  color: var(--neutral-dark, #1A1A1A);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -358,11 +358,11 @@
   padding: 0;
 
   &:hover {
-    background: var(--purple-deep, #20174b);
+    background: var(--primary-color, #9DBB3E);
     color: #ffffff;
-    border-color: var(--purple-deep, #20174b);
+    border-color: var(--primary-color, #9DBB3E);
     transform: translateY(-50%) scale(1.08);
-    box-shadow: 0 10px 26px rgba(32, 23, 75, 0.25);
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.25);
   }
 
   &:active {
@@ -409,7 +409,7 @@
     width: 8px;
     height: 8px;
     border-radius: 9999px;
-    background: rgba(94, 67, 155, 0.25);
+    background: rgba(168, 224, 56, 0.35);
     border: none;
     padding: 0;
     margin: 0;
@@ -418,14 +418,14 @@
     transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 
     &:hover {
-      background: rgba(94, 67, 155, 0.6);
+      background: rgba(168, 224, 56, 0.7);
     }
 
     &.is-active,
     &.swiper-pagination-bullet-active {
       width: 26px;
-      background: var(--purple-deep, #20174b);
-      box-shadow: 0 2px 8px rgba(32, 23, 75, 0.2);
+      background: var(--primary-green, #A8E038);
+      box-shadow: 0 2px 10px rgba(168, 224, 56, 0.45);
     }
   }
 }

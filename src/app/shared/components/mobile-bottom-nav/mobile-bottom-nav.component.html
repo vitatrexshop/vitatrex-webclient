@@ -1,17 +1,28 @@
 <!-- ══════════════════════════════════════════════════════════════
      VITATRIX MOBILE FLOATING BOTTOM DOCK NAVIGATION
-     Exact Reference Match: Rounded floating pill with orange border,
-     elevated center Shop button, Cart with dynamic badge, Search & Account
+     Rounded floating pill with purple border, elevated center Shop
+     button, Cart badge, Search with live suggestions overlay
      ══════════════════════════════════════════════════════════════ -->
 
-<!-- Quick Search Popup Sheet for Mobile -->
+<!-- ── Mobile Live Search Bottom Sheet ───────────────────────────── -->
 <div
   class="mobile-search-sheet"
   [class.is-open]="isSearchOpen"
-  aria-hidden="!isSearchOpen"
+  [attr.aria-hidden]="!isSearchOpen"
+  [attr.aria-label]="'COMMON.SEARCH' | translate"
+  role="dialog"
+  aria-modal="true"
 >
+  <!-- Backdrop -->
   <div class="search-sheet-backdrop" (click)="closeSearch()"></div>
+
+  <!-- Sheet Card -->
   <div class="search-sheet-card">
+
+    <!-- Drag Handle -->
+    <div class="search-sheet-handle" aria-hidden="true"></div>
+
+    <!-- Header Row -->
     <div class="search-sheet-header">
       <h3 class="search-sheet-title">{{ 'COMMON.SEARCH' | translate }}</h3>
       <button
@@ -20,37 +31,130 @@
         (click)="closeSearch()"
         [attr.aria-label]="'COMMON.CLOSE' | translate"
       >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
           <line x1="18" y1="6" x2="6" y2="18"/>
           <line x1="6" y1="6" x2="18" y2="18"/>
         </svg>
       </button>
     </div>
 
+    <!-- Search Input -->
     <form class="search-sheet-form" (ngSubmit)="submitSearch()">
-      <div class="search-sheet-input-wrap">
-        <svg class="search-sheet-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="8"/>
+      <div class="search-sheet-input-wrap" [class.is-loading]="isSearchLoading">
+        <!-- Magnifier Icon -->
+        <svg class="search-sheet-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7.5"/>
           <line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
+
         <input
           #searchInput
+          id="mobile-bottom-search-input"
           type="search"
           dir="auto"
           class="search-sheet-input"
           [placeholder]="'NAV.SEARCH_PLACEHOLDER' | translate"
           [formControl]="searchControl"
           autocomplete="off"
+          aria-autocomplete="list"
+          [attr.aria-controls]="showResults ? 'mobile-search-results' : null"
         />
-        <button type="submit" class="search-sheet-btn">
+
+        <!-- Inline Spinner -->
+        <span class="search-sheet-spinner" *ngIf="isSearchLoading" aria-hidden="true">
+          <svg class="spin-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5">
+            <circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-dashoffset="10" stroke-linecap="round"/>
+          </svg>
+        </span>
+
+        <!-- Submit Button -->
+        <button type="submit" class="search-sheet-btn" [attr.aria-label]="'COMMON.SEARCH' | translate">
           {{ 'COMMON.SEARCH' | translate }}
         </button>
       </div>
     </form>
-  </div>
-</div>
 
-<!-- Main Floating Dock Container -->
+    <!-- ── Live Results Area ────────────────────────────────────── -->
+    <div
+      id="mobile-search-results"
+      class="search-sheet-results"
+      *ngIf="showResults"
+      role="listbox"
+      aria-label="نتائج البحث"
+    >
+
+      <!-- Loading skeleton rows -->
+      <ng-container *ngIf="isSearchLoading && searchResults.length === 0">
+        <div class="search-result-skeleton" *ngFor="let s of [1,2,3]">
+          <div class="skel-thumb"></div>
+          <div class="skel-lines">
+            <div class="skel-line skel-line--title"></div>
+            <div class="skel-line skel-line--price"></div>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- Results list -->
+      <ng-container *ngIf="!isSearchLoading && searchResults.length > 0">
+        <!-- Results header -->
+        <div class="search-results-header">
+          <span class="results-label">نتائج البحث</span>
+          <span class="results-count-pill">{{ totalSearchResults }} منتج</span>
+        </div>
+
+        <!-- Product items -->
+        <a
+          *ngFor="let item of searchResults"
+          href="javascript:void(0)"
+          class="search-result-item"
+          role="option"
+          (click)="navigateToProduct(item.slug)"
+          [attr.aria-label]="item.name"
+        >
+          <div class="result-thumb">
+            <img [src]="item.image" [alt]="item.name" loading="lazy" width="48" height="48"/>
+          </div>
+          <div class="result-info">
+            <span class="result-name" [innerHTML]="item.name | highlight:searchControl.value"></span>
+            <span class="result-price" *ngIf="item.variants?.[0]?.price">
+              {{ item.variants[0].price | number:'1.0-0' }} ج.م
+            </span>
+          </div>
+          <div class="result-chevron" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+          </div>
+        </a>
+
+        <!-- View all results -->
+        <button type="button" class="search-view-all-btn" (click)="submitSearch()">
+          <span>عرض جميع النتائج ({{ totalSearchResults }})</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </button>
+      </ng-container>
+
+      <!-- Empty state -->
+      <div class="search-empty-state" *ngIf="!isSearchLoading && searchResults.length === 0">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          <line x1="8" y1="11" x2="14" y2="11"/>
+        </svg>
+        <p>لا توجد نتائج مطابقة</p>
+        <span>جرّب كلمات أخرى مثل: فيتامين، بروتين، زنك</span>
+      </div>
+
+    </div>
+    <!-- /.search-sheet-results -->
+
+  </div><!-- /.search-sheet-card -->
+</div><!-- /.mobile-search-sheet -->
+
+
+<!-- ── Main Floating Dock Container ────────────────────────────── -->
 <nav
   class="mobile-bottom-dock"
   [class.is-hidden]="(isCartDrawerOpen$ | async) || (isCheckoutPage$ | async)"
@@ -75,19 +179,22 @@
       <span class="dock-label">{{ 'NAV.HOME' | translate }}</span>
     </a>
 
-    <!-- 2. بحث (Search) -->
+    <!-- 2. بحث (Search) — triggers live search overlay -->
     <button
       type="button"
       class="dock-item dock-btn"
       [class.is-active]="isSearchOpen"
       (click)="toggleSearch()"
       aria-label="Search"
+      id="mobile-dock-search-btn"
     >
       <div class="dock-icon-wrap">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="11" cy="11" r="7.5"/>
           <line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
+        <!-- Active indicator dot -->
+        <span class="dock-search-dot" *ngIf="isSearchOpen" aria-hidden="true"></span>
       </div>
       <span class="dock-label">{{ 'NAV.SEARCH' | translate }}</span>
     </button>
@@ -123,7 +230,6 @@
           <circle cx="19" cy="20" r="1.2"/>
           <path d="M1 1h4l2.68 12.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
         </svg>
-
         <!-- Dynamic Counter Badge -->
         <span
           *ngIf="(itemCount$ | async) as count"

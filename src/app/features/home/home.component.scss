@@ -5,7 +5,7 @@
 
 :host {
   display: block;
-  background: #fdfbf7;
+  background: #FFFFFF;
   min-height: 100vh;
   font-family: 'Readex Pro', 'Noto Kufi Arabic', 'Cairo', sans-serif;
 }
@@ -44,7 +44,7 @@
 
 // ── The Happy Shelf Product Slider Wrapper ───────────────────
 .vt-products-wrapper {
-  background: #faf7fe;
+  background: #FFFFFF;
   padding-block: 0;
   width: 100%;
   overflow: hidden;
@@ -61,10 +61,10 @@
   border: none;
 }
 
-// ── Offers Section Wrapper — Luxury Deep Purple Strip ────────
+// ── Offers Section Wrapper ────────────────────────────────────
 .vt-offers-wrapper {
   width: 100%;
-  background: radial-gradient(circle at 50% 20%, #2a1d63 0%, #20174b 75%, #18113c 100%);
+  background: linear-gradient(180deg, #FFFFFF 0%, #F2FCE8 50%, #FFFFFF 100%);
   overflow: hidden;
 
   @media (max-width: 767px) {

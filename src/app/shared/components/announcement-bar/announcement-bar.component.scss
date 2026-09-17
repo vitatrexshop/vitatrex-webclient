@@ -1,33 +1,141 @@
+// ══════════════════════════════════════════════════════════════════════
+// ANNOUNCEMENT BAR — Seamless infinite marquee ticker
+// GPU-composited, hover-pause, edge fades, mobile-safe height
+// Pattern: dual-group track scrolling translateX(0) → translateX(-50%)
+// ══════════════════════════════════════════════════════════════════════
+
 .announcement-bar {
-  background: linear-gradient(90deg, #5e439b, #20174b);
-  color: #fff;
-  height: 38px;
+  width: 100%;
+  // Enough height so text never clips on mobile (avoids tight 38px box)
+  height: 40px;
+  min-height: 40px;
   overflow: hidden;
+  background: var(--primary-green, #A8E038);
   display: flex;
   align-items: center;
+  position: relative;
+  // Promote to its own stacking context — prevents z-index bleed
+  z-index: 100;
+  box-sizing: border-box;
 
+  // ── Scrolling track ────────────────────────────────────────────────
   &__track {
-    display: inline-flex;
+    // width: max-content ensures both groups sit side-by-side on one line
+    width: max-content;
+    display: flex;
     align-items: center;
-    gap: var(--space-6);
+    // GPU-composited: only triggers compositor thread, no layout/paint
+    will-change: transform;
+    transform: translateZ(0);
+    animation: announcement-ticker-ltr 28s linear infinite;
+    // Prevent any wrapping that could cause layout thrashing
     white-space: nowrap;
-    // Override RTL for physical left-to-right track layout (content reads RTL inside)
-    direction: ltr;
-    animation: ticker 28s linear infinite;
-    font-size: 0.82rem;
-    font-weight: 600;
-    letter-spacing: 0.015em;
+    flex-shrink: 0;
   }
 
+  // ── Explicit RTL Marquee Animation ────────────────────────────────
+  :host-context([dir='rtl']) &__track,
+  [dir='rtl'] &__track,
+  &.is-rtl &__track {
+    animation-name: announcement-ticker-rtl;
+  }
+
+  // Pause on hover so users can read the announcement
+  &:hover &__track {
+    animation-play-state: paused;
+  }
+
+  // ── One half of the seamless loop ─────────────────────────────────
+  &__group {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    // Trailing padding keeps spacing clean at the seam point
+    padding-inline-end: 20px;
+    flex-shrink: 0;
+  }
+
+  // ── Individual text item ───────────────────────────────────────────
+  &__item {
+    font-size: 0.83rem;
+    font-weight: 800;
+    color: var(--neutral-dark, #1E293B);
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Readex Pro', 'Noto Kufi Arabic', sans-serif;
+    letter-spacing: 0.01em;
+    line-height: 1; // exact line-height prevents vertical clipping
+  }
+
+  // ── Item icon (shipping truck, etc.) ──────────────────────────────
+  .item-icon {
+    flex-shrink: 0;
+    color: var(--neutral-dark, #1E293B);
+    opacity: 0.95;
+  }
+
+  // ── Bullet separator ──────────────────────────────────────────────
   .sep {
-    color: #d2bbf0;
+    color: #567E14;
     font-size: 0.65rem;
     opacity: 0.9;
+    flex-shrink: 0;
+    line-height: 1;
+    margin: 0 4px;
+  }
+
+  // ── Left / Right edge fade-out gradients ──────────────────────────
+  &__fade {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 64px;
+    z-index: 2;
+    pointer-events: none;
+
+    &--left {
+      left: 0;
+      background: linear-gradient(to right, #A8E038 0%, rgba(168, 224, 56, 0) 100%);
+    }
+
+    &--right {
+      right: 0;
+      background: linear-gradient(to left, #A8E038 0%, rgba(168, 224, 56, 0) 100%);
+    }
   }
 }
 
-// Scroll from right to left (standard news ticker direction)
-@keyframes ticker {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+// ══════════════════════════════════════════════════════════════════════
+// Keyframes:
+// LTR: translateX(0) → translateX(-50%)
+// RTL: translateX(0) → translateX(50%)
+// With two identical groups the seam is completely invisible.
+// translateZ(0) keeps it on the GPU compositor thread (60fps, no jank).
+// ══════════════════════════════════════════════════════════════════════
+@keyframes announcement-ticker-ltr {
+  from { transform: translateX(0)    translateZ(0); }
+  to   { transform: translateX(-50%) translateZ(0); }
+}
+
+@keyframes announcement-ticker-rtl {
+  from { transform: translateX(0)   translateZ(0); }
+  to   { transform: translateX(50%) translateZ(0); }
+}
+
+// ── Responsive adjustments ────────────────────────────────────────────
+@media (max-width: 480px) {
+  .announcement-bar {
+    height: 36px;
+    min-height: 36px;
+
+    &__item {
+      font-size: 0.78rem;
+    }
+
+    &__fade {
+      width: 40px; // Narrower fade on small screens to show more text
+    }
+  }
 }

@@ -21,9 +21,9 @@
     display: inline-block;
     font-size: 0.82rem;
     font-weight: 800;
-    color: #5e439b;
-    background: #ede4f8;
-    border: 1px solid #d8c8ee;
+    color: #9DBB3E;
+    background: #f7fbe9;
+    border: 1px solid #d6eba0;
     padding: 6px 18px;
     border-radius: 9999px;
     letter-spacing: 0.03em;
@@ -32,7 +32,7 @@
   &__title {
     font-size: clamp(1.8rem, 4vw, 2.5rem);
     font-weight: 900;
-    color: #20174b;
+    color: #1A1A1A;
     margin: 0;
     font-family: 'Readex Pro', 'Noto Kufi Arabic', 'Plus Jakarta Sans', sans-serif;
     line-height: 1.25;
@@ -92,18 +92,18 @@
 
   &:hover {
     transform: translateY(-3px);
-    border-color: #5e439b;
-    box-shadow: 0 10px 24px rgba(94, 67, 155, 0.12);
+    border-color: #9DBB3E;
+    box-shadow: 0 10px 24px rgba(157, 187, 62, 0.12);
   }
 
   &.is-active {
     background: #ffffff;
-    border-color: #5e439b;
-    box-shadow: 0 12px 30px rgba(94, 67, 155, 0.2);
+    border-color: #9DBB3E;
+    box-shadow: 0 12px 30px rgba(157, 187, 62, 0.2);
     transform: translateY(-4px);
 
     .fs-selector-card__name {
-      color: #5e439b;
+      color: #9DBB3E;
     }
   }
 
@@ -151,11 +151,11 @@
     inset-inline-end: 12px;
     font-size: 0.65rem;
     font-weight: 800;
-    background: #5e439b;
+    background: #9DBB3E;
     color: #ffffff;
     padding: 2px 8px;
     border-radius: 9999px;
-    box-shadow: 0 2px 8px rgba(94, 67, 155, 0.35);
+    box-shadow: 0 2px 8px rgba(232, 106, 36, 0.35);
   }
 }
 
@@ -164,7 +164,7 @@
   background: #ffffff;
   border: 1.5px solid #ded4f0;
   border-radius: 36px;
-  box-shadow: 0 20px 60px rgba(32, 23, 75, 0.08);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.06);
   overflow: hidden;
   display: grid;
   grid-template-columns: 1fr;
@@ -190,7 +190,7 @@
 // ── 1. Visual Showcase Column (Left in RTL) ───────────────────
 .fs-showcase__visual {
   position: relative;
-  background: linear-gradient(135deg, #f5f0fc 0%, #ede4f8 50%, #faf7fe 100%);
+  background: linear-gradient(135deg, #f7fbe9 0%, #edf5c4 50%, #f7fbe9 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -207,7 +207,7 @@
   position: absolute;
   width: 320px;
   height: 320px;
-  background: radial-gradient(circle, rgba(94, 67, 155, 0.25) 0%, rgba(32, 23, 75, 0.12) 50%, transparent 70%);
+  background: radial-gradient(circle, rgba(157, 187, 62, 0.25) 0%, rgba(130, 157, 47, 0.12) 50%, transparent 70%);
   border-radius: 50%;
   pointer-events: none;
   animation: aura-pulse 4s ease-in-out infinite alternate;
@@ -311,9 +311,9 @@
   align-self: flex-start;
   font-size: 0.82rem;
   font-weight: 800;
-  color: #5e439b;
-  background: #ede4f8;
-  border: 1px solid #d8c8ee;
+  color: #9DBB3E;
+  background: #f7fbe9;
+  border: 1px solid #d6eba0;
   padding: 5px 16px;
   border-radius: 9999px;
 
@@ -418,7 +418,7 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: linear-gradient(135deg, #5e439b 0%, #20174b 100%);
+  background: linear-gradient(135deg, #E86A24 0%, #D55917 100%);
   color: #ffffff;
   font-size: 0.98rem;
   font-weight: 800;
@@ -426,14 +426,14 @@
   border-radius: 9999px;
   border: none;
   cursor: pointer;
-  box-shadow: 0 8px 24px rgba(94, 67, 155, 0.35);
+  box-shadow: 0 8px 24px rgba(232, 106, 36, 0.35);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   font-family: inherit;
 
   &:hover {
-    background: linear-gradient(135deg, #7152b7 0%, #2b1f63 100%);
+    background: linear-gradient(135deg, #f07a34 0%, #e06020 100%);
     transform: translateY(-2px);
-    box-shadow: 0 12px 30px rgba(32, 23, 75, 0.45);
+    box-shadow: 0 12px 30px rgba(232, 106, 36, 0.45);
   }
 
   &:active {
@@ -447,8 +447,8 @@
   justify-content: center;
   gap: 8px;
   background: #ffffff;
-  color: #20174b;
-  border: 1.5px solid #d8c8ee;
+  color: #1A1A1A;
+  border: 1.5px solid #d6eba0;
   font-size: 0.92rem;
   font-weight: 800;
   padding: 13px 26px;
@@ -458,10 +458,10 @@
   font-family: inherit;
 
   &:hover {
-    border-color: #5e439b;
-    color: #5e439b;
+    border-color: #9DBB3E;
+    color: #9DBB3E;
     transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(94, 67, 155, 0.12);
+    box-shadow: 0 6px 18px rgba(157, 187, 62, 0.12);
   }
 
   .btn-arrow {

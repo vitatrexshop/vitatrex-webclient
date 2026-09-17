@@ -18,7 +18,7 @@
   border-radius: 24px;
   overflow: hidden;
   box-shadow: 0 16px 40px rgba(32, 23, 75, 0.08);
-  border: 1.5px solid #ded4f0;
+  border: 1.5px solid #d6eba0;
   text-decoration: none;
   cursor: pointer;
   background: #ffffff;
@@ -27,20 +27,20 @@
   @media (min-width: 769px) {
     display: block;
     border-radius: 36px;
-    box-shadow: 0 20px 50px rgba(32, 23, 75, 0.1);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
 
     &:hover {
       transform: translateY(-4px);
-      box-shadow: 0 28px 70px rgba(94, 67, 155, 0.2);
+      box-shadow: 0 28px 70px rgba(0, 0, 0, 0.1);
 
       .poster-main-img {
         transform: scale(1.02);
       }
 
       .poster-cta-btn {
-        background: linear-gradient(135deg, #7152b7 0%, #2b1f63 100%);
+        background: linear-gradient(135deg, #f07a34 0%, #e06020 100%);
         transform: translateY(-2px);
-        box-shadow: 0 10px 28px rgba(94, 67, 155, 0.5);
+        box-shadow: 0 10px 28px rgba(232, 106, 36, 0.45);
       }
     }
   }
@@ -93,19 +93,16 @@
 // ── 2. Top Corner Discount Badge ─────────────────────────────
 .poster-top-badge {
   position: absolute;
-  top: 12px;
-  inset-inline-start: 12px;
-  z-index: 3;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  background: linear-gradient(135deg, #5e439b 0%, #20174b 100%);
-  color: #ffffff;
+  top: 14px;
+  inset-inline-start: 14px;
+  z-index: 2;
+  background: linear-gradient(135deg, #A8E038 0%, #8EC826 100%);
+  color: var(--neutral-dark, #1E293B);
   font-size: 0.82rem;
   font-weight: 900;
   padding: 6px 16px;
   border-radius: 9999px;
-  box-shadow: 0 6px 18px rgba(94, 67, 155, 0.4);
+  box-shadow: 0 6px 18px rgba(168, 224, 56, 0.35);
 
   @media (min-width: 769px) {
     top: 20px;
@@ -132,11 +129,11 @@
   width: 100%;
   background: #ffffff;
   padding: 16px 20px 20px;
-  color: #20174b;
+  color: #1A1A1A;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  border-top: 1.5px solid #ded4f0;
+  border-top: 1.5px solid #d6eba0;
 
   @media (min-width: 769px) {
     // Desktop layout: Frosted White Floating Glass Bar
@@ -149,10 +146,10 @@
     justify-content: space-between;
     gap: 20px;
     background: #ffffff;
-    border: 1.5px solid #ded4f0;
+    border: 1.5px solid #d6eba0;
     border-radius: 26px;
     padding: 18px 30px;
-    box-shadow: 0 12px 36px rgba(32, 23, 75, 0.1);
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
   }
 }
 
@@ -167,9 +164,9 @@
   align-self: flex-start;
   font-size: 0.76rem;
   font-weight: 800;
-  color: #5e439b;
-  background: #ede4f8;
-  border: 1px solid #d8c8ee;
+  color: #6B9E11;
+  background: var(--primary-green-light, #F2FCE8);
+  border: 1px solid rgba(107, 158, 17, 0.25);
   padding: 3px 12px;
   border-radius: 9999px;
   letter-spacing: 0.02em;
@@ -182,7 +179,7 @@
 .poster-bar-title {
   font-size: 1.3rem;
   font-weight: 900;
-  color: #20174b;
+  color: var(--neutral-dark, #1E293B);
   margin: 0;
   font-family: 'Readex Pro', 'Noto Kufi Arabic', 'Plus Jakarta Sans', sans-serif;
   line-height: 1.25;
@@ -214,7 +211,7 @@
 .poster-price-current {
   font-size: 1.6rem;
   font-weight: 900;
-  color: #1e1b4b;
+  color: var(--neutral-dark, #1E293B);
   font-family: 'Readex Pro', 'Plus Jakarta Sans', sans-serif;
   line-height: 1;
 
@@ -238,13 +235,13 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: linear-gradient(135deg, #5e439b 0%, #20174b 100%);
+  background: linear-gradient(135deg, #E86A24 0%, #D55917 100%);
   color: #ffffff;
   font-size: 0.95rem;
   font-weight: 900;
   padding: 12px 26px;
   border-radius: 9999px;
-  box-shadow: 0 6px 20px rgba(94, 67, 155, 0.35);
+  box-shadow: 0 6px 20px rgba(232, 106, 36, 0.35);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   font-family: 'Readex Pro', 'Noto Kufi Arabic', 'Plus Jakarta Sans', sans-serif;
   white-space: nowrap;

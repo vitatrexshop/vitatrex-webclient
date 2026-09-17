@@ -1,28 +1,29 @@
 // ══════════════════════════════════════════════════════════════
-// Product Detail Page — Vitatrix Sleep Well Purple Brand Design System
-// Responsive layout for desktop, tablet, and mobile (from 320px+)
+// Product Detail Page — Vitatrix Modern Clean Design System
+// Vibrant Light Green & Orange CTA Palette
 // ══════════════════════════════════════════════════════════════
 
-$primary:            #5e439b;
-$primary-deep:       #20174b;
-$primary-hover:      #7051b8;
-$primary-dark-hover: #2c2068;
+$primary:            #A8E038;
+$primary-deep:       #166534;
+$primary-hover:      #8EC826;
+$primary-dark-hover: #72A41C;
 
-$purple-gradient:    linear-gradient(135deg, #5e439b 0%, #20174b 100%);
-$purple-soft:        #f3ecfb;
-$purple-border:      #e7dff5;
+$cta-gradient:       linear-gradient(135deg, #E86A24 0%, #D55917 100%);
+$cta-gradient-hover: linear-gradient(135deg, #f07a34 0%, #e06020 100%);
+$brand-green-soft:   #F2FCE8;
+$brand-border:       #E2E8F0;
 
-$text-dark:          #20174b;
-$text-body:          #40366d;
-$text-muted:         #635892;
-$text-light:         #8c82b5;
+$text-dark:          #1E293B;
+$text-body:          #334155;
+$text-muted:         #64748B;
+$text-light:         #94A3B8;
 
-$bg-app:             #fcfaff;
-$bg-card:            #ffffff;
-$bg-soft:            #f6f2fc;
+$bg-app:             #FFFFFF;
+$bg-card:            #FFFFFF;
+$bg-soft:            #F8FAFC;
 
-$crimson:            #e81b38;
-$crimson-bg:         #fdf2f4;
+$crimson:            #DC2626;
+$crimson-bg:         #FEF2F2;
 
 .detail-page {
   padding-top: var(--space-4, 1rem);
@@ -61,7 +62,7 @@ $crimson-bg:         #fdf2f4;
     }
 
     &:hover {
-      color: $primary;
+      color: $text-dark;
 
       .breadcrumb-arrow {
         transform: translateX(-4px);
@@ -122,8 +123,8 @@ $crimson-bg:         #fdf2f4;
   position: relative;
   background: $bg-card;
   border-radius: 22px;
-  border: 1px solid $purple-border;
-  box-shadow: 0 8px 24px rgba(32, 23, 75, 0.05);
+  border: 1px solid $brand-border;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -149,13 +150,13 @@ $crimson-bg:         #fdf2f4;
     position: absolute;
     top: 14px;
     inset-inline-start: 14px;
-    background: $purple-gradient;
+    background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
     color: #ffffff;
     font-size: 0.75rem;
     font-weight: 800;
     padding: 4px 14px;
     border-radius: 9999px;
-    box-shadow: 0 4px 12px rgba(94, 67, 155, 0.35);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.22);
     z-index: 5;
     letter-spacing: 0.02em;
   }
@@ -172,7 +173,7 @@ $crimson-bg:         #fdf2f4;
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
-    filter: drop-shadow(0 10px 22px rgba(32, 23, 75, 0.08));
+    filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.06));
     transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 
     &:hover {
@@ -208,7 +209,7 @@ $crimson-bg:         #fdf2f4;
     width: 54px;
     height: 54px;
     border-radius: 12px;
-    border: 2px solid $purple-border;
+    border: 2px solid $brand-border;
     background: $bg-card;
     cursor: pointer;
     overflow: hidden;
@@ -235,13 +236,13 @@ $crimson-bg:         #fdf2f4;
 
     &.is-active {
       border-color: $primary;
-      background: $purple-soft;
-      box-shadow: 0 4px 12px rgba(94, 67, 155, 0.22);
+      background: $brand-green-soft;
+      box-shadow: 0 4px 12px rgba(168, 224, 56, 0.25);
       transform: scale(1.04);
     }
 
     &:hover:not(.is-active) {
-      border-color: $primary-hover;
+      border-color: #CBD5E1;
       transform: translateY(-2px);
     }
   }
@@ -288,9 +289,9 @@ $crimson-bg:         #fdf2f4;
     border-radius: 9999px;
     font-size: 0.76rem;
     font-weight: 700;
-    border: 1px solid $purple-border;
-    background: $purple-soft;
-    color: $primary;
+    border: 1px solid $brand-border;
+    background: $brand-green-soft;
+    color: #166534;
     transition: transform 0.15s ease, background 0.15s ease;
 
     &:hover {
@@ -316,9 +317,9 @@ $crimson-bg:         #fdf2f4;
     }
 
     &.pill--purple {
-      border-color: $purple-border;
-      color: $primary;
-      background: $purple-soft;
+      border-color: #e9d5ff;
+      color: #7e22ce;
+      background: #faf5ff;
     }
 
     &.pill--pink {
@@ -346,7 +347,7 @@ $crimson-bg:         #fdf2f4;
   .price-value {
     font-size: clamp(1.5rem, 5vw, 2.1rem);
     font-weight: 900;
-    color: $primary-deep;
+    color: $text-dark;
     letter-spacing: -0.01em;
     font-family: 'Outfit', sans-serif;
   }
@@ -430,7 +431,7 @@ $crimson-bg:         #fdf2f4;
   .picker-btn {
     padding: 7px 18px;
     border-radius: 9999px;
-    border: 1.5px solid $purple-border;
+    border: 1.5px solid $brand-border;
     background: $bg-card;
     cursor: pointer;
     font-size: 0.88rem;
@@ -446,21 +447,21 @@ $crimson-bg:         #fdf2f4;
 
     &.is-active {
       border-color: $primary;
-      background: $purple-soft;
-      color: $primary-deep;
-      box-shadow: 0 2px 10px rgba(94, 67, 155, 0.18);
+      background: $brand-green-soft;
+      color: $text-dark;
+      box-shadow: 0 2px 10px rgba(168, 224, 56, 0.2);
     }
 
     &:hover:not(.is-active) {
-      border-color: $primary-hover;
-      background: lighten($purple-soft, 3%);
+      border-color: #CBD5E1;
+      background: lighten($brand-green-soft, 3%);
     }
 
     .picker-btn-discount {
       font-size: 0.72rem;
       background: $crimson-bg;
       color: $crimson;
-      border: 1px solid rgba(232, 27, 56, 0.2);
+      border: 1px solid rgba(220, 38, 38, 0.2);
       padding: 1px 6px;
       border-radius: 9999px;
       font-weight: 800;
@@ -495,7 +496,7 @@ $crimson-bg:         #fdf2f4;
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
-  border: 1.5px solid $purple-border;
+  border: 1.5px solid $brand-border;
   border-radius: 9999px;
   height: 50px;
   background: $bg-card;
@@ -532,8 +533,8 @@ $crimson-bg:         #fdf2f4;
     -webkit-tap-highlight-color: transparent;
 
     &:hover:not(:disabled) {
-      color: $primary;
-      background: $purple-soft;
+      color: $text-dark;
+      background: $brand-green-soft;
     }
 
     &:active:not(:disabled) {
@@ -558,7 +559,7 @@ $crimson-bg:         #fdf2f4;
   }
 }
 
-// Vitatrix Sleep Well Purple Brand Buttons
+// Product CTA Buttons
 .btn-360 {
   height: 50px;
   border-radius: 9999px;
@@ -587,13 +588,13 @@ $crimson-bg:         #fdf2f4;
     transform: scale(0.97);
   }
 
-  // ADD TO CART: Brand Purple Gradient
+  // ADD TO CART: Brand CTA Orange Gradient
   &-add {
     flex: 1;
     min-width: 0;
-    background: $purple-gradient;
+    background: $cta-gradient;
     color: #ffffff;
-    box-shadow: 0 4px 18px rgba(94, 67, 155, 0.35);
+    box-shadow: 0 4px 18px rgba(232, 106, 36, 0.32);
     white-space: nowrap;
 
     .cart-svg-icon {
@@ -610,23 +611,23 @@ $crimson-bg:         #fdf2f4;
     }
 
     &:hover:not(:disabled) {
-      background: linear-gradient(135deg, #7051b8 0%, #2c2068 100%);
+      background: $cta-gradient-hover;
       transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(94, 67, 155, 0.45);
+      box-shadow: 0 8px 24px rgba(232, 106, 36, 0.45);
     }
   }
 
-  // BUY IT NOW: Deep Midnight Purple
+  // BUY IT NOW: Sleek Dark Slate
   &-buynow {
     width: 100%;
-    background: $primary-deep;
+    background: #1E293B;
     color: #ffffff;
-    box-shadow: 0 4px 16px rgba(32, 23, 75, 0.25);
+    box-shadow: 0 4px 16px rgba(30, 41, 59, 0.22);
 
     &:hover:not(:disabled) {
-      background: #2c2068;
+      background: #0F172A;
       transform: translateY(-2px);
-      box-shadow: 0 8px 22px rgba(32, 23, 75, 0.35);
+      box-shadow: 0 8px 22px rgba(15, 23, 42, 0.32);
     }
   }
 
@@ -655,8 +656,8 @@ $crimson-bg:         #fdf2f4;
   flex-wrap: wrap;
   width: 100%;
   padding-block: 14px;
-  border-top: 1px solid $purple-border;
-  border-bottom: 1px solid $purple-border;
+  border-top: 1px solid $brand-border;
+  border-bottom: 1px solid $brand-border;
   margin-bottom: 20px;
   box-sizing: border-box;
 
@@ -674,7 +675,7 @@ $crimson-bg:         #fdf2f4;
     color: $text-muted;
 
     .g-icon {
-      color: $primary;
+      color: #65A30D;
       font-size: 1rem;
       flex-shrink: 0;
     }
@@ -697,7 +698,7 @@ $crimson-bg:         #fdf2f4;
 
 .accordion-section {
   width: 100%;
-  border-bottom: 1px solid $purple-border;
+  border-bottom: 1px solid $brand-border;
   padding-bottom: 16px;
   margin-bottom: 24px;
   box-sizing: border-box;
@@ -721,7 +722,7 @@ $crimson-bg:         #fdf2f4;
     }
 
     .accordion-icon {
-      color: $primary;
+      color: #65A30D;
       flex-shrink: 0;
     }
 
@@ -735,7 +736,7 @@ $crimson-bg:         #fdf2f4;
     .accordion-toggle-symbol {
       font-size: 1.3rem;
       font-weight: 700;
-      color: $primary;
+      color: $text-dark;
       line-height: 1;
       width: 24px;
       text-align: center;
@@ -751,7 +752,7 @@ $crimson-bg:         #fdf2f4;
     .description-headline {
       font-size: 1.1rem;
       font-weight: 800;
-      color: $primary;
+      color: #166534;
       margin: 0;
       line-height: 1.3;
       letter-spacing: 0.02em;
@@ -783,12 +784,12 @@ $crimson-bg:         #fdf2f4;
       padding: 12px 14px;
       border-radius: 14px;
       background: $bg-soft;
-      border: 1px solid $purple-border;
+      border: 1px solid $brand-border;
       box-sizing: border-box;
       transition: box-shadow 0.2s ease;
 
       &:hover {
-        box-shadow: 0 4px 14px rgba(94, 67, 155, 0.1);
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
       }
 
       &__icon {
@@ -796,11 +797,11 @@ $crimson-bg:         #fdf2f4;
         width: 32px;
         height: 32px;
         border-radius: 50%;
-        background: rgba(94, 67, 155, 0.1);
+        background: $brand-green-soft;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: $primary;
+        color: #166534;
         margin-top: 1px;
       }
 
@@ -841,7 +842,7 @@ $crimson-bg:         #fdf2f4;
       margin: 4px 0 0;
 
       .subtitle-icon {
-        color: $primary;
+        color: #65A30D;
         flex-shrink: 0;
       }
     }
@@ -872,13 +873,13 @@ $crimson-bg:         #fdf2f4;
       padding: 12px 14px;
       border-radius: 14px;
       background: $bg-card;
-      border: 1.5px solid $purple-border;
+      border: 1.5px solid $brand-border;
       transition: border-color 0.2s ease, box-shadow 0.2s ease;
       box-sizing: border-box;
 
       &:hover {
         border-color: $primary;
-        box-shadow: 0 4px 14px rgba(94, 67, 155, 0.1);
+        box-shadow: 0 4px 14px rgba(168, 224, 56, 0.15);
       }
 
       &__header {
@@ -896,7 +897,7 @@ $crimson-bg:         #fdf2f4;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #fff;
+        color: #1E293B;
       }
 
       &__title {
@@ -942,27 +943,27 @@ $crimson-bg:         #fdf2f4;
       gap: 6px;
       padding: 5px 14px;
       border-radius: 9999px;
-      background: $purple-soft;
-      border: 1.5px solid $purple-border;
+      background: $brand-green-soft;
+      border: 1.5px solid #D0F2A1;
       transition: all 0.2s ease;
       cursor: default;
 
       &:hover {
         border-color: $primary;
-        background: darken($purple-soft, 3%);
+        background: #E4F8C9;
       }
 
       &__name {
         font-size: 0.82rem;
         font-weight: 700;
-        color: $primary-deep;
+        color: #166534;
       }
 
       &__amount {
         font-size: 0.75rem;
         font-weight: 600;
-        color: $primary;
-        background: rgba(94, 67, 155, 0.12);
+        color: #15803d;
+        background: rgba(22, 101, 52, 0.1);
         padding: 2px 7px;
         border-radius: 9999px;
       }
@@ -1008,7 +1009,7 @@ $crimson-bg:         #fdf2f4;
 
         .bullet-dot {
           font-size: 0.85rem;
-          color: $primary;
+          color: #65A30D;
           flex-shrink: 0;
         }
       }
@@ -1060,7 +1061,7 @@ $crimson-bg:         #fdf2f4;
 .suggestions-section {
   margin-top: 48px;
   padding-top: 36px;
-  border-top: 1px solid $purple-border;
+  border-top: 1px solid $brand-border;
   width: 100%;
   box-sizing: border-box;
 
@@ -1104,7 +1105,7 @@ $crimson-bg:         #fdf2f4;
 
 .suggest-card {
   background: $bg-card;
-  border: 1px solid $purple-border;
+  border: 1px solid $brand-border;
   border-radius: 18px;
   overflow: hidden;
   display: flex;
@@ -1115,7 +1116,7 @@ $crimson-bg:         #fdf2f4;
   &:hover {
     transform: translateY(-4px);
     border-color: $primary;
-    box-shadow: 0 10px 24px rgba(94, 67, 155, 0.12);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
   }
 
   &__link {
@@ -1143,7 +1144,7 @@ $crimson-bg:         #fdf2f4;
       max-height: 100%;
       object-fit: contain;
       transition: transform 0.3s ease;
-      filter: drop-shadow(0 4px 10px rgba(32, 23, 75, 0.08));
+      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.06));
     }
   }
 
@@ -1175,7 +1176,7 @@ $crimson-bg:         #fdf2f4;
   &__price {
     font-size: 0.95rem;
     font-weight: 900;
-    color: $primary-deep;
+    color: $text-dark;
     margin-top: auto;
     padding-top: 4px;
     font-family: 'Outfit', sans-serif;
@@ -1185,14 +1186,14 @@ $crimson-bg:         #fdf2f4;
     margin: 0 10px 12px;
     padding: 8px 12px;
     border-radius: 9999px;
-    background: $purple-gradient;
+    background: $cta-gradient;
     color: #ffffff;
     border: none;
     font-weight: 800;
     font-size: 0.8rem;
     font-family: 'Readex Pro', sans-serif;
     cursor: pointer;
-    box-shadow: 0 3px 10px rgba(94, 67, 155, 0.25);
+    box-shadow: 0 3px 10px rgba(232, 106, 36, 0.25);
     transition: all 0.2s ease;
     white-space: nowrap;
     text-align: center;
@@ -1205,9 +1206,9 @@ $crimson-bg:         #fdf2f4;
     }
 
     &:hover:not(:disabled) {
-      background: linear-gradient(135deg, #7051b8 0%, #2c2068 100%);
+      background: $cta-gradient-hover;
       transform: translateY(-1px);
-      box-shadow: 0 5px 14px rgba(94, 67, 155, 0.35);
+      box-shadow: 0 5px 14px rgba(232, 106, 36, 0.35);
     }
 
     &--disabled,
@@ -1232,7 +1233,7 @@ $crimson-bg:         #fdf2f4;
   .sk-back {
     width: 120px;
     height: 20px;
-    background: #f3ecfb;
+    background: #F1F5F9;
     border-radius: 6px;
     margin-bottom: 24px;
   }
@@ -1250,7 +1251,7 @@ $crimson-bg:         #fdf2f4;
 
   .sk-gallery {
     aspect-ratio: 1 / 1;
-    background: #f3ecfb;
+    background: #F1F5F9;
     border-radius: 22px;
     animation: shimmer 1.5s infinite;
   }
@@ -1263,7 +1264,7 @@ $crimson-bg:         #fdf2f4;
 
   .sk-line {
     height: 24px;
-    background: #f3ecfb;
+    background: #F1F5F9;
     border-radius: 6px;
     animation: shimmer 1.5s infinite;
 
@@ -1274,7 +1275,7 @@ $crimson-bg:         #fdf2f4;
 
   .sk-blocks {
     height: 100px;
-    background: #f3ecfb;
+    background: #F1F5F9;
     border-radius: 16px;
     animation: shimmer 1.5s infinite;
   }
@@ -1290,13 +1291,13 @@ $crimson-bg:         #fdf2f4;
 
   .not-found-card {
     background: $bg-card;
-    border: 1px solid $purple-border;
+    border: 1px solid $brand-border;
     border-radius: 24px;
     padding: 48px 32px;
     text-align: center;
     max-width: 480px;
     width: 100%;
-    box-shadow: 0 10px 30px rgba(32, 23, 75, 0.05);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
 
     .not-found-icon {
       color: $text-light;
@@ -1327,19 +1328,19 @@ $crimson-bg:         #fdf2f4;
       gap: 8px;
       padding: 12px 26px;
       border-radius: 9999px;
-      background: $purple-gradient;
+      background: $cta-gradient;
       color: #ffffff;
       font-size: 0.9rem;
       font-weight: 700;
       font-family: 'Readex Pro', sans-serif;
       text-decoration: none;
-      box-shadow: 0 4px 16px rgba(94, 67, 155, 0.35);
+      box-shadow: 0 4px 16px rgba(232, 106, 36, 0.35);
       transition: all 0.2s ease;
 
       &:hover {
-        background: linear-gradient(135deg, #7051b8 0%, #2c2068 100%);
+        background: $cta-gradient-hover;
         transform: translateY(-1px);
-        box-shadow: 0 6px 20px rgba(94, 67, 155, 0.45);
+        box-shadow: 0 6px 20px rgba(232, 106, 36, 0.45);
       }
     }
   }

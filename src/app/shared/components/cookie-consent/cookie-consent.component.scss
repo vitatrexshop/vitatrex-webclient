@@ -20,10 +20,10 @@
   padding: 14px 20px;
 
   // Dark glassmorphism theme
-  background: rgba(20, 14, 50, 0.96);
+  background: rgba(26, 26, 26, 0.96);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  border-top: 1px solid rgba(94, 67, 155, 0.35);
+  border-top: 1px solid rgba(157, 187, 62, 0.35);
   box-shadow: 0 -4px 32px rgba(0, 0, 0, 0.4);
 
   // RTL-native
@@ -73,7 +73,7 @@
   }
 
   &__link {
-    color: #c4a8ff;
+    color: var(--primary-color, #9DBB3E);
     font-weight: 600;
     text-decoration: underline;
     text-underline-offset: 3px;
@@ -81,7 +81,7 @@
     margin-inline-start: 4px;
 
     &:hover {
-      color: #e2d4ff;
+      color: var(--primary-light, #c8e16a);
     }
   }
 
@@ -99,7 +99,7 @@
     align-items: center;
     justify-content: center;
     padding: 9px 26px;
-    background: linear-gradient(135deg, #5e439b 0%, #20174b 100%);
+    background: linear-gradient(135deg, #E86A24 0%, #D55917 100%);
     color: #ffffff;
     font-size: 0.88rem;
     font-weight: 700;
@@ -108,13 +108,13 @@
     border-radius: 22px;
     cursor: pointer;
     white-space: nowrap;
-    box-shadow: 0 3px 12px rgba(94, 67, 155, 0.5);
+    box-shadow: 0 3px 12px rgba(232, 106, 36, 0.4);
     transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
 
     &:hover {
-      background: linear-gradient(135deg, #7152b7 0%, #2b1f63 100%);
+      background: linear-gradient(135deg, #f07a34 0%, #e06020 100%);
       transform: translateY(-1px);
-      box-shadow: 0 6px 18px rgba(94, 67, 155, 0.6);
+      box-shadow: 0 6px 18px rgba(232, 106, 36, 0.5);
     }
 
     &:active {

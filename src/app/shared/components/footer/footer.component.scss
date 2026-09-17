@@ -6,7 +6,7 @@
 
 .site-footer {
   position: relative;
-  background: #20174b; // VitaTrix Deep Midnight Purple
+  background: #1A1A1A; // VitaTrix Neutral Dark
   color: #ffffff;
   margin-top: auto;
   font-family: var(--font-body, 'IBM Plex Sans Arabic', 'Readex Pro', sans-serif);
@@ -40,7 +40,7 @@
   // ── Main Content Body ───────────────────────────────────────
   &__main {
     padding: 16px 0 calc(115px + env(safe-area-inset-bottom, 0px));
-    background: #20174b;
+    background: #1A1A1A;
     width: 100%;
     box-sizing: border-box;
 
@@ -137,7 +137,7 @@
       white-space: nowrap;
 
       &:hover {
-        color: #d2bbf0;
+        color: var(--primary-green, #A8E038);
         text-decoration: underline;
         text-underline-offset: 4px;
       }

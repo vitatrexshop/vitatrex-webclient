@@ -1,16 +1,50 @@
 <article class="product-card-360" *ngIf="product">
-  <!-- ── Image Stage ────────────────────────────────────────── -->
+
+  <!-- ══ SECTION 1: Absolute Badges Wrapper (lives outside stage for clean z-index) ══ -->
+  <!-- ── Status Badges: Top-Start (BestSeller / Featured) ── -->
+  <div class="product-card-360__badges product-card-360__badges--start"
+       *ngIf="product.isBestSeller || product.isFeatured">
+    <span class="card-badge badge--bestseller" *ngIf="product.isBestSeller">
+      {{ 'PRODUCT.BEST_SELLER' | translate }}
+    </span>
+    <span class="card-badge badge--featured" *ngIf="product.isFeatured && !product.isBestSeller">
+      {{ 'PRODUCT.FEATURED' | translate }}
+    </span>
+  </div>
+
+  <!-- ── Discount Badge: Top-End ── -->
+  <div class="product-card-360__badges product-card-360__badges--end"
+       *ngIf="selectedVariant && selectedVariant.discountPercentage > 0">
+    <span class="card-badge badge--discount">
+      -{{ selectedVariant.discountPercentage }}%
+    </span>
+  </div>
+
+  <!-- ── Low-Stock Badge: Bottom-Start ── -->
+  <div class="product-card-360__badges product-card-360__badges--low-stock"
+       *ngIf="selectedVariant && selectedVariant.stock !== -1 && selectedVariant.stock > 0 && selectedVariant.stock <= 5">
+    <span class="card-badge badge--low-stock">
+      باقي {{ selectedVariant.stock }} فقط!
+    </span>
+  </div>
+
+  <!-- ══ SECTION 2: Image Container ══ -->
   <a [routerLink]="['/shop', product.slug]" class="product-card-360__stage" [attr.aria-label]="product.name">
     <div class="product-card-360__img-box">
+      <!-- Blur-up skeleton shown while image loads -->
+      <div class="product-card-360__img-skeleton" [class.is-hidden]="imgLoaded" aria-hidden="true"></div>
+
       <img
         #primaryImg
         [src]="primaryImage"
         [alt]="product.name"
         class="product-card-360__img product-card-360__img--primary"
+        [class.is-loaded]="imgLoaded"
         width="280"
         height="280"
         [attr.loading]="priority ? 'eager' : 'lazy'"
         [attr.fetchpriority]="priority ? 'high' : 'auto'"
+        (load)="onImageLoad()"
       />
       <img
         #secondaryImg
@@ -24,46 +58,21 @@
       />
     </div>
 
-    <!-- Status Badges (Top Start) -->
-    <div class="product-card-360__badges product-card-360__badges--start" *ngIf="product.isBestSeller || product.isFeatured">
-      <span class="card-badge badge--bestseller" *ngIf="product.isBestSeller">
-        {{ 'PRODUCT.BEST_SELLER' | translate }}
-      </span>
-      <span class="card-badge badge--featured" *ngIf="product.isFeatured && !product.isBestSeller">
-        {{ 'PRODUCT.FEATURED' | translate }}
-      </span>
-    </div>
-
-    <!-- Discount Badge (Top End) -->
-    <div class="product-card-360__badges product-card-360__badges--end" *ngIf="selectedVariant && selectedVariant.discountPercentage > 0">
-      <span class="card-badge badge--discount">
-        -{{ selectedVariant.discountPercentage }}%
-      </span>
-    </div>
-
-    <!-- Low-Stock Warning Badge -->
-    <div class="product-card-360__badges product-card-360__badges--low-stock"
-         *ngIf="selectedVariant && selectedVariant.stock !== -1 && selectedVariant.stock > 0 && selectedVariant.stock <= 5">
-      <span class="card-badge badge--low-stock">
-        باقي {{ selectedVariant.stock }} فقط!
-      </span>
-    </div>
-
-    <!-- Out-of-Stock Overlay -->
+    <!-- Out-of-Stock Full Overlay (inside stage for correct clipping) -->
     <div class="product-card-360__out-of-stock"
          *ngIf="selectedVariant && selectedVariant.stock !== -1 && selectedVariant.stock <= 0">
       <span>نفذ المخزون</span>
     </div>
   </a>
 
-  <!-- ── Product Details (Centered 360 Nutrition Style) ──────── -->
+  <!-- ══ SECTION 3: Bottom Content ══ -->
   <div class="product-card-360__details">
-    <!-- Title -->
+    <!-- Product Title -->
     <h3 class="product-card-360__title">
       <a [routerLink]="['/shop', product.slug]">{{ product.name }}</a>
     </h3>
 
-    <!-- Price -->
+    <!-- Pricing: side-by-side, current + crossed-out original -->
     <div class="product-card-360__pricing" *ngIf="selectedVariant">
       <span class="price-main">LE {{ selectedVariant.price | number:'1.2-2' }}</span>
       <span
@@ -74,7 +83,7 @@
       </span>
     </div>
 
-    <!-- Variant Selector (if multiple) -->
+    <!-- Variant Selector (if multiple variants) -->
     <div class="product-card-360__variants" *ngIf="product.variants && product.variants.length > 1" role="group">
       <button
         *ngFor="let v of product.variants; trackBy: trackByCount"
@@ -87,22 +96,23 @@
       </button>
     </div>
 
-    <!-- Action Button (Add to Cart) -->
+    <!-- CTA: Add to Cart — anchored at bottom via margin-top: auto -->
     <button
       type="button"
       class="product-card-360__cta"
+      [class.product-card-360__cta--disabled]="isOutOfStock"
+      [disabled]="isOutOfStock"
       (click)="addToCart($event)"
-      [disabled]="selectedVariant && selectedVariant.stock !== -1 && selectedVariant.stock <= 0"
-      [class.product-card-360__cta--disabled]="selectedVariant && selectedVariant.stock !== -1 && selectedVariant.stock <= 0"
       [attr.aria-label]="'PRODUCT.ADD_TO_CART' | translate"
     >
-      <svg class="cart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <svg class="cart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
         <line x1="3" y1="6" x2="21" y2="6"/>
         <path d="M16 10a4 4 0 0 1-8 0"/>
       </svg>
-      <span>{{ 'PRODUCT.ADD_TO_CART' | translate }}</span>
+      <span>{{ isOutOfStock ? 'نفذ المخزون' : ('PRODUCT.ADD_TO_CART' | translate) }}</span>
     </button>
   </div>
-</article>
 
+</article>

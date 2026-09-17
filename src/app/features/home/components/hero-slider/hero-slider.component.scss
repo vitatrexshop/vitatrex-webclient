@@ -6,8 +6,13 @@
 
 // ── Shimmer Keyframe (Skeleton) ───────────────────────────────
 @keyframes skShimmer {
-  0%   { background-position: -200% 0; }
-  100% { background-position:  200% 0; }
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 // ── Main Hero Section Wrapper ─────────────────────────────────
@@ -17,7 +22,7 @@
   align-items: center;
   width: 100%;
   overflow-x: hidden;
-  background: linear-gradient(135deg, #1A0B2E 0%, #321359 50%, #150727 100%);
+  background: #0f1f08;
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -33,6 +38,7 @@
   position: relative;
   overflow: hidden;
   padding: 2.75rem 1.5rem 2.5rem;
+  background: linear-gradient(160deg, #0f1f08 0%, #1a3510 50%, #0d1c07 100%);
 
   @media (min-width: 768px) {
     padding: 4rem 2rem 3.5rem;
@@ -42,7 +48,7 @@
     padding: 5rem 2rem 4rem;
   }
 
-  // ── Hero Logo Image ──────────────────────────────────────────
+  // ── Hero Logo Image ────────────────────────────────────────
   .hero-logo-wrapper {
     display: flex;
     align-items: center;
@@ -61,8 +67,9 @@
       object-fit: contain;
       // CLS fix: matches HTML width/height (280×75) to pre-reserve layout space
       aspect-ratio: 280 / 75;
-      filter: drop-shadow(0 4px 18px rgba(0, 0, 0, 0.4));
-      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      // logo-dark.webp already has correct dark colors — no filter needed
+      filter: none;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
       image-rendering: -webkit-optimize-contrast;
 
       @media (min-width: 640px) {
@@ -82,6 +89,7 @@
 
       &:hover {
         transform: scale(1.025);
+        opacity: 0.92;
       }
     }
   }
@@ -95,29 +103,64 @@
     font-weight: 900;
     line-height: 1.05;
     letter-spacing: -0.03em;
-    color: #ffffff;
+    color: var(--neutral-dark, #1E293B);
     margin: 0 0 0.8rem;
     will-change: opacity, letter-spacing;
-
-    // VitaTrix SLEEP WELL Purple Gradient
-    background: linear-gradient(135deg, #ffffff 0%, #e2d4f8 55%, #c4b5fd 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
   }
 
   // ── Slogan ───────────────────────────────────────────────────
   .hero-slogan {
-    font-size: clamp(1.1rem, 2.4vw, 1.65rem);
-    font-weight: 500;
+    font-size: clamp(1.1rem, 2.4vw, 1.55rem);
+    font-weight: 600;
     line-height: 1.55;
-    color: #E2D9F3;
+    color: rgba(255, 255, 255, 0.88);
     margin: 0;
     max-width: 720px;
     letter-spacing: 0;
     will-change: opacity, filter;
     position: relative;
     z-index: 2;
+  }
+
+  // ── Primary CTA Button (Vibrant Orange) ──────────────────────
+  .hero-cta-wrap {
+    margin-top: 1.5rem;
+    position: relative;
+    z-index: 3;
+  }
+
+  .hero-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 32px;
+    background: linear-gradient(135deg, #E86A24 0%, #D55917 100%);
+    color: #ffffff;
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 800;
+    border-radius: 9999px;
+    text-decoration: none;
+    box-shadow: 0 6px 20px rgba(232, 106, 36, 0.35);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+
+    svg {
+      transition: transform 0.25s ease;
+    }
+
+    &:hover {
+      background: linear-gradient(135deg, #f07a34 0%, #e06020 100%);
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 10px 26px rgba(232, 106, 36, 0.45);
+
+      svg {
+        transform: translateX(-4px);
+      }
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
   }
 }
 
@@ -126,11 +169,9 @@
 // ══════════════════════════════════════════════════════════════
 .hero-banner-bleed {
   width: 100%;
-  max-width: 100%;
-  margin: 0 !important;
-  padding: 0 !important;
-  border-radius: 0 !important;
-  overflow: hidden;
+  max-width: 1340px;
+  margin: 0 auto !important;
+  padding: 0 16px !important;
   display: block;
 }
 
@@ -138,14 +179,14 @@
   position: relative;
   width: 100%;
   max-width: 100% !important;
-  margin: 0 !important;
+  margin: 0 auto !important;
   padding: 0 !important;
-  border-radius: 0 !important;
-  border: none !important;
-  box-shadow: none !important;
+  border-radius: 20px !important;
+  border: 1px solid rgba(0, 0, 0, 0.05) !important;
+  box-shadow: 0 12px 36px rgba(30, 41, 59, 0.08) !important;
   overflow: hidden;
   will-change: transform, opacity;
-  background: #0f0728;
+  background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -205,9 +246,17 @@
 }
 
 @keyframes hero-shimmer {
-  0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 
@@ -241,7 +290,7 @@
     right: -14px;
     width: 48px;
     height: 40px;
-    color: #c4b5fd; // Soft violet highlight for dark purple background
+    color: #8EC826; // Fresh green highlight
     pointer-events: none;
     z-index: 10;
     transform: scaleX(-1) rotate(-10deg);
@@ -267,7 +316,7 @@
       height: 100%;
       display: block;
       overflow: visible;
-      filter: drop-shadow(0 4px 10px rgba(94, 67, 155, 0.45));
+      filter: drop-shadow(0 2px 6px rgba(142, 200, 38, 0.35));
     }
 
     .arrow-loop {
@@ -298,7 +347,7 @@
   .manifesto-headline {
     font-size: clamp(1.85rem, 5.2vw, 3rem);
     font-weight: 900;
-    color: #ffffff;
+    color: var(--neutral-dark, #1E293B);
     font-family: 'Readex Pro', 'Noto Kufi Arabic', sans-serif;
     line-height: 1.25;
     letter-spacing: -0.015em;
@@ -310,7 +359,7 @@
   .manifesto-body {
     font-size: clamp(0.98rem, 2.2vw, 1.25rem);
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.85);
+    color: #475569;
     line-height: 1.75;
     margin: 0;
     text-align: center;
@@ -321,67 +370,77 @@
 
 // ── Playful Rhythmic Pointing Nudge (RTL / Arabic) ─────────────
 @keyframes arrowNudgeRtl {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scaleX(-1) rotate(-10deg) translate(0, 0) scale(1);
-    filter: drop-shadow(0 4px 10px rgba(94, 67, 155, 0.4));
+    filter: drop-shadow(0 4px 10px rgba(157, 187, 62, 0.4));
   }
+
   24% {
     transform: scaleX(-1) rotate(-16deg) translate(-10px, 8px) scale(1.08);
     filter: drop-shadow(0 6px 14px rgba(16, 185, 129, 0.6));
   }
+
   42% {
     transform: scaleX(-1) rotate(-8deg) translate(-2px, 2px) scale(0.98);
     filter: drop-shadow(0 3px 8px rgba(16, 185, 129, 0.35));
   }
+
   60% {
     transform: scaleX(-1) rotate(-14deg) translate(-7px, 6px) scale(1.05);
     filter: drop-shadow(0 5px 12px rgba(16, 185, 129, 0.5));
   }
+
   80% {
     transform: scaleX(-1) rotate(-9deg) translate(-1px, 1px) scale(1);
-    filter: drop-shadow(0 4px 10px rgba(94, 67, 155, 0.4));
+    filter: drop-shadow(0 4px 10px rgba(157, 187, 62, 0.4));
   }
 }
 
 // ── Playful Rhythmic Pointing Nudge (LTR / English) ────────────
 @keyframes arrowNudgeLtr {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: rotate(10deg) translate(0, 0) scale(1);
-    filter: drop-shadow(0 4px 10px rgba(94, 67, 155, 0.4));
+    filter: drop-shadow(0 4px 10px rgba(157, 187, 62, 0.4));
   }
+
   24% {
     transform: rotate(16deg) translate(10px, 8px) scale(1.08);
     filter: drop-shadow(0 6px 14px rgba(16, 185, 129, 0.6));
   }
+
   42% {
     transform: rotate(8deg) translate(2px, 2px) scale(0.98);
     filter: drop-shadow(0 3px 8px rgba(16, 185, 129, 0.35));
   }
+
   60% {
     transform: rotate(14deg) translate(7px, 6px) scale(1.05);
     filter: drop-shadow(0 5px 12px rgba(16, 185, 129, 0.5));
   }
+
   80% {
     transform: rotate(9deg) translate(1px, 1px) scale(1);
-    filter: drop-shadow(0 4px 10px rgba(94, 67, 155, 0.4));
+    filter: drop-shadow(0 4px 10px rgba(157, 187, 62, 0.4));
   }
 }
 
 // ── Skeleton Loader ───────────────────────────────────────────
 .hero-section--skeleton {
-  background: linear-gradient(135deg, #1A0B2E 0%, #321359 50%, #150727 100%);
+  background: var(--primary-green-light, #F2FCE8);
 
   .hero-text-strip {
     padding: 3rem 1.5rem 2.5rem;
   }
 
   .sk-shimmer {
-    background: linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0.04) 0%,
-      rgba(255, 255, 255, 0.12) 50%,
-      rgba(255, 255, 255, 0.04) 100%
-    );
+    background: linear-gradient(90deg,
+        rgba(0, 0, 0, 0.03) 0%,
+        rgba(0, 0, 0, 0.07) 50%,
+        rgba(0, 0, 0, 0.03) 100%);
     background-size: 200% 100%;
     animation: skShimmer 1.8s infinite ease-in-out;
     border-radius: 12px;

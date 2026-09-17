@@ -1,12 +1,12 @@
-// ══════════════════════════════════════════════════════════════
-// Marquee Bar — SLEEP WELL PURPLE TONAL GRADIENT + WHITE TEXT
-// #5e439b → #20174b gradient
+﻿// ══════════════════════════════════════════════════════════════
+// Marquee Bar — GREEN TONAL GRADIENT + WHITE TEXT
+// #9DBB3E → #829D2F gradient
 // ══════════════════════════════════════════════════════════════
 
 .marquee-bar {
   width: 100%;
   overflow: hidden;
-  background: linear-gradient(90deg, #5e439b 0%, #20174b 50%, #5e439b 100%);
+  background: linear-gradient(90deg, #9DBB3E 0%, #829D2F 50%, #9DBB3E 100%);
   padding: 13px 0;
   position: relative;
   z-index: 5;
@@ -43,7 +43,7 @@
     &::after {
       content: '•';
       margin-inline-start: 40px;
-      color: #d2bbf0; // Soft Lavender bullet
+      color: #d6eba0; // Soft Lavender bullet
       font-size: 1.2rem;
       font-weight: 900;
     }
@@ -60,12 +60,12 @@
 
     &--right {
       right: 0;
-      background: linear-gradient(to left, #20174b 0%, transparent 100%);
+      background: linear-gradient(to left, #829D2F 0%, transparent 100%);
     }
 
     &--left {
       left: 0;
-      background: linear-gradient(to right, #5e439b 0%, transparent 100%);
+      background: linear-gradient(to right, #9DBB3E 0%, transparent 100%);
     }
   }
 
