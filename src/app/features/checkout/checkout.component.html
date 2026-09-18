@@ -1,10 +1,26 @@
-﻿<main class="checkout-page container">
+<main class="checkout-page container">
 
   <!-- ── Page Header ─────────────────────────────────────────── -->
   <div class="checkout-header">
     <a routerLink="/shop" class="checkout-back">← {{ 'COMMON.CONTINUE_SHOPPING' | translate }}</a>
     <h1 class="checkout-title">{{ 'CHECKOUT.TITLE' | translate }}</h1>
     <p class="checkout-subtitle">{{ 'CHECKOUT.SUBTITLE' | translate }}</p>
+  </div>
+
+  <!-- ── Global Submission Error Banner ──────────────────────── -->
+  <div class="checkout-alert-error" *ngIf="orderSubmissionError" role="alert">
+    <div class="checkout-alert-error__icon">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+    </div>
+    <div class="checkout-alert-error__body">
+      <h3 class="checkout-alert-error__title">تنبيه بشأن إتمام الطلب</h3>
+      <p class="checkout-alert-error__text">{{ orderSubmissionError }}</p>
+    </div>
+    <button type="button" class="checkout-alert-error__close" (click)="orderSubmissionError = null" aria-label="إغلاق التنبيه">✕</button>
   </div>
 
   <div class="checkout-grid">
@@ -42,15 +58,19 @@
           <!-- Phone Number -->
           <div class="field-group" [class.has-error]="isInvalid('phone')">
             <label class="field-label" for="phone">{{ 'CHECKOUT.PHONE' | translate }} <span class="required">*</span></label>
-            <input
-              id="phone"
-              type="tel"
-              class="field-input"
-              formControlName="phone"
-              [placeholder]="'CHECKOUT.PHONE_PLACEHOLDER' | translate"
-              autocomplete="tel"
-              dir="ltr"
-            />
+            <div class="field-phone-wrap">
+              <input
+                id="phone"
+                type="tel"
+                class="field-input field-input--phone"
+                formControlName="phone"
+                [placeholder]="'CHECKOUT.PHONE_PLACEHOLDER' | translate"
+                autocomplete="tel"
+                dir="ltr"
+              />
+              <span class="field-phone-badge">🇪🇬 +20</span>
+            </div>
+            <span class="field-hint">أدخل رقم الهاتف المكون من 11 رقماً للتواصل عند التوصيل</span>
             <span class="field-error" *ngIf="getFieldError('phone') as err" role="alert">{{ err }}</span>
           </div>
 
@@ -60,7 +80,7 @@
             <select id="governorate" class="field-input field-select" formControlName="governorate">
               <option value="" disabled selected>{{ 'CHECKOUT.SELECT_CITY' | translate }}</option>
               <option *ngFor="let g of governorates" [value]="g.governorate">
-                {{ g.governorate }} ({{ g.fee }} {{ 'COMMON.CURRENCY' | translate }})
+                {{ g.governorate }}
               </option>
             </select>
             <span class="field-error" *ngIf="getFieldError('governorate') as err" role="alert">{{ err }}</span>
@@ -126,28 +146,6 @@
             </div>
             <div class="payment-card__check" *ngIf="selectedPaymentMethod === 'cod'">✓</div>
           </button>
-
-          <!-- Card Payment (Active — Kashier) -->
-          <button
-            type="button"
-            class="payment-card"
-            [class.payment-card--active]="selectedPaymentMethod === 'card'"
-            (click)="selectPayment('card')"
-            aria-pressed="true"
-            id="payment-card"
-          >
-            <div class="payment-card__icon">
-              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
-                <line x1="1" y1="10" x2="23" y2="10"/>
-              </svg>
-            </div>
-            <div class="payment-card__info">
-              <span class="payment-card__name">بطاقة بنكية / فيزا أو ماستركارد</span>
-              <span class="payment-card__desc">دفع إلكتروني آمن ومباشر عبر بوابة كاشير</span>
-            </div>
-            <div class="payment-card__check" *ngIf="selectedPaymentMethod === 'card'">✓</div>
-          </button>
         </div>
       </section>
 
@@ -178,11 +176,13 @@
           <div
             class="summary-item"
             [class.summary-item--lowest]="isLowestPricedItem(item)"
+            [class.summary-item--bundle]="item.isBundle"
+            [class.summary-item--offer]="item.isOffer"
             *ngFor="let item of cartItems; trackBy: trackByItem"
           >
             <div class="summary-item__img-wrap">
               <img
-                [src]="formatMediaUrl(item.product.image)"
+                [src]="formatMediaUrl(getItemImage(item))"
                 [alt]="item.product.name"
                 class="summary-item__img"
                 loading="lazy"
@@ -190,20 +190,41 @@
               <span class="summary-item__qty-badge">{{ item.quantity }}</span>
             </div>
             <div class="summary-item__info">
-              <p class="summary-item__name">{{ item.product.name }}</p>
-              <p class="summary-item__variant" *ngIf="!item.isBundle">
+              <div class="summary-item__title-row">
+                <span class="summary-item__pill summary-item__pill--bundle" *ngIf="item.isBundle">باقة مخصصة</span>
+                <span class="summary-item__pill summary-item__pill--offer" *ngIf="item.isOffer">عرض توفير</span>
+                <p class="summary-item__name">{{ item.product.name }}</p>
+              </div>
+
+              <!-- Regular product variant count -->
+              <p class="summary-item__variant" *ngIf="!item.isBundle && !item.isOffer">
                 {{ item.selectedVariant.count }} {{ 'COMMON.PIECES' | translate }}
               </p>
-              <p class="summary-item__variant summary-item__variant--bundle" *ngIf="item.isBundle && item.bundleMeta">
-                {{ item.bundleMeta.includedSummary }}
-              </p>
+
+              <!-- Bundle Included Items Breakdown -->
+              <div class="summary-item__breakdown" *ngIf="item.isBundle && item.bundleMeta">
+                <span class="summary-item__breakdown-label">3 عبوات:</span>
+                <span class="summary-item__breakdown-text">{{ item.bundleMeta.includedSummary }}</span>
+              </div>
+
+              <!-- Offer Included Items Breakdown -->
+              <div class="summary-item__breakdown summary-item__breakdown--offer" *ngIf="item.isOffer && item.offerMeta">
+                <span class="summary-item__breakdown-label">محتويات العرض:</span>
+                <span class="summary-item__breakdown-text">{{ item.offerMeta.includedSummary }}</span>
+              </div>
+
               <!-- Lowest-price coupon badge -->
               <span class="coupon-target-badge" *ngIf="isLowestPricedItem(item)">
                 <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><circle cx="7" cy="7" r="1.5" fill="currentColor"/></svg>
                 خصم الكوبون مُطبَّق هنا
               </span>
             </div>
-            <div class="summary-item__price">{{ item.itemTotal | number }} {{ 'COMMON.CURRENCY' | translate }}</div>
+            <div class="summary-item__price-col">
+              <span class="summary-item__orig-price" *ngIf="getOriginalPrice(item) as orig">
+                {{ orig * item.quantity | number }} {{ 'COMMON.CURRENCY' | translate }}
+              </span>
+              <span class="summary-item__price">{{ item.itemTotal | number }} {{ 'COMMON.CURRENCY' | translate }}</span>
+            </div>
           </div>
         </div>
 
@@ -341,12 +362,34 @@
           </svg>
           <div>
             <div class="payment-badge-label">{{ 'CHECKOUT.PAYMENT_METHOD' | translate }}</div>
-            <div class="payment-badge-value">{{ selectedPaymentMethod === 'card' ? 'بطاقة بنكية (كاشير)' : ('CHECKOUT.COD' | translate) }}</div>
+            <div class="payment-badge-value">{{ 'CHECKOUT.COD' | translate }}</div>
           </div>
         </div>
       </div>
     </aside>
 
+  </div>
+
+  <!-- ── Mobile Sticky Checkout Bar ────────────────────────────── -->
+  <div class="mobile-checkout-bar" *ngIf="cartItems.length > 0">
+    <div class="mobile-checkout-bar__inner">
+      <div class="mobile-checkout-bar__info">
+        <span class="mobile-checkout-bar__label">{{ 'CHECKOUT.ORDER_TOTAL' | translate }}</span>
+        <span class="mobile-checkout-bar__price">{{ orderTotal | number }} {{ 'COMMON.CURRENCY' | translate }}</span>
+      </div>
+      <button
+        type="button"
+        class="mobile-checkout-bar__btn"
+        (click)="submitOrder()"
+        [disabled]="isSubmitting"
+      >
+        <span *ngIf="!isSubmitting">{{ 'CHECKOUT.SUBMIT_ORDER' | translate }}</span>
+        <span *ngIf="isSubmitting" class="submit-btn__loading">
+          <span class="spinner spinner--sm"></span>
+          {{ 'CHECKOUT.SUBMITTING' | translate }}
+        </span>
+      </button>
+    </div>
   </div>
 </main>
 

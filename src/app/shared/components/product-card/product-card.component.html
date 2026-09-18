@@ -1,7 +1,6 @@
-<article class="product-card-360" *ngIf="product">
+<article class="product-card product-card-360" *ngIf="product" (click)="navigateToDetails()">
 
-  <!-- ══ SECTION 1: Absolute Badges Wrapper (lives outside stage for clean z-index) ══ -->
-  <!-- ── Status Badges: Top-Start (BestSeller / Featured) ── -->
+  <!-- ══ SECTION 1: Badges (Top Start & End) ══ -->
   <div class="product-card-360__badges product-card-360__badges--start"
        *ngIf="product.isBestSeller || product.isFeatured">
     <span class="card-badge badge--bestseller" *ngIf="product.isBestSeller">
@@ -12,7 +11,7 @@
     </span>
   </div>
 
-  <!-- ── Discount Badge: Top-End ── -->
+  <!-- Discount Badge -->
   <div class="product-card-360__badges product-card-360__badges--end"
        *ngIf="selectedVariant && selectedVariant.discountPercentage > 0">
     <span class="card-badge badge--discount">
@@ -20,7 +19,7 @@
     </span>
   </div>
 
-  <!-- ── Low-Stock Badge: Bottom-Start ── -->
+  <!-- Low-Stock Badge -->
   <div class="product-card-360__badges product-card-360__badges--low-stock"
        *ngIf="selectedVariant && selectedVariant.stock !== -1 && selectedVariant.stock > 0 && selectedVariant.stock <= 5">
     <span class="card-badge badge--low-stock">
@@ -28,90 +27,77 @@
     </span>
   </div>
 
-  <!-- ══ SECTION 2: Image Container ══ -->
-  <a [routerLink]="['/shop', product.slug]" class="product-card-360__stage" [attr.aria-label]="product.name">
-    <div class="product-card-360__img-box">
-      <!-- Blur-up skeleton shown while image loads -->
-      <div class="product-card-360__img-skeleton" [class.is-hidden]="imgLoaded" aria-hidden="true"></div>
+  <!-- ══ SECTION 2: Image Container — Dual-Image CSS Crossfade on Hover ══ -->
+  <a [routerLink]="['/shop', product.slug]" class="product-img-wrapper product-card-360__stage" [attr.aria-label]="product.name">
+    <div class="product-img-box product-card-360__img-box">
 
+      <!-- Primary Product Image -->
       <img
         #primaryImg
-        [src]="primaryImage"
+        [src]="product.images?.[0] || product.image || 'assets/images/hero-fallback.webp'"
         [alt]="product.name"
-        class="product-card-360__img product-card-360__img--primary"
-        [class.is-loaded]="imgLoaded"
-        width="280"
-        height="280"
+        class="product-img primary-img"
         [attr.loading]="priority ? 'eager' : 'lazy'"
         [attr.fetchpriority]="priority ? 'high' : 'auto'"
         (load)="onImageLoad()"
       />
-      <img
-        #secondaryImg
-        *ngIf="secondaryImage"
-        [src]="secondaryImage"
-        [alt]="product.name"
-        class="product-card-360__img product-card-360__img--secondary"
-        width="280"
-        height="280"
-        loading="lazy"
-      />
+
     </div>
 
-    <!-- Out-of-Stock Full Overlay (inside stage for correct clipping) -->
+    <!-- Out-of-Stock overlay (inside stage for proper clipping) -->
     <div class="product-card-360__out-of-stock"
          *ngIf="selectedVariant && selectedVariant.stock !== -1 && selectedVariant.stock <= 0">
-      <span>نفذ المخزون</span>
+      <span>{{ 'PRODUCT.OUT_OF_STOCK' | translate }}</span>
     </div>
   </a>
 
-  <!-- ══ SECTION 3: Bottom Content ══ -->
+  <!-- ══ SECTION 3: Content (Title, Price, Variants, CTA) ══ -->
   <div class="product-card-360__details">
-    <!-- Product Title -->
+    <!-- Title -->
     <h3 class="product-card-360__title">
       <a [routerLink]="['/shop', product.slug]">{{ product.name }}</a>
     </h3>
 
-    <!-- Pricing: side-by-side, current + crossed-out original -->
+    <!-- Price -->
     <div class="product-card-360__pricing" *ngIf="selectedVariant">
-      <span class="price-main">LE {{ selectedVariant.price | number:'1.2-2' }}</span>
+      <span class="price-main">LE {{ selectedVariant.price > 10000000 ? '0.00' : (selectedVariant.price | number:'1.2-2') }}</span>
       <span
         class="price-old"
-        *ngIf="selectedVariant.originalPrice && selectedVariant.originalPrice > selectedVariant.price"
+        *ngIf="selectedVariant.originalPrice && selectedVariant.originalPrice > selectedVariant.price && selectedVariant.originalPrice < 10000000"
       >
         LE {{ selectedVariant.originalPrice | number:'1.2-2' }}
       </span>
     </div>
 
-    <!-- Variant Selector (if multiple variants) -->
+    <!-- Variant Selector -->
     <div class="product-card-360__variants" *ngIf="product.variants && product.variants.length > 1" role="group">
       <button
         *ngFor="let v of product.variants; trackBy: trackByCount"
         type="button"
         class="variant-btn"
         [class.is-active]="v === selectedVariant"
-        (click)="selectVariant(v)"
+        (click)="$event.stopPropagation(); selectVariant(v)"
       >
         {{ v.count }} {{ 'COMMON.PIECES' | translate }}
       </button>
     </div>
 
-    <!-- CTA: Add to Cart — anchored at bottom via margin-top: auto -->
+    <!-- Add to Cart CTA Button with correct PRODUCT.ADD_TO_CART translation -->
     <button
+      #cartBtn
       type="button"
       class="product-card-360__cta"
       [class.product-card-360__cta--disabled]="isOutOfStock"
       [disabled]="isOutOfStock"
-      (click)="addToCart($event)"
-      [attr.aria-label]="'PRODUCT.ADD_TO_CART' | translate"
+      (click)="$event.stopPropagation(); addToCart($event)"
+      [attr.aria-label]="isOutOfStock ? ('PRODUCT.OUT_OF_STOCK' | translate) : ('PRODUCT.ADD_TO_CART' | translate)"
     >
-      <svg class="cart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-        <line x1="3" y1="6" x2="21" y2="6"/>
-        <path d="M16 10a4 4 0 0 1-8 0"/>
+      <svg class="cart-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="9" cy="21" r="1"/>
+        <circle cx="20" cy="21" r="1"/>
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
       </svg>
-      <span>{{ isOutOfStock ? 'نفذ المخزون' : ('PRODUCT.ADD_TO_CART' | translate) }}</span>
+      <span>{{ isOutOfStock ? ('PRODUCT.OUT_OF_STOCK' | translate) : ('PRODUCT.ADD_TO_CART' | translate) }}</span>
     </button>
   </div>
 

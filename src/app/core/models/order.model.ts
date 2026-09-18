@@ -54,12 +54,30 @@ export interface CustomerInfo {
  */
 export interface OrderItem {
   _id?: string;
-  product: string | Product;
-  /** The gummy count of the selected variant (e.g. 60) */
-  variantCount: number;
+  product?: string | Product;
+  offer?: string | any;
+  /** The gummy count of the selected variant (e.g. 60). Optional for offers. */
+  variantCount?: number;
   quantity: number;
   /** Price snapshot captured at time of order — never changes retroactively */
   price: number;
+}
+
+/**
+ * A single line item in the guest checkout payload.
+ * Either `productId` (product / bundle child) or `offerId` (promotional offer) must be set.
+ */
+export interface OrderItemInput {
+  /** Product MongoDB ID — required for regular product and bundle-child line items. */
+  productId?: string;
+  /**
+   * Offer MongoDB ID — set when the line item represents a promotional Offer.
+   * The backend resolves offer pricing from the DB; frontend never trusts client price.
+   */
+  offerId?: string;
+  /** Gummy-count of the selected variant (e.g. 60). Not used for offer items. */
+  variantCount?: number;
+  quantity: number;
 }
 
 /**
@@ -68,12 +86,12 @@ export interface OrderItem {
  */
 export interface OrderInput {
   customer: CustomerInfo;
-  items: {
-    productId: string;
-    variantCount: number;
-    quantity: number;
-  }[];
+  items: OrderItemInput[];
   paymentMethod: PaymentMethod;
+  /** Applied coupon code (if any) */
+  couponCode?: string;
+  /** Pre-calculated discount amount confirmed by the coupon service */
+  discountAmount?: number;
 }
 
 /**

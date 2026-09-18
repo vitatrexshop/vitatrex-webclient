@@ -101,6 +101,13 @@ const routes: Routes = [
     pathMatch: 'full',
   },
   {
+    path: 'offers',
+    loadChildren: () =>
+      import('./features/offer-details/offer-details.module').then(
+        (m) => m.OfferDetailsModule
+      ),
+  },
+  {
     path: '404',
     loadChildren: () =>
       import('./features/not-found/not-found.module').then(

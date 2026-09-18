@@ -1,15 +1,18 @@
-import { Injectable } from '@angular/core';
+﻿import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, distinctUntilChanged } from 'rxjs/operators';
-import { CartItem, BundleCartMeta } from '../models/cart.model';
+import { CartItem, BundleCartMeta, OfferCartMeta } from '../models/cart.model';
 import { Product, Variant } from '../models/product.model';
+import { Offer, OfferItem } from '../models/offer.model';
 import { AnalyticsService } from './analytics.service';
 
 const CART_STORAGE_KEY = 'vitatrix_cart';
 
 /**
  * Client-side shopping cart backed by a BehaviorSubject.
- * Supports both standalone product variants and unified customizable 3-slot bundles.
+ * Supports standalone product variants, unified 3-slot bundles, and promotional offers.
+ * Offers are stored as ONE atomic line item at the offer price — child products are
+ * display-only metadata and do NOT accumulate price individually.
  * State is persisted to localStorage on every mutation so it survives page refreshes.
  */
 @Injectable({ providedIn: 'root' })
@@ -23,13 +26,13 @@ export class CartService {
   /** Raw list of cart items */
   readonly cartItems$: Observable<CartItem[]> = this._items$.asObservable();
 
-  /** Total number of individual units (or bundles) in the cart */
+  /** Total number of individual units (or bundles/offers) in the cart */
   readonly itemCount$: Observable<number> = this._items$.pipe(
     map((items) => items.reduce((sum, i) => sum + i.quantity, 0)),
     distinctUntilChanged()
   );
 
-  /** Sum of all line totals (variant.price x quantity) */
+  /** Sum of all line totals (unitPrice x quantity) */
   readonly cartTotal$: Observable<number> = this._items$.pipe(
     map((items) => items.reduce((sum, i) => sum + i.itemTotal, 0)),
     distinctUntilChanged()
@@ -52,9 +55,9 @@ export class CartService {
     distinctUntilChanged()
   );
 
-  // ─────────────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────────────────────
   // Mutations
-  // ─────────────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────────────────────
 
   /**
    * Add a standard product+variant to the cart.
@@ -66,7 +69,7 @@ export class CartService {
 
     const current = this._items$.value;
     const existingIndex = current.findIndex(
-      (i) => !i.isBundle && i.product._id === product._id && i.selectedVariant.count === variant.count
+      (i) => !i.isBundle && !i.isOffer && i.product._id === product._id && i.selectedVariant.count === variant.count
     );
 
     let updated: CartItem[];
@@ -83,6 +86,7 @@ export class CartService {
         quantity: safeQty,
         itemTotal: variant.price * safeQty,
         isBundle: false,
+        isOffer: false,
       };
       updated = [...current, newItem];
     }
@@ -91,7 +95,7 @@ export class CartService {
 
     // GA4: fire add_to_cart for the item that was just added/incremented
     const trackItem = updated.find(
-      (i) => !i.isBundle && i.product._id === product._id && i.selectedVariant.count === variant.count
+      (i) => !i.isBundle && !i.isOffer && i.product._id === product._id && i.selectedVariant.count === variant.count
     );
     if (trackItem) {
       this.analytics.trackAddToCart({ ...trackItem, quantity: safeQty });
@@ -120,7 +124,7 @@ export class CartService {
 
     const bundleMeta: BundleCartMeta = {
       bundleId,
-      bundleTitle: bundle.title || 'باقة اصنع باقتك',
+      bundleTitle: bundle.title || 'باقة مخصصة',
       bundleImage: bundle.image || selectedProducts[0]?.image || '',
       bundlePrice,
       originalPrice,
@@ -132,11 +136,11 @@ export class CartService {
 
     const syntheticProduct: Product = {
       _id: syntheticId,
-      name: bundle.title || 'باقة اصنع باقتك',
+      name: bundle.title || 'باقة مخصصة',
       slug: bundle.slug || `bundle-${bundleId}`,
       category: 'bundle',
       description: bundle.description || includedSummary,
-      benefits: ['باقة 3 منتجات', 'شحن مجاني'],
+      benefits: ['باقة 3 منتجات', 'توفير مضاعف'],
       isBestSeller: true,
       isFeatured: true,
       image: bundle.image || selectedProducts[0]?.image || '',
@@ -183,7 +187,104 @@ export class CartService {
   }
 
   /**
-   * Remove a specific product or bundle from the cart.
+   * Add an entire promotional Offer as ONE single cart line item.
+   *
+   * CRITICAL: This method does NOT iterate over offer.items or call addToCart() per product.
+   * The offer is treated as an atomic unit priced at offer.offerPrice.
+   * Child product names are stored in offerMeta.includedItems for display only.
+   *
+   * @param offer     The Offer document from the API (must have offerPrice)
+   * @param quantity  Number of offers to add (default 1)
+   */
+  addOfferToCart(offer: Offer, quantity = 1): void {
+    const offerId = offer._id;
+    const offerPrice = offer.offerPrice ?? 0;
+    const originalPrice = offer.originalPrice ?? offerPrice;
+    const discountPct = offer.discountPercentage ?? 0;
+
+    // Build display-only metadata from child items
+    const includedItems: string[] = (offer.items ?? [])
+      .map((item: OfferItem) => {
+        if (item.product && typeof item.product === 'object') {
+          return (item.product as Product).name ?? '';
+        }
+        return '';
+      })
+      .filter((name: string) => name.length > 0);
+
+    const includedSummary = includedItems.join(' + ');
+
+    // Synthetic product ID to deduplicate same offer in cart
+    const syntheticId = `offer_${offerId}`;
+
+    const offerMeta: OfferCartMeta = {
+      offerId,
+      offerTitle: offer.title,
+      offerImage: offer.image,
+      offerPrice,
+      originalPrice,
+      discountPercentage: discountPct,
+      includedItems,
+      includedSummary,
+    };
+
+    // Synthetic Product/Variant shells so the CartItem interface stays satisfied.
+    // These shells are NEVER sent to the backend — only offerMeta.offerId is.
+    const syntheticProduct: Product = {
+      _id: syntheticId,
+      name: offer.title,
+      slug: offer.slug || `offer-${offerId}`,
+      category: 'offer',
+      description: offer.description || includedSummary,
+      benefits: [],
+      isBestSeller: false,
+      isFeatured: false,
+      image: offer.image,
+      isActive: true,
+      variants: [
+        {
+          _id: `v_${syntheticId}`,
+          count: 1,
+          price: offerPrice,
+          originalPrice: originalPrice > offerPrice ? originalPrice : null,
+          discountPercentage: discountPct,
+          stock: 99,
+        },
+      ],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    const syntheticVariant = syntheticProduct.variants[0];
+
+    const current = this._items$.value;
+    const existingIndex = current.findIndex((i) => i.isOffer && i.product._id === syntheticId);
+
+    let updated: CartItem[];
+    if (existingIndex > -1) {
+      updated = current.map((item, idx) => {
+        if (idx !== existingIndex) return item;
+        const newQty = item.quantity + quantity;
+        return { ...item, quantity: newQty, itemTotal: offerPrice * newQty };
+      });
+    } else {
+      const newItem: CartItem = {
+        product: syntheticProduct,
+        selectedVariant: syntheticVariant,
+        quantity,
+        itemTotal: offerPrice * quantity,
+        isOffer: true,
+        isBundle: false,
+        offerMeta,
+      };
+      updated = [...current, newItem];
+    }
+
+    this.publish(updated);
+  }
+
+  /**
+   * Remove a specific product, bundle, or offer from the cart.
    */
   removeFromCart(productId: string, variantCount: number): void {
     const removing = this._items$.value.find(
@@ -230,9 +331,9 @@ export class CartService {
     return this._items$.value;
   }
 
-  // ─────────────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────────────────────
   // Private helpers
-  // ─────────────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────────────────────
 
   private publish(items: CartItem[]): void {
     this._items$.next(items);

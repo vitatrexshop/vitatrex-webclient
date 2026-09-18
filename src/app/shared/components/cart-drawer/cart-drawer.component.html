@@ -97,10 +97,11 @@
           *ngFor="let item of items; trackBy: trackById"
           class="cart-item"
           [class.cart-item--bundle]="item.isBundle"
+          [class.cart-item--offer]="item.isOffer"
         >
           <div class="cart-item__img-wrap">
             <img
-              [src]="formatMediaUrl(item.product.image)"
+              [src]="formatMediaUrl(getItemImage(item))"
               [alt]="item.product.name"
               width="64"
               height="64"
@@ -108,18 +109,20 @@
               class="cart-item__img"
             />
             <span class="cart-item__bundle-pill" *ngIf="item.isBundle">باقة 3 منتجات</span>
+            <span class="cart-item__offer-pill" *ngIf="item.isOffer">عرض توفير</span>
           </div>
 
           <div class="cart-item__details">
             <div class="cart-item__header-line">
               <span class="cart-item__badge" *ngIf="item.isBundle">باقة مخصصة</span>
+              <span class="cart-item__badge cart-item__badge--offer" *ngIf="item.isOffer">عرض خاص</span>
               <p class="cart-item__name">{{ item.product.name }}</p>
             </div>
 
-            <p class="cart-item__variant" *ngIf="!item.isBundle">
+            <p class="cart-item__variant" *ngIf="!item.isBundle && !item.isOffer">
               {{ item.selectedVariant.count }} {{ 'COMMON.PIECES' | translate }}
             </p>
-            <span class="cart-item__low-stock" *ngIf="!item.isBundle && item.selectedVariant.stock !== -1 && item.selectedVariant.stock > 0 && item.selectedVariant.stock <= 5">
+            <span class="cart-item__low-stock" *ngIf="!item.isBundle && !item.isOffer && item.selectedVariant.stock !== -1 && item.selectedVariant.stock > 0 && item.selectedVariant.stock <= 5">
               باقي {{ item.selectedVariant.stock }} قطع فقط!
             </span>
 
@@ -128,6 +131,14 @@
               <span class="cart-item__bundle-box-title">المحتويات (3 عبوات):</span>
               <ul class="cart-item__bundle-box-list">
                 <li *ngFor="let inc of item.bundleMeta.includedItems">• {{ inc }}</li>
+              </ul>
+            </div>
+
+            <!-- Offer Included Items Breakdown -->
+            <div class="cart-item__bundle-box cart-item__offer-box" *ngIf="item.isOffer && item.offerMeta">
+              <span class="cart-item__bundle-box-title">محتويات العرض:</span>
+              <ul class="cart-item__bundle-box-list">
+                <li *ngFor="let inc of item.offerMeta.includedItems">• {{ inc }}</li>
               </ul>
             </div>
 
@@ -150,7 +161,12 @@
                   type="button"
                 >+</button>
               </div>
-              <span class="cart-item__price">{{ item.itemTotal | number }} {{ 'COMMON.CURRENCY' | translate }}</span>
+              <div class="cart-item__price-wrap">
+                <span class="cart-item__orig-price" *ngIf="getOriginalPrice(item) as orig">
+                  {{ orig * item.quantity | number }} {{ 'COMMON.CURRENCY' | translate }}
+                </span>
+                <span class="cart-item__price">{{ item.itemTotal | number }} {{ 'COMMON.CURRENCY' | translate }}</span>
+              </div>
             </div>
           </div>
 

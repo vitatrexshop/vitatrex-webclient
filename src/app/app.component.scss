@@ -8,9 +8,9 @@
   // Header sections explicit layout reservation to eliminate CLS
   app-announcement-bar {
     display: block;
-    height: 38px;
-    min-height: 38px;
-    contain: strict;
+    min-height: 42px;
+    position: relative;
+    z-index: 101;
   }
 
   app-header {

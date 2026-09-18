@@ -3,13 +3,13 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
-  HostListener,
   Input,
   OnChanges,
   OnDestroy,
   SimpleChanges,
   ViewChild
 } from '@angular/core';
+import { Router } from '@angular/router';
 import { gsap } from 'gsap';
 import { Product, Variant } from '../../../core/models/product.model';
 import { CartService } from '../../../core/services/cart.service';
@@ -40,6 +40,7 @@ export class ProductCardComponent implements OnChanges, OnDestroy {
   imgLoaded = false;
 
   constructor(
+    private readonly router: Router,
     private readonly cartService: CartService,
     private readonly cartDrawerService: CartDrawerService,
     private readonly toastService: ToastService,
@@ -82,66 +83,6 @@ export class ProductCardComponent implements OnChanges, OnDestroy {
     this.cdr.markForCheck();
   }
 
-  @HostListener('mouseenter')
-  onMouseEnter(): void {
-    const primaryEl = this.primaryImgRef?.nativeElement;
-    const secondaryEl = this.secondaryImgRef?.nativeElement;
-
-    if (secondaryEl && primaryEl) {
-      gsap.to(primaryEl, {
-        opacity: 0,
-        scale: 1.05,
-        duration: 0.4,
-        ease: 'power2.out',
-        overwrite: 'auto'
-      });
-      gsap.to(secondaryEl, {
-        opacity: 1,
-        scale: 1.05,
-        duration: 0.4,
-        ease: 'power2.out',
-        overwrite: 'auto'
-      });
-    } else if (primaryEl) {
-      gsap.to(primaryEl, {
-        scale: 1.05,
-        duration: 0.4,
-        ease: 'power2.out',
-        overwrite: 'auto'
-      });
-    }
-  }
-
-  @HostListener('mouseleave')
-  onMouseLeave(): void {
-    const primaryEl = this.primaryImgRef?.nativeElement;
-    const secondaryEl = this.secondaryImgRef?.nativeElement;
-
-    if (secondaryEl && primaryEl) {
-      gsap.to(primaryEl, {
-        opacity: 1,
-        scale: 1,
-        duration: 0.35,
-        ease: 'power2.out',
-        overwrite: 'auto'
-      });
-      gsap.to(secondaryEl, {
-        opacity: 0,
-        scale: 1,
-        duration: 0.35,
-        ease: 'power2.out',
-        overwrite: 'auto'
-      });
-    } else if (primaryEl) {
-      gsap.to(primaryEl, {
-        scale: 1,
-        duration: 0.35,
-        ease: 'power2.out',
-        overwrite: 'auto'
-      });
-    }
-  }
-
   ngOnDestroy(): void {
     const primaryEl = this.primaryImgRef?.nativeElement;
     const secondaryEl = this.secondaryImgRef?.nativeElement;
@@ -156,6 +97,13 @@ export class ProductCardComponent implements OnChanges, OnDestroy {
 
   selectVariant(variant: Variant): void {
     this.selectedVariant = variant;
+  }
+
+  /** Navigate to the product detail page using the product slug */
+  navigateToDetails(): void {
+    if (this.product?.slug) {
+      this.router.navigate(['/shop', this.product.slug]);
+    }
   }
 
   addToCart(event: MouseEvent): void {

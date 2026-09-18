@@ -8,12 +8,21 @@ import { ProductService } from '../../../core/services/product.service';
 import { CartService } from '../../../core/services/cart.service';
 import { CartDrawerService } from '../../../core/services/cart-drawer.service';
 import { ToastService } from '../../../core/services/toast.service';
+import { SettingsService } from '../../../core/services/settings.service';
 import { Product, Variant } from '../../../core/models/product.model';
 
 export interface HealthPill {
   label: string;
   emoji: string;
   colorClass: string;
+}
+
+export interface DynamicProductFeature {
+  id: string;
+  title: string;
+  iconUrl?: string;
+  iconType: 'leaf' | 'shield' | 'check' | 'truck' | 'star' | 'default';
+  hasImgError?: boolean;
 }
 
 @Component({
@@ -39,6 +48,14 @@ export class ProductDetailComponent implements OnInit {
   /** Other products to suggest — populated after main product loads */
   suggestedProducts: Product[] = [];
 
+  /** Free shipping threshold loaded from backend settings (default 500 until loaded) */
+  freeShippingThreshold = 500;
+  /** Whether free shipping feature is enabled at all */
+  isFreeShippingEnabled = true;
+
+  private cachedFeaturesKey = '';
+  private cachedFeatures: DynamicProductFeature[] = [];
+
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
@@ -46,14 +63,114 @@ export class ProductDetailComponent implements OnInit {
     private readonly cartService: CartService,
     private readonly cartDrawerService: CartDrawerService,
     private readonly toastService: ToastService,
+    private readonly settingsService: SettingsService,
     private readonly cdr: ChangeDetectorRef,
     public readonly translate: TranslateService
   ) {}
 
-    getBadgeTitle(badge: any): string {
+  getBadgeTitle(badge: any): string {
     if (!badge || !badge.title) return '';
     const lang = this.translate?.currentLang || 'ar';
     return (lang === 'en' && badge.title.en) ? badge.title.en : (badge.title.ar || badge.title.en || '');
+  }
+
+  getEffectiveShippingThreshold(product?: Product | null): number {
+    if (product && typeof product.freeShippingThreshold === 'number' && product.freeShippingThreshold > 0) {
+      return product.freeShippingThreshold;
+    }
+    if (product && typeof (product as any).freeShippingMinAmount === 'number' && (product as any).freeShippingMinAmount > 0) {
+      return (product as any).freeShippingMinAmount;
+    }
+    return this.freeShippingThreshold || 500;
+  }
+
+  getProductFeatures(product?: Product | null): DynamicProductFeature[] {
+    if (!product) return [];
+    const currentLang = this.translate?.currentLang || 'ar';
+    const cacheKey = `${product._id}_${currentLang}`;
+    if (this.cachedFeaturesKey === cacheKey && this.cachedFeatures.length > 0) {
+      return this.cachedFeatures;
+    }
+
+    const items: DynamicProductFeature[] = [];
+    const rawList = (product.features && product.features.length)
+      ? product.features
+      : ((product.badges && product.badges.length)
+          ? product.badges
+          : ((product.tags && product.tags.length) ? product.tags : []));
+
+    if (rawList && rawList.length > 0) {
+      rawList.forEach((raw: any, index: number) => {
+        let title = '';
+        let iconUrl = '';
+
+        if (typeof raw === 'string') {
+          title = raw.trim();
+        } else if (raw && typeof raw === 'object') {
+          title = this.extractLocalizedTitle(raw.title || raw.name || '');
+          iconUrl = raw.iconUrl || raw.icon || '';
+        }
+
+        if (title) {
+          items.push({
+            id: `feat-${index}-${title}`,
+            title,
+            iconUrl: iconUrl || undefined,
+            iconType: this.detectIconType(title),
+            hasImgError: false,
+          });
+        }
+      });
+    }
+
+    if (items.length === 0) {
+      items.push({
+        id: 'feat-natural',
+        title: this.translate.instant('MARQUEE.NATURAL') || (currentLang === 'ar' ? 'مكونات طبيعية 100%' : '100% Natural Ingredients'),
+        iconType: 'leaf',
+        hasImgError: false,
+      });
+      items.push({
+        id: 'feat-halal',
+        title: this.translate.instant('MARQUEE.HALAL') || (currentLang === 'ar' ? 'حلال ومعتمد' : 'Halal Certified'),
+        iconType: 'shield',
+        hasImgError: false,
+      });
+    }
+
+    this.cachedFeaturesKey = cacheKey;
+    this.cachedFeatures = items;
+    return items;
+  }
+
+  private extractLocalizedTitle(titleObj: any): string {
+    if (!titleObj) return '';
+    if (typeof titleObj === 'string') return titleObj;
+    const lang = this.translate?.currentLang || 'ar';
+    if (lang === 'en' && titleObj.en) return titleObj.en;
+    return titleObj.ar || titleObj.en || '';
+  }
+
+  private detectIconType(title: string): 'leaf' | 'shield' | 'check' | 'truck' | 'star' | 'default' {
+    const t = (title || '').toLowerCase();
+    if (t.includes('طبيعي') || t.includes('natural') || t.includes('نباتي') || t.includes('organic') || t.includes('plant')) {
+      return 'leaf';
+    }
+    if (t.includes('حلال') || t.includes('halal') || t.includes('أمان') || t.includes('safe') || t.includes('معتمد') || t.includes('certified')) {
+      return 'shield';
+    }
+    if (t.includes('شحن') || t.includes('shipping') || t.includes('توصيل') || t.includes('delivery')) {
+      return 'truck';
+    }
+    if (t.includes('سكر') || t.includes('sugar') || t.includes('جودة') || t.includes('quality') || t.includes('صحي') || t.includes('pure')) {
+      return 'check';
+    }
+    return 'shield';
+  }
+
+  onFeatureImgError(feature: DynamicProductFeature): void {
+    feature.hasImgError = true;
+    this.cdr.markForCheck();
   }
 
   ngOnInit(): void {
@@ -120,6 +237,17 @@ export class ProductDetailComponent implements OnInit {
 
     // Subscribe to update component state synchronously as well
     this.product$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
+
+    // Load free-shipping threshold from backend settings
+    this.settingsService.getShippingSettings()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (settings) => {
+          this.freeShippingThreshold = settings?.freeShippingThreshold ?? 500;
+          this.isFreeShippingEnabled = settings?.isFreeShippingEnabled !== false;
+          this.cdr.markForCheck();
+        },
+      });
   }
 
   /** Fetch all products, exclude the current one, take up to 4 as suggestions */

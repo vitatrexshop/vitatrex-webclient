@@ -1,0 +1,48 @@
+<header class="navbar-wrapper">
+  <!-- 1. Left Section: Hamburger Menu -->
+  <div class="nav-left">
+    <button
+      type="button"
+      class="hamburger-btn"
+      (click)="toggleMenu()"
+      aria-label="Toggle navigation"
+      [attr.aria-expanded]="isMenuOpen"
+    >
+      <svg
+        class="hamburger-icon"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+  </div>
+
+  <!-- 2. Center Section: VitaTrex Logo -->
+  <div class="nav-center">
+    <a [routerLink]="['/']" class="brand-link" aria-label="VitaTrex Homepage">
+      <img
+        src="assets/images/vitatrex-logo.png"
+        alt="VitaTrex"
+        class="brand-logo"
+        loading="eager"
+      />
+    </a>
+  </div>
+
+  <!-- 3. Right Section: Language Capsule -->
+  <div class="nav-right">
+    <button class="lang-btn" type="button" (click)="switchLanguage()" aria-label="Toggle language">
+      <span>EN</span>
+      <i class="chevron-icon"></i>
+    </button>
+  </div>
+</header>

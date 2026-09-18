@@ -30,8 +30,19 @@ export interface ActiveIngredient {
 }
 
 export interface ProductBadge {
-  title: { ar: string; en: string };
-  iconUrl: string;
+  _id?: string;
+  title: { ar: string; en: string } | string;
+  iconUrl?: string;
+  icon?: string;
+}
+
+export interface ProductFeature {
+  _id?: string;
+  title?: { ar: string; en: string } | string;
+  name?: string;
+  iconUrl?: string;
+  icon?: string;
+  type?: string;
 }
 
 export interface KeyBenefit {
@@ -58,6 +69,11 @@ export interface Product {
   activeIngredients?: ActiveIngredient[];
   keyBenefits?: KeyBenefit[];
   badges?: ProductBadge[];
+  features?: (ProductFeature | ProductBadge | string)[];
+  tags?: string[];
+  freeShippingThreshold?: number;
+  freeShippingMinAmount?: number;
+  isFreeShipping?: boolean;
   createdAt: string;
   updatedAt: string;
 }

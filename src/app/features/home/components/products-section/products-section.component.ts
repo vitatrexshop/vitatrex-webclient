@@ -5,6 +5,7 @@ import {
   Component,
   DestroyRef,
   ElementRef,
+  HostListener,
   Inject,
   inject,
   NgZone,
@@ -61,6 +62,11 @@ export class ProductsSectionComponent implements OnInit, AfterViewInit, OnDestro
   private readonly isBrowser: boolean;
 
   isLoading = true;
+  isTransitioning = false;
+
+  private navTransitionTimer?: ReturnType<typeof setTimeout>;
+  private resizeTimer?: ReturnType<typeof setTimeout>;
+  private resizeObserver?: ResizeObserver;
 
   // ── Default shelf products (curated reference items) ─────────
   readonly defaultShelfProducts: HappyShelfItem[] = [
@@ -120,6 +126,11 @@ export class ProductsSectionComponent implements OnInit, AfterViewInit, OnDestro
   // ── Lifecycle ────────────────────────────────────────────────
   ngOnInit(): void {
     this.fetchProducts();
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.cdr.markForCheck();
+      });
   }
 
   ngAfterViewInit(): void {
@@ -141,7 +152,41 @@ export class ProductsSectionComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   ngOnDestroy(): void {
+    this.resizeObserver?.disconnect();
+    if (this.resizeTimer) clearTimeout(this.resizeTimer);
+    if (this.navTransitionTimer) clearTimeout(this.navTransitionTimer);
     this.swiper?.destroy(true, true);
+  }
+
+  @HostListener('window:resize')
+  onWindowResize(): void {
+    this.handleResize();
+  }
+
+  private handleResize(): void {
+    if (!this.isBrowser || !this.swiper) return;
+    if (this.resizeTimer) clearTimeout(this.resizeTimer);
+    this.resizeTimer = setTimeout(() => {
+      this.ngZone.runOutsideAngular(() => {
+        if (this.swiper && !this.swiper.destroyed) {
+          this.swiper.updateSize();
+          this.swiper.updateSlides();
+          this.swiper.updateProgress();
+          this.swiper.update();
+        }
+      });
+    }, 120);
+  }
+
+  private setupResizeObserver(): void {
+    if (!this.isBrowser || typeof ResizeObserver === 'undefined') return;
+    this.resizeObserver?.disconnect();
+    const el = this.swiperEl?.nativeElement;
+    if (!el) return;
+    this.resizeObserver = new ResizeObserver(() => {
+      this.handleResize();
+    });
+    this.resizeObserver.observe(el);
   }
 
   // ── Data Loading ─────────────────────────────────────────────
@@ -188,46 +233,62 @@ export class ProductsSectionComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   private buildShelfProducts(backendProds: Product[]): void {
-    const items: HappyShelfItem[] = [...this.defaultShelfProducts];
-
+    // ── Primary path: real products from the API ──────────────────
     if (backendProds?.length) {
-      backendProds.forEach((bp) => {
-        const existingIdx = items.findIndex(
-          (i) => i.slug === bp.slug || i.name.toLowerCase() === bp.name.toLowerCase()
-        );
-        if (existingIdx !== -1) {
-          items[existingIdx].rawProduct = bp;
-          if (bp.variants?.[0]?.price) {
-            items[existingIdx].price = bp.variants[0].price;
-          }
-          const isAvailable =
-            (bp as any).inStock !== false &&
-            (bp.variants?.[0]?.stock === undefined ||
-              bp.variants[0].stock > 0 ||
-              bp.variants[0].stock === -1);
-          items[existingIdx].inStock = isAvailable;
-        }
+      this.shelfProducts = backendProds.map((bp): HappyShelfItem => {
+        const variant    = bp.variants?.[0];
+        const price      = variant?.price ?? 0;
+        const origPrice  = variant?.originalPrice && variant.originalPrice > price
+          ? variant.originalPrice
+          : null;
+        const isAvailable =
+          (bp as any).inStock !== false &&
+          (variant?.stock === undefined || variant.stock > 0 || variant.stock === -1);
+
+        // Prefer the first image; fall back through available fields
+        const image =
+          (bp.images && bp.images.length > 0 ? bp.images[0] : null) ??
+          (bp as any).image ??
+          'assets/images/hero-fallback.webp';
+
+        return {
+          _id:           bp._id ?? bp.slug,
+          name:          bp.name,
+          slug:          bp.slug,
+          price,
+          originalPrice: origPrice,
+          image,
+          inStock:       isAvailable,
+          category:      (bp as any).category ?? '',
+          rawProduct:    bp,
+        };
       });
+      return;
     }
 
-    this.shelfProducts = items;
+    // ── Fallback path: hardcoded defaults when API is empty/failed ─
+    this.shelfProducts = [...this.defaultShelfProducts];
   }
+
 
   // ── Swiper Initialization ────────────────────────────────────
   private initSwiper(): void {
     const el = this.swiperEl?.nativeElement;
     if (!el || !this.isBrowser) return;
-    const section = this.sectionEl?.nativeElement;
 
     this.swiper?.destroy(true, true);
 
     this.swiper = new Swiper(el, {
       modules: [Navigation, Pagination, Autoplay],
-      loop: this.shelfProducts.length >= 3,
+      loop: false,
+      rewind: this.shelfProducts.length > 1,
       slidesPerView: 5,
       spaceBetween: 24,
-      speed: 600,
+      speed: 500,
       grabCursor: true,
+      preventInteractionOnTransition: true, // Blocks rapid touches and transitions
+      threshold: 8,
+      touchAngle: 45,
       watchSlidesProgress: true,
       observer: true,
       observeParents: true,
@@ -235,16 +296,12 @@ export class ProductsSectionComponent implements OnInit, AfterViewInit, OnDestro
       resizeObserver: true,
       updateOnWindowResize: true,
       autoplay: {
-        delay: 2500,
+        delay: 3500,
         disableOnInteraction: false,
         pauseOnMouseEnter: true,
       },
-      navigation: {
-        nextEl: section?.querySelectorAll<HTMLElement>('.shelf-nav-btn--next') as any ?? '.shelf-nav-btn--next',
-        prevEl: section?.querySelectorAll<HTMLElement>('.shelf-nav-btn--prev') as any ?? '.shelf-nav-btn--prev',
-      },
       pagination: {
-        el: section?.querySelector<HTMLElement>('.shelf-dots') ?? '.shelf-dots',
+        el: el.parentElement?.querySelector<HTMLElement>('.shelf-dots') ?? '.shelf-dots',
         clickable: true,
         bulletClass: 'shelf-dot',
         bulletActiveClass: 'is-active',
@@ -271,13 +328,72 @@ export class ProductsSectionComponent implements OnInit, AfterViewInit, OnDestro
           spaceBetween: 24,
         },
       },
+      on: {
+        slideChangeTransitionStart: () => {
+          this.ngZone.run(() => {
+            this.isTransitioning = true;
+            this.cdr.markForCheck();
+          });
+        },
+        slideChangeTransitionEnd: () => {
+          this.ngZone.run(() => {
+            this.isTransitioning = false;
+            this.cdr.markForCheck();
+          });
+        },
+        touchStart: () => {
+          if (this.isTransitioning && this.swiper) {
+            this.swiper.allowTouchMove = false;
+          } else if (this.swiper) {
+            this.swiper.allowTouchMove = true;
+          }
+        },
+        touchEnd: () => {
+          if (this.swiper) {
+            this.swiper.allowTouchMove = true;
+          }
+        },
+      },
     });
 
-    // Ensure Swiper calculates dimensions properly immediately and after render
     this.swiper.update();
     setTimeout(() => {
       this.swiper?.update();
     }, 100);
+
+    this.setupResizeObserver();
+  }
+
+  // ── Debounced Navigation Handlers ────────────────────────────
+
+  onNextClick(event?: Event): void {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    if (this.isTransitioning || !this.swiper) return;
+    this.lockTransition();
+    this.swiper.slideNext(500);
+  }
+
+  onPrevClick(event?: Event): void {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    if (this.isTransitioning || !this.swiper) return;
+    this.lockTransition();
+    this.swiper.slidePrev(500);
+  }
+
+  private lockTransition(duration = 520): void {
+    this.isTransitioning = true;
+    this.cdr.markForCheck();
+    if (this.navTransitionTimer) clearTimeout(this.navTransitionTimer);
+    this.navTransitionTimer = setTimeout(() => {
+      this.isTransitioning = false;
+      this.cdr.markForCheck();
+    }, duration);
   }
 
   // ── Add to Cart & Notify Handlers ────────────────────────────

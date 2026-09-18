@@ -71,9 +71,8 @@ export class ShopComponent implements OnInit {
       ]))
     );
 
-    // 2. Fetch raw datasets
+    // 2. Fetch raw products dataset
     this.products$ = this.productService.getProducts().pipe(catchError(() => of([])));
-    this.offers$ = this.offerService.getOffers().pipe(catchError(() => of([])));
 
     // 3. React to route query parameters
     this.route.queryParams
@@ -98,11 +97,21 @@ export class ShopComponent implements OnInit {
     );
 
     const categoryStream$ = this.selectedCategory$.valueChanges.pipe(
-      startWith(this.selectedCategory$.value)
+      startWith(this.selectedCategory$.value),
+      distinctUntilChanged()
     );
 
     this.isBundleMode$ = categoryStream$.pipe(
       map(catId => catId === 'bundle')
+    );
+
+    // Reactively fetch offers whenever category filter changes
+    // When "باقات التوفير" is selected, calls /api/v1/offers?category=bundle
+    this.offers$ = categoryStream$.pipe(
+      switchMap((catId) => {
+        const catParam = catId === 'bundle' ? 'bundle' : (catId !== 'all' ? catId : undefined);
+        return this.offerService.getOffers(catParam).pipe(catchError(() => of([])));
+      })
     );
 
     this.filteredProducts$ = combineLatest([
@@ -137,10 +146,10 @@ export class ShopComponent implements OnInit {
       searchStream$,
     ]).pipe(
       map(([offers, search]) => {
-        return offers.filter((o) => {
+        return (offers || []).filter((o) => {
           return (
             !search ||
-            o.title.toLowerCase().includes(search) ||
+            o.title?.toLowerCase().includes(search) ||
             o.description?.toLowerCase().includes(search)
           );
         });

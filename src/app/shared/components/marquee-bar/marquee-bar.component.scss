@@ -1,6 +1,7 @@
 // ══════════════════════════════════════════════════════════════
 // Marquee Bar — GREEN TONAL GRADIENT + WHITE TEXT
 // #9DBB3E → #829D2F gradient
+// GSAP controls track movement (no CSS animation conflict)
 // ══════════════════════════════════════════════════════════════
 
 .marquee-bar {
@@ -14,10 +15,8 @@
   &__track {
     display: flex;
     width: max-content;
-    // GPU-composited: no repaints during animation
     will-change: transform;
     transform: translateZ(0);
-    animation: vt-ticker 32s linear infinite;
   }
 
   &__group {
@@ -31,7 +30,7 @@
   &__item {
     font-size: 0.88rem;
     font-weight: 700;
-    color: #ffffff; // Crisp white — replaces any old green
+    color: #ffffff;
     white-space: nowrap;
     display: flex;
     align-items: center;
@@ -39,11 +38,10 @@
     font-family: 'Readex Pro', 'Noto Kufi Arabic', sans-serif;
     letter-spacing: 0.015em;
 
-    // Light Lavender bullet separator between items
     &::after {
       content: '•';
       margin-inline-start: 40px;
-      color: #d6eba0; // Soft Lavender bullet
+      color: #d6eba0;
       font-size: 1.2rem;
       font-weight: 900;
     }
@@ -73,10 +71,4 @@
   &:hover &__track {
     animation-play-state: paused;
   }
-}
-
-// 60fps hardware-accelerated horizontal scroll
-@keyframes vt-ticker {
-  from { transform: translateX(0) translateZ(0); }
-  to   { transform: translateX(-50%) translateZ(0); }
 }

@@ -1,4 +1,4 @@
-﻿import {
+import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -231,6 +231,9 @@ export class OrderSuccessComponent implements OnInit {
 
   getProductName(item: OrderItem): string {
     if (!item) return 'Vitatrex';
+    if (item.offer && typeof item.offer === 'object' && item.offer.title) {
+      return item.offer.title;
+    }
     if (typeof item.product === 'object' && item.product && (item.product as Product).name) {
       return (item.product as Product).name;
     }
@@ -239,6 +242,9 @@ export class OrderSuccessComponent implements OnInit {
 
   getProductImage(item: OrderItem): string {
     if (!item) return 'assets/images/hero-fallback.webp';
+    if (item.offer && typeof item.offer === 'object' && item.offer.image) {
+      return item.offer.image;
+    }
     if (typeof item.product === 'object' && item.product && (item.product as Product).image) {
       return (item.product as Product).image;
     }
@@ -267,7 +273,12 @@ export class OrderSuccessComponent implements OnInit {
     }
   }
 
-    /** Agent 2 — Opens a pre-filled WhatsApp order confirmation message with full order breakdown in a new tab. */
+  /** Confirms the order and navigates user to the shop for continued browsing. */
+  confirmOrder(): void {
+    this.router.navigate(['/shop']);
+  }
+
+  /** Agent 2 — Opens a pre-filled WhatsApp order confirmation message with full order breakdown in a new tab. */
   confirmOrderViaWhatsApp(order: Order | null): void {
     if (!order) return;
 

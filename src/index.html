@@ -122,13 +122,10 @@
       /* ── App layout skeleton — pre-reserve chrome height before JS boots ── */
       html, body { margin: 0; padding: 0; }
 
-      /* Announcement bar: exact 38px height (matches component CSS) */
+      /* Announcement bar: matches component height */
       app-announcement-bar {
         display: block;
-        height: 38px;
-        min-height: 38px;
-        overflow: hidden;
-        contain: strict;
+        min-height: 42px;
       }
 
       /* Header: pre-reserve ~70px so page content doesn't shift down */

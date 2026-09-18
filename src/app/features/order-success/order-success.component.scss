@@ -710,16 +710,16 @@ $amber-border:   #fde68a;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-//  Agent 2 — WhatsApp CTA Button (.btn-whatsapp)
-//  Official WhatsApp Green: #25D366  |  Hover: #1ebe5d  |  Active: #17a84f
+//  Order Confirmation CTA Button (.btn-confirm)
+//  Theme Primary Purple: #5e439b  |  Hover: #49337d
 // ─────────────────────────────────────────────────────────────────────────────
-.btn-whatsapp {
+.btn-confirm {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 13px 26px;
-  background: #25D366;
+  padding: 13px 28px;
+  background: $primary;
   color: #ffffff;
   border: none;
   border-radius: 12px;
@@ -729,29 +729,25 @@ $amber-border:   #fde68a;
   cursor: pointer;
   text-decoration: none;
   letter-spacing: 0.01em;
-  box-shadow: 0 4px 18px rgba(37, 211, 102, 0.32);
+  box-shadow: 0 4px 18px rgba(94, 67, 155, 0.28);
   transition: background 0.18s ease, transform 0.14s ease, box-shadow 0.18s ease;
   white-space: nowrap;
 
-  svg {
-    flex-shrink: 0;
-  }
-
   &:hover {
-    background: #1ebe5d;
-    box-shadow: 0 6px 22px rgba(37, 211, 102, 0.42);
+    background: $primary-dark;
+    box-shadow: 0 6px 22px rgba(94, 67, 155, 0.38);
     transform: translateY(-1px);
     color: #ffffff;
   }
 
   &:active {
-    background: #17a84f;
+    background: $primary-dark;
     transform: translateY(0);
-    box-shadow: 0 2px 10px rgba(37, 211, 102, 0.25);
+    box-shadow: 0 2px 10px rgba(94, 67, 155, 0.2);
   }
 
   &:focus-visible {
-    outline: 3px solid rgba(37, 211, 102, 0.55);
+    outline: 3px solid rgba(94, 67, 155, 0.45);
     outline-offset: 3px;
   }
 }

@@ -484,11 +484,11 @@ body {
   background: var(--bg-app) !important;
 }
 
-// ── Announcement Bar — Brand Vibrant Green ───────────────────
+// ── Announcement Bar — Brand Vibrant Orange ───────────────────
 .announcement-bar {
-  background: var(--primary-green, #A8E038) !important;
-  color: var(--neutral-dark, #1E293B) !important;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+  background: linear-gradient(90deg, #FF7A00 0%, #E86A24 100%) !important;
+  color: #ffffff !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
 }
 
 // ── Logo & Site Identity ────────────────────────────────────

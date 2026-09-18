@@ -5,6 +5,7 @@ import {
   Component,
   DestroyRef,
   ElementRef,
+  HostListener,
   Inject,
   inject,
   NgZone,
@@ -16,6 +17,7 @@ import {
 import { isPlatformBrowser } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { catchError, of } from 'rxjs';
+import { Router } from '@angular/router';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Swiper from 'swiper';
@@ -51,13 +53,19 @@ export class OffersSectionComponent implements AfterViewInit, OnDestroy {
   private readonly cartService = inject(CartService);
   private readonly cartDrawer = inject(CartDrawerService);
   private readonly ngZone = inject(NgZone);
+  private readonly router = inject(Router);
 
   private ctx?: gsap.Context;
   private swiper?: Swiper;
   private readonly isBrowser: boolean;
 
   isLoading = true;
+  isTransitioning = false;
   promotions: UnifiedPromotion[] = [];
+
+  private navTransitionTimer?: ReturnType<typeof setTimeout>;
+  private resizeTimer?: ReturnType<typeof setTimeout>;
+  private resizeObserver?: ResizeObserver;
 
   readonly slotLabels = SLOT_LABELS;
 
@@ -227,11 +235,45 @@ export class OffersSectionComponent implements AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.ctx?.revert();
+    this.resizeObserver?.disconnect();
+    if (this.resizeTimer) clearTimeout(this.resizeTimer);
+    if (this.navTransitionTimer) clearTimeout(this.navTransitionTimer);
     this.swiper?.destroy(true, true);
     if (this.isBrowser) {
       ScrollTrigger.getAll().forEach((t) => t.kill());
       document.body.style.overflow = '';
     }
+  }
+
+  @HostListener('window:resize')
+  onWindowResize(): void {
+    this.handleResize();
+  }
+
+  private handleResize(): void {
+    if (!this.isBrowser || !this.swiper) return;
+    if (this.resizeTimer) clearTimeout(this.resizeTimer);
+    this.resizeTimer = setTimeout(() => {
+      this.ngZone.runOutsideAngular(() => {
+        if (this.swiper && !this.swiper.destroyed) {
+          this.swiper.updateSize();
+          this.swiper.updateSlides();
+          this.swiper.updateProgress();
+          this.swiper.update();
+        }
+      });
+    }, 120);
+  }
+
+  private setupResizeObserver(): void {
+    if (!this.isBrowser || typeof ResizeObserver === 'undefined') return;
+    this.resizeObserver?.disconnect();
+    const el = this.swiperEl?.nativeElement;
+    if (!el) return;
+    this.resizeObserver = new ResizeObserver(() => {
+      this.handleResize();
+    });
+    this.resizeObserver.observe(el);
   }
 
   // ─── Data ─────────────────────────────────────────────────────────────────
@@ -297,23 +339,29 @@ export class OffersSectionComponent implements AfterViewInit, OnDestroy {
   private initSwiper(): void {
     const el = this.swiperEl?.nativeElement;
     if (!el) return;
-    const section = this.sectionEl?.nativeElement;
 
     this.swiper?.destroy(true, true);
 
     this.swiper = new Swiper(el, {
       modules: [Navigation, Pagination, Autoplay],
-      loop: this.promotions.length > 1,
+      loop: false,
+      rewind: this.promotions.length > 1,
       slidesPerView: 1,
       spaceBetween: 16,
       centeredSlides: false,
-      speed: 500,
+      speed: 450,
       grabCursor: true,
-      threshold: 5,
+      preventInteractionOnTransition: true, // Blocks rapid touches and gestures while animation is in flight
+      threshold: 8,
+      touchAngle: 45,
       resistanceRatio: 0.85,
-      passiveListeners: true, // Throttles & uses passive listeners to prevent main-thread blocking during drag/swipe
+      passiveListeners: true,
       touchEventsTarget: 'wrapper',
-      watchSlidesProgress: true, // Only tracks progress on visible & adjacent slides
+      watchSlidesProgress: true,
+      observer: true,
+      observeParents: true,
+      observeSlideChildren: true,
+      resizeObserver: true,
       updateOnWindowResize: true,
       autoplay: {
         delay: 5500,
@@ -325,28 +373,50 @@ export class OffersSectionComponent implements AfterViewInit, OnDestroy {
         clickable: true,
         dynamicBullets: true,
       },
-      navigation: {
-        nextEl: section?.querySelector<HTMLElement>('.offers-nav--next') ?? undefined,
-        prevEl: section?.querySelector<HTMLElement>('.offers-nav--prev') ?? undefined,
-      },
       breakpoints: {
-        // Mobile: 1 full-width slide
+        // Mobile: 1 full-width slide, clean bounds
         0: {
           slidesPerView: 1,
           spaceBetween: 12,
           centeredSlides: false,
         },
-        // Tablet: 1 slide, centered
+        // Tablet: 1 slide, clean bounds
         768: {
           slidesPerView: 1,
           spaceBetween: 20,
-          centeredSlides: true,
+          centeredSlides: false,
         },
-        // Desktop: (>= 1024px) properly sized (1.2 or 1 centered) without letterboxing
+        // Desktop: 1 slide, clean bounds without overlapping
         1024: {
-          slidesPerView: this.promotions.length > 1 ? 1.2 : 1,
+          slidesPerView: 1,
           spaceBetween: 24,
-          centeredSlides: true,
+          centeredSlides: false,
+        },
+      },
+      on: {
+        slideChangeTransitionStart: () => {
+          this.ngZone.run(() => {
+            this.isTransitioning = true;
+            this.cdr.markForCheck();
+          });
+        },
+        slideChangeTransitionEnd: () => {
+          this.ngZone.run(() => {
+            this.isTransitioning = false;
+            this.cdr.markForCheck();
+          });
+        },
+        touchStart: () => {
+          if (this.isTransitioning && this.swiper) {
+            this.swiper.allowTouchMove = false;
+          } else if (this.swiper) {
+            this.swiper.allowTouchMove = true;
+          }
+        },
+        touchEnd: () => {
+          if (this.swiper) {
+            this.swiper.allowTouchMove = true;
+          }
         },
       },
     });
@@ -355,6 +425,40 @@ export class OffersSectionComponent implements AfterViewInit, OnDestroy {
     setTimeout(() => {
       this.swiper?.update();
     }, 100);
+
+    this.setupResizeObserver();
+  }
+
+  // ─── Debounced Navigation Handlers ────────────────────────────────────────
+
+  onNextClick(event?: Event): void {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    if (this.isTransitioning || !this.swiper) return;
+    this.lockTransition();
+    this.swiper.slideNext(450);
+  }
+
+  onPrevClick(event?: Event): void {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    if (this.isTransitioning || !this.swiper) return;
+    this.lockTransition();
+    this.swiper.slidePrev(450);
+  }
+
+  private lockTransition(duration = 480): void {
+    this.isTransitioning = true;
+    this.cdr.markForCheck();
+    if (this.navTransitionTimer) clearTimeout(this.navTransitionTimer);
+    this.navTransitionTimer = setTimeout(() => {
+      this.isTransitioning = false;
+      this.cdr.markForCheck();
+    }, duration);
   }
 
   // ─── GSAP ─────────────────────────────────────────────────────────────────
@@ -496,6 +600,14 @@ export class OffersSectionComponent implements AfterViewInit, OnDestroy {
 
   // ─── Cart Actions ─────────────────────────────────────────────────────────
 
+  /** Navigate to the offer details page by slug or ID. */
+  goToOfferDetails(promo: UnifiedPromotion, event?: Event): void {
+    if (event) event.stopPropagation();
+    const identifier = promo.slug || promo.id || promo._id;
+    if (!identifier) return;
+    this.router.navigate(['/offers', identifier]);
+  }
+
   handleAddToCart(promo: UnifiedPromotion, event?: Event): void {
     if (promo.type === 'bundle') {
       this.addBundleToCart(promo as PromotionBundle, event);
@@ -547,36 +659,11 @@ export class OffersSectionComponent implements AfterViewInit, OnDestroy {
     const oId = offer.id || offer._id || '';
     if (this.addingIds.has(oId)) return;
 
-    const itemsToAdd = (offer.items ?? []).filter(
-      (i): i is OfferItem & { product: Product } =>
-        typeof i.product === 'object' && i.product !== null
-    );
-
-    if (itemsToAdd.length === 0) {
-      this.cartDrawer.open();
-      return;
-    }
-
     this.addingIds.add(oId);
     this.cdr.markForCheck();
 
-    const pricePerItem = Math.round((offer.discountedPrice ?? offer.offerPrice ?? 0) / itemsToAdd.length);
-
-    itemsToAdd.forEach((item) => {
-      const product = item.product as Product;
-      const variantsArr = Array.isArray(product.variants) ? product.variants : [];
-      const variant = variantsArr[0] ?? {
-        _id: `${product._id}-synthetic`,
-        count: 1,
-        price: pricePerItem,
-        originalPrice: Math.round((offer.originalPrice ?? 0) / itemsToAdd.length),
-        discountPercentage: offer.discountPercentage ?? 0,
-        stock: 99,
-      };
-
-      this.cartService.addToCart(product, variant as any, item.quantity ?? 1);
-    });
-
+    // Treat the entire promotional offer as an atomic line item at offer.offerPrice
+    this.cartService.addOfferToCart(offer as any, 1);
     this.cartDrawer.open();
 
     setTimeout(() => {

@@ -1,33 +1,38 @@
 // ══════════════════════════════════════════════════════════════════════
-// Product Card — Vitatrix / 360 Nutrition Premium Refactor
-// Modern glassmorphism badges · Hover elevation · Blur-up skeleton
+// Product Card — Vitatrix / 360 Nutrition Premium Card
+// Perfect 1:1 Image Frame · Zero Crop of Graphics · Smooth 1.04 Zoom
 // ══════════════════════════════════════════════════════════════════════
 
+.product-card,
 .product-card-360 {
   display: flex;
   flex-direction: column;
   background: #ffffff;
-  border-radius: 16px;
+  border-radius: 18px;
   border: 1px solid rgba(0, 0, 0, 0.06);
   padding: 14px;
-  transition:
-    box-shadow 0.3s ease,
-    border-color 0.3s ease,
-    transform 0.3s ease;
   height: 100%;
   position: relative;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-sizing: border-box;
+  cursor: pointer;
 
+  // Clean Hover: card lift (-4px) + shadow + subtle image zoom (1.04)
   &:hover {
-    transform: translateY(-6px);
-    border-color: rgba(157, 187, 62, 0.3);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+
+    .product-img,
+    .primary-img {
+      transform: scale(1.04);
+    }
   }
 
-  // ── SECTION 1: Badges — absolute, on top of everything ───────────
+  // ── SECTION 1: Badges (Top Start & End) ────────────────────────────
   &__badges {
     position: absolute;
-    top: 22px;
+    top: 20px;
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -35,39 +40,37 @@
     pointer-events: none;
 
     &--start {
-      inset-inline-start: 22px;
+      inset-inline-start: 20px;
       align-items: flex-start;
     }
 
     &--end {
-      inset-inline-end: 22px;
+      inset-inline-end: 20px;
       align-items: flex-end;
     }
 
     &--low-stock {
       position: absolute;
-      bottom: 84px; // just above the CTA button area
-      inset-inline-start: 22px;
+      bottom: 84px;
+      inset-inline-start: 20px;
       z-index: 6;
       pointer-events: none;
     }
   }
 
-  // Badge Pills — Glassmorphism with crisp colour coding
   .card-badge {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     padding: 4px 10px;
     border-radius: 9999px;
-    font-size: 0.68rem;
+    font-size: 0.7rem;
     font-weight: 700;
     line-height: 1.3;
     letter-spacing: 0.025em;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     white-space: nowrap;
+    opacity: 1 !important;
 
     &.badge--bestseller,
     &.badge--featured {
@@ -77,8 +80,8 @@
     }
 
     &.badge--discount {
-      background: rgba(255, 241, 242, 0.9);
-      color: #e11d48;
+      background: #FFF1F2;
+      color: #E11D48;
       border: 1px solid rgba(225, 29, 72, 0.28);
       font-weight: 800;
       direction: ltr;
@@ -86,92 +89,61 @@
     }
   }
 
-  // ── SECTION 2: Image Stage ────────────────────────────────────────
-  &__stage {
+  // ── SECTION 2: Image Stage (Fixed 4:3 aspect-ratio, overflow hidden) ──
+  &__stage,
+  .product-img-wrapper {
     display: block;
     position: relative;
     text-decoration: none;
     cursor: pointer;
-    border-radius: 12px;
+    border-radius: 14px;
     overflow: hidden;
+    width: 100%;
+    margin-bottom: 4px;
   }
 
-  &__img-box {
+  // Image box: fixed aspect ratio, transparent — PNG backgrounds render cleanly
+  &__img-box,
+  .product-img-box {
     position: relative;
     width: 100%;
-    aspect-ratio: 1 / 1;
-    background: #f7f8fc;
-    border-radius: 12px;
+    aspect-ratio: 4 / 3;
+    background: transparent;   // no white frame behind transparent PNGs
+    border-radius: 0;          // removed inner border-radius frame
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 18px;
-    overflow: hidden;
   }
 
-  // Blur-up skeleton — shimmer gradient while loading
-  &__img-skeleton {
-    position: absolute;
-    inset: 0;
-    border-radius: 12px;
-    background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
-    background-size: 200% 100%;
-    animation: card-skeleton-shimmer 1.4s ease-in-out infinite;
-    z-index: 2;
-    transition: opacity 0.35s ease;
-
-    &.is-hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-  }
-
-  &__img {
+  // Product image: object-fit contain so full bottle is always visible, no crop
+  .product-img,
+  .primary-img,
+  .secondary-img {
+    width: 100%;
+    height: 100%;
     max-width: 100%;
     max-height: 100%;
-    object-fit: contain;
-    filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.07));
-    will-change: transform, opacity;
-    position: relative;
-    z-index: 1;
-    // Blur-up: start blurred, clear on load
-    filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.07)) blur(6px);
-    transition: filter 0.4s ease, opacity 0.4s ease;
-
-    &.is-loaded {
-      filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.07)) blur(0px);
-    }
-
-    &--primary {
-      opacity: 1;
-    }
-
-    &--secondary {
-      position: absolute;
-      width: calc(100% - 36px);
-      height: calc(100% - 36px);
-      top: 18px;
-      left: 18px;
-      right: 18px;
-      bottom: 18px;
-      margin: auto;
-      z-index: 2;
-      opacity: 0;
-      pointer-events: none;
-    }
+    object-fit: contain;       // was cover — contain prevents zoom/crop of PNG
+    object-position: center;
+    display: block;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: scale(1);
+    filter: none !important;
+    opacity: 1 !important;
   }
 
-  // Out-of-stock full overlay — stays within stage's overflow:hidden
+  // Out of stock overlay (clean and subtle, no white washing)
   &__out-of-stock {
     position: absolute;
     inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.75);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
+    border-radius: 14px;
+    background: rgba(0, 0, 0, 0.28);
     z-index: 5;
 
     span {
@@ -182,11 +154,11 @@
       padding: 6px 16px;
       border-radius: 99px;
       letter-spacing: 0.04em;
-      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.35);
+      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.45);
     }
   }
 
-  // ── SECTION 3: Bottom Content ─────────────────────────────────────
+  // ── SECTION 3: Content Details ────────────────────────────────────
   &__details {
     display: flex;
     flex-direction: column;
@@ -194,6 +166,7 @@
     text-align: center;
     padding-top: 14px;
     flex: 1;
+    opacity: 1 !important;
   }
 
   &__title {
@@ -203,16 +176,17 @@
     margin: 0 0 6px 0;
     line-height: 1.35;
     font-family: 'Readex Pro', 'Inter', sans-serif;
-    // Clamp to 2 lines max
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    opacity: 1 !important;
 
     a {
       text-decoration: none;
       color: inherit;
       transition: color 0.2s ease;
+      opacity: 1 !important;
 
       &:hover {
         color: var(--primary-green-dark, #8EC826);
@@ -220,7 +194,6 @@
     }
   }
 
-  // Pricing — side-by-side, current price + crossed-out original
   &__pricing {
     display: flex;
     align-items: baseline;
@@ -228,28 +201,31 @@
     gap: 8px;
     margin-bottom: 12px;
     flex-wrap: wrap;
+    opacity: 1 !important;
 
     .price-main {
       font-size: 1.15rem;
       font-weight: 800;
       color: #111827;
       font-family: 'Readex Pro', sans-serif;
+      opacity: 1 !important;
     }
 
     .price-old {
       font-size: 0.85rem;
       color: #9ca3af;
       text-decoration: line-through;
+      opacity: 1 !important;
     }
   }
 
-  // Variant Pills
   &__variants {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 5px;
     margin-bottom: 12px;
+    opacity: 1 !important;
 
     .variant-btn {
       padding: 4px 10px;
@@ -262,6 +238,7 @@
       cursor: pointer;
       transition: all 0.15s ease;
       font-family: inherit;
+      opacity: 1 !important;
 
       &.is-active {
         border-color: var(--primary-green, #A8E038);
@@ -275,7 +252,7 @@
     }
   }
 
-  // CTA Button — pill shape, gradient, anchored at bottom
+  // CTA Button
   &__cta {
     width: 100%;
     margin-top: auto;
@@ -284,7 +261,7 @@
     background: linear-gradient(135deg, #E86A24 0%, #D55917 100%);
     color: #ffffff;
     border: none;
-    font-size: 0.85rem;
+    font-size: 0.88rem;
     font-weight: 800;
     letter-spacing: 0.02em;
     cursor: pointer;
@@ -295,6 +272,7 @@
     box-shadow: 0 4px 14px rgba(232, 106, 36, 0.32);
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     font-family: inherit;
+    opacity: 1 !important;
 
     .cart-icon {
       width: 16px;
@@ -313,20 +291,20 @@
       box-shadow: 0 4px 14px rgba(232, 106, 36, 0.28);
     }
 
-    // Disabled / out-of-stock state
     &--disabled,
     &:disabled {
-      opacity: 0.45;
+      opacity: 0.65 !important;
       cursor: not-allowed;
       pointer-events: none;
-      background: #9ca3af !important;
+      background: #CBD5E1 !important;
+      color: #64748B !important;
       box-shadow: none !important;
       transform: none !important;
     }
   }
 }
 
-// ── Low-Stock Badge (pulsing amber warning) ───────────────────────────
+// ── Low-Stock Badge ──────────────────────────────────────────────────
 .badge--low-stock {
   background: linear-gradient(135deg, #fff8ed 0%, #fef3c7 100%);
   color: #b45309;
@@ -337,8 +315,6 @@
   border-radius: 8px;
   letter-spacing: 0.02em;
   animation: badge-low-stock-pulse 2.5s ease-in-out infinite;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
 }
 
 @keyframes badge-low-stock-pulse {
@@ -346,13 +322,6 @@
   50%       { opacity: 0.85; box-shadow: 0 0 0 5px rgba(251, 191, 36, 0); }
 }
 
-// ── Blur-up skeleton shimmer keyframe ────────────────────────────────
-@keyframes card-skeleton-shimmer {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-
-// ── LTR support ───────────────────────────────────────────────────────
 [dir='ltr'] {
   .product-card-360__details {
     text-align: center;

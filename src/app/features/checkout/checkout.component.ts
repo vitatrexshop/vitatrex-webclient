@@ -1,4 +1,4 @@
-﻿import {
+import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -17,7 +17,7 @@ import { ToastService } from '../../core/services/toast.service';
 import { CouponService } from '../../core/services/coupon.service';
 import { SettingsService } from '../../core/services/settings.service';
 import { CartItem } from '../../core/models/cart.model';
-import { OrderInput, PaymentMethod, CreateOrderData, GovernorateOption } from '../../core/models/order.model';
+import { OrderInput, PaymentMethod, CreateOrderData, GovernorateOption, OrderItemInput } from '../../core/models/order.model';
 import { ApplyCouponResponse } from '../../core/models/coupon.model';
 import { OrderTrackingService } from '../track-order/order-tracking.service';
 import { environment } from '../../../environments/environment';
@@ -47,6 +47,8 @@ export class CheckoutComponent implements OnInit {
   cartTotal = 0;
   isSubmitting = false;
   isLoadingGovernorates = true;
+  formSubmitted = false;
+  orderSubmissionError: string | null = null;
 
   governorates: GovernorateOption[] = [];
 
@@ -103,7 +105,37 @@ export class CheckoutComponent implements OnInit {
   /** Returns true if this cart item has the lowest unit price (coupon target) */
   isLowestPricedItem(item: CartItem): boolean {
     if (!this.appliedCoupon || this.cartItems.length <= 1) return false;
-    return item.selectedVariant.price === this.appliedCoupon.lowestItemPrice;
+    const price = item.isOffer && item.offerMeta
+      ? item.offerMeta.offerPrice
+      : item.isBundle && item.bundleMeta
+      ? item.bundleMeta.bundlePrice
+      : item.selectedVariant.price;
+    return price === this.appliedCoupon.lowestItemPrice;
+  }
+
+  /** Returns original price if item has a discount */
+  getOriginalPrice(item: CartItem): number | null {
+    if (item.isBundle && item.bundleMeta?.originalPrice && item.bundleMeta.originalPrice > item.bundleMeta.bundlePrice) {
+      return item.bundleMeta.originalPrice;
+    }
+    if (item.isOffer && item.offerMeta?.originalPrice && item.offerMeta.originalPrice > item.offerMeta.offerPrice) {
+      return item.offerMeta.originalPrice;
+    }
+    if (item.selectedVariant?.originalPrice && item.selectedVariant.originalPrice > item.selectedVariant.price) {
+      return item.selectedVariant.originalPrice;
+    }
+    return null;
+  }
+
+  /** Safely gets thumbnail image for products, bundles, or offers */
+  getItemImage(item: CartItem): string {
+    if (item.isOffer && item.offerMeta?.offerImage) {
+      return item.offerMeta.offerImage;
+    }
+    if (item.isBundle && item.bundleMeta?.bundleImage) {
+      return item.bundleMeta.bundleImage;
+    }
+    return item.product?.image ?? '';
   }
 
   ngOnInit(): void {
@@ -125,10 +157,20 @@ export class CheckoutComponent implements OnInit {
 
     this.form = this.fb.group({
       name:           ['', [Validators.required, Validators.minLength(3)]],
-      phone:          ['', [Validators.required, Validators.pattern(/^(01)[0-9]{9}$/)]],
+      phone:          ['', [Validators.required, Validators.pattern(/^(01)[0125][0-9]{8}$/)]],
       governorate:    ['', Validators.required],
       addressDetails: ['', [Validators.required, Validators.minLength(10)]],
       paymentMethod:  ['cod', Validators.required],
+    });
+
+    // Automatically normalize phone input (convert Arabic numerals, remove spaces/hyphens/+20)
+    this.form.get('phone')?.valueChanges.subscribe((val) => {
+      if (val) {
+        const normalized = this.normalizePhone(val);
+        if (normalized !== val) {
+          this.form.get('phone')?.setValue(normalized, { emitEvent: false });
+        }
+      }
     });
 
     // Re-render when governorate changes to immediately recalculate shipping breakdown
@@ -152,8 +194,31 @@ export class CheckoutComponent implements OnInit {
     this.cartService.cartItems$.pipe(take(1)).subscribe((items) => {
       this.cartItems = items;
       this.cartTotal = items.reduce((sum, i) => sum + i.itemTotal, 0);
+      if (!items || items.length === 0) {
+        this.toastService.show('سلة التسوق فارغة، يرجى إضافة منتجات أولاً', 'info');
+        this.router.navigate(['/shop']);
+      }
       this.cdr.markForCheck();
     });
+  }
+
+  // ── Phone Normalization Helper ────────────────────────────────────────────
+
+  normalizePhone(input: string): string {
+    if (!input) return '';
+    // Convert Arabic-Indic numerals (٠-٩) to standard ASCII digits (0-9)
+    let cleaned = input.replace(/[٠-٩]/g, (d) => String.fromCharCode(d.charCodeAt(0) - 1632 + 48));
+    // Strip spaces, dashes, dots, and parentheses
+    cleaned = cleaned.replace(/[\s\-.()]/g, '');
+    // Strip leading international Egyptian prefixes
+    if (cleaned.startsWith('+20')) {
+      cleaned = '0' + cleaned.slice(3);
+    } else if (cleaned.startsWith('0020')) {
+      cleaned = '0' + cleaned.slice(4);
+    } else if (cleaned.startsWith('20') && cleaned.length === 12) {
+      cleaned = '0' + cleaned.slice(2);
+    }
+    return cleaned;
   }
 
   // ── Coupon Methods ────────────────────────────────────────────────────────
@@ -167,9 +232,17 @@ export class CheckoutComponent implements OnInit {
     this.cdr.markForCheck();
 
     const cartItemsPayload = this.cartItems.map((item) => ({
-      price: item.selectedVariant?.price ?? item.bundleMeta?.bundlePrice ?? (item.itemTotal ? item.itemTotal / (item.quantity || 1) : 0),
+      price: item.isOffer && item.offerMeta
+        ? item.offerMeta.offerPrice
+        : item.isBundle && item.bundleMeta
+        ? item.bundleMeta.bundlePrice
+        : (item.selectedVariant?.price ?? (item.itemTotal ? item.itemTotal / (item.quantity || 1) : 0)),
       quantity: item.quantity,
-      name: item.product?.name ?? item.bundleMeta?.bundleTitle ?? 'Product',
+      name: item.isOffer && item.offerMeta
+        ? item.offerMeta.offerTitle
+        : item.isBundle && item.bundleMeta
+        ? item.bundleMeta.bundleTitle
+        : (item.product?.name ?? 'Product'),
     }));
 
     this.couponService.applyCoupon({ code, cartItems: cartItemsPayload }).subscribe({
@@ -212,44 +285,76 @@ export class CheckoutComponent implements OnInit {
 
   getFieldError(field: string): string | null {
     const ctrl = this.form.get(field);
-    if (!ctrl || !ctrl.invalid || !ctrl.touched) return null;
+    if (!ctrl || !ctrl.invalid || (!ctrl.touched && !this.formSubmitted)) return null;
+
     if (ctrl.hasError('required')) {
+      if (field === 'governorate') return 'يرجى اختيار المحافظة لحساب تكلفة الشحن وموعد التوصيل';
+      if (field === 'name') return 'يرجى إدخال اسم المستلم بالكامل';
+      if (field === 'phone') return 'يرجى إدخال رقم الهاتف للتواصل';
+      if (field === 'addressDetails') return 'يرجى كتابة تفاصيل العنوان كاملاً';
       return this.translate.instant('CHECKOUT.ERRORS.REQUIRED');
     }
+
     if (ctrl.hasError('minlength')) {
       return field === 'name'
         ? this.translate.instant('CHECKOUT.ERRORS.MIN_NAME')
         : this.translate.instant('CHECKOUT.ERRORS.MIN_ADDRESS');
     }
+
     if (ctrl.hasError('pattern')) {
       return this.translate.instant('CHECKOUT.ERRORS.INVALID_PHONE');
     }
+
     return this.translate.instant('CHECKOUT.ERRORS.REQUIRED');
   }
 
   isInvalid(field: string): boolean {
     const ctrl = this.form.get(field);
-    return !!(ctrl && ctrl.invalid && ctrl.touched);
+    return !!(ctrl && ctrl.invalid && (ctrl.touched || this.formSubmitted));
   }
 
   submitOrder(): void {
+    this.formSubmitted = true;
+    this.orderSubmissionError = null;
     this.form.markAllAsTouched();
-    if (this.form.invalid || this.isSubmitting) return;
+
+    if (!this.cartItems || this.cartItems.length === 0) {
+      this.orderSubmissionError = 'سلة التسوق فارغة، يرجى إضافة منتجات قبل إتمام الطلب.';
+      this.toastService.show(this.orderSubmissionError, 'warning');
+      this.router.navigate(['/shop']);
+      return;
+    }
+
+    if (this.form.invalid || this.isSubmitting) {
+      if (this.form.invalid) {
+        this.orderSubmissionError = 'يرجى استكمال البيانات المطلوبة الموضحة باللون الأحمر قبل تأكيد الطلب.';
+        setTimeout(() => {
+          const firstInvalid = document.querySelector('.field-group.has-error');
+          if (firstInvalid) {
+            firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }, 60);
+      }
+      return;
+    }
 
     this.isSubmitting = true;
     this.cdr.markForCheck();
 
-    const { name, phone, governorate, addressDetails, paymentMethod } = this.form.value;
+    const rawPhone = this.form.get('phone')?.value ?? '';
+    const phone = this.normalizePhone(rawPhone);
+    const { name, governorate, addressDetails, paymentMethod } = this.form.value;
 
     const payload: OrderInput = {
       customer: {
-        name,
+        name: name.trim(),
         phone,
         city: governorate, // backward compatibility
         governorate,
-        address: addressDetails,
+        address: addressDetails.trim(),
       },
-      items: this.cartItems.flatMap((item) => {
+      items: this.cartItems.flatMap((item): OrderItemInput[] => {
+        // 3-slot customisable bundle → flatten to individual products
         if (item.isBundle && item.bundleMeta) {
           return item.bundleMeta.selectedProducts.map((prod) => ({
             productId: prod._id,
@@ -257,6 +362,11 @@ export class CheckoutComponent implements OnInit {
             quantity: item.quantity,
           }));
         }
+        // Promotional offer → send as atomic offer line (backend resolves price)
+        if (item.isOffer && item.offerMeta) {
+          return [{ offerId: item.offerMeta.offerId, quantity: item.quantity }];
+        }
+        // Standard product variant
         return [
           {
             productId: item.product._id,
@@ -295,9 +405,7 @@ export class CheckoutComponent implements OnInit {
             orderNumber: orderData.orderNumber,
           }).subscribe({
             next: (kashierPayload) => {
-              console.log("[Checkout Component] Kashier payload received. merchantId:", kashierPayload.merchantId || kashierPayload.mid);
               const redirectUrl = this.paymentService.buildKashierRedirectUrl(kashierPayload);
-              console.log("[Checkout Component] Redirecting to Kashier URL:", redirectUrl);
               window.location.href = redirectUrl;
             },
             error: (err) => {
@@ -309,14 +417,25 @@ export class CheckoutComponent implements OnInit {
             }
           });
         } else {
+          this.toastService.show('تم استلام طلبك بنجاح! شكراً لاختيارك فيتاتريكس.', 'success');
           this.router.navigate(['/order-success', orderData.orderNumber]);
         }
       },
       error: (err) => {
         this.isSubmitting = false;
-        this.cdr.markForCheck();
-        const msg = err?.error?.message || 'حدث خطأ أثناء تقديم الطلب. يرجى المحاولة مرة أخرى.';
+        let msg = 'حدث خطأ أثناء تقديم الطلب. يرجى المحاولة مرة أخرى.';
+        if (err?.status === 0) {
+          msg = 'تعذّر الاتصال بالخادم. يرجى التحقق من اتصال الإنترنت والمحاولة مرة أخرى.';
+        } else if (err?.error?.message && typeof err.error.message === 'string') {
+          msg = err.error.message;
+        } else if (err?.status === 400) {
+          msg = 'يرجى مراجعة بيانات الطلب، بعض المنتجات أو العناوين غير صالحة.';
+        } else if (err?.status >= 500) {
+          msg = 'الخدمة غير متاحة مؤقتاً، نعمل على حل المشكلة حالياً. يرجى المحاولة بعد قليل.';
+        }
+        this.orderSubmissionError = msg;
         this.toastService.show(msg, 'error');
+        this.cdr.markForCheck();
       },
     });
   }
@@ -334,5 +453,6 @@ export class CheckoutComponent implements OnInit {
     return raw;
   }
 }
+
 
 

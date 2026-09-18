@@ -7,9 +7,8 @@
 <div
   class="announcement-bar"
   role="banner"
-  [class.is-rtl]="isRtl"
   [attr.aria-label]="'ANNOUNCEMENT.BAR_LABEL' | translate"
-  *ngIf="(shippingSettings$ | async) as settings"
+  *ngIf="{ settings: shippingSettings$ | async } as data"
 >
   <!-- Left edge fade -->
   <div class="announcement-bar__fade announcement-bar__fade--left" aria-hidden="true"></div>
@@ -24,15 +23,38 @@
 
     <!-- ── Group A: Primary (screen-readable) ─────────────────── -->
     <div class="announcement-bar__group">
-      <ng-container *ngIf="settings.isFreeShippingEnabled">
+      <ng-container *ngIf="data.settings?.isFreeShippingEnabled !== false">
         <span class="announcement-bar__item">
-          <svg class="item-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <svg class="item-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <rect x="1" y="3" width="15" height="13" rx="1"/>
             <path d="M16 8h4l3 5v3h-7V8z"/>
             <circle cx="5.5" cy="18.5" r="2.5"/>
             <circle cx="18.5" cy="18.5" r="2.5"/>
           </svg>
-          {{ 'MARQUEE.FREE_SHIPPING_DYNAMIC' | translate: { amount: settings.freeShippingThreshold } }}
+          {{ 'MARQUEE.FREE_SHIPPING_DYNAMIC' | translate: { amount: data.settings?.freeShippingThreshold || 500 } }}
+        </span>
+        <span class="sep" aria-hidden="true">✦</span>
+      </ng-container>
+
+      <span class="announcement-bar__item">{{ 'ANNOUNCEMENT.PROMO_1' | translate }}</span>
+      <span class="sep" aria-hidden="true">✦</span>
+
+      <span class="announcement-bar__item">{{ 'ANNOUNCEMENT.PROMO_2' | translate }}</span>
+      <span class="sep" aria-hidden="true">✦</span>
+
+      <span class="announcement-bar__item">{{ 'ANNOUNCEMENT.PROMO_3' | translate }}</span>
+      <span class="sep" aria-hidden="true">✦</span>
+
+      <!-- Second repetition to ensure full coverage on widescreen displays -->
+      <ng-container *ngIf="data.settings?.isFreeShippingEnabled !== false">
+        <span class="announcement-bar__item">
+          <svg class="item-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="1" y="3" width="15" height="13" rx="1"/>
+            <path d="M16 8h4l3 5v3h-7V8z"/>
+            <circle cx="5.5" cy="18.5" r="2.5"/>
+            <circle cx="18.5" cy="18.5" r="2.5"/>
+          </svg>
+          {{ 'MARQUEE.FREE_SHIPPING_DYNAMIC' | translate: { amount: data.settings?.freeShippingThreshold || 500 } }}
         </span>
         <span class="sep" aria-hidden="true">✦</span>
       </ng-container>
@@ -49,15 +71,38 @@
 
     <!-- ── Group B: Duplicate — aria-hidden, creates seamless loop ── -->
     <div class="announcement-bar__group" aria-hidden="true">
-      <ng-container *ngIf="settings.isFreeShippingEnabled">
+      <ng-container *ngIf="data.settings?.isFreeShippingEnabled !== false">
         <span class="announcement-bar__item">
-          <svg class="item-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <svg class="item-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <rect x="1" y="3" width="15" height="13" rx="1"/>
             <path d="M16 8h4l3 5v3h-7V8z"/>
             <circle cx="5.5" cy="18.5" r="2.5"/>
             <circle cx="18.5" cy="18.5" r="2.5"/>
           </svg>
-          {{ 'MARQUEE.FREE_SHIPPING_DYNAMIC' | translate: { amount: settings.freeShippingThreshold } }}
+          {{ 'MARQUEE.FREE_SHIPPING_DYNAMIC' | translate: { amount: data.settings?.freeShippingThreshold || 500 } }}
+        </span>
+        <span class="sep" aria-hidden="true">✦</span>
+      </ng-container>
+
+      <span class="announcement-bar__item">{{ 'ANNOUNCEMENT.PROMO_1' | translate }}</span>
+      <span class="sep" aria-hidden="true">✦</span>
+
+      <span class="announcement-bar__item">{{ 'ANNOUNCEMENT.PROMO_2' | translate }}</span>
+      <span class="sep" aria-hidden="true">✦</span>
+
+      <span class="announcement-bar__item">{{ 'ANNOUNCEMENT.PROMO_3' | translate }}</span>
+      <span class="sep" aria-hidden="true">✦</span>
+
+      <!-- Second repetition to match Group A exactly -->
+      <ng-container *ngIf="data.settings?.isFreeShippingEnabled !== false">
+        <span class="announcement-bar__item">
+          <svg class="item-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="1" y="3" width="15" height="13" rx="1"/>
+            <path d="M16 8h4l3 5v3h-7V8z"/>
+            <circle cx="5.5" cy="18.5" r="2.5"/>
+            <circle cx="18.5" cy="18.5" r="2.5"/>
+          </svg>
+          {{ 'MARQUEE.FREE_SHIPPING_DYNAMIC' | translate: { amount: data.settings?.freeShippingThreshold || 500 } }}
         </span>
         <span class="sep" aria-hidden="true">✦</span>
       </ng-container>
@@ -77,3 +122,4 @@
   <!-- Right edge fade -->
   <div class="announcement-bar__fade announcement-bar__fade--right" aria-hidden="true"></div>
 </div>
+

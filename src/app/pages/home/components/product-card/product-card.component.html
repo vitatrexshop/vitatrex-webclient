@@ -1,0 +1,18 @@
+<article class="product-card">
+  <!-- Image Container with aspect-ratio: 4/3, height: 200px, and overflow: hidden -->
+  <div class="product-img-wrapper product-img-container">
+    <img
+      [src]="product?.image"
+      [alt]="product?.name"
+      class="product-img"
+      loading="lazy"
+    />
+  </div>
+
+  <div class="product-card__content">
+    <h3 class="product-card__title">{{ product?.name }}</h3>
+    <div class="product-card__price">
+      <span class="price-main">{{ product?.price }}</span>
+    </div>
+  </div>
+</article>

@@ -114,6 +114,40 @@ $white:      #ffffff;
   }
 }
 
+.field-phone-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.field-input--phone {
+  padding-inline-end: 80px;
+  direction: ltr;
+  text-align: right;
+  letter-spacing: 0.03em;
+}
+
+.field-phone-badge {
+  position: absolute;
+  inset-inline-end: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: $slate-500;
+  background: #f1f5f9;
+  padding: 4px 8px;
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+.field-hint {
+  font-size: 0.76rem;
+  color: $slate-400;
+  margin-top: -2px;
+}
+
 .field-label {
   font-size: 0.88rem;
   font-weight: 700;
@@ -341,8 +375,22 @@ $white:      #ffffff;
 
 .summary-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
+  padding: 10px;
+  border-radius: 14px;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+
+  &--bundle {
+    background: #f7fdf0;
+    border-color: #d6eba0;
+  }
+
+  &--offer {
+    background: #f0fdfc;
+    border-color: #99e6e0;
+  }
 
   &__img-wrap {
     position: relative;
@@ -380,6 +428,33 @@ $white:      #ffffff;
     min-width: 0;
   }
 
+  &__title-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 2px;
+  }
+
+  &__pill {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 1px 7px;
+    border-radius: 9999px;
+
+    &--bundle {
+      background: #84cc16;
+      color: #ffffff;
+    }
+
+    &--offer {
+      background: #0d9488;
+      color: #ffffff;
+    }
+  }
+
   &__name {
     font-size: 0.88rem;
     font-weight: 700;
@@ -394,21 +469,54 @@ $white:      #ffffff;
     font-size: 0.78rem;
     color: $slate-500;
     margin: 2px 0 0;
+  }
 
-    &--bundle {
-      color: #7c3aed;
-      font-size: 0.72rem;
-      line-height: 1.3;
-      white-space: normal;
+  &__breakdown {
+    margin-top: 4px;
+    padding: 4px 8px;
+    background: rgba(214, 235, 160, 0.25);
+    border-radius: 6px;
+    font-size: 0.72rem;
+    line-height: 1.35;
+    color: #4d7c0f;
+
+    &--offer {
+      background: rgba(153, 230, 224, 0.25);
+      color: #0f766e;
+    }
+
+    &-label {
+      font-weight: 800;
+      margin-inline-end: 4px;
+    }
+
+    &-text {
+      font-weight: 600;
     }
   }
 
-  &__price {
-    font-size: 0.92rem;
-    font-weight: 800;
-    color: $slate-900;
-    white-space: nowrap;
+  &__price-col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1px;
     flex-shrink: 0;
+  }
+
+  &__orig-price {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #94a3b8;
+    text-decoration: line-through;
+    line-height: 1;
+  }
+
+  &__price {
+    font-size: 0.95rem;
+    font-weight: 900;
+    color: #E86A24;
+    white-space: nowrap;
+    line-height: 1.2;
   }
 }
 
@@ -808,5 +916,134 @@ $white:      #ffffff;
   animation: fadeInBadge 0.3s ease-out;
 
   svg { color: #16a34a; flex-shrink: 0; }
+}
+
+// ── Global Submission Error Banner ────────────────────────────
+.checkout-alert-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: #fef2f2;
+  border: 1.5px solid #fca5a5;
+  border-radius: 16px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.08);
+  animation: shakeAlert 0.4s ease-in-out;
+
+  &__icon {
+    flex-shrink: 0;
+    color: #dc2626;
+    margin-top: 2px;
+  }
+
+  &__body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__title {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #991b1b;
+    margin: 0 0 4px;
+  }
+
+  &__text {
+    font-size: 0.88rem;
+    color: #b91c1c;
+    margin: 0;
+    line-height: 1.45;
+  }
+
+  &__close {
+    background: none;
+    border: none;
+    color: #ef4444;
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 6px;
+    transition: background 0.15s;
+
+    &:hover {
+      background: #fee2e2;
+    }
+  }
+}
+
+@keyframes shakeAlert {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
+}
+
+// ── Mobile Sticky Checkout Bar ────────────────────────────────
+.mobile-checkout-bar {
+  display: none;
+
+  @media (max-width: 767px) {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    background: $white;
+    border-top: 1.5px solid $peach;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+    padding: 12px 16px;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+
+    &__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    &__info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    &__label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: $slate-500;
+    }
+
+    &__price {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: #E86A24;
+    }
+
+    &__btn {
+      flex: 1;
+      max-width: 220px;
+      padding: 12px 18px;
+      background: linear-gradient(135deg, #E86A24, #D55917);
+      color: $white;
+      font-size: 0.95rem;
+      font-weight: 800;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(232, 106, 36, 0.35);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+      &:active {
+        transform: scale(0.98);
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+  }
 }
 

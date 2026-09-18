@@ -17,9 +17,10 @@ const OFFERS_API = '/offers';
 export class OfferService {
   constructor(private readonly api: ApiService) {}
 
-  /** Fetch all active offers (public endpoint) */
-  getOffers(): Observable<Offer[]> {
-    return this.api.get<Offer[]>(OFFERS_API).pipe(
+  /** Fetch all active offers (public endpoint, optional category filter) */
+  getOffers(category?: string): Observable<Offer[]> {
+    const params = category ? `?category=${encodeURIComponent(category)}` : '';
+    return this.api.get<Offer[]>(`${OFFERS_API}${params}`).pipe(
       map((res) => res.data ?? [])
     );
   }
@@ -27,6 +28,13 @@ export class OfferService {
   /** Fetch a single offer by slug */
   getOfferBySlug(slug: string): Observable<Offer> {
     return this.api.get<Offer>(`${OFFERS_API}/${slug}`).pipe(
+      map((res) => res.data as Offer)
+    );
+  }
+
+  /** Fetch a single offer by MongoDB _id */
+  getOfferById(id: string): Observable<Offer> {
+    return this.api.get<Offer>(`${OFFERS_API}/${id}`).pipe(
       map((res) => res.data as Offer)
     );
   }

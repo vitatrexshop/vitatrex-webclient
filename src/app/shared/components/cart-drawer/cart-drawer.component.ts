@@ -134,6 +134,35 @@ export class CartDrawerComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Returns original price if item has a discount (for strikethrough comparison).
+   */
+  getOriginalPrice(item: CartItem): number | null {
+    if (item.isBundle && item.bundleMeta?.originalPrice && item.bundleMeta.originalPrice > item.bundleMeta.bundlePrice) {
+      return item.bundleMeta.originalPrice;
+    }
+    if (item.isOffer && item.offerMeta?.originalPrice && item.offerMeta.originalPrice > item.offerMeta.offerPrice) {
+      return item.offerMeta.originalPrice;
+    }
+    if (item.selectedVariant?.originalPrice && item.selectedVariant.originalPrice > item.selectedVariant.price) {
+      return item.selectedVariant.originalPrice;
+    }
+    return null;
+  }
+
+  /**
+   * Safely gets the thumbnail image URL for standard products, bundles, or offers.
+   */
+  getItemImage(item: CartItem): string {
+    if (item.isOffer && item.offerMeta?.offerImage) {
+      return item.offerMeta.offerImage;
+    }
+    if (item.isBundle && item.bundleMeta?.bundleImage) {
+      return item.bundleMeta.bundleImage;
+    }
+    return item.product?.image ?? '';
+  }
+
+  /**
    * Spawns a celebratory particle confetti burst inside the drawer.
    */
   private launchConfetti(): void {

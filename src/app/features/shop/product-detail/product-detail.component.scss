@@ -3,14 +3,14 @@
 // Vibrant Light Green & Orange CTA Palette
 // ══════════════════════════════════════════════════════════════
 
-$primary:            #A8E038;
-$primary-deep:       #166534;
-$primary-hover:      #8EC826;
-$primary-dark-hover: #72A41C;
+$primary:            #4F378B;
+$primary-deep:       #3b2769;
+$primary-hover:      #5e439b;
+$primary-dark-hover: #3b2769;
 
-$cta-gradient:       linear-gradient(135deg, #E86A24 0%, #D55917 100%);
-$cta-gradient-hover: linear-gradient(135deg, #f07a34 0%, #e06020 100%);
-$brand-green-soft:   #F2FCE8;
+$cta-gradient:       linear-gradient(135deg, #4F378B 0%, #3b2769 100%);
+$cta-gradient-hover: linear-gradient(135deg, #5e439b 0%, #4F378B 100%);
+$brand-green-soft:   #f4effd;
 $brand-border:       #E2E8F0;
 
 $text-dark:          #1E293B;
@@ -101,6 +101,7 @@ $crimson-bg:         #FEF2F2;
 
 .gallery-column {
   width: 100%;
+  overflow: hidden;          // prevent image bleed at column level
   box-sizing: border-box;
 }
 
@@ -109,6 +110,7 @@ $crimson-bg:         #FEF2F2;
   flex-direction: column;
   gap: 12px;
   width: 100%;
+  overflow: hidden;          // belt-and-suspenders: stop any bleed from child
 
   @media (min-width: 640px) {
     flex-direction: row;
@@ -117,33 +119,34 @@ $crimson-bg:         #FEF2F2;
   }
 }
 
-// Main Large Showcase Image Card
+// Main Large Showcase Image Card — transparent, no frame
 .main-image-card {
+  // display: flex is critical — establishes the flex formatting context so
+  // the child stage's height: 100% resolves against the card's explicit height.
+  display: flex;
   flex: 1;
   position: relative;
-  background: $bg-card;
-  border-radius: 22px;
-  border: 1px solid $brand-border;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
   width: 100%;
-  aspect-ratio: 1 / 1;
-  max-height: 480px;
-  padding: 24px;
   overflow: hidden;
   box-sizing: border-box;
 
-  @media (max-width: 639px) {
-    border-radius: 18px;
-    padding: 16px;
-    max-height: 340px;
+  // Explicit pixel heights — percentage heights on children resolve against these
+  height: 420px;
+
+  @media (max-width: 768px) {
+    height: 280px;
+  }
+
+  @media (max-width: 480px) {
+    height: 240px;
   }
 
   @media (max-width: 380px) {
-    max-height: 280px;
-    padding: 12px;
+    height: 200px;
   }
 
   .showcase-badge {
@@ -161,19 +164,25 @@ $crimson-bg:         #FEF2F2;
     letter-spacing: 0.02em;
   }
 
+  // Stage fills the card via flex stretch — no absolute needed
   .main-image-stage {
+    flex: 1;
     width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
   }
 
   .showcase-main-img {
+    // max-width/max-height 100% resolves against the flex stage's real pixel size
     max-width: 100%;
     max-height: 100%;
+    width: auto;
+    height: auto;
     object-fit: contain;
-    filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.06));
+    display: block;
     transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 
     &:hover {
@@ -181,6 +190,7 @@ $crimson-bg:         #FEF2F2;
     }
   }
 }
+
 
 // Thumbnails Strip
 .vertical-thumbnails {
@@ -588,13 +598,13 @@ $crimson-bg:         #FEF2F2;
     transform: scale(0.97);
   }
 
-  // ADD TO CART: Brand CTA Orange Gradient
+  // ADD TO CART: Theme Primary Purple
   &-add {
     flex: 1;
     min-width: 0;
     background: $cta-gradient;
     color: #ffffff;
-    box-shadow: 0 4px 18px rgba(232, 106, 36, 0.32);
+    box-shadow: 0 4px 18px rgba(79, 55, 139, 0.32);
     white-space: nowrap;
 
     .cart-svg-icon {
@@ -613,7 +623,7 @@ $crimson-bg:         #FEF2F2;
     &:hover:not(:disabled) {
       background: $cta-gradient-hover;
       transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(232, 106, 36, 0.45);
+      box-shadow: 0 8px 24px rgba(79, 55, 139, 0.45);
     }
   }
 

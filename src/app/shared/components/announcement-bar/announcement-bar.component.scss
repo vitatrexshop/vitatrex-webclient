@@ -1,16 +1,17 @@
 // ══════════════════════════════════════════════════════════════════════
 // ANNOUNCEMENT BAR — Seamless infinite marquee ticker
-// GPU-composited, hover-pause, edge fades, mobile-safe height
+// GPU-composited, hover-pause, edge fades, orange brand banner
 // Pattern: dual-group track scrolling translateX(0) → translateX(-50%)
 // ══════════════════════════════════════════════════════════════════════
 
 .announcement-bar {
   width: 100%;
-  // Enough height so text never clips on mobile (avoids tight 38px box)
-  height: 40px;
-  min-height: 40px;
+  // Ample vertical padding ensures tall Arabic ascenders/descenders never clip
+  padding: 10px 0;
+  min-height: 44px;
+  height: auto;
   overflow: hidden;
-  background: var(--primary-green, #A8E038);
+  background: linear-gradient(90deg, #FF7A00 0%, #E86A24 100%);
   display: flex;
   align-items: center;
   position: relative;
@@ -24,23 +25,18 @@
     width: max-content;
     display: flex;
     align-items: center;
+    // Consistent LTR direction ensures seamless -50% translateX loop in all locales
+    direction: ltr;
     // GPU-composited: only triggers compositor thread, no layout/paint
     will-change: transform;
     transform: translateZ(0);
-    animation: announcement-ticker-ltr 28s linear infinite;
+    animation: announcement-ticker-loop 30s linear infinite;
     // Prevent any wrapping that could cause layout thrashing
     white-space: nowrap;
     flex-shrink: 0;
   }
 
-  // ── Explicit RTL Marquee Animation ────────────────────────────────
-  :host-context([dir='rtl']) &__track,
-  [dir='rtl'] &__track,
-  &.is-rtl &__track {
-    animation-name: announcement-ticker-rtl;
-  }
-
-  // Pause on hover so users can read the announcement
+  // Pause on hover so users can read the announcement comfortably
   &:hover &__track {
     animation-play-state: paused;
   }
@@ -49,93 +45,103 @@
   &__group {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 28px;
     // Trailing padding keeps spacing clean at the seam point
-    padding-inline-end: 20px;
+    padding-inline-end: 28px;
     flex-shrink: 0;
   }
 
   // ── Individual text item ───────────────────────────────────────────
   &__item {
-    font-size: 0.83rem;
-    font-weight: 800;
-    color: var(--neutral-dark, #1E293B);
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: #ffffff;
     white-space: nowrap;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     font-family: 'Readex Pro', 'Noto Kufi Arabic', sans-serif;
     letter-spacing: 0.01em;
-    line-height: 1; // exact line-height prevents vertical clipping
+    line-height: 1.5; // Generous line-height prevents vertical clipping of Arabic diacritics
+    padding: 2px 0;
   }
 
   // ── Item icon (shipping truck, etc.) ──────────────────────────────
   .item-icon {
     flex-shrink: 0;
-    color: var(--neutral-dark, #1E293B);
-    opacity: 0.95;
+    color: #ffffff;
+    opacity: 1;
+    width: 15px;
+    height: 15px;
   }
 
   // ── Bullet separator ──────────────────────────────────────────────
   .sep {
-    color: #567E14;
-    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.7rem;
     opacity: 0.9;
     flex-shrink: 0;
     line-height: 1;
     margin: 0 4px;
+    user-select: none;
   }
 
-  // ── Left / Right edge fade-out gradients ──────────────────────────
+  // ── Left / Right edge fade-out gradients matching orange background ──
   &__fade {
     position: absolute;
     top: 0;
     bottom: 0;
-    width: 64px;
+    width: 50px;
     z-index: 2;
     pointer-events: none;
 
     &--left {
       left: 0;
-      background: linear-gradient(to right, #A8E038 0%, rgba(168, 224, 56, 0) 100%);
+      background: linear-gradient(to right, #FF7A00 0%, rgba(255, 122, 0, 0) 100%);
     }
 
     &--right {
       right: 0;
-      background: linear-gradient(to left, #A8E038 0%, rgba(168, 224, 56, 0) 100%);
+      background: linear-gradient(to left, #E86A24 0%, rgba(232, 106, 36, 0) 100%);
     }
   }
 }
 
 // ══════════════════════════════════════════════════════════════════════
-// Keyframes:
-// LTR: translateX(0) → translateX(-50%)
-// RTL: translateX(0) → translateX(50%)
+// Keyframes: translate3d(0) → translate3d(-50%, 0, 0)
 // With two identical groups the seam is completely invisible.
-// translateZ(0) keeps it on the GPU compositor thread (60fps, no jank).
+// translate3d keeps it on the GPU compositor thread (60fps, no jank).
 // ══════════════════════════════════════════════════════════════════════
-@keyframes announcement-ticker-ltr {
-  from { transform: translateX(0)    translateZ(0); }
-  to   { transform: translateX(-50%) translateZ(0); }
+@keyframes announcement-ticker-loop {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
 }
 
-@keyframes announcement-ticker-rtl {
-  from { transform: translateX(0)   translateZ(0); }
-  to   { transform: translateX(50%) translateZ(0); }
+@media (prefers-reduced-motion: reduce) {
+  .announcement-bar__track {
+    animation: none;
+    transform: none;
+  }
 }
 
 // ── Responsive adjustments ────────────────────────────────────────────
 @media (max-width: 480px) {
   .announcement-bar {
-    height: 36px;
-    min-height: 36px;
+    padding: 8px 0;
+    min-height: 40px;
 
     &__item {
-      font-size: 0.78rem;
+      font-size: 0.8rem;
+      gap: 6px;
+    }
+
+    &__group {
+      gap: 20px;
+      padding-inline-end: 20px;
     }
 
     &__fade {
-      width: 40px; // Narrower fade on small screens to show more text
+      width: 32px; // Narrower fade on small screens to maximize visible text
     }
   }
 }
