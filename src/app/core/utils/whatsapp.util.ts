@@ -6,7 +6,7 @@
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
-export const STORE_WA_NUMBER = '201043674944';
+export const STORE_WA_NUMBER = '201128782527';
 
 export interface WhatsAppOrderItem {
   name?: string;
