@@ -1,14 +1,21 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  ElementRef,
+  Inject,
   OnInit,
+  PLATFORM_ID,
+  ViewChild,
   inject,
 } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { take } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
+import { gsap } from 'gsap';
 import { CartService } from '../../core/services/cart.service';
 import { OrderService } from '../../core/services/order.service';
 import { PaymentService } from '../../core/services/payment.service';
@@ -28,7 +35,13 @@ import { environment } from '../../../environments/environment';
   styleUrls: ['./checkout.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CheckoutComponent implements OnInit {
+export class CheckoutComponent implements OnInit, AfterViewInit {
+
+  // ── ViewChild refs for truck animation ─────────────────────────────────────
+  @ViewChild('truckBtn') truckBtnEl?: ElementRef<HTMLButtonElement>;
+  @ViewChild('truckEl')  truckEl?:    ElementRef<HTMLElement>;
+  @ViewChild('boxEl')    boxEl?:      ElementRef<HTMLElement>;
+
   private readonly fb = inject(FormBuilder);
   private readonly cartService = inject(CartService);
   private readonly orderService = inject(OrderService);
@@ -42,6 +55,8 @@ export class CheckoutComponent implements OnInit {
   private readonly trackingService = inject(OrderTrackingService);
   private readonly translate = inject(TranslateService);
 
+  constructor(@Inject(PLATFORM_ID) private readonly platformId: object) {}
+
   form!: FormGroup;
   cartItems: CartItem[] = [];
   cartTotal = 0;
@@ -49,6 +64,7 @@ export class CheckoutComponent implements OnInit {
   isLoadingGovernorates = true;
   formSubmitted = false;
   orderSubmissionError: string | null = null;
+  orderPlacedSuccess = false;
 
   governorates: GovernorateOption[] = [];
 
@@ -138,6 +154,13 @@ export class CheckoutComponent implements OnInit {
     return item.product?.image ?? '';
   }
 
+  // ── Lifecycle ─────────────────────────────────────────────────────────────
+
+  ngAfterViewInit(): void {
+    // No GSAP setup needed; CSS transitions handle default/loading/done states.
+    // GSAP is used only for the box-loading micro-animation on success.
+  }
+
   ngOnInit(): void {
     this.settingsService
       .getShippingSettings()
@@ -159,7 +182,7 @@ export class CheckoutComponent implements OnInit {
       name:           ['', [Validators.required, Validators.minLength(3)]],
       phone:          ['', [Validators.required, Validators.pattern(/^(01)[0125][0-9]{8}$/)]],
       governorate:    ['', Validators.required],
-      addressDetails: ['', [Validators.required, Validators.minLength(10)]],
+      addressDetails: ['', [Validators.required, Validators.minLength(3)]],
       paymentMethod:  ['cod', Validators.required],
     });
 
@@ -313,34 +336,226 @@ export class CheckoutComponent implements OnInit {
     return !!(ctrl && ctrl.invalid && (ctrl.touched || this.formSubmitted));
   }
 
+  /**
+   * Main entry point when user clicks the truck button or submits the form.
+   */
   submitOrder(): void {
+    this.onTruckButtonClick();
+  }
+
+  /**
+   * Handles click on the Aaron Iker 3D Truck button.
+   */
+  onTruckButtonClick(e?: Event): void {
+    if (e) {
+      e.preventDefault();
+    }
+
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    const button = this.truckBtnEl?.nativeElement;
+    if (!button) return;
+
+    // If already in 'done' state, clicking again resets back to default (Aaron Iker toggle behavior)
+    if (button.classList.contains('done')) {
+      this.resetTruckButton();
+      return;
+    }
+
+    // If currently animating or submitting, prevent duplicate triggers
+    if (button.classList.contains('animation') || this.isSubmitting) {
+      return;
+    }
+
     this.formSubmitted = true;
     this.orderSubmissionError = null;
     this.form.markAllAsTouched();
 
+    // Check cart items
     if (!this.cartItems || this.cartItems.length === 0) {
       this.orderSubmissionError = 'سلة التسوق فارغة، يرجى إضافة منتجات قبل إتمام الطلب.';
       this.toastService.show(this.orderSubmissionError, 'warning');
-      this.router.navigate(['/shop']);
+      this.cdr.markForCheck();
+      // Allow preview animation so user can see the 3D effect in action
+      this.playTruckAnimation(button, () => {
+        setTimeout(() => this.resetTruckButton(), 2500);
+      });
       return;
     }
 
-    if (this.form.invalid || this.isSubmitting) {
-      if (this.form.invalid) {
-        this.orderSubmissionError = 'يرجى استكمال البيانات المطلوبة الموضحة باللون الأحمر قبل تأكيد الطلب.';
-        setTimeout(() => {
-          const firstInvalid = document.querySelector('.field-group.has-error');
-          if (firstInvalid) {
-            firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }
-        }, 60);
-      }
+    // Check form validation
+    if (this.form.invalid) {
+      this.orderSubmissionError = 'يرجى استكمال البيانات المطلوبة الموضحة باللون الأحمر قبل تأكيد الطلب.';
+      this.toastService.show('يرجى ملء الحقول المطلوبة الموضحة باللون الأحمر', 'warning');
+      this.cdr.markForCheck();
+      setTimeout(() => {
+        const firstInvalid = document.querySelector('.field-group.has-error');
+        if (firstInvalid) {
+          firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 60);
+
+      // Play the full 3D animation preview, then reset the button back
+      this.playTruckAnimation(button, () => {
+        setTimeout(() => this.resetTruckButton(), 3000);
+      });
       return;
     }
 
+    // Form is VALID!
+    // Start 3D truck animation AND submit backend order in parallel
     this.isSubmitting = true;
     this.cdr.markForCheck();
 
+    let animFinished = false;
+    let orderSuccessData: CreateOrderData | null = null;
+    let submissionError: any = null;
+
+    this.playTruckAnimation(button, () => {
+      animFinished = true;
+      if (orderSuccessData) {
+        this.finishOrder(orderSuccessData);
+      } else if (submissionError) {
+        this.handleSubmissionError(submissionError);
+      }
+    });
+
+    this.executeOrderSubmission(
+      (data) => {
+        orderSuccessData = data;
+        if (animFinished) {
+          this.finishOrder(data);
+        }
+      },
+      (err) => {
+        submissionError = err;
+        if (animFinished) {
+          this.handleSubmissionError(err);
+        }
+      }
+    );
+  }
+
+  /**
+   * Aaron Iker 3D GSAP Truck Animation Sequence.
+   */
+  playTruckAnimation(button: HTMLElement, onComplete?: () => void): void {
+    const box = (this.boxEl?.nativeElement || button.querySelector('.box')) as HTMLElement;
+    const truck = (this.truckEl?.nativeElement || button.querySelector('.truck')) as HTMLElement;
+
+    if (!box || !truck) {
+      button.classList.add('done');
+      onComplete?.();
+      return;
+    }
+
+    // Add .animation class to flip button -90deg in 3D perspective
+    button.classList.add('animation');
+
+    // 1. Box scale & opacity reveal
+    gsap.to(button, {
+      '--box-s': 1,
+      '--box-o': 1,
+      duration: 0.3,
+      delay: 0.5,
+    });
+
+    // 2. Box slides horizontally into position over the truck
+    gsap.to(box, {
+      x: 0,
+      duration: 0.4,
+      delay: 0.7,
+    });
+
+    // 3. Truck flap opens / adjusts
+    gsap.to(button, {
+      '--hx': -5,
+      '--bx': 50,
+      duration: 0.18,
+      delay: 0.92,
+    });
+
+    // 4. Box drops down into the truck cargo bed
+    gsap.to(box, {
+      y: 0,
+      duration: 0.1,
+      delay: 1.15,
+    });
+
+    // 5. Truck dips under the cargo weight
+    gsap.set(button, {
+      '--truck-y': 0,
+      '--truck-y-n': -26,
+    });
+
+    gsap.to(button, {
+      '--truck-y': 1,
+      '--truck-y-n': -25,
+      duration: 0.2,
+      delay: 1.25,
+      onComplete: () => {
+        // 6. Truck drives across the button road!
+        const btnWidth = button.offsetWidth || 230;
+        const targetX = Math.max(160, btnWidth - 72 + 25);
+
+        gsap.timeline({
+          onComplete: () => {
+            button.classList.add('done');
+            if (onComplete) {
+              onComplete();
+            }
+          },
+        })
+          .to(truck, { x: 0, duration: 0.4 })
+          .to(truck, { x: 45, duration: 0.9, ease: 'power1.inOut' })
+          .to(truck, { x: 25, duration: 0.5, ease: 'power1.inOut' })
+          .to(truck, { x: targetX, duration: 0.6, ease: 'power2.in' });
+
+        // 7. Road progress bar fills along top edge in sync with the truck
+        gsap.to(button, {
+          '--progress': 1,
+          duration: 2.4,
+          ease: 'power2.in',
+        });
+      },
+    });
+  }
+
+  /**
+   * Resets the button back to the initial state (interactive toggle).
+   */
+  resetTruckButton(): void {
+    const button = this.truckBtnEl?.nativeElement;
+    if (!button) return;
+
+    const box = (this.boxEl?.nativeElement || button.querySelector('.box')) as HTMLElement;
+    const truck = (this.truckEl?.nativeElement || button.querySelector('.truck')) as HTMLElement;
+
+    button.classList.remove('animation', 'done');
+    this.isSubmitting = false;
+    this.cdr.markForCheck();
+
+    if (truck) {
+      gsap.set(truck, { x: 4 });
+    }
+    gsap.set(button, {
+      '--progress': 0,
+      '--hx': 0,
+      '--bx': 0,
+      '--box-s': 0.5,
+      '--box-o': 0,
+      '--truck-y': 0,
+      '--truck-y-n': -26,
+    });
+    if (box) {
+      gsap.set(box, { x: -24, y: -6 });
+    }
+  }
+
+  private executeOrderSubmission(
+    onSuccess: (data: CreateOrderData) => void,
+    onError: (err: any) => void
+  ): void {
     const rawPhone = this.form.get('phone')?.value ?? '';
     const phone = this.normalizePhone(rawPhone);
     const { name, governorate, addressDetails, paymentMethod } = this.form.value;
@@ -354,7 +569,6 @@ export class CheckoutComponent implements OnInit {
         address: addressDetails.trim(),
       },
       items: this.cartItems.flatMap((item): OrderItemInput[] => {
-        // 3-slot customisable bundle → flatten to individual products
         if (item.isBundle && item.bundleMeta) {
           return item.bundleMeta.selectedProducts.map((prod) => ({
             productId: prod._id,
@@ -362,11 +576,9 @@ export class CheckoutComponent implements OnInit {
             quantity: item.quantity,
           }));
         }
-        // Promotional offer → send as atomic offer line (backend resolves price)
         if (item.isOffer && item.offerMeta) {
           return [{ offerId: item.offerMeta.offerId, quantity: item.quantity }];
         }
-        // Standard product variant
         return [
           {
             productId: item.product._id,
@@ -376,7 +588,6 @@ export class CheckoutComponent implements OnInit {
         ];
       }),
       paymentMethod,
-      // Pass coupon data if applied
       ...(this.appliedCoupon && {
         couponCode: this.appliedCoupon.appliedCouponCode,
         discountAmount: this.appliedCoupon.discountAmount,
@@ -386,7 +597,6 @@ export class CheckoutComponent implements OnInit {
     this.orderService.submitGuestOrder(payload).subscribe({
       next: (orderData: CreateOrderData) => {
         this.cartService.clearCart();
-
         try {
           if (orderData.trackingUrl) {
             const url = new URL(orderData.trackingUrl);
@@ -398,46 +608,57 @@ export class CheckoutComponent implements OnInit {
         } catch {
           // Ignore
         }
-
-        if (paymentMethod === 'card') {
-          this.paymentService.initiateKashierCheckout({
-            orderId: orderData._id,
-            orderNumber: orderData.orderNumber,
-          }).subscribe({
-            next: (kashierPayload) => {
-              const redirectUrl = this.paymentService.buildKashierRedirectUrl(kashierPayload);
-              window.location.href = redirectUrl;
-            },
-            error: (err) => {
-              this.isSubmitting = false;
-              this.cdr.markForCheck();
-              const msg = err?.error?.message || 'تم تسجيل طلبك بنجاح، وجارٍ نقلك لتفاصيل الطلب.';
-              this.toastService.show(msg, 'warning');
-              this.router.navigate(['/order-success', orderData.orderNumber]);
-            }
-          });
-        } else {
-          this.toastService.show('تم استلام طلبك بنجاح! شكراً لاختيارك فيتاتريكس.', 'success');
-          this.router.navigate(['/order-success', orderData.orderNumber]);
-        }
+        onSuccess(orderData);
       },
       error: (err) => {
-        this.isSubmitting = false;
-        let msg = 'حدث خطأ أثناء تقديم الطلب. يرجى المحاولة مرة أخرى.';
-        if (err?.status === 0) {
-          msg = 'تعذّر الاتصال بالخادم. يرجى التحقق من اتصال الإنترنت والمحاولة مرة أخرى.';
-        } else if (err?.error?.message && typeof err.error.message === 'string') {
-          msg = err.error.message;
-        } else if (err?.status === 400) {
-          msg = 'يرجى مراجعة بيانات الطلب، بعض المنتجات أو العناوين غير صالحة.';
-        } else if (err?.status >= 500) {
-          msg = 'الخدمة غير متاحة مؤقتاً، نعمل على حل المشكلة حالياً. يرجى المحاولة بعد قليل.';
-        }
-        this.orderSubmissionError = msg;
-        this.toastService.show(msg, 'error');
-        this.cdr.markForCheck();
+        onError(err);
       },
     });
+  }
+
+  private finishOrder(orderData: CreateOrderData): void {
+    const paymentMethod = this.form?.get('paymentMethod')?.value ?? 'cod';
+    if (paymentMethod === 'card') {
+      this.paymentService.initiateKashierCheckout({
+        orderId: orderData._id,
+        orderNumber: orderData.orderNumber,
+      }).subscribe({
+        next: (kashierPayload) => {
+          const redirectUrl = this.paymentService.buildKashierRedirectUrl(kashierPayload);
+          window.location.href = redirectUrl;
+        },
+        error: (err) => {
+          this.isSubmitting = false;
+          this.cdr.markForCheck();
+          const msg = err?.error?.message || 'تم تسجيل طلبك بنجاح، وجارٍ نقلك لتفاصيل الطلب.';
+          this.toastService.show(msg, 'warning');
+          this.router.navigate(['/order-success', orderData.orderNumber]);
+        },
+      });
+    } else {
+      setTimeout(() => {
+        this.toastService.show('تم استلام طلبك بنجاح! شكراً لاختيارك فيتاتريكس.', 'success');
+        this.router.navigate(['/order-success', orderData.orderNumber]);
+      }, 1200);
+    }
+  }
+
+  private handleSubmissionError(err: any): void {
+    this.isSubmitting = false;
+    let msg = 'حدث خطأ أثناء تقديم الطلب. يرجى المحاولة مرة أخرى.';
+    if (err?.status === 0) {
+      msg = 'تعذّر الاتصال بالخادم. يرجى التحقق من اتصال الإنترنت والمحاولة مرة أخرى.';
+    } else if (err?.error?.message && typeof err.error.message === 'string') {
+      msg = err.error.message;
+    } else if (err?.status === 400) {
+      msg = 'يرجى مراجعة بيانات الطلب، بعض المنتجات أو العناوين غير صالحة.';
+    } else if (err?.status >= 500) {
+      msg = 'الخدمة غير متاحة مؤقتاً، نعمل على حل المشكلة حالياً. يرجى المحاولة بعد قليل.';
+    }
+    this.orderSubmissionError = msg;
+    this.toastService.show(msg, 'error');
+    this.cdr.markForCheck();
+    this.resetTruckButton();
   }
 
   trackByItem(_: number, item: CartItem): string {

@@ -370,14 +370,14 @@
     "RIGHTS": "© {{year}} فيتاتريكس Vitatrex. جميع الحقوق محفوظة."
   },
   "HAPPY_SHELF": {
-    "TITLE": "رف السعادة",
+    "TITLE": "THE VITAMIN WORLD",
     "NOTIFY_ME": "أعلمني عند التوفر",
     "NOTIFY_SUCCESS": "سنقوم بإشعارك فور توفر هذا المنتج مجدداً!",
     "OUT_OF_STOCK": "نفد من المخزون",
     "IN_STOCK": "متوفر",
     "QUICK_ADD": "أضف للسلة"
   },
-  "HAPPY_SHELF_TITLE": "رف السعادة",
+  "HAPPY_SHELF_TITLE": "THE VITAMIN WORLD",
   "NOT_FOUND": {
     "PAGE_TITLE": "404 - الصفحة غير موجودة | فيتاتريكس",
     "BADGE": "خطأ 404",

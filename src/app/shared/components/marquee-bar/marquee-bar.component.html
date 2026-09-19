@@ -1,32 +1,26 @@
 <div class="marquee-bar" role="region" aria-label="Highlights">
   <div class="marquee-bar__track" #track aria-hidden="true">
-    <ng-container *ngIf="(shippingSettings$ | async) as settings">
-      <div class="marquee-item">{{ 'MARQUEE.NATURAL' | translate }}</div>
-      <span class="marquee-sep">•</span>
-      <div class="marquee-item">{{ 'MARQUEE.SUGAR_FREE' | translate }}</div>
-      <span class="marquee-sep">•</span>
-      <div class="marquee-item">{{ 'MARQUEE.HALAL' | translate }}</div>
-      <ng-container *ngIf="settings.isFreeShippingEnabled">
-        <span class="marquee-sep">•</span>
-        <div class="marquee-item">{{ 'MARQUEE.FREE_SHIPPING_DYNAMIC' | translate: { amount: settings.freeShippingThreshold } }}</div>
-      </ng-container>
-      <span class="marquee-sep">•</span>
-      <div class="marquee-item">{{ 'MARQUEE.MADE_IN_EGYPT' | translate }}</div>
-      <span class="marquee-sep">•</span>
+    <ng-container *ngIf="{ settings: (shippingSettings$ | async) } as data">
+      <div class="marquee-bar__group">
+        <div class="marquee-bar__item">{{ 'MARQUEE.NATURAL' | translate }}</div>
+        <div class="marquee-bar__item">{{ 'MARQUEE.SUGAR_FREE' | translate }}</div>
+        <div class="marquee-bar__item">{{ 'MARQUEE.HALAL' | translate }}</div>
+        <div class="marquee-bar__item" *ngIf="data.settings?.isFreeShippingEnabled !== false">
+          {{ 'MARQUEE.FREE_SHIPPING_DYNAMIC' | translate: { amount: data.settings?.freeShippingThreshold || 500 } }}
+        </div>
+        <div class="marquee-bar__item">{{ 'MARQUEE.MADE_IN_EGYPT' | translate }}</div>
+      </div>
 
       <!-- Duplicate for seamless infinite scroll -->
-      <div class="marquee-item">{{ 'MARQUEE.NATURAL' | translate }}</div>
-      <span class="marquee-sep">•</span>
-      <div class="marquee-item">{{ 'MARQUEE.SUGAR_FREE' | translate }}</div>
-      <span class="marquee-sep">•</span>
-      <div class="marquee-item">{{ 'MARQUEE.HALAL' | translate }}</div>
-      <ng-container *ngIf="settings.isFreeShippingEnabled">
-        <span class="marquee-sep">•</span>
-        <div class="marquee-item">{{ 'MARQUEE.FREE_SHIPPING_DYNAMIC' | translate: { amount: settings.freeShippingThreshold } }}</div>
-      </ng-container>
-      <span class="marquee-sep">•</span>
-      <div class="marquee-item">{{ 'MARQUEE.MADE_IN_EGYPT' | translate }}</div>
-      <span class="marquee-sep">•</span>
+      <div class="marquee-bar__group">
+        <div class="marquee-bar__item">{{ 'MARQUEE.NATURAL' | translate }}</div>
+        <div class="marquee-bar__item">{{ 'MARQUEE.SUGAR_FREE' | translate }}</div>
+        <div class="marquee-bar__item">{{ 'MARQUEE.HALAL' | translate }}</div>
+        <div class="marquee-bar__item" *ngIf="data.settings?.isFreeShippingEnabled !== false">
+          {{ 'MARQUEE.FREE_SHIPPING_DYNAMIC' | translate: { amount: data.settings?.freeShippingThreshold || 500 } }}
+        </div>
+        <div class="marquee-bar__item">{{ 'MARQUEE.MADE_IN_EGYPT' | translate }}</div>
+      </div>
     </ng-container>
   </div>
 </div>

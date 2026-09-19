@@ -29,19 +29,66 @@
 // ── 1. Section Header & Title ─────────────────────────────────
 .happy-shelf-header {
   text-align: center;
-  margin-bottom: clamp(2rem, 4vw, 3.25rem);
+  margin-bottom: clamp(2.25rem, 4.5vw, 3.5rem);
 }
 
 .happy-shelf-title {
-  font-family: var(--font-heading, 'Plus Jakarta Sans', 'Readex Pro', -apple-system, sans-serif);
-  font-size: clamp(1.75rem, 3.5vw, 2.65rem);
-  font-weight: 900;
+  direction: ltr !important;
+  unicode-bidi: isolate;
+  font-family: 'Plus Jakarta Sans', var(--font-heading, sans-serif);
+  font-size: clamp(1.85rem, 3.8vw, 2.25rem);
+  font-weight: 800;
   text-transform: uppercase;
   color: var(--neutral-dark, #1E293B);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
   margin: 0;
   text-align: center;
-  line-height: 1.15;
+  line-height: 1.3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  column-gap: 0.38em;
+  row-gap: 0.25em;
+
+  .title-prefix {
+    display: inline-block;
+    color: inherit;
+  }
+
+  .title-highlight-wrap,
+  .highlight {
+    position: relative;
+    display: inline-block;
+    white-space: nowrap;
+
+    .title-highlight-text {
+      position: relative;
+      z-index: 1;
+      color: inherit;
+    }
+
+    .title-sketch-svg {
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 100%;
+      height: 16px;
+      pointer-events: none;
+      z-index: 0;
+      overflow: visible;
+    }
+
+    .title-sketch-path {
+      stroke: #9DBB3E;
+      stroke-width: 4px;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+      transition: stroke-dashoffset 0.1s linear;
+    }
+  }
 }
 
 // ── 2. Carousel Wrapper (Full Width) ──────────────────────────

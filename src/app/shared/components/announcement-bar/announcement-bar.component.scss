@@ -18,6 +18,8 @@
   // Promote to its own stacking context — prevents z-index bleed
   z-index: 100;
   box-sizing: border-box;
+  // Crucial: enforce LTR coordinate system for the track so it anchors at left: 0 in both LTR and RTL locales
+  direction: ltr !important;
 
   // ── Scrolling track ────────────────────────────────────────────────
   &__track {
@@ -25,13 +27,10 @@
     width: max-content;
     display: flex;
     align-items: center;
-    // Consistent LTR direction ensures seamless -50% translateX loop in all locales
     direction: ltr;
-    // GPU-composited: only triggers compositor thread, no layout/paint
     will-change: transform;
     transform: translateZ(0);
     animation: announcement-ticker-loop 30s linear infinite;
-    // Prevent any wrapping that could cause layout thrashing
     white-space: nowrap;
     flex-shrink: 0;
   }
@@ -46,14 +45,13 @@
     display: flex;
     align-items: center;
     gap: 28px;
-    // Trailing padding keeps spacing clean at the seam point
     padding-inline-end: 28px;
     flex-shrink: 0;
   }
 
   // ── Individual text item ───────────────────────────────────────────
   &__item {
-    font-size: 0.86rem;
+    font-size: 0.88rem;
     font-weight: 700;
     color: #ffffff;
     white-space: nowrap;
@@ -62,8 +60,9 @@
     gap: 8px;
     font-family: 'Readex Pro', 'Noto Kufi Arabic', sans-serif;
     letter-spacing: 0.01em;
-    line-height: 1.5; // Generous line-height prevents vertical clipping of Arabic diacritics
+    line-height: 1.5;
     padding: 2px 0;
+    direction: rtl; // Arabic text and icons render in natural RTL order
   }
 
   // ── Item icon (shipping truck, etc.) ──────────────────────────────

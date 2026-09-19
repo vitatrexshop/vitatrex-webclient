@@ -11,10 +11,34 @@
 >
   <div class="happy-shelf-container">
 
-    <!-- ── Section Title (Exact Centered Bold Deep Purple Uppercase) ── -->
+    <!-- ── Section Title (Plus Jakarta Sans 800 with Hand-Drawn Underline) ── -->
     <header class="happy-shelf-header">
-      <h2 id="happy-shelf-heading" class="happy-shelf-title">
-        {{ 'HAPPY_SHELF.TITLE' | translate }}
+      <h2 id="happy-shelf-heading" class="happy-shelf-title" dir="ltr">
+        <span class="title-prefix">THE VITAMIN</span>
+        <span class="title-highlight-wrap highlight">
+          <span class="title-highlight-text">WORLD</span>
+          <svg
+            #sketchSvg
+            class="title-sketch-svg"
+            viewBox="0 0 160 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+            preserveAspectRatio="none"
+          >
+            <!-- Hand-drawn smooth curved underline stroke beneath WORLD -->
+            <path
+              #sketchPath
+              class="title-sketch-path"
+              d="M 3,8 C 45,15 115,15 157,6"
+              stroke="#9DBB3E"
+              stroke-width="4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              fill="none"
+            />
+          </svg>
+        </span>
       </h2>
     </header>
 

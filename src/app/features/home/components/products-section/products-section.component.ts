@@ -26,6 +26,12 @@ import { CartService } from '../../../../core/services/cart.service';
 import { ToastService } from '../../../../core/services/toast.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Product } from '../../../../core/models/product.model';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export interface HappyShelfItem {
   _id: string;
@@ -49,6 +55,10 @@ export interface HappyShelfItem {
 export class ProductsSectionComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('sectionEl', { static: false }) sectionEl?: ElementRef<HTMLElement>;
   @ViewChild('swiperEl', { static: false }) swiperEl?: ElementRef<HTMLElement>;
+  @ViewChild('sketchPath', { static: false }) sketchPath?: ElementRef<SVGPathElement>;
+
+  private ctx?: gsap.Context;
+  private titleObserver?: IntersectionObserver;
 
   private readonly productService = inject(ProductService);
   private readonly cartService    = inject(CartService);
@@ -148,14 +158,99 @@ export class ProductsSectionComponent implements OnInit, AfterViewInit, OnDestro
           this.swiper?.update();
         }), 60);
       }
+      this.initTitleAnimation();
     }
   }
 
   ngOnDestroy(): void {
+    this.titleObserver?.disconnect();
+    this.ctx?.revert();
     this.resizeObserver?.disconnect();
     if (this.resizeTimer) clearTimeout(this.resizeTimer);
     if (this.navTransitionTimer) clearTimeout(this.navTransitionTimer);
     this.swiper?.destroy(true, true);
+  }
+
+  /**
+   * Animates the hand-drawn SVG highlight path around 'WORLD' when the section enters viewport.
+   */
+  private initTitleAnimation(): void {
+    if (!this.isBrowser) return;
+
+    this.ngZone.runOutsideAngular(() => {
+      setTimeout(() => {
+        const path = this.sketchPath?.nativeElement;
+        if (!path) return;
+
+        // Exact measured SVG path length
+        let length = 180;
+        try {
+          if (typeof path.getTotalLength === 'function') {
+            const measured = path.getTotalLength();
+            if (measured > 0) length = Math.ceil(measured);
+          }
+        } catch (_) {}
+
+        // Initialize stroke hidden
+        path.style.strokeDasharray = `${length}`;
+        path.style.strokeDashoffset = `${length}`;
+        path.style.opacity = '1';
+
+        let hasAnimated = false;
+        const triggerDraw = () => {
+          if (hasAnimated) return;
+          hasAnimated = true;
+
+          gsap.to(path, {
+            strokeDashoffset: 0,
+            duration: 0.9,
+            ease: 'power2.out',
+            onComplete: () => {
+              path.style.strokeDashoffset = '0';
+            },
+          });
+        };
+
+        const target = this.sectionEl?.nativeElement || path;
+
+        // 1. Check if already in viewport right now (e.g. refreshed or direct scroll)
+        if (this.isElementVisible(target)) {
+          triggerDraw();
+          return;
+        }
+
+        // 2. Browser-native IntersectionObserver (robust against dynamic layout shifts)
+        if (typeof IntersectionObserver !== 'undefined') {
+          this.titleObserver = new IntersectionObserver(
+            (entries) => {
+              if (entries[0]?.isIntersecting) {
+                triggerDraw();
+                this.titleObserver?.disconnect();
+              }
+            },
+            { threshold: 0.15, rootMargin: '40px' }
+          );
+          this.titleObserver.observe(target);
+        }
+
+        // 3. GSAP ScrollTrigger as additional layer
+        this.ctx = gsap.context(() => {
+          ScrollTrigger.create({
+            trigger: target,
+            start: 'top 85%',
+            onEnter: triggerDraw,
+            once: true,
+          });
+        }, target);
+      }, 100);
+    });
+  }
+
+  private isElementVisible(el: HTMLElement | SVGElement): boolean {
+    if (typeof window === 'undefined' || !el) return false;
+    const rect = el.getBoundingClientRect();
+    const vh = window.innerHeight || document.documentElement.clientHeight;
+    return rect.top < vh && rect.bottom > 0;
   }
 
   @HostListener('window:resize')

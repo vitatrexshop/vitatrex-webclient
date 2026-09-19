@@ -23,7 +23,7 @@ import {
   PAYMENT_STATUS_LABELS,
 } from '../../core/models/order.model';
 import { Product } from '../../core/models/product.model';
-import { generateWhatsAppLink } from '../../core/utils/whatsapp.util';
+import { generateWhatsAppLink, STORE_WA_NUMBER } from '../../core/utils/whatsapp.util';
 
 @Component({
   selector: 'app-order-success',
@@ -273,12 +273,32 @@ export class OrderSuccessComponent implements OnInit {
     }
   }
 
-  /** Confirms the order and navigates user to the shop for continued browsing. */
+  /**
+   * Confirms the order by constructing a pre-filled WhatsApp message URL
+   * targeting phone number 201043674944 with full order summary details
+   * (Items, Total Amount, Customer Name, Phone, Address) and opens via window.open.
+   */
   confirmOrder(): void {
-    this.router.navigate(['/shop']);
+    if (this.order) {
+      this.confirmOrderViaWhatsApp(this.order);
+      return;
+    }
+
+    // Fallback if order object is still loading or not populated yet
+    const waNumber = STORE_WA_NUMBER; // 201043674944
+    const message = `🌿 *VitaTrex | تأكيد طلب جديد*\n────────────────\n🆔 *رقم الطلب:* #${this.orderNumber || ''}\n_أود تأكيد طلبي والمتابعة معكم._`;
+    const url = `https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`;
+    try {
+      const win = window.open(url, '_blank');
+      if (!win || win.closed || typeof win.closed === 'undefined') {
+        window.location.href = url;
+      }
+    } catch {
+      window.location.href = url;
+    }
   }
 
-  /** Agent 2 — Opens a pre-filled WhatsApp order confirmation message with full order breakdown in a new tab. */
+  /** Opens a pre-filled WhatsApp order confirmation message with full order breakdown in a new tab. */
   confirmOrderViaWhatsApp(order: Order | null): void {
     if (!order) return;
 
@@ -306,7 +326,15 @@ export class OrderSuccessComponent implements OnInit {
       paymentMethod: this.getPaymentMethodLabel(order.paymentMethod),
     });
 
-    window.open(url, '_blank', 'noopener,noreferrer');
+    try {
+      const win = window.open(url, '_blank');
+      if (!win || win.closed || typeof win.closed === 'undefined') {
+        window.location.href = url;
+      }
+    } catch (err) {
+      console.error('Failed to open WhatsApp URL:', err);
+      window.location.href = url;
+    }
   }
 
   /** Backwards compatibility helper for simple order inquiries. */

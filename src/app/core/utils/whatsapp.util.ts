@@ -2,11 +2,11 @@
  * ─────────────────────────────────────────────────────────────────────────────
  *  Agent 1 — Core Utilities & Link Generator (Angular / TypeScript mirror)
  *  WhatsApp (wa.me) Deep-Link Helper — VitaTrex Store
- *  Store WhatsApp Number: 201128782527
+ *  Store WhatsApp Number: 201043674944
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
-export const STORE_WA_NUMBER = '201128782527';
+export const STORE_WA_NUMBER = '201043674944';
 
 export interface WhatsAppOrderItem {
   name?: string;

@@ -370,14 +370,14 @@
     "RIGHTS": "© {{year}} Vitatrex. All rights reserved."
   },
   "HAPPY_SHELF": {
-    "TITLE": "THE HAPPY SHELF",
+    "TITLE": "THE VITAMIN WORLD",
     "NOTIFY_ME": "Notify me",
     "NOTIFY_SUCCESS": "We'll notify you as soon as this product is back in stock!",
     "OUT_OF_STOCK": "Out of Stock",
     "IN_STOCK": "In Stock",
     "QUICK_ADD": "Quick Add"
   },
-  "HAPPY_SHELF_TITLE": "THE HAPPY SHELF",
+  "HAPPY_SHELF_TITLE": "THE VITAMIN WORLD",
   "NOT_FOUND": {
     "PAGE_TITLE": "404 - Page Not Found | VitaTrex",
     "BADGE": "Error 404",

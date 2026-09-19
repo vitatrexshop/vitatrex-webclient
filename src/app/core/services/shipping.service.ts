@@ -17,7 +17,19 @@ export class ShippingService {
     this.governorates$ = this.api
       .get<GovernorateOption[]>(`${SHIPPING_API}/governorates`)
       .pipe(
-        map((res) => (res.data as GovernorateOption[]) ?? []),
+        map((res) => {
+          const list = (res.data as GovernorateOption[]) ?? [];
+          const seen = new Set<string>();
+          const cleaned: GovernorateOption[] = [];
+          for (const item of list) {
+            const govName = item.governorate === 'الدهقلية' ? 'الدقهلية' : item.governorate;
+            if (!seen.has(govName)) {
+              seen.add(govName);
+              cleaned.push({ ...item, governorate: govName });
+            }
+          }
+          return cleaned.sort((a, b) => a.governorate.localeCompare(b.governorate, 'ar'));
+        }),
         shareReplay(1)
       );
   }

@@ -6,7 +6,7 @@
 
 .site-footer {
   position: relative;
-  background: #1A1A1A; // VitaTrix Neutral Dark
+  background: transparent;
   color: #ffffff;
   margin-top: auto;
   font-family: var(--font-body, 'IBM Plex Sans Arabic', 'Readex Pro', sans-serif);
@@ -30,6 +30,10 @@
       // CLS fix: fixed aspect-ratio prevents wave height from causing layout shift
       aspect-ratio: 1440 / 40;
 
+      path {
+        fill: #9DBB3E;
+      }
+
       @media (min-width: 768px) {
         height: 60px;
         aspect-ratio: 1440 / 60;
@@ -40,7 +44,7 @@
   // ── Main Content Body ───────────────────────────────────────
   &__main {
     padding: 16px 0 calc(115px + env(safe-area-inset-bottom, 0px));
-    background: #1A1A1A;
+    background: #9DBB3E;
     width: 100%;
     box-sizing: border-box;
 
@@ -97,7 +101,7 @@
 // ── Thin Divider Line ─────────────────────────────────────────
 .footer-divider {
   border: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.18);
+  border-top: 1px solid rgba(255, 255, 255, 0.28);
   margin: 18px 0 22px;
   width: 100%;
   box-sizing: border-box;
@@ -137,7 +141,8 @@
       white-space: nowrap;
 
       &:hover {
-        color: var(--primary-green, #A8E038);
+        color: #ffffff;
+        opacity: 0.88;
         text-decoration: underline;
         text-underline-offset: 4px;
       }
@@ -229,7 +234,7 @@
 
   .mobile-inner-divider {
     border: none;
-    border-top: 1px solid rgba(255, 255, 255, 0.18);
+    border-top: 1px solid rgba(255, 255, 255, 0.28);
     margin: 12px 0 18px;
     width: 100%;
   }
@@ -272,8 +277,8 @@
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1.5px solid rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.15);
+    border: 1.5px solid rgba(255, 255, 255, 0.6);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -283,10 +288,11 @@
     box-sizing: border-box;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.22);
+      background: #ffffff;
+      color: #7B9B25;
       border-color: #ffffff;
       transform: translateY(-3px) scale(1.08);
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
     }
 
     &:active {
@@ -310,8 +316,8 @@
     gap: 8px;
     padding: 8px 28px;
     border-radius: 9999px;
-    border: 1.5px solid rgba(255, 255, 255, 0.45);
-    background: rgba(255, 255, 255, 0.06);
+    border: 1.5px solid rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.15);
     color: #ffffff;
     font-family: var(--font-heading, 'Readex Pro', sans-serif);
     font-weight: 700;
@@ -326,10 +332,11 @@
     }
 
     &:hover {
-      background: rgba(255, 255, 255, 0.16);
+      background: #ffffff;
+      color: #7B9B25;
       border-color: #ffffff;
       transform: scale(1.05);
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
 
       .chevron-icon {
         transform: translateY(2px);

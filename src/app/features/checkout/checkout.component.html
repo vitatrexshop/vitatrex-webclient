@@ -84,18 +84,6 @@
               </option>
             </select>
             <span class="field-error" *ngIf="getFieldError('governorate') as err" role="alert">{{ err }}</span>
-
-            <!-- Dynamic Estimated Delivery Notice Badge -->
-            <div class="delivery-badge" *ngIf="selectedGovernorateOption as opt">
-              <svg class="delivery-badge__icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"/>
-                <polyline points="12 6 12 12 16 14"/>
-              </svg>
-              <span class="delivery-badge__text">
-                {{ 'CHECKOUT.ESTIMATED_DELIVERY' | translate: { hours: opt.deliveryTimeHours } }}
-              </span>
-              <span class="delivery-badge__zone" *ngIf="opt.zoneName">({{ opt.zoneName }})</span>
-            </div>
           </div>
 
           <!-- Address Details -->
@@ -149,19 +137,36 @@
         </div>
       </section>
 
-      <!-- ── Submit Button ────────────────────────────────────── -->
-      <button
-        type="submit"
-        class="submit-btn"
-        [disabled]="isSubmitting"
-        id="submit-order-btn"
-      >
-        <span *ngIf="!isSubmitting">{{ 'CHECKOUT.SUBMIT_ORDER' | translate }}</span>
-        <span *ngIf="isSubmitting" class="submit-btn__loading">
-          <span class="spinner"></span>
-          {{ 'CHECKOUT.SUBMITTING' | translate }}
-        </span>
-      </button>
+      <!-- ── Truck Animated Submit Button (Aaron Iker Design) ──── -->
+      <div class="truck-button-wrap">
+        <button
+          #truckBtn
+          type="button"
+          class="truck-button"
+          id="submit-order-btn"
+          (click)="onTruckButtonClick($event)"
+          [attr.aria-label]="'CHECKOUT.SUBMIT_ORDER' | translate"
+        >
+          <!-- Default label -->
+          <span class="default">{{ 'CHECKOUT.SUBMIT_ORDER' | translate }}</span>
+
+          <!-- Success label + tick -->
+          <span class="success">
+            تم الطلب بنجاح
+            <svg viewBox="0 0 12 10">
+              <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+            </svg>
+          </span>
+
+          <!-- Truck scene (rides on the rotated face of the button) -->
+          <div class="truck" #truckEl>
+            <div class="wheel"></div>
+            <div class="back"></div>
+            <div class="front"></div>
+            <div class="box" #boxEl></div>
+          </div>
+        </button>
+      </div>
     </form>
 
     <!-- ══════════════════════════════════════════════════════════
@@ -381,13 +386,14 @@
         type="button"
         class="mobile-checkout-bar__btn"
         (click)="submitOrder()"
-        [disabled]="isSubmitting"
+        [disabled]="isSubmitting || orderPlacedSuccess"
       >
-        <span *ngIf="!isSubmitting">{{ 'CHECKOUT.SUBMIT_ORDER' | translate }}</span>
-        <span *ngIf="isSubmitting" class="submit-btn__loading">
-          <span class="spinner spinner--sm"></span>
+        <span *ngIf="!isSubmitting && !orderPlacedSuccess">{{ 'CHECKOUT.SUBMIT_ORDER' | translate }}</span>
+        <span *ngIf="isSubmitting" style="display:flex;align-items:center;gap:8px;">
+          <span style="width:16px;height:16px;border:2px solid rgba(255,255,255,0.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;"></span>
           {{ 'CHECKOUT.SUBMITTING' | translate }}
         </span>
+        <span *ngIf="orderPlacedSuccess">✓ تم الطلب!</span>
       </button>
     </div>
   </div>
