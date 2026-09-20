@@ -58,6 +58,9 @@ export class CheckoutComponent implements OnInit, AfterViewInit {
   constructor(@Inject(PLATFORM_ID) private readonly platformId: object) {}
 
   form!: FormGroup;
+  get checkoutForm(): FormGroup {
+    return this.form;
+  }
   cartItems: CartItem[] = [];
   cartTotal = 0;
   isSubmitting = false;
@@ -369,36 +372,27 @@ export class CheckoutComponent implements OnInit, AfterViewInit {
 
     this.formSubmitted = true;
     this.orderSubmissionError = null;
-    this.form.markAllAsTouched();
 
-    // Check cart items
+    // 1. Form Validation Check: If invalid, mark all touched, focus first invalid field, and return immediately
+    if (this.checkoutForm.invalid) {
+      this.checkoutForm.markAllAsTouched();
+      this.orderSubmissionError = 'يرجى استكمال البيانات المطلوبة الموضحة باللون الأحمر قبل تأكيد الطلب.';
+      this.toastService.show('يرجى ملء الحقول المطلوبة الموضحة باللون الأحمر', 'warning');
+      this.cdr.markForCheck();
+      this.focusFirstInvalidField();
+      return;
+    }
+
+    // 2. Check cart items
     if (!this.cartItems || this.cartItems.length === 0) {
       this.orderSubmissionError = 'سلة التسوق فارغة، يرجى إضافة منتجات قبل إتمام الطلب.';
       this.toastService.show(this.orderSubmissionError, 'warning');
       this.cdr.markForCheck();
-      // Allow preview animation so user can see the 3D effect in action
-      this.playTruckAnimation(button, () => {
-        setTimeout(() => this.resetTruckButton(), 2500);
-      });
       return;
     }
 
-    // Check form validation
-    if (this.form.invalid) {
-      this.orderSubmissionError = 'يرجى استكمال البيانات المطلوبة الموضحة باللون الأحمر قبل تأكيد الطلب.';
-      this.toastService.show('يرجى ملء الحقول المطلوبة الموضحة باللون الأحمر', 'warning');
-      this.cdr.markForCheck();
-      setTimeout(() => {
-        const firstInvalid = document.querySelector('.field-group.has-error');
-        if (firstInvalid) {
-          firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      }, 60);
-
-      // Play the full 3D animation preview, then reset the button back
-      this.playTruckAnimation(button, () => {
-        setTimeout(() => this.resetTruckButton(), 3000);
-      });
+    // 3. Execute Animation & Order Submission on Success (only when checkoutForm.valid evaluates to true)
+    if (!this.checkoutForm.valid) {
       return;
     }
 
@@ -434,6 +428,37 @@ export class CheckoutComponent implements OnInit, AfterViewInit {
         }
       }
     );
+  }
+
+  /**
+   * Identifies and shifts focus to the first invalid input in the form.
+   */
+  private focusFirstInvalidField(): void {
+    setTimeout(() => {
+      const fieldOrder = ['name', 'phone', 'governorate', 'addressDetails'];
+      for (const field of fieldOrder) {
+        const ctrl = this.checkoutForm.get(field);
+        if (ctrl && ctrl.invalid) {
+          const el = document.querySelector<HTMLElement>(
+            `[formControlName="${field}"], #${field === 'name' ? 'fullName' : field}`
+          );
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            el.focus();
+            return;
+          }
+        }
+      }
+
+      // Fallback selector if none matched in fieldOrder
+      const fallbackEl = document.querySelector<HTMLElement>(
+        '.field-group.has-error input, .field-group.has-error select, .field-group.has-error textarea, .ng-invalid[formControlName]'
+      );
+      if (fallbackEl) {
+        fallbackEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        fallbackEl.focus();
+      }
+    }, 60);
   }
 
   /**
