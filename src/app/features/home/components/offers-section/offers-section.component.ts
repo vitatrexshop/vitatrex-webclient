@@ -518,6 +518,10 @@ export class OffersSectionComponent implements AfterViewInit, OnDestroy {
     this.activeSlotIdx.set(bId, slotIdx);
     this.showModal.set(bId, true);
     if (this.isBrowser) document.body.style.overflow = 'hidden';
+    // Pause slider autoplay while modal is open
+    if (this.swiper?.autoplay?.running) {
+      this.swiper.autoplay.stop();
+    }
     this.cdr.markForCheck();
   }
 
@@ -528,6 +532,10 @@ export class OffersSectionComponent implements AfterViewInit, OnDestroy {
     }
     this.activeModalBundle = null;
     if (this.isBrowser) document.body.style.overflow = '';
+    // Resume slider autoplay after modal closes
+    if (this.swiper?.autoplay && !this.swiper.autoplay.running) {
+      this.swiper.autoplay.start();
+    }
     this.cdr.markForCheck();
   }
 
