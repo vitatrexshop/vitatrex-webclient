@@ -170,6 +170,11 @@
     "START_BTN": "Start Health Quiz Now"
   },
   "PRODUCT": {
+    "CLICK_TO_ZOOM": "Click to zoom 🔍",
+    "ZOOM_IN": "Zoom in",
+    "ZOOM_OUT": "Zoom out",
+    "RESET_ZOOM": "Reset zoom",
+    "CLOSE_ZOOM": "Close",
     "ADD_TO_CART": "ADD TO CART",
     "BUY_IT_NOW": "BUY IT NOW",
     "DESCRIPTION": "DESCRIPTION",
@@ -208,6 +213,11 @@
     "NO_PRODUCTS_SUB": "Try searching with different keywords or browse all categories.",
     "VIEW_ALL_PRODUCTS": "View All Products",
     "NO_BUNDLES_TITLE": "No bundles currently available",
+    "BUILD_YOUR_BUNDLE": "Build Your Bundle 🎁",
+    "BUNDLE_TAGLINE": "Choose 2 products (120 pcs) + 1 free gift (60 pcs)",
+    "CUSTOM_BUNDLE": "Custom Bundle",
+    "PAID_CHOICES": "bundle items",
+    "GIFT_CHOICES": "gift options",
     "CATEGORIES": "Categories:",
     "ALL": "All"
   },

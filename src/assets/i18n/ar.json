@@ -170,6 +170,11 @@
     "START_BTN": "ابدأ الاختبار الآن"
   },
   "PRODUCT": {
+    "CLICK_TO_ZOOM": "اضغط للتكبير 🔍",
+    "ZOOM_IN": "تكبير",
+    "ZOOM_OUT": "تصغير",
+    "RESET_ZOOM": "إعادة ضبط",
+    "CLOSE_ZOOM": "إغلاق",
     "ADD_TO_CART": "أضف للسلة",
     "BUY_IT_NOW": "شراء فوري",
     "DESCRIPTION": "الوصف",
@@ -208,6 +213,11 @@
     "NO_PRODUCTS_SUB": "جرب البحث بكلمات أخرى أو تصفح جميع التصنيفات.",
     "VIEW_ALL_PRODUCTS": "عرض جميع المنتجات",
     "NO_BUNDLES_TITLE": "لا توجد باقات توفير متاحة حالياً",
+    "BUILD_YOUR_BUNDLE": "اصنع باقتك 🎁",
+    "BUNDLE_TAGLINE": "اختر 2 منتج (120 قطعة) + هدية مجانية (60 قطعة)",
+    "CUSTOM_BUNDLE": "باقة مخصصة",
+    "PAID_CHOICES": "منتج باقة",
+    "GIFT_CHOICES": "خيار هدية",
     "CATEGORIES": "التصنيفات:",
     "ALL": "الكل"
   },

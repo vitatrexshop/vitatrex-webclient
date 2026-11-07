@@ -1,0 +1,88 @@
+<article
+  class="product-card product-card-360 shop-bundle-card"
+  *ngIf="bundle"
+  (click)="onCardClick()"
+  role="button"
+  tabindex="0"
+  (keydown.enter)="onCardClick()"
+  [attr.aria-label]="bundle.title"
+>
+
+  <!-- ══ SECTION 1: Badges (Top Start & End) ══ -->
+  <div class="product-card-360__badges product-card-360__badges--start">
+    <span class="card-badge badge--custom-bundle">
+      {{ bundle.badgeText || ('SHOP.CUSTOM_BUNDLE' | translate) }}
+    </span>
+  </div>
+
+  <!-- Discount Badge -->
+  <div
+    class="product-card-360__badges product-card-360__badges--end"
+    *ngIf="bundle.discountPercentage > 0"
+  >
+    <span class="card-badge badge--discount">
+      -{{ bundle.discountPercentage }}%
+    </span>
+  </div>
+
+  <!-- ══ SECTION 2: Image Stage (Consistent 4:3 Ratio) ══ -->
+  <div class="product-img-wrapper product-card-360__stage">
+    <div class="product-img-box product-card-360__img-box">
+      <img
+        [src]="formatMediaUrl(bundle.image)"
+        [alt]="bundle.title"
+        class="product-img primary-img"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+  </div>
+
+  <!-- ══ SECTION 3: Content (Title, Price, Tagline, CTA) ══ -->
+  <div class="product-card-360__details shop-bundle-card__details">
+    <!-- Title -->
+    <h3 class="product-card-360__title shop-bundle-card__title">
+      <span>{{ bundle.title }}</span>
+    </h3>
+
+    <!-- Pricing Row -->
+    <div class="product-card-360__pricing shop-bundle-card__pricing">
+      <span class="price-main">
+        {{ bundle.bundlePrice | number:'1.0-0' }} {{ 'COMMON.CURRENCY' | translate }}
+      </span>
+      <span
+        class="price-old"
+        *ngIf="bundle.originalPrice && bundle.originalPrice > bundle.bundlePrice"
+      >
+        {{ bundle.originalPrice | number:'1.0-0' }} {{ 'COMMON.CURRENCY' | translate }}
+      </span>
+    </div>
+
+    <!-- Explanatory Tagline: "اختر 2 منتج (120 قطعة) + هدية مجانية (60 قطعة)" -->
+    <div class="shop-bundle-card__tagline">
+      <span class="tagline-icon">🎁</span>
+      <span class="tagline-text">{{ 'SHOP.BUNDLE_TAGLINE' | translate }}</span>
+    </div>
+
+    <!-- Pool Counter Hint -->
+    <div class="shop-bundle-card__pool-hint" *ngIf="paidCount > 0 && giftCount > 0">
+      <span>{{ paidCount }} {{ 'SHOP.PAID_CHOICES' | translate }} (120) + {{ giftCount }} {{ 'SHOP.GIFT_CHOICES' | translate }} (60)</span>
+    </div>
+
+    <!-- CTA Button: "اصنع باقتك 🎁" -->
+    <button
+      type="button"
+      class="product-card-360__cta shop-bundle-card__cta"
+      (click)="onCtaClick($event)"
+      [attr.aria-label]="'SHOP.BUILD_YOUR_BUNDLE' | translate"
+    >
+      <span class="cta-gift-icon">🎁</span>
+      <span>{{ 'SHOP.BUILD_YOUR_BUNDLE' | translate }}</span>
+      <svg class="cta-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="5" y1="12" x2="19" y2="12"/>
+        <polyline points="12 5 19 12 12 19"/>
+      </svg>
+    </button>
+  </div>
+</article>
+

@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { Order, OrderInput, CreateOrderData } from '../models/order.model';
+import { BundleOrderPayload } from '../models/bundle.model';
 
 const ORDERS_API = '/orders';
 
@@ -23,6 +24,16 @@ export class OrderService {
    * Returns the created Order summary including trackingUrl.
    */
   submitGuestOrder(payload: OrderInput): Observable<CreateOrderData> {
+    return this.api.post<CreateOrderData>(ORDERS_API, payload).pipe(
+      map((res) => res.data as CreateOrderData)
+    );
+  }
+
+  /**
+   * Submit a bundle order (2 paid + 1 free gift) to the backend.
+   * Backend enforces: pool membership, gift price=0, stock deduction for all 3 items.
+   */
+  submitBundleOrder(payload: BundleOrderPayload): Observable<CreateOrderData> {
     return this.api.post<CreateOrderData>(ORDERS_API, payload).pipe(
       map((res) => res.data as CreateOrderData)
     );

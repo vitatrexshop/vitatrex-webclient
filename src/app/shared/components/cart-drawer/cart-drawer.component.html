@@ -130,7 +130,10 @@
             <div class="cart-item__bundle-box" *ngIf="item.isBundle && item.bundleMeta">
               <span class="cart-item__bundle-box-title">المحتويات (3 عبوات):</span>
               <ul class="cart-item__bundle-box-list">
-                <li *ngFor="let inc of item.bundleMeta.includedItems">• {{ inc }}</li>
+                <li *ngFor="let p of item.bundleMeta.paidProducts">• {{ p.name }} (120 قطعة)</li>
+                <li *ngIf="item.bundleMeta.giftProduct" class="bundle-gift-line">
+                  🎁 {{ item.bundleMeta.giftProduct.name }} (60 قطعة) — <span class="bundle-gift-free">مجاناً</span>
+                </li>
               </ul>
             </div>
 

@@ -40,6 +40,7 @@ export class PromotionService {
   normalizePromotion(item: any): UnifiedPromotion {
     const isBundle =
       item.type === 'bundle' ||
+      (Array.isArray(item.paidProducts) && item.paidProducts.length > 0) ||
       (Array.isArray(item.allowedProducts) && item.allowedProducts.length > 0);
     const id = item.id || item._id || '';
     const discountedPrice =
@@ -66,7 +67,9 @@ export class PromotionService {
         bundlePrice: discountedPrice,
         discountPercentage,
         isActive: item.isActive !== false,
-        allowedProducts: item.allowedProducts ?? [],
+        paidProducts: item.paidProducts ?? [],
+        giftProducts: item.giftProducts ?? [],
+        allowedProducts: item.allowedProducts ?? item.paidProducts ?? [],
         startDate: item.startDate,
         endDate: item.endDate,
         createdAt: item.createdAt,
@@ -140,7 +143,9 @@ export class PromotionService {
           bundlePrice: b.bundlePrice,
           discountPercentage: b.discountPercentage,
           isActive: b.isActive,
-          allowedProducts: b.allowedProducts,
+          paidProducts: b.paidProducts ?? [],
+          giftProducts: b.giftProducts ?? [],
+          allowedProducts: (b.paidProducts || []).concat(b.giftProducts || []),
           startDate: b.startDate,
           endDate: b.endDate,
           createdAt: b.createdAt,

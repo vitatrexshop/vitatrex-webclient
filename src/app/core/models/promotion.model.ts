@@ -1,4 +1,4 @@
-﻿import { ApiResponse } from './api-response.model';
+import { ApiResponse } from './api-response.model';
 import { Product } from './product.model';
 import { OfferItem } from './offer.model';
 
@@ -32,7 +32,9 @@ export interface PromotionOffer extends PromotionBase {
 
 export interface PromotionBundle extends PromotionBase {
   type: 'bundle';
-  allowedProducts: (string | Product)[];
+  allowedProducts?: (string | Product)[];
+  paidProducts?: (string | Product)[];
+  giftProducts?: (string | Product)[];
 }
 
 export type UnifiedPromotion = PromotionOffer | PromotionBundle;

@@ -8,7 +8,10 @@ export interface Bundle {
   description: string;
   image: string;
   badgeText: string | null;
-  allowedProducts: (string | Product)[];
+  // ── NEW: مصفوفتان منفصلتان ──────────────────────────────────────
+  paidProducts: (string | Product)[];  // 120 قطعة — خانات 01 و 02
+  giftProducts: (string | Product)[];  // 60 قطعة — خانة 03 (الهدية)
+  // ── REMOVED: allowedProducts ────────────────────────────────────
   bundlePrice: number;
   originalPrice: number;
   discountPercentage: number;
@@ -25,7 +28,8 @@ export interface BundlePayload {
   description?: string;
   image: string;
   badgeText?: string | null;
-  allowedProducts: string[];
+  paidProducts: string[];
+  giftProducts: string[];
   bundlePrice: number;
   originalPrice: number;
   isActive?: boolean;
@@ -35,15 +39,18 @@ export interface BundlePayload {
 
 export interface BundleOrderPayload {
   bundleId: string;
-  selectedProductIds: string[];
+  selectedPaidProductIds: string[];  // exactly 2
+  selectedGiftProductId: string;     // exactly 1
   customer: {
     name: string;
     phone: string;
     email?: string;
     address: string;
-    city: string;
+    governorate: string;
+    city?: string;
   };
   paymentMethod?: 'cod' | 'card';
+  couponCode?: string | null;
 }
 
 export type BundleResponse = ApiResponse<Bundle>;

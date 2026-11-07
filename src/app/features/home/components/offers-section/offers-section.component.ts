@@ -34,7 +34,7 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-const SLOT_LABELS = ['اختر منتجك الأول', 'اختر منتجك الثاني', 'اختر منتجك الثالث'];
+const SLOT_LABELS = ['المنتج الأول (120 قطعة)', 'المنتج الثاني (120 قطعة)', '🎁 هديتك المجانية (60 قطعة)'];
 
 @Component({
   selector: 'app-offers-section',
@@ -547,6 +547,10 @@ export class OffersSectionComponent implements AfterViewInit, OnDestroy {
     return this.activeSlotIdx.get(bundleId) ?? 0;
   }
 
+  isGiftSlot(slotIdx: number): boolean {
+    return slotIdx === 2;
+  }
+
   getActiveSlotLabel(bundleId: string): string {
     return this.slotLabels[this.getActiveSlotIdx(bundleId)] ?? 'اختر منتجك';
   }
@@ -601,6 +605,18 @@ export class OffersSectionComponent implements AfterViewInit, OnDestroy {
   }
 
   getSelectableProducts(bundle: PromotionBundle): Product[] {
+    const bId = bundle.id || bundle._id || '';
+    const slotIdx = this.activeSlotIdx.get(bId) ?? 0;
+    if (slotIdx === 2 && bundle.giftProducts && bundle.giftProducts.length > 0) {
+      return (bundle.giftProducts as any[]).filter(
+        (p): p is Product => typeof p === 'object' && (p as Product).isActive !== false
+      );
+    }
+    if (bundle.paidProducts && bundle.paidProducts.length > 0) {
+      return (bundle.paidProducts as any[]).filter(
+        (p): p is Product => typeof p === 'object' && (p as Product).isActive !== false
+      );
+    }
     return (bundle.allowedProducts ?? []).filter(
       (p): p is Product => typeof p === 'object' && (p as Product).isActive !== false
     );
@@ -647,7 +663,9 @@ export class OffersSectionComponent implements AfterViewInit, OnDestroy {
     this.cdr.markForCheck();
 
     const chosen = this.getSelectedProducts(bId);
-    this.cartService.addBundleToCart(bundle, chosen, 1);
+    if (chosen.length >= 3) {
+      this.cartService.addBundleToCart(bundle, [chosen[0], chosen[1]], chosen[2], 1);
+    }
     this.cartDrawer.open();
 
     setTimeout(() => {

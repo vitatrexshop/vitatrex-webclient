@@ -744,6 +744,16 @@ $white:      #ffffff;
     &-text {
       font-weight: 600;
     }
+
+    .summary-gift-highlight {
+      display: inline-block;
+      color: #059669;
+      font-weight: 700;
+      background: rgba(16, 185, 129, 0.12);
+      padding: 1px 6px;
+      border-radius: 4px;
+      margin-inline-start: 4px;
+    }
   }
 
   &__price-col {

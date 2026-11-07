@@ -27,8 +27,6 @@
     // Smooth scroll-to-top on route change
     scroll-behavior: smooth;
     position: relative;
-    z-index: 1;
-    contain: layout style;
 
     @media (max-width: 991px) {
       padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px));

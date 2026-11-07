@@ -103,35 +103,39 @@ export class CartService {
   }
 
   /**
-   * Add an entire unified Bundle (3 user-chosen products) as a single cart line.
+   * Add an entire unified Bundle (2 paid + 1 gift products) as a single cart line.
    * @param bundle  The bundle object from the API
-   * @param selectedProducts  Exactly 3 products chosen by the client
+   * @param paidProducts  Exactly 2 paid products chosen by the client (120-count)
+   * @param giftProduct   Exactly 1 free gift product (60-count)
    * @param quantity  Number of bundles to add (default 1)
    */
-  addBundleToCart(bundle: any, selectedProducts: Product[], quantity = 1): void {
-    const bundleId = bundle.id || bundle._id || 'bundle';
-    const bundlePrice = bundle.discountedPrice ?? bundle.bundlePrice ?? 0;
+  addBundleToCart(bundle: any, paidProducts: Product[], giftProduct: Product, quantity = 1): void {
+    const bundleId = bundle._id || bundle.id || 'bundle';
+    const bundlePrice = bundle.bundlePrice ?? 0;
     const originalPrice = bundle.originalPrice ?? bundlePrice;
     const discountPct = bundle.discountPercentage ?? 0;
+    const giftOriginalPrice = giftProduct.variants?.find((v: any) => v.count === 60)?.price ?? 0;
 
-    // Build human-readable included summary
-    const includedNames = selectedProducts.map((p) => p.name);
-    const includedSummary = includedNames.join(' + ');
+    const allSelectedProducts = [...paidProducts, giftProduct];
+    const includedNames = allSelectedProducts.map((p) => p.name);
+    const includedSummary = paidProducts.map((p) => p.name).join(' + ') + ` + 🎁 ${giftProduct.name}`;
 
     // Unique synthetic ID based on bundle + sorted selected product IDs
-    const sortedIds = [...selectedProducts.map((p) => p._id)].sort().join('_');
+    const sortedIds = [...allSelectedProducts.map((p) => p._id)].sort().join('_');
     const syntheticId = `bundle_${bundleId}_${sortedIds}`;
 
     const bundleMeta: BundleCartMeta = {
       bundleId,
       bundleTitle: bundle.title || 'باقة مخصصة',
-      bundleImage: bundle.image || selectedProducts[0]?.image || '',
+      bundleImage: bundle.image || paidProducts[0]?.image || '',
       bundlePrice,
       originalPrice,
       discountPercentage: discountPct,
-      selectedProducts,
+      paidProducts,
+      giftProduct,
       includedSummary,
       includedItems: includedNames,
+      giftProductOriginalPrice: giftOriginalPrice,
     };
 
     const syntheticProduct: Product = {
@@ -143,7 +147,7 @@ export class CartService {
       benefits: ['باقة 3 منتجات', 'توفير مضاعف'],
       isBestSeller: true,
       isFeatured: true,
-      image: bundle.image || selectedProducts[0]?.image || '',
+      image: bundle.image || paidProducts[0]?.image || '',
       isActive: true,
       variants: [
         {

@@ -25,6 +25,7 @@ import { CouponService } from '../../core/services/coupon.service';
 import { SettingsService } from '../../core/services/settings.service';
 import { CartItem } from '../../core/models/cart.model';
 import { OrderInput, PaymentMethod, CreateOrderData, GovernorateOption, OrderItemInput } from '../../core/models/order.model';
+import { BundleOrderPayload } from '../../core/models/bundle.model';
 import { ApplyCouponResponse } from '../../core/models/coupon.model';
 import { OrderTrackingService } from '../track-order/order-tracking.service';
 import { environment } from '../../../environments/environment';
@@ -585,6 +586,47 @@ export class CheckoutComponent implements OnInit, AfterViewInit {
     const phone = this.normalizePhone(rawPhone);
     const { name, governorate, addressDetails, paymentMethod } = this.form.value;
 
+    // Check if cart contains a bundle order (2 paid 120-count + 1 gift 60-count)
+    const bundleItem = this.cartItems.find((i) => i.isBundle && i.bundleMeta);
+    if (bundleItem && bundleItem.bundleMeta) {
+      const bundlePayload: BundleOrderPayload = {
+        bundleId: bundleItem.bundleMeta.bundleId,
+        selectedPaidProductIds: bundleItem.bundleMeta.paidProducts.map((p) => p._id),
+        selectedGiftProductId: bundleItem.bundleMeta.giftProduct._id,
+        customer: {
+          name: name.trim(),
+          phone,
+          city: governorate,
+          governorate,
+          address: addressDetails.trim(),
+        },
+        paymentMethod,
+        couponCode: this.appliedCoupon ? this.appliedCoupon.appliedCouponCode : null,
+      };
+
+      this.orderService.submitBundleOrder(bundlePayload).subscribe({
+        next: (orderData: CreateOrderData) => {
+          this.cartService.clearCart();
+          try {
+            if (orderData.trackingUrl) {
+              const url = new URL(orderData.trackingUrl);
+              const token = url.searchParams.get('token') ?? '';
+              if (token) {
+                this.trackingService.saveToStorage(orderData.orderNumber, token);
+              }
+            }
+          } catch {
+            // Ignore
+          }
+          onSuccess(orderData);
+        },
+        error: (err) => {
+          onError(err);
+        },
+      });
+      return;
+    }
+
     const payload: OrderInput = {
       customer: {
         name: name.trim(),
@@ -595,11 +637,17 @@ export class CheckoutComponent implements OnInit, AfterViewInit {
       },
       items: this.cartItems.flatMap((item): OrderItemInput[] => {
         if (item.isBundle && item.bundleMeta) {
-          return item.bundleMeta.selectedProducts.map((prod) => ({
+          const paid = item.bundleMeta.paidProducts.map((prod) => ({
             productId: prod._id,
-            variantCount: prod.variants?.[0]?.count || 60,
+            variantCount: 120,
             quantity: item.quantity,
           }));
+          const gift = {
+            productId: item.bundleMeta.giftProduct._id,
+            variantCount: 60,
+            quantity: item.quantity,
+          };
+          return [...paid, gift];
         }
         if (item.isOffer && item.offerMeta) {
           return [{ offerId: item.offerMeta.offerId, quantity: item.quantity }];

@@ -13,10 +13,14 @@ export interface BundleCartMeta {
   bundlePrice: number;
   originalPrice: number;
   discountPercentage: number;
-  /** All 3 products chosen by the client for this bundle */
-  selectedProducts: Product[];
+  /** 2 منتجات مدفوعة */
+  paidProducts: Product[];
+  /** 1 منتج هدية مجانية */
+  giftProduct: Product;
   includedSummary: string;
   includedItems: string[];
+  /** سعر منتج الهدية — للعرض في "وفرت" */
+  giftProductOriginalPrice: number;
 }
 
 /**

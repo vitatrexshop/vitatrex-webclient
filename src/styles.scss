@@ -902,3 +902,17 @@ input[type="search"]::-webkit-search-results-decoration {
     color: #ffffff !important;
   }
 }
+
+
+// Clean fullscreen lightbox mode: hide floating docks and overlays
+body:has(.product-lightbox-backdrop) {
+  overflow: hidden !important;
+
+  app-mobile-bottom-nav,
+  app-floating-whatsapp {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+}

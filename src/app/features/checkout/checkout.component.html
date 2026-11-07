@@ -209,7 +209,10 @@
               <!-- Bundle Included Items Breakdown -->
               <div class="summary-item__breakdown" *ngIf="item.isBundle && item.bundleMeta">
                 <span class="summary-item__breakdown-label">3 عبوات:</span>
-                <span class="summary-item__breakdown-text">{{ item.bundleMeta.includedSummary }}</span>
+                <span class="summary-item__breakdown-text">
+                  <span *ngFor="let p of item.bundleMeta.paidProducts; let last = last">{{ p.name }} (120 قطعة){{ !last ? ' + ' : '' }}</span>
+                  <span *ngIf="item.bundleMeta.giftProduct" class="summary-gift-highlight"> + 🎁 {{ item.bundleMeta.giftProduct.name }} (60 قطعة — مجاناً)</span>
+                </span>
               </div>
 
               <!-- Offer Included Items Breakdown -->

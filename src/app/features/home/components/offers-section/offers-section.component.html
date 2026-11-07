@@ -253,19 +253,26 @@
 
                   <!-- Glowing Neon Plus Divider (between slots) -->
                   <div class="bundle-slot-divider" *ngIf="slotIdx > 0" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-                      <line x1="12" y1="5" x2="12" y2="19"/>
-                      <line x1="5" y1="12" x2="19" y2="12"/>
-                    </svg>
+                    <ng-container *ngIf="slotIdx === 2; else plusDivider">
+                      <span class="gift-divider-icon" style="font-size: 1.15rem; line-height: 1;">🎁</span>
+                    </ng-container>
+                    <ng-template #plusDivider>
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                        <line x1="12" y1="5" x2="12" y2="19"/>
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                      </svg>
+                    </ng-template>
                   </div>
 
                   <!-- Slot: Empty / Glassmorphic Selector -->
                   <div
                     class="bundle-slot"
+                    [class.bundle-slot--gift]="isGiftSlot(slotIdx)"
                     *ngIf="!getSlotProduct(item.id || item._id || '', slotIdx)"
                   >
                     <div
                       class="bundle-slot-card bundle-slot-card--glass-empty"
+                      [class.bundle-slot-card--gift-empty]="isGiftSlot(slotIdx)"
                       (click)="openModalForSlot(asBundle(item), slotIdx, $event)"
                       role="button"
                       tabindex="0"
@@ -273,25 +280,32 @@
                       [attr.aria-label]="slotLabels[slotIdx] + ' لباقة ' + item.title"
                       [attr.id]="'offer-slot-' + slotIdx + '-' + (item.id || item._id)"
                     >
-                      <div class="slot-ambient-glow" aria-hidden="true"></div>
+                      <div class="slot-ambient-glow" [class.slot-ambient-glow--gift]="isGiftSlot(slotIdx)" aria-hidden="true"></div>
                       <div class="slot-glass-body">
                         <div class="slot-step-indicator">
-                          <span class="step-label">{{ slotLabels[slotIdx] }}</span>
-                          <span class="step-num">0{{ slotIdx + 1 }}</span>
+                          <span class="step-label" [class.step-label--gift]="isGiftSlot(slotIdx)">
+                            {{ isGiftSlot(slotIdx) ? '🎁 هديتك المجانية (ببلاش)' : (slotIdx === 0 ? 'المنتج الأول (120 قطعة)' : 'المنتج الثاني (120 قطعة)') }}
+                          </span>
+                          <span class="step-num" [class.step-num--gift]="isGiftSlot(slotIdx)">0{{ slotIdx + 1 }}</span>
                         </div>
 
                         <div class="slot-empty-icon-wrap">
-                          <div class="slot-icon-circle">
-                            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                              <line x1="12" y1="5" x2="12" y2="19"/>
-                              <line x1="5" y1="12" x2="19" y2="12"/>
-                            </svg>
+                          <div class="slot-icon-circle" [class.slot-icon-circle--gift]="isGiftSlot(slotIdx)">
+                            <ng-container *ngIf="isGiftSlot(slotIdx); else paidEmptyIcon">
+                              <span style="font-size: 1.3rem;">🎁</span>
+                            </ng-container>
+                            <ng-template #paidEmptyIcon>
+                              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="12" y1="5" x2="12" y2="19"/>
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                              </svg>
+                            </ng-template>
                           </div>
                         </div>
 
                         <div class="slot-empty-prompt">
-                          <span class="prompt-main">اختر المنتج</span>
-                          <span class="prompt-sub">انقر للإضافة</span>
+                          <span class="prompt-main">{{ isGiftSlot(slotIdx) ? '🎁 اختر هديتك المجانية' : 'اختر المنتج' }}</span>
+                          <span class="prompt-sub">{{ isGiftSlot(slotIdx) ? '60 قطعة — مجاناً (ببلاش 🎉)' : '120 قطعة' }}</span>
                         </div>
                       </div>
                     </div>
@@ -300,23 +314,27 @@
                   <!-- Slot: Filled / 3D Render Preview -->
                   <div
                     class="bundle-slot"
+                    [class.bundle-slot--gift]="isGiftSlot(slotIdx)"
                     *ngIf="getSlotProduct(item.id || item._id || '', slotIdx) as prod"
                   >
                     <div
                       class="bundle-slot-card bundle-slot-card--glass-filled"
+                      [class.bundle-slot-card--gift-filled]="isGiftSlot(slotIdx)"
                       [class.is-checking]="isSlotCheckAnimating(item.id || item._id || '', slotIdx)"
                       (click)="openModalForSlot(asBundle(item), slotIdx, $event)"
                       role="button"
                       tabindex="0"
                       (keydown.enter)="openModalForSlot(asBundle(item), slotIdx, $event)"
-                      [attr.aria-label]="'تغيير ' + slotLabels[slotIdx] + ': ' + prod.name"
+                      [attr.aria-label]="'تغيير ' + (isGiftSlot(slotIdx) ? 'الهدية المجانية' : slotLabels[slotIdx]) + ': ' + prod.name"
                       [attr.id]="'offer-slot-filled-' + slotIdx + '-' + (item.id || item._id)"
                     >
-                      <div class="slot-ambient-glow slot-ambient-glow--active" aria-hidden="true"></div>
+                      <div class="slot-ambient-glow slot-ambient-glow--active" [class.slot-ambient-glow--gift]="isGiftSlot(slotIdx)" aria-hidden="true"></div>
                       <div class="slot-glass-body">
                         <div class="slot-step-indicator slot-step-indicator--filled">
-                          <span class="step-label">{{ slotLabels[slotIdx] }}</span>
-                          <span class="step-check-icon">
+                          <span class="step-label" [class.step-label--gift]="isGiftSlot(slotIdx)">
+                            {{ isGiftSlot(slotIdx) ? '🎁 هديتك المجانية (ببلاش)' : (slotIdx === 0 ? 'المنتج الأول (120 قطعة)' : 'المنتج الثاني (120 قطعة)') }}
+                          </span>
+                          <span class="step-check-icon" [class.step-check-icon--gift]="isGiftSlot(slotIdx)">
                             <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                               <polyline points="20 6 9 17 4 12"/>
                             </svg>
@@ -325,6 +343,10 @@
 
                         <!-- 3D Floating Product Render Preview -->
                         <div class="slot-3d-img-stage">
+                          <!-- Floating Gift Tag on top of the bottle -->
+                          <div class="slot-gift-overlay-badge" *ngIf="isGiftSlot(slotIdx)">
+                            <span>60 قطعة مجاناً 🎁</span>
+                          </div>
                           <img
                             [src]="formatMediaUrl(prod.image)"
                             [alt]="prod.name"
@@ -341,6 +363,13 @@
 
                         <div class="slot-product-info">
                           <h4 class="slot-product-name">{{ prod.name }}</h4>
+                          <!-- Size badge / Gift badge -->
+                          <div class="slot-paid-banner" *ngIf="!isGiftSlot(slotIdx)">
+                            <span class="paid-banner-text">120 قطعة</span>
+                          </div>
+                          <div class="slot-gift-banner" *ngIf="isGiftSlot(slotIdx)" aria-label="هدية مجانية 60 قطعة مجاناً">
+                            <span class="gift-banner-text">🎁 60 قطعة — مجاناً (ببلاش)</span>
+                          </div>
                           <div class="slot-change-pill" aria-hidden="true">
                             <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5">
                               <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/>
@@ -399,7 +428,7 @@
                         <path d="M16 10a4 4 0 0 1-8 0"/>
                       </svg>
                       <span *ngIf="!allSlotsSelected(item.id || item._id || '')">
-                        اختر 3 منتجات لتفعيل الباقة
+                        اختر منتجين + هديتك لتفعيل الباقة
                       </span>
                       <span *ngIf="allSlotsSelected(item.id || item._id || '')">
                         أضف الباقة للسلة
@@ -457,10 +486,14 @@
   >
     <div class="bc-modal">
       <!-- Modal Header -->
-      <div class="bc-modal-header">
+      <div class="bc-modal-header" [class.bc-modal-header--gift]="isGiftSlot(getActiveSlotIdx(activeModalBundle.id || activeModalBundle._id || ''))">
         <div class="bc-modal-header-text">
-          <h4 class="bc-modal-title">{{ getActiveSlotLabel(activeModalBundle.id || activeModalBundle._id || '') }}</h4>
-          <p class="bc-modal-subtitle">اختر منتجًا من قائمة المنتجات المتاحة للباقة</p>
+          <h4 class="bc-modal-title" [class.bc-modal-title--gift]="isGiftSlot(getActiveSlotIdx(activeModalBundle.id || activeModalBundle._id || ''))">
+            {{ isGiftSlot(getActiveSlotIdx(activeModalBundle.id || activeModalBundle._id || '')) ? '🎁 اختر هديتك المجانية (60 قطعة)' : getActiveSlotLabel(activeModalBundle.id || activeModalBundle._id || '') }}
+          </h4>
+          <p class="bc-modal-subtitle" [class.bc-modal-subtitle--gift]="isGiftSlot(getActiveSlotIdx(activeModalBundle.id || activeModalBundle._id || ''))">
+            {{ isGiftSlot(getActiveSlotIdx(activeModalBundle.id || activeModalBundle._id || '')) ? 'اختر عبوة 60 قطعة مجانية كهدية مع باقتك 🎉' : 'اختر عبوة 120 قطعة للباقة' }}
+          </p>
         </div>
         <button
           class="bc-modal-close"
@@ -481,6 +514,7 @@
       <div class="bc-modal-grid" dir="rtl">
         <button
           class="bc-modal-product"
+          [class.bc-modal-product--gift]="isGiftSlot(getActiveSlotIdx(activeModalBundle.id || activeModalBundle._id || ''))"
           type="button"
           *ngFor="let product of getSelectableProducts(activeModalBundle); trackBy: trackByProductId"
           [class.bc-modal-product--selected]="getSlotProduct(activeModalBundle.id || activeModalBundle._id || '', getActiveSlotIdx(activeModalBundle.id || activeModalBundle._id || ''))?._id === product._id"
@@ -509,9 +543,17 @@
             </div>
           </div>
           <p class="bc-modal-product-name">{{ product.name }}</p>
-          <p class="bc-modal-product-price" *ngIf="product.variants?.[0]?.price">
-            {{ product.variants[0].price | number }} ج.م
-          </p>
+          <ng-container *ngIf="isGiftSlot(getActiveSlotIdx(activeModalBundle.id || activeModalBundle._id || '')); else paidPrice">
+            <p class="bc-modal-product-price bc-modal-product-price--gift" *ngIf="product.variants?.[0]?.price">
+              <span class="price-strikethrough">{{ product.variants[0].price | number }} ج.م</span>
+              <span class="price-free">مجاناً 🎁 (60 قطعة)</span>
+            </p>
+          </ng-container>
+          <ng-template #paidPrice>
+            <p class="bc-modal-product-price" *ngIf="product.variants?.[0]?.price">
+              {{ product.variants[0].price | number }} ج.م (120 قطعة)
+            </p>
+          </ng-template>
         </button>
       </div>
     </div><!-- /.bc-modal -->

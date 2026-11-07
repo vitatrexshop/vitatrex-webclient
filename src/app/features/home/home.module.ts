@@ -1,4 +1,4 @@
-﻿import { NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HomeRoutingModule } from './home-routing.module';
 import { HomeComponent } from './home.component';
@@ -13,7 +13,6 @@ import { QuizCtaComponent } from './components/quiz-cta/quiz-cta.component';
 import { FlavorSwitcherComponent } from './components/flavor-switcher/flavor-switcher.component';
 import { PromoVideoComponent } from './components/promo-video/promo-video.component';
 import { VideoStoriesComponent } from './components/video-stories/video-stories.component';
-import { BundleCardComponent } from './components/bundle-card/bundle-card.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +26,6 @@ import { BundleCardComponent } from './components/bundle-card/bundle-card.compon
     QuizCtaComponent,
     FeaturedBannerComponent,
     FlavorSwitcherComponent,
-    BundleCardComponent,
   ],
   imports: [CommonModule, HomeRoutingModule, SharedModule],
 })

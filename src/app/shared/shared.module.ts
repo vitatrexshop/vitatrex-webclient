@@ -18,6 +18,8 @@ import { MobileBottomNavComponent } from './components/mobile-bottom-nav/mobile-
 import { FloatingWhatsappComponent } from './components/floating-whatsapp/floating-whatsapp.component';
 import { HighlightPipe } from './pipes/highlight.pipe';
 import { CookieConsentComponent } from './components/cookie-consent/cookie-consent.component';
+import { BundleCardComponent } from './components/bundle-card/bundle-card.component';
+import { ShopBundleCardComponent } from './components/shop-bundle-card/shop-bundle-card.component';
 
 const SHARED_COMPONENTS = [
   HeaderComponent,
@@ -25,6 +27,8 @@ const SHARED_COMPONENTS = [
   AnnouncementBarComponent,
   ProductCardComponent,
   OfferCardComponent,
+  BundleCardComponent,
+  ShopBundleCardComponent,
   CartDrawerComponent,
   LoadingSpinnerComponent,
   BadgeComponent,

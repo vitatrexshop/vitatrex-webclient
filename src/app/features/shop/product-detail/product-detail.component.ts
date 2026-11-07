@@ -1,5 +1,5 @@
 import { TranslateService } from '@ngx-translate/core';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, HostListener, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
@@ -31,7 +31,7 @@ export interface DynamicProductFeature {
   styleUrls: ['./product-detail.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProductDetailComponent implements OnInit {
+export class ProductDetailComponent implements OnInit, OnDestroy {
   private readonly destroyRef = inject(DestroyRef);
 
   product: Product | null = null;
@@ -44,6 +44,12 @@ export class ProductDetailComponent implements OnInit {
   selectedImage: string | null = null;
   isDescriptionOpen = false;
   isAdding = false;
+
+  // ─── Image Zoom & Lightbox State ──────────────────────────────────────────
+  isHoverZoomed = false;
+  zoomOrigin = '50% 50%';
+  isLightboxOpen = false;
+  lightboxZoom = 1;
 
   /** Other products to suggest — populated after main product loads */
   suggestedProducts: Product[] = [];
@@ -435,6 +441,108 @@ export class ProductDetailComponent implements OnInit {
       return variant.originalPrice;
     }
     return null;
+  }
+
+  // ─── Image Zoom & Lightbox Controls ───────────────────────────────────────
+  onImageMouseMove(event: MouseEvent): void {
+    const target = event.currentTarget as HTMLElement;
+    const rect = target.getBoundingClientRect();
+    if (rect.width > 0 && rect.height > 0) {
+      const x = Math.max(0, Math.min(100, ((event.clientX - rect.left) / rect.width) * 100));
+      const y = Math.max(0, Math.min(100, ((event.clientY - rect.top) / rect.height) * 100));
+      this.zoomOrigin = `${x.toFixed(1)}% ${y.toFixed(1)}%`;
+      this.isHoverZoomed = true;
+      this.cdr.markForCheck();
+    }
+  }
+
+  onImageMouseLeave(): void {
+    this.isHoverZoomed = false;
+    this.zoomOrigin = '50% 50%';
+    this.cdr.markForCheck();
+  }
+
+  openLightbox(): void {
+    this.isLightboxOpen = true;
+    this.lightboxZoom = 1;
+    if (typeof document !== 'undefined') {
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+    }
+    this.cdr.markForCheck();
+  }
+
+  closeLightbox(): void {
+    this.isLightboxOpen = false;
+    this.lightboxZoom = 1;
+    if (typeof document !== 'undefined') {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    }
+    this.cdr.markForCheck();
+  }
+
+  zoomIn(event?: Event): void {
+    if (event) event.stopPropagation();
+    this.lightboxZoom = Math.min(3, +(this.lightboxZoom + 0.5).toFixed(1));
+    this.cdr.markForCheck();
+  }
+
+  zoomOut(event?: Event): void {
+    if (event) event.stopPropagation();
+    this.lightboxZoom = Math.max(1, +(this.lightboxZoom - 0.5).toFixed(1));
+    this.cdr.markForCheck();
+  }
+
+  resetZoom(event?: Event): void {
+    if (event) event.stopPropagation();
+    this.lightboxZoom = 1;
+    this.cdr.markForCheck();
+  }
+
+  toggleLightboxZoom(event: MouseEvent): void {
+    event.stopPropagation();
+    this.lightboxZoom = this.lightboxZoom >= 2.5 ? 1 : +(this.lightboxZoom + 0.75).toFixed(1);
+    this.cdr.markForCheck();
+  }
+
+  nextImage(event?: Event): void {
+    if (event) event.stopPropagation();
+    const thumbs = this.getThumbnails(this.product);
+    if (thumbs.length <= 1) return;
+    const current = this.getImageUrl(this.product);
+    const idx = thumbs.indexOf(current);
+    const nextIdx = (idx + 1) % thumbs.length;
+    this.selectImage(thumbs[nextIdx]);
+  }
+
+  prevImage(event?: Event): void {
+    if (event) event.stopPropagation();
+    const thumbs = this.getThumbnails(this.product);
+    if (thumbs.length <= 1) return;
+    const current = this.getImageUrl(this.product);
+    const idx = thumbs.indexOf(current);
+    const prevIdx = (idx - 1 + thumbs.length) % thumbs.length;
+    this.selectImage(thumbs[prevIdx]);
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  handleKeyboardNav(event: KeyboardEvent): void {
+    if (!this.isLightboxOpen) return;
+    if (event.key === 'Escape') {
+      this.closeLightbox();
+    } else if (event.key === 'ArrowRight') {
+      this.translate.currentLang === 'ar' ? this.prevImage() : this.nextImage();
+    } else if (event.key === 'ArrowLeft') {
+      this.translate.currentLang === 'ar' ? this.nextImage() : this.prevImage();
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (typeof document !== 'undefined') {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    }
   }
 
   trackByVariant(_: number, item: Variant): number {
