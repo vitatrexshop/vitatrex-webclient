@@ -34,7 +34,7 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-const SLOT_LABELS = ['المنتج الأول (120 قطعة)', 'المنتج الثاني (120 قطعة)', '🎁 هديتك المجانية (60 قطعة)'];
+const SLOT_LABELS = ['المنتج الأول', 'المنتج الثاني', '🎁 هديتك المجانية'];
 
 @Component({
   selector: 'app-offers-section',

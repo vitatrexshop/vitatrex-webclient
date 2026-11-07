@@ -29,7 +29,7 @@ import { Product } from '../../../core/models/product.model';
 import { environment } from '../../../../environments/environment';
 
 /** Labels for each slot index — slot 2 is the free gift */
-const SLOT_LABELS = ['المنتج الأول (120 قطعة)', 'المنتج الثاني (120 قطعة)', '🎁 هديتك المجانية (60 قطعة)'];
+const SLOT_LABELS = ['المنتج الأول', 'المنتج الثاني', '🎁 هديتك المجانية'];
 const SLOT_ARIA   = ['اختر المنتج الأول', 'اختر المنتج الثاني', 'اختر الهدية المجانية'];
 
 @Component({
